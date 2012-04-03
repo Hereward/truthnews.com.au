@@ -1,0 +1,136 @@
+/*
+Original design: andreas02 (v3.0 - Apr 24, 2008) - A free xhtml/css website template by Andreas Viklund.
+For more information, see http://andreasviklund.com/templates/andreas02/
+*/
+
+/* General layout */
+body {
+  background: #444040 url(storage/images/framework/gradient.jpg) top left repeat-x;
+  color:#303030; 
+  font:12px Arial,Helvetica,sans-serif;
+  margin:0; 
+  padding:7px 0 0;
+}  /* 76% #e0e0e0 */
+
+#container {
+  border:0px #444444 solid; 
+  background:#fff; 
+  margin:0px auto 20px auto ; 
+  padding:0px 30px 30px 30px; 
+
+  width:960px;
+}
+
+/* Site title */
+
+#logo {height:130px;  width:462px; margin:10px auto 10px auto; background: white url(storage/images/framework/waca_logo2.gif) top left no-repeat; clear:both}
+#logo_content { 
+    padding: 35px 0px 0px 0px;
+}
+
+#logo h1 {border:none; color:white; margin:0px 0px 0px 147px;}
+#logo h1 a {border:none; color:#FFFFFF;}
+#logo h1 a:hover {border:none; color:#FF0000; text-decoration:none;}
+#logo p {font-size:1em;  color:#FFFFFF; margin:0px 0px 0px 150px; }
+
+/* Tags */
+a {
+  font-weight:bold; 
+  /*border-bottom:1px dotted #505050;*/
+  color:#126FB4; 
+  text-decoration:none;
+}
+
+a:hover {
+  /* border-bottom:1px solid #505050; */
+  color:red; 
+  text-decoration:none;
+}
+
+
+a img {
+  border:0;
+}
+
+h1 {font-size:22px; font-weight:bold; margin:0 0 5px; padding:0;}
+
+h2 {
+font-size:2.0em; 
+font-weight:600; 
+margin:0 0 12px;
+}
+
+h3 {
+  font-size:1.4em;
+  font-weight:600; 
+  margin:0 0 10px;
+}
+
+p {line-height:1.4em; margin:0 0 15px; text-align:left;}
+br {line-height:1.1em;}
+ul,ol {margin:0 0 15px 15px; padding:0;}
+li {margin:0 0 3px 0;}
+
+/* Toptabs menu */
+#toptabs {font-size:.8em; margin:10px auto -7px; width:860px;}
+#toptabs p {color:white; text-align:right; font-weight:bold;}
+.toptab {background:#f0f0f0 url(storage/images/framework/corner2.gif) top right no-repeat; border-bottom:1px solid #e0e0e0; color:gray; margin:0 0 0 4px; padding:4px 5px 3px; text-decoration:none;}
+.toptab:hover {background:#fafafa url(storage/images/framework/corner2.gif) top right no-repeat; border-bottom:1px solid #eaeaea; color:#505050; text-decoration:none;}
+.activetoptab {background:#fff url(storage/images/framework/corner2.gif) top right no-repeat; border-bottom:1px solid #fff; color:#505050; margin:0 0 0 4px; padding:4px 5px 3px; text-decoration:none;}
+.activetoptab:hover {border-bottom:1px solid #fff; text-decoration:none;}
+
+/* Navitabs menu */
+#navitabs {clear:both;}
+.navitab {background:#EEEEEE url(storage/images/framework/corner.gif) top right no-repeat; border-bottom:1px solid #EEEEEE; border-left:1px solid #fff; font-size:1.1em; margin:0 0 4px; padding:4px 8px; text-decoration:none;}
+.navitab:hover {background:#d0d0d0 url(storage/images/framework/corner.gif) top right no-repeat; border-bottom:1px solid #d0d0d0; text-decoration:none;}
+.activenavitab {background:#9E061F url(storage/images/framework/corner.gif) top right no-repeat; border-bottom:1px solid #9E061F; color:#fff; font-size:1.1em; margin:0 0 5px; padding:4px 8px 5px; text-decoration:none;}
+.activenavitab:hover {color:#fff; text-decoration:none;}
+
+/* Header description area */
+#desc {background:#252525; color:#fff; /* height:200px; */ margin:5px 0 15px; padding:0 0 5px 0;}  /* #505050 url(storage/images/framework/front.jpg) bottom left repeat-y; clear:both */
+#desc p {font-size:1em; line-height:1.3em; padding:0 0 0 15px; width:290px;}
+#desc h2 {color:#fff; padding:15px 15px 0;}
+#desc a {border-color:#fff; color:#fff; text-decoration:none;}
+
+/* Main content */
+#main {
+   border-right:1px solid #EAE8E8; 
+   float:left; 
+   margin:0px 0px 10px 0px; 
+   padding:0 35px 0 0; 
+   width:604px;
+   min-height:5000px;
+}  /* d8d8d8 */
+
+/* Sidebar */
+#sidebar {
+  float:right; 
+  width:222px;
+  margin:0px 0px 0px 20px;
+}
+#sidebar p {font-size:0.9em; line-height:1.3em; margin:0 0 15px;}
+#sidebar ul {margin:0 0 15px 0; padding:0;}
+#sidebar li {list-style:none;}
+ul.sidelink li {list-style:none; margin:0 0 3px; padding:0;}
+ul.sidelink li a{background:#f0f0f0 url(storage/images/framework/corner.gif) top right no-repeat; border:none; display:block; margin:5px 10px 5px 0; padding:3px 4px 3px 8px; text-align:left; width:140px;}
+ul.sidelink li a:hover {background:#e0e0e0 url(storage/images/framework/corner.gif) top right no-repeat; border:none; text-decoration:none;}
+
+/* Footer */
+#footer {
+  background:#fff; 
+  border-top:1px solid #EAE8E8; 
+  clear:both; 
+  margin:0; 
+  padding:0;
+}
+
+#footer a {color:gray;}
+#footer a:hover {color:#303030;}
+#footer p {color:gray; font-size:1.1em; line-height:1.3em; margin:15px 0 0; padding:0;}
+
+/* Additional classes */
+.photo {background-color:#f0f0f0; border:1px solid #d8d8d8; margin:0 0 15px; padding:2px;}
+
+.right {margin:-8px 0 8px 0; text-align:right;}
+.block {background:#f0f0f0; padding:10px;}
+.hide {display:none;}

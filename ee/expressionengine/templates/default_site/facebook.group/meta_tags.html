@@ -1,0 +1,7 @@
+{if embed:entry_id}
+  {embed=facebook/meta_tags_channel entry_id="{embed:entry_id}"}
+{if:elseif embed:title}
+  {embed=facebook/meta_tags_custom title="{embed:title}" description="{embed:description}" url="{embed:url}"}
+{if:else}
+  {embed=facebook/meta_tags_default}
+{/if}

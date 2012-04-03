@@ -1,0 +1,52 @@
+{exp:channel:entries limit="1" entry_id="{embed:entry_id}"}
+<item>
+<title>{exp:xml_encode}{title}{/exp:xml_encode} {if media_segments > 1}- Part 1{/if}</title>
+<itunes:author>Episode author</itunes:author>
+<itunes:subtitle></itunes:subtitle>
+<itunes:summary>{exp:xml_encode}{description}{/exp:xml_encode}</itunes:summary>
+      {if media_date}
+        {embed=feeds/rss_media_enclosure segment="1" media_segments="{media_segments}" media_date="{media_date}" media_source="{media_source}"}
+      {/if}
+
+<guid>{channel_url}/{url_title}</guid>
+<pubDate>{gmt_entry_date format="%D, %j %M %Y %H:%i:%s %Q"}</pubDate>
+<itunes:duration>{exp:tna_utils:get_media_properties segment='1' media_source='{media_source}' media_date='{media_date}'}</itunes:duration>
+<itunes:keywords>{keywords}</itunes:keywords>
+</item>
+
+{if media_segments > 1}
+<item>
+<title>{exp:xml_encode}{title}{/exp:xml_encode} - Part 2</title>
+<itunes:author>Episode author</itunes:author>
+<itunes:subtitle></itunes:subtitle>
+<itunes:summary>{exp:xml_encode}{description}{/exp:xml_encode}</itunes:summary>
+      {if media_date}
+        {embed=feeds/rss_media_enclosure segment="2" media_segments="{media_segments}" media_date="{media_date}" media_source="{media_source}"}
+      {/if}
+
+<guid>{channel_url}/{url_title}</guid>
+<pubDate>{gmt_entry_date format="%D, %j %M %Y %H:%i:%s %Q"}</pubDate>
+<itunes:duration>{exp:tna_utils:get_media_properties segment='2' media_source='{media_source}' media_date='{media_date}'}</itunes:duration>
+<itunes:keywords>{keywords}</itunes:keywords>
+</item>
+
+{/if} 
+
+{if media_segments > 2}
+<item>
+<title>{exp:xml_encode}{title}{/exp:xml_encode} - Part 3</title>
+<itunes:author>Episode author</itunes:author>
+<itunes:subtitle></itunes:subtitle>
+<itunes:summary>{exp:xml_encode}{description}{/exp:xml_encode}</itunes:summary>
+      {if media_date}
+        {embed=feeds/rss_media_enclosure segment="3" media_segments="{media_segments}" media_date="{media_date}" media_source="{media_source}"}
+      {/if}
+
+<guid>{channel_url}/{url_title}</guid>
+<pubDate>{gmt_entry_date format="%D, %j %M %Y %H:%i:%s %Q"}</pubDate>
+<itunes:duration>{exp:tna_utils:get_media_properties segment='3' media_source='{media_source}' media_date='{media_date}'}</itunes:duration>
+<itunes:keywords>{keywords}</itunes:keywords>
+</item>
+
+{/if} 
+{/exp:channel:entries}

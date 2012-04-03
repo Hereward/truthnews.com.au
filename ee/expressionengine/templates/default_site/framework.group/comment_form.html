@@ -1,0 +1,46 @@
+{exp:comment:form  site="{embed:site}" dynamic="off" entry_id="{embed:entry_id}" preview="framework/comment_preview"}
+
+<strong>Enter comments below, then click Submit:</strong><br/>
+
+{if logged_out}
+<table>
+<tr>
+<td align="right">Name:</td><td><input type="text" name="name" value="{name}" size="50" /></td>
+</tr>
+<tr>
+<td align="right">Email:</td><td> <input type="text" name="email" value="{email}" size="50" /></td>
+</tr>
+<tr>
+<td align="right">Location:</td><td> <input type="text" name="location" value="{location}" size="50" /></td>
+</tr>
+<tr>
+<td align="right">URL:</td><td> <input type="text" name="url" value="{url}" size="50" /></td>
+</tr>
+</table>
+
+{/if}
+
+<div class="comment_buttons">
+{exp:comment_buttons}
+</div>
+
+<p><textarea name="comment" cols="70" rows="12">{comment}</textarea></p>
+
+
+<p><input type="checkbox" name="save_info" value="yes" {save_info} /> Remember my personal information</p>
+
+<p><input type="checkbox" name="notify_me" value="yes" {notify_me} /> Notify me of follow-up comments?</p>
+
+{if captcha}
+
+<p>Please enter the word you see in the image below:</p>
+
+<p>{captcha}<br />
+<input type="text" name="captcha" value="{captcha_word}" size="20" maxlength="20" style="width:140px;" /></p>
+
+{/if}
+
+<input type="submit" name="submit" value="Submit" />
+<input type="submit" name="preview" value="Preview" />
+
+{/exp:comment:form}

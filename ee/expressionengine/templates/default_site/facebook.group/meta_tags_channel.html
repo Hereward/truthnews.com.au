@@ -1,0 +1,16 @@
+{exp:channel:entries dynamic="off" site="default_site" entry_id="{embed:entry_id}" limit="1" orderby="date" sort="desc" paginate="bottom"}
+<meta property="og:title" content="{title}"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="{channel_url}/{url_title}"/>
+{if image_hero}
+<meta property="og:image" content="{image_hero}"/>
+{if:else}
+<meta property="og:image" content="http://www.truthnews.com.au/storage/banners/tnra_small_logo.jpg"/>
+{/if}
+<meta property="og:site_name" content="{site_name}"/>
+<meta property="fb:app_id" content="{fb_app_id}"/>
+<meta property="og:description" content="{exp:xml_encode}{description}{/exp:xml_encode}"/>
+<meta property="og:author" content="Truth News Australia"/>
+{/exp:channel:entries}
+
+{!-- image_hero --}

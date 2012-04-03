@@ -1,0 +1,39 @@
+{embed ="framework/doc_head"}
+{!--
+{embed="framework/login_details"}
+--}
+
+<div id="container">
+	{embed="framework/header"}
+
+	{embed ="framework/navigation" section="home"}
+
+{!-- boo!
+        <div class="home_presentation">
+           
+        </div>
+--}
+
+{!--
+        <div style="min-height:262px;" class="home_presentation">
+               {embed="static/feature"}
+               {embed ="static/home_presentation"}  
+        </div>
+--}
+
+	<div id="main">
+        {embed="framework/latest"}
+{!--
+         {embed="framework/tna_blog"}
+--}
+
+         {embed="framework/news_channel" channel="tna|tna_news|911oz" search="" limit="10"}
+
+	</div>
+        
+	
+     {embed="framework/right_col"}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}

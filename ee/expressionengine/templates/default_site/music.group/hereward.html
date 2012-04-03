@@ -1,0 +1,63 @@
+  {embed ="framework/doc_head" description="Hereward - Musician and Songwriter" title="Hereward - Musician and Songwriter"}
+
+
+<div id="container">
+{!--
+	{embed="framework/header"}
+--}
+	{embed ="framework/navigation" section="home"}
+
+
+	<div id="main">
+<div class="article_container">
+         <h2 class="channel_title" style="color:#990015;">Hereward - Musician and Songwriter</h2>
+
+<p style="width:300px; padding:5px; border:1px dotted #990015; margin:10px auto 20px auto; text-align:center; color:#990015; font-weight:bold;">&ldquo;artists use lies to expose the truth,<br/>while politicians use them to hide it&rdquo;</p>
+
+<div style="margin-bottom:5px;"><img style="border:1px solid black;" src="http://www.truthnews.com.au/storage/images/hereward_bw_02_600X388.jpg" width="600" height="338"/></div>
+<p><em>Hereward plays a mixture of original songs and classic folk acoustic pieces.</em></p>
+
+{embed="framework/music_item" title="He Was A friend of Mine (Trad.)" unique_id="he_was_a_friend" path="storage/media/music/he_was_a_friend_of_mine_20120205.mp3"}
+        
+{embed="framework/music_item" title="Black Cloud (Original)" unique_id="black_cloud" path="storage/media/music/black_cloud_20120205.mp3"}
+
+{embed="framework/music_item" title="Tower of Song (Leonard Cohen)" unique_id="tower_of_song" path="storage/media/music/tower_of_song_20120205.mp3"}
+
+{embed="framework/music_item" title="I Shall Be Released (Bob Dylan)" unique_id="i_shall_be_released" path="storage/media/music/i_shall_be_released_20120210.mp3"}
+{!--
+{embed="framework/music_item" title="Most of the Time (Bob Dylan)" unique_id="most_of_the_time" path="storage/media/music/most_of_the_time_20120205.mp3"}
+--}
+
+<h2 class="channel_title" style="font-size:2em; margin-top:20px; color:#990015;">Contact Hereward</h2>
+
+<p style="margin-bottom:15px; border-bottom:1px solid #EAE8E8"><strong>Phone Contact:</strong> +61 415 059675</p>
+
+{exp:email:contact_form user_recipients="false" return="http://www.truthnews.com.au/web/music/hereward" recipients="editor@truthnews.com.au" charset="utf-8"} 
+ 
+            <p><label for="from"><strong>Your Email:</strong></label><br /> <input type="text" id="from" name="from" size="60" maxlength="35" value="{member_email}" /></p> 
+
+            <p>
+              <label for="subject"><strong>Subject:</strong></label><br /> 
+
+             <input type="text" id="subject" name="subject" size="60" value="Enquiry about Hereward, Musician and Songwriter" />
+            </p> 
+
+            <p><label for="message"><strong>Message:</strong></label><br /> 
+
+             <textarea id="message" name="message" rows="18" cols="60"></textarea>
+           </p> 
+
+           <p><input name="submit" type='submit' value='Send' /></p> 
+        {/exp:email:contact_form}
+
+
+        
+</div>
+	</div>
+        
+	
+     {embed="framework/right_col"}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}

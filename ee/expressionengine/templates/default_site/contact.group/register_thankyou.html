@@ -1,0 +1,39 @@
+{embed ="framework/doc_head" adzone="none"}
+<script type='text/javascript'>
+   setTimeout('window.location=\'{site_url}web/contact/register\'', 1000);
+
+</script>
+
+
+<div id="container">
+	{embed="framework/header"}
+        <?php
+          $this->EE =& get_instance();
+          $email = $this->EE->db->escape_str($_POST['email']);
+          $how = $this->EE->db->escape_str($_POST['howdidyoulearn']);
+          $reason = $this->EE->db->escape_str($_POST['reason']);
+          $related = $this->EE->db->escape_str($_POST['related']);
+          $sql = "insert into tna_event_register set email='$email', how ='$how', reason ='$reason', related ='$related'";
+          
+          $this->EE->db->query($sql);
+          
+          //echo "<div>$sql</div>";
+
+        ?>
+
+	{!-- embed ="framework/navigation" section="home" --}
+
+
+	<div style="font-weight:bold; border:none;" id="main">
+           <h2 style="color:#9A001A; margin-top:20px;">THANK YOU!</h2>
+
+           <p>Your details have been processed.</p>
+        
+	</div>
+        
+	
+     {!-- embed="framework/right_col" --}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}

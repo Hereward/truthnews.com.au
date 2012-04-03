@@ -1,0 +1,29 @@
+{!--
+{if logged_out}
+<p>
+In order to leave a comment you may need to <a href="http://www.wearechange.org.au/site/main/join">register and login</a>. 
+</p>
+{/if}
+--}
+
+<a name="comment_body" ></a>
+<div  class="comment_block">
+<h3>Comments</h3>
+{exp:comment:entries site="{embed:site}" dynamic="off" entry_id="{embed:entry_id}" sort="asc" limit="20" paginate="bottom"}
+
+<div class="comment_entry">
+{comment}
+</div>
+
+<p class="comment_data">By <strong>{name}</strong> on {comment_date format="%Y %m %d"}</p>
+  {paginate}
+     <p>Page {current_page} of {total_pages} pages {pagination_links}</p>
+  {/paginate}
+
+{/exp:comment:entries}
+
+
+
+  {embed="default_site:framework/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
+
+</div>

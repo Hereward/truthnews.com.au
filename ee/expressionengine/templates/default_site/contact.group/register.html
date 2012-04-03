@@ -1,0 +1,55 @@
+{embed ="framework/doc_head" adzone="none"}
+
+
+<div id="container">
+	{embed="framework/header"}
+
+	{!-- embed ="framework/navigation" section="home" --}
+
+
+	<div style="font-weight:bold; border:none;" id="main">
+         
+          <form style="width:820px;" action="{site_url}web/contact/register_thankyou" method="post" id="guest_form">
+ 
+            <h2 style="color:#9A001A; margin-top:20px;">GUEST REGISTER</h2>
+
+            <div style="float:right;">
+
+              <p><label">Please tell us any related topics you are interested in:</label><br> 
+
+                 <textarea cols="44" rows="18" name="related" id="related"></textarea>
+              </p> 
+
+              <p style="text-align:right;"><input type="submit" value="Submit" name="submit"></p> 
+            </div>
+            
+            <p><label>Your Email:</label><br> <input type="text" value="" maxlength="35" size="60" name="email" id="email"></p> 
+
+            <p>
+              <label>How did you learn about this event?</label><br> 
+              <select id="howdidyoulearn" name="howdidyoulearn">
+                <option value="flyer">From a flyer</option>
+                <option value="email">From an email</option>
+                <option value="search">gaga</option>
+                <option selected="selected" value="mouth">Word of mouth</option>
+                <option value="other">Other</option>
+              </select>
+
+
+
+            </p> 
+
+           <p><label>What is your main reason for coming tonight?</label><br> 
+
+             <textarea cols="40" rows="12" name="reason" id="reason"></textarea>
+           </p> 
+           
+        </form>
+	</div>
+        
+	
+     {!-- embed="framework/right_col" --}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}

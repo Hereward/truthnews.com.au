@@ -1,0 +1,45 @@
+{embed ="framework/doc_head" title="Contribute to Truth News Australia"}
+
+<div id="container">
+	{embed="framework/header"}
+
+	{embed ="framework/navigation" section="home"}
+     
+
+	<div id="main">
+         <h2>We Welcome Donations!</h2
+         <p>Unfortunately our PayPal account was frozen and funds seized recently under a false pretext about regulations for non-profit organisations.</p>
+         <p>We have never claimed to be a tax exempt "non-profit organisation", yet despite this Paypal insists that we cannot receive donations!</p>
+         <p>We intend to create a merchant account soon to allow credit card deposits, however there are additional costs involved in creating this facility.</p>
+         <p>
+             In the meantime, if you would like to donate please use the contact form below to send us a message and the amount you would like to donate. 
+             We will reply with our bank account details so you can make a direct deposit.
+         </p>
+          
+          <p>Thanks in advance for your support of Truth News Australia!</p>
+
+          {exp:email:contact_form user_recipients="false" recipients="editor@truthnews.com.au" charset="utf-8"} 
+ 
+            <p><label for="from">Your Email:</label><br /> <input type="text" id="from" name="from" size="60" maxlength="35" value="{member_email}" /></p> 
+
+            <p>
+              <label for="subject">Subject:</label><br /> 
+
+             <input type="text" id="subject" name="subject" size="60" value="Donation Offer: Truth News Australia" />
+            </p> 
+
+            <p><label for="message">Message:</label><br /> 
+
+             <textarea id="message" name="message" rows="18" cols="60"></textarea>
+           </p> 
+
+           <p><input name="submit" type='submit' value='Send' /></p> 
+        {/exp:email:contact_form}
+	</div>
+        
+	
+     {embed="framework/right_col"}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}

@@ -1,0 +1,44 @@
+DirectoryIndex web index.php index.html 
+<Files web>
+ForceType php5-cgi
+</Files>
+
+
+<IfModule mod_php4.c>
+php_flag session.use_trans_sid off
+</IfModule>
+
+RewriteEngine on
+
+# Removes index.php
+
+RewriteCond $1 !\.(gif|jpe?g|png)$ [NC]
+RewriteCond $1 !(stats)$ [NC]
+
+##RewriteCond $1 !(\/storage\/) [NC]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+
+RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+
+RewriteCond %{QUERY_STRING} fb_comment_id=
+RewriteRule (.*) http://www.truthnews.com.au/$1? [R=301,L]
+
+RewriteCond %{QUERY_STRING}  ^feed=podcast$
+#RewriteRule ^/radio/wordpress/$ /web/feeds/tna.rss2 [R=301]
+#RewriteRule ^/radio/wordpress/$ /web/feeds/tna.rss2 [L]
+
+RewriteRule ^(.*)$ http://www.truthnews.com.au/web/feeds/tna.rss2? [R=301,L]
+#RewriteRule ^radio/wordpress$ /web/feeds/tna.rss2? [L]
+
+#RewriteRule (.*) http://www.truthnews.com.au/web/feeds/tna.rss2? [L]
+#RewriteRule ^radio/wordpress/$ /web/feeds/tna.rss2 [L]
+
+
+#RewriteRule ^/radio/wordpress/?feed=podcast /web/feeds/tna.rss2? [l,nc]
+
+# BOING  RedirectMatch ^/$ http://www.truthnews.com.au/radio/wordpress/
+#Redirect 301 /radio/wordpress/ http://www.truthnews.com.au/

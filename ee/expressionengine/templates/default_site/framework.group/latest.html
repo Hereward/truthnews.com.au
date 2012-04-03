@@ -1,0 +1,37 @@
+<div class="latest">
+<div class="right">
+
+  <h2 style="color:red; font-size: 1.7em;">Live Transmission!</h2>
+  <div style="margin-top:10px; text-align:center;"><a href="http://www.logosradionetwork.com/"><img src="http://www.truthnews.com.au/storage/images/framework/logos_logo.jpg" alt="Logos Radio Network" /></a></div>
+  <a href="http://www.logosradionetwork.com/"> 
+     <table style="font-family: verdana; margin:10px 0px auto; font-weight:bold; font-size: 12px;">
+      <tr>
+        <td style="color:red;" align="right">US:</td><td style="color:white;" align="left">Wednesdays 8-10pm CST</td>
+      </tr>
+      <tr>
+        <td style="color:red;" align="right">Australia:</td><td style="color:white;" align="left">Thursdays 11-1pm AEST</td>
+      </tr>
+    </table>
+  </a>
+
+{!--
+   <ul>
+ 
+     {exp:channel:entries offset="0" channel="tna_news|911oz" limit="5" orderby="entry_date" sort="desc" status="open"}
+           <li><a href="{channel_url}/{url_title}">{exp:char_limit total="60"}{title}{/exp:char_limit}</a></li>
+     {/exp:channel:entries}
+
+  </ul>
+--}
+</div>
+<div class="left">
+  <h2>Latest podcasts</h2>
+  <ul>
+     {exp:channel:entries offset="0" search:podcast="yes" channel="tna|tna_news" limit="5" orderby="entry_date" sort="desc" status="open"}
+           <li><a href="{channel_url}/{url_title}">{exp:char_limit total="60"}{title}{/exp:char_limit}</a></li>
+     {/exp:channel:entries}
+  </ul>
+</div>
+
+</div>
+

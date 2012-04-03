@@ -1,0 +1,31 @@
+{exp:rss:feed channel="tna"}
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+<channel>
+<itunes:new-feed-url>http://www.truthnews.com.au/web/feeds/itunes.xml</itunes:new-feed-url>
+<ttl>60</ttl>
+{exp:channel:info channel="tna"}
+<title>{channel_title}</title>
+<description>A hard hitting talk radio show which boldly ventures beyond the spin, deception and propaganda of mainstream
+news.</description>
+<link>http://www.truthnews.com.au/web/radio</link>
+<language>en-us</language>
+<copyright>Copyright Truth News Australia 2011</copyright>
+<itunes:subtitle></itunes:subtitle>
+<itunes:author>Hereward Fenton</itunes:author>
+<itunes:summary>{channel_description}</itunes:summary>
+<itunes:owner>
+<itunes:name>Hereward Fenton</itunes:name>
+<itunes:email>editor@truthnews.com.au</itunes:email>
+</itunes:owner>
+<itunes:image href="http://www.truthnews.com.au/storage/banners/tnra_small_banner_182X162.jpg" />
+<itunes:category text="News">
+<itunes:category text="Truth Justice Freedom"/>
+</itunes:category>
+{/exp:channel:info}
+{exp:channel:entries site="default_site" channel="tna" orderby="date" sort="desc" }
+{embed=feeds/itunes_feed_item entry_id="{entry_id}"}
+{/exp:channel:entries} 
+</channel>
+</rss>
+{/exp:rss:feed} 
