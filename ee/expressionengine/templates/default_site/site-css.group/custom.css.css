@@ -1,3 +1,11 @@
+h2.call_in {
+    background-color: #9A001A;
+    color: white;
+    padding: 7px 0;
+    text-align: center;
+    width: 599px;
+}
+
 div.latest {
    margin:10px 0px 10px 0px;
    padding-bottom:20px;
