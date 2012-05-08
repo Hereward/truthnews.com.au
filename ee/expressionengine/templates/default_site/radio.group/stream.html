@@ -1,0 +1,44 @@
+
+{embed ="framework/doc_head" description="Logos Radio Network Stream" title="Logos Radio Network Stream"}
+
+
+<div id="container">
+	{embed="framework/header"}
+
+	{embed ="framework/navigation" section="home"}
+
+
+	<div id="main">
+         
+               <div class="article_container">
+
+               <div>
+               <div style="margin-top:15px;" id='mediaspace_logosstream'>This text will be replaced</div>
+                 <script type='text/javascript'>
+                   load_player_object_simple("logosstream","http://stream.logosradionetwork.com:80/;stream.nsv&");  
+                 </script>
+              </div>
+ 
+                 {!-- <div class="add_this">{embed=framework/add_this add_this_url="{channel_url}/{url_title}"} </div> --}
+{!--
+                            <div class="article">
+
+                             {if embed:show_comments}
+                                {embed="facebook/fb_comments"}
+                                {embed="framework/comment_body" site="default_site" entry_id="{entry_id}"}
+                             {/if}
+                            </div>
+--}
+                
+                
+               </div>
+
+         {embed="ad_zones/banner"}
+	</div>
+        
+	
+     {embed="framework/right_col"}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}
