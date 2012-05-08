@@ -1,0 +1,22 @@
+{exp:channel:entries site="default_site" limit="1" orderby="date" sort="desc"}
+  {embed ="framework/doc_head" entry_id="{entry_id}" description="{exp:xml_encode}{description}{/exp:xml_encode}" title="{title}"}
+{/exp:channel:entries}
+
+<div id="container">
+	{embed="framework/header"}
+
+	{embed ="framework/navigation" section="home"}
+
+
+	<div id="main">
+         
+         {embed="framework/news_channel" show_comments="yes" channel="tna|tna_news|911oz" search="" limit="1"}
+         {embed="ad_zones/banner"}
+	</div>
+        
+	
+     {embed="framework/right_col"}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}
