@@ -67,7 +67,7 @@ div.logos {
   background-color: #1E1C1D;
   width:260px; 
   margin:0px 5px 0px 0px; 
- 
+  float:left;
   text-align:left;
   padding:13px 15px 5px 18px; 
   -moz-border-radius: 10px;
@@ -83,8 +83,8 @@ ul.listen {
 }
 
 div.call_in {
-	float:right;
-	margin: 0px 0px 0px 10px;
+	
+	margin: 0px 0px 0px 0px;
 }
 
 .listen h2 {
