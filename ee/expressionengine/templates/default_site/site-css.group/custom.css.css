@@ -63,6 +63,19 @@ div.latest a:hover {
   color:white;
 }
 
+div.logos {
+  background-color: #1E1C1D;
+  width:260px; 
+  margin:0px 5px 0px 0px; 
+ 
+  text-align:left;
+  padding:13px 15px 5px 18px; 
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  height:195px;
+  overflow:hidden;
+}
 
 div.fb_message {
   color:dimgray;
