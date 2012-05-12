@@ -66,7 +66,7 @@ div.latest a:hover {
 div.logos {
   background-color: #1E1C1D;
   width:260px; 
-  margin:0px 5px 0px 0px; 
+  margin:0px 20px 0px 0px; 
   float:left;
   text-align:left;
   padding:13px 15px 5px 18px; 
@@ -84,7 +84,11 @@ ul.listen {
 
 div.call_in {
 	
-	margin: 0px 0px 0px 0px;
+	margin: 20px 0px 0px 0px;
+}
+
+div.call_in li {
+	font-size 14px;
 }
 
 .listen h2 {
