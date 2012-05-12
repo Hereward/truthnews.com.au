@@ -6,6 +6,20 @@ h2.call_in {
     width: 599px;
 }
 
+h2.listen_live {
+    background-color: #9A001A;
+    color: white;
+    padding: 7px 0;
+    text-align: center;
+    width: 599px;
+}
+
+.listen_live a, .listen_live a:link .listen_live a:visited {
+	text-decoration:underline;
+	background-color: #9A001A;
+    color: white;
+}
+
 div.latest {
    margin:10px 0px 10px 0px;
    padding-bottom:20px;
