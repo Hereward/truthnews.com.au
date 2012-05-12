@@ -77,8 +77,7 @@ div.logos {
   overflow:hidden;
 }
 
-ul.call_in {
-	clear:both;
+div.call_in ul {
 	margin:20px 0px 0px 0px;
 	list-style-position:inside;
 }
