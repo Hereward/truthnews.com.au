@@ -90,6 +90,7 @@ div.call_in {
 }
 
 div.call_in p {
+	font-size:16px;
 	margin-top:20px;
 }
 
@@ -99,7 +100,7 @@ div.call_in p {
 
 h2.listen_options {
 	clear:both;
-	margin:50px 0px 0px 0px;
+	margin:40px 0px 0px 0px;
 }
 
 div.call_in h2 {
@@ -109,7 +110,7 @@ div.call_in h2 {
 }
 
 ul.listen_options {
-	
+	font-size:18px;
 	margin:0px 0px 0px 0px;
 	
 }
