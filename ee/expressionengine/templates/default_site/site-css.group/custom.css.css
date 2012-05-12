@@ -100,17 +100,20 @@ div.call_in p {
 
 .listen h2 {
 	color:black;
+	font-size:2.5em;
 }
 
 h2.listen_options {
 	clear:both;
 	color:red;
 	margin:40px 0px 0px 0px;
+	font-size:2.5em;
 }
 
 div.call_in h2 {
 	color:red;
 	margin-bottom:5px;
+	font-size:2.5em;
 }
 
 ul.listen_options {
