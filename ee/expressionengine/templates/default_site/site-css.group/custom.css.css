@@ -9,9 +9,12 @@ h2.call_in {
 h2.listen_live {
     background-color: #9A001A;
     color: white;
-    padding: 7px 0;
+    padding: 8px 0;
     text-align: center;
     width: 599px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
 }
 
 .listen_live a, .listen_live a:link .listen_live a:visited {
