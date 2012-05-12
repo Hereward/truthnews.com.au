@@ -80,13 +80,13 @@ div.logos {
 div.call_in ul {
 	margin:10px 0px 10px 0px;
 	list-style-position:inside;
-	font-size:16px;
+	font-size:18px;
 }
 
 div.call_in {
 	
 	margin: 20px 0px 0px 0px;
-	font-size:16px;
+	font-size:18px;
 }
 
 
@@ -95,7 +95,7 @@ div.call_in {
 }
 
 div.call_in h2 {
-	font-size:18px;
+	font-size:20px;
 	color:red;
 	margin-bottom:5px;
 }
