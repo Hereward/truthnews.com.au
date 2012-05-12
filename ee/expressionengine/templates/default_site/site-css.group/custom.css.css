@@ -86,7 +86,7 @@ div.call_in ul {
 div.call_in {
 	
 	margin: 20px 0px 0px 0px;
-	font-size:14px;
+	font-size:16px;
 }
 
 
@@ -95,8 +95,9 @@ div.call_in {
 }
 
 div.call_in h2 {
-	font-size:16px;
+	font-size:18px;
 	color:black;
+	margin-bottom:5px;
 }
 
 ul.listen_options {
