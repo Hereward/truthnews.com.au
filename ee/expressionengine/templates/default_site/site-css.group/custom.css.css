@@ -80,6 +80,7 @@ div.logos {
 ul.listen {
 	clear:both;
 	margin:20px 0px 0px 0px;
+	list-style-position:inside;
 }
 
 div.call_in {
