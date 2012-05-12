@@ -69,11 +69,11 @@ div.logos {
   margin:10px 20px 0px 0px; 
   float:left;
   text-align:left;
-  padding:8px 10px 0px 15px; 
+  padding:5px 10px 0px 15px; 
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  height:175px;
+  height:165px;
   overflow:hidden;
 }
 
