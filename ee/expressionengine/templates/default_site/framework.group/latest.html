@@ -1,6 +1,6 @@
 <div class="latest">
 <div class="right">
-
+{!--
   <h2 style="color:red; font-size: 1.7em;">Live Transmission!</h2>
   <div style="margin-top:10px; text-align:center;"><a href="http://www.logosradionetwork.com/"><img src="http://www.truthnews.com.au/storage/images/framework/logos_logo.jpg" alt="Logos Radio Network" /></a></div>
   <a href="http://www.logosradionetwork.com/"> 
@@ -13,8 +13,9 @@
       </tr>
     </table>
   </a>
+--}
 
-{!--
+   <h2>Latest Stories</h2>
    <ul>
  
      {exp:channel:entries offset="0" channel="tna_news|911oz" limit="5" orderby="entry_date" sort="desc" status="open"}
@@ -22,7 +23,7 @@
      {/exp:channel:entries}
 
   </ul>
---}
+
 </div>
 <div class="left">
   <h2>Latest podcasts</h2>
