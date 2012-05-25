@@ -35,7 +35,7 @@ class Tna_utils {
     if (array_key_exists('playtime_seconds', $info)) {
     	$duration = $info['playtime_seconds'];
     }
-    return $duration;
+    return round($duration);
     
   }
 
