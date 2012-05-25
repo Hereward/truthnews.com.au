@@ -19,9 +19,9 @@ news.</description>
 <itunes:email>editor@truthnews.com.au</itunes:email>
 </itunes:owner>
 <itunes:image href="http://www.truthnews.com.au/storage/banners/tnra_small_banner_182X162.jpg" />
-<itunes:category text="News">
+
 <itunes:category text="News &amp; Politics"/>
-</itunes:category>
+
 {/exp:channel:info}
 {exp:channel:entries site="default_site" channel="tna" orderby="date" sort="desc" }
 {embed=feeds/itunes_feed_item entry_id="{entry_id}"}
