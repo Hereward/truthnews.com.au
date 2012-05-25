@@ -24,7 +24,7 @@
         {embed=feeds/rss_media_enclosure segment="2" media_segments="{media_segments}" media_date="{media_date}" media_source="{media_source}"}
       {/if}
 
-<guid>{channel_url}/{url_title}</guid>
+<guid>{channel_url}/{url_title}#part2</guid>
 <pubDate>{gmt_entry_date format="%D, %j %M %Y %H:%i:%s +1000"}</pubDate>
 <itunes:duration>{exp:tna_utils:get_media_properties segment='2' media_source='{media_source}' media_date='{media_date}'}</itunes:duration>
 <itunes:keywords>{keywords}</itunes:keywords>
@@ -42,7 +42,7 @@
         {embed=feeds/rss_media_enclosure segment="3" media_segments="{media_segments}" media_date="{media_date}" media_source="{media_source}"}
       {/if}
 
-<guid>{channel_url}/{url_title}</guid>
+<guid>{channel_url}/{url_title}#part3</guid>
 <pubDate>{gmt_entry_date format="%D, %j %M %Y %H:%i:%s +1000"}</pubDate>
 <itunes:duration>{exp:tna_utils:get_media_properties segment='3' media_source='{media_source}' media_date='{media_date}'}</itunes:duration>
 <itunes:keywords>{keywords}</itunes:keywords>
