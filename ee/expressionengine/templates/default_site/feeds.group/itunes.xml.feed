@@ -20,7 +20,7 @@ news.</description>
 </itunes:owner>
 <itunes:image href="http://www.truthnews.com.au/storage/banners/tnra_small_banner_182X162.jpg" />
 <itunes:category text="News">
-<itunes:category text="News & Politics"/>
+<itunes:category text="News &amp; Politics"/>
 </itunes:category>
 {/exp:channel:info}
 {exp:channel:entries site="default_site" channel="tna" orderby="date" sort="desc" }
