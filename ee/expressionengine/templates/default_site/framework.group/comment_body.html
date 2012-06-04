@@ -19,7 +19,7 @@ In order to leave a comment you may need to <a href="http://www.wearechange.org.
 
 <p class="comment_data">By <strong>{name}</strong> on {comment_date format="%Y %m %d"}</p>
   {paginate}
-     <p>Page {current_page} of {total_pages} pages {pagination_links}</p>
+     <p>Page {current_page} of {total_pages} pages {exp:low_replace find="index.php" replace=""}{pagination_links}{/exp:low_replace}</p>
   {/paginate}
 
 {/exp:comment:entries}
