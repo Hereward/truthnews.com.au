@@ -1,0 +1,12 @@
+<div class="recent_comments">
+   <h2>Recent Comments</h2>
+   
+   {exp:comment:entries sort="desc" orderby="date" limit="10" dynamic="no"}
+        {comment}
+        <p>
+                By {name} on {comment_date format="%Y %m %d"}<br>
+                From the entry '<a href="{comment_url_title_auto_path}">{title}</a>'.
+        </p>
+   {/exp:comment:entries}
+</div>
+
