@@ -1,3 +1,10 @@
+div.recent_comments {
+    text-align:left; 
+    margin-top:0px; 
+    margin-bottom:20px;
+}
+
+
 h2.call_in {
     background-color: #9A001A;
     color: white;
