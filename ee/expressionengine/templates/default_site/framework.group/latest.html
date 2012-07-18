@@ -12,13 +12,13 @@
         <td style="color:red;" align="right">Australia:</td><td style="color:white;" align="left">Thursdays 11-1pm AEST</td>
       </tr>
     </table>
-  </a>
+  </a> 
 --}
 
    <h2>Most Popular</h2>
    <ul>
  
-     {exp:channel:entries start_on="2012-01-01 00:00" orderby=”comment_total” offset="0" channel="tna_news|911oz" limit="5" sort="desc" status="open"}
+     {exp:channel:entries start_on="2012-01-01 00:00" orderby="comment_total" offset="0" channel="tna_news|911oz" limit="5" sort="desc" status="open"}
            <li><a href="{channel_url}/{url_title}">{exp:char_limit total="60"}{title}{/exp:char_limit}</a></li>
      {/exp:channel:entries}
 
