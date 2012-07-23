@@ -7,10 +7,11 @@
     xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
     xmlns:admin="http://webns.net/mvcb/"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:atom="http://www.w3.org/2005/Atom">
 
     <channel>
-    
+    <atom:link href="http://www.truthnews.com.au/web/feeds/tna.rss2" rel="self" type="application/rss+xml" />
     <title>Truth News Radio Australia</title>
     <link>http://www.truthnews.com.au</link>
     <description>A hard hitting talk radio show which boldly ventures beyond the spin, deception and propaganda of mainstream news.</description>
