@@ -23,7 +23,7 @@ news.</description>
 <itunes:category text="News &amp; Politics"/>
 
 {/exp:channel:info}
-{exp:channel:entries site="default_site" channel="tna" orderby="date" sort="desc" }
+{exp:channel:entries limit="50" site="default_site" channel="tna" orderby="date" sort="desc" cache="yes" refresh="5"}
 {embed=feeds/itunes_feed_item entry_id="{entry_id}"}
 {/exp:channel:entries} 
 </channel>
