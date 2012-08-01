@@ -26,9 +26,9 @@
 
 </div>
 <div class="left">
-  <h2>Latest podcasts</h2>
+  <h2>Latest Posts</h2>
   <ul>
-     {exp:channel:entries offset="0" search:podcast="yes" channel="tna|tna_news" limit="5" orderby="entry_date" sort="desc" status="open"}
+     {exp:channel:entries offset="0" channel="tna|tna_news" limit="5" orderby="entry_date" sort="desc" status="open"}
            <li><a href="{channel_url}/{url_title}">{exp:char_limit total="60"}{title}{/exp:char_limit}</a></li>
      {/exp:channel:entries}
   </ul>
