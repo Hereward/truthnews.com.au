@@ -2,6 +2,8 @@ div.recent_comments {
     text-align:left; 
     margin-top:0px; 
     margin-bottom:20px;
+    overflow:hidden;
+    width: 290px;
 }
 
 
