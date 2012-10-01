@@ -21,7 +21,7 @@
     <dc:date>{gmt_date format="%Y-%m-%dT%H:%i:%s%Q"}</dc:date>
     <admin:generatorAgent rdf:resource="http://expressionengine.com/" />
     
-{exp:channel:entries channel="tna|tna_news" limit="50" rdf="off" dynamic_start="on" disable="member_data|trackbacks" cache="yes" refresh="5"}
+{exp:channel:entries channel="tna|tna_news" limit="10" rdf="off" dynamic_start="on" disable="member_data|trackbacks" cache="yes" refresh="5"}
     {embed=feeds/rss2_feed_item entry_id="{entry_id}"}
 {/exp:channel:entries}
     
