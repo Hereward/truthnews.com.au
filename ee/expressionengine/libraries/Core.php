@@ -487,7 +487,7 @@ class EE_Core {
 	function _enable_debugging()
 	{
 		$this->EE->db->db_debug = TRUE;
-		error_reporting(E_ALL);
+		error_reporting(E_ALL & ~E_DEPRECATED);
 		@ini_set('display_errors', 1);
 	}
 	

@@ -12,7 +12,7 @@ class Tna_utils {
   }
   
   function get_media_properties() {
-  	require_once ('/home/planetonline/websites/truthnews/includes/getid3/getid3.php');
+  	require_once ("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.php");
   	//$filename = $this->EE->TMPL->fetch_param('filename');
         $media_source = $this->EE->TMPL->fetch_param('media_source');
         $media_date = $this->EE->TMPL->fetch_param('media_date');
@@ -27,9 +27,9 @@ class Tna_utils {
   	$getID3 = new getID3;
         $full_path = '';
         if ($param_path) {
-        $full_path = "/home/planetonline/websites/truthnews/$param_path";
+        $full_path = "{$_SERVER['DOCUMENT_ROOT']}/$param_path";
         } else {
-  	$full_path = "/home/planetonline/websites/truthnews/radio/export/$filename";
+  	$full_path = "{$_SERVER['DOCUMENT_ROOT']}/radio/export/$filename";
         }
     $info = $getID3->analyze($full_path);
     if (array_key_exists('playtime_seconds', $info)) {

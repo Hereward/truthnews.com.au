@@ -79,9 +79,9 @@ function load_player_object(entry_id,media_date,duration,source,segment) {
   so.addParam('wmode','opaque');
   so.addVariable('duration',duration);
   if (segment>1) {
-     media_url = 'http://www.truthnews.com.au/radio/export/'+source+'_'+media_date+'_'+segment+'.mp3';
+     media_url = '/radio/export/'+source+'_'+media_date+'_'+segment+'.mp3';
   } else {
-     media_url = 'http://www.truthnews.com.au/radio/export/'+source+'_'+media_date+'.mp3';
+     media_url = '/radio/export/'+source+'_'+media_date+'.mp3';
   }
   //alert("media URL = " + media_url);
   so.addVariable('file',media_url);
