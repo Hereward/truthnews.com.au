@@ -16,10 +16,19 @@
            <ul>
              <li><a href="http://archive.logosradionetwork.com/category/truth-news-radio-australia/">Logos Radio Network</a>
               (available within a few hours of every broadcast, contain ads)</li>
-             <li><a href="{site_url}/web/feeds/tna.rss2">TNRA</a> (no ads, but archives are posted less frequently)</li>
+             <li><strong>TNRA</strong> - <em>see below</em> (no ads, but archives are posted less frequently)</li>
+             <li>If you wish to subscribe to our podcasts using iTunes, please use <a href="{site_url}web/feeds/itunes.xml">this link</a></li>
+             <li>If you wish to subscribe to an RSS feed of all TNRA posts, please use <a href="{site_url}web/feeds/tna.rss2">this link</a></li>
            </ul>
+           
+            
+           
+           <h3>TNRA Archives</h3>
+{exp:channel:month_links channel="tna|tna_news|911oz" limit="50"}
+<a href="{path='archives/all'}">{month}, {year}</a><br />
+{/exp:channel:month_links}
          
-         <p>If you wish to subscribe to our podcasts using iTunes, please use <a href="{site_url}web/feeds/tna.rss2">this link</a>.
+        
         
 	</div>
         
