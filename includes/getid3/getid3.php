@@ -60,6 +60,7 @@ class getID3
 
 		// Check memory
 		$memory_limit = ini_get('memory_limit');
+		
 		if (eregi('([0-9]+)M', $memory_limit, $matches)) {
 			// could be stored as "16M" rather than 16777216 for example
 			$memory_limit = $matches[1] * 1048576;

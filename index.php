@@ -24,7 +24,7 @@
  * http://expressionengine.com/user_guide/installation/best_practices.html
  * 
  */
-	$system_path = './system';
+	$system_path = './ee';
 
 
 /*
@@ -65,7 +65,7 @@
  * Enable it only if you have a good reason to.
  * 
  */
-	$debug = 0;
+	$debug = 1;
 
 /*
  * --------------------------------------------------------------------
@@ -169,7 +169,8 @@
  */	
 	if (DEBUG == 1)
 	{
-		error_reporting(E_ALL);
+		
+		error_reporting(E_ALL & ~E_DEPRECATED);
 		@ini_set('display_errors', 1);
 	}
 	else
