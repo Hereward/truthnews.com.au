@@ -3,7 +3,7 @@
  * ExpressionEngine - by EllisLab
  *
  * @package		ExpressionEngine
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
  * @license		http://expressionengine.com/user_guide/license.html
  * @link		http://expressionengine.com
@@ -19,7 +19,7 @@
  * @package		ExpressionEngine
  * @subpackage	Modules
  * @category	Update File
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @link		http://expressionengine.com
  */
 
@@ -349,8 +349,6 @@ class Email {
 		);
 
 		$tagdata = str_replace($LB, "\n", $tagdata);
-
-		$recipients = $this->_encrypt_recipients($recipients);
 
 		$allow = ($allow_html !== FALSE) ? TRUE : FALSE;
 		
@@ -892,7 +890,7 @@ class Email {
 		$recipients = $this->_encrypt_recipients($recipients);
 
 		$data = array(
-			'id'			=> ($this->EE->TMPL->form_id == '') ? 'contact_form' : $this->EE->TMPL->form_id,
+			'id'			=> ($this->EE->TMPL->form_id == '') ? $form_id : $this->EE->TMPL->form_id,
 			'class'			=> $this->EE->TMPL->form_class,
 			'hidden_fields'	=> array(
 				'ACT'				=> $this->EE->functions->fetch_action_id('Email', 'send_email'),

@@ -3,7 +3,7 @@
  * ExpressionEngine - by EllisLab
  *
  * @package		ExpressionEngine
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
  * @license		http://expressionengine.com/user_guide/license.html
  * @link		http://expressionengine.com
@@ -24,7 +24,7 @@
  * @package		ExpressionEngine
  * @subpackage	Config
  * @category	Config
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @link		http://expressionengine.com
  */
 	
@@ -131,6 +131,7 @@ $mimes = array(
 				'qt'	=>	'video/quicktime',
 				'ra'	=>	'audio/x-realaudio',
 				'ram'	=>	'audio/x-pn-realaudio',
+				'rar'	=>	'application/x-rar-compressed',
 				'rm'	=>	'audio/x-pn-realaudio',
 				'rpm'	=>	'audio/x-pn-realaudio-plugin',
 				'rtx'	=>	'text/richtext',
@@ -154,6 +155,7 @@ $mimes = array(
 				'webm'	=>	'video/webm',
 				'wmlc'	=>	'application/wmlc',
 				'word'	=>	array('application/msword', 'application/octet-stream'),
+				'wmv' 	=> 	'video/x-ms-wmv',
 				'xht'	=>	'application/xhtml+xml',
 				'xhtml'	=>	'application/xhtml+xml',
 				'xl'	=>	'application/excel',

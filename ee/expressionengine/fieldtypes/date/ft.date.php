@@ -3,7 +3,7 @@
  * ExpressionEngine - by EllisLab
  *
  * @package		ExpressionEngine
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
  * @license		http://expressionengine.com/user_guide/license.html
  * @link		http://expressionengine.com
@@ -19,7 +19,7 @@
  * @package		ExpressionEngine
  * @subpackage	Fieldtypes
  * @category	Fieldtypes
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @link		http://expressionengine.com
  */
 class Date_ft extends EE_Fieldtype {
@@ -57,7 +57,7 @@ class Date_ft extends EE_Fieldtype {
 			$data = $this->EE->localize->string_to_timestamp($data);
 		}
 
-		if ($data === FALSE)
+		if ( ! is_numeric($data) && $data != '')
 		{
 			return lang('invalid_date');
 		}

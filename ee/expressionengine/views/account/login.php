@@ -5,6 +5,8 @@
 
 	<?=$this->view->head_title($cp_page_title)?>
 	<?=$this->view->head_link('css/login.css'); ?>
+	<?=$this->view->script_tag('jquery/jquery.js')?>
+	
 </head>
 <body>
 
@@ -24,12 +26,12 @@
 		<dl>
 			<dt><?=lang('username', 'username')?>:</dt>
 			<dd>
-				<?=form_input(array('style' => 'width:90%', 'size' => '35', 'dir' => 'ltr', 'name' => "username", 'id' => "username", 'value' => $username, 'maxlength' => 50))?>
+				<?=form_input(array('style' => 'width:90%', 'size' => '35', 'dir' => 'ltr', 'name' => "username", 'id' => "username", 'value' => $username, 'maxlength' => 50, 'autocomplete' => 'off'))?>
 			</dd>
 
 			<dt><?=lang('password', 'password')?>:</dt>
 			<dd>
-			  <?=form_password(array('style' => 'width:90%', 'size' => '32', 'dir' => 'ltr', 'name' => "password", 'id' => "password", 'maxlength' => 40))?> 
+			  <?=form_password(array('style' => 'width:90%', 'size' => '32', 'dir' => 'ltr', 'name' => "password", 'id' => "password", 'maxlength' => 40, 'autocomplete' => 'off'))?> 
 			</dd>
 		</dl>
 		
@@ -46,6 +48,12 @@
 		<?=form_close()?>
 
 	</div>
+<?php
+if (isset($script_foot))
+{
+	echo $script_foot;
+}
+?>
 
 </body>
 </html>

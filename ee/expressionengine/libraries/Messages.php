@@ -3,7 +3,7 @@
  * ExpressionEngine - by EllisLab
  *
  * @package		ExpressionEngine
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
  * @license		http://expressionengine.com/user_guide/license.html
  * @link		http://expressionengine.com
@@ -19,7 +19,7 @@
  * @package		ExpressionEngine
  * @subpackage	Core
  * @category	Core
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @link		http://expressionengine.com
  */
 class EE_Messages {
@@ -3147,7 +3147,7 @@ DOH;
 				
 				if ($this->allegiance == 'user')
 				{
-					$this->single_parts['path']['send_pm'] = $this->_create_path('pm').$this->buddies[$i]['5'].'/';
+					$this->single_parts['path']['send_pm'] = $this->_create_path('pm').'/'.$this->buddies[$i]['5'].'/';
 				}
 				else
 				{
