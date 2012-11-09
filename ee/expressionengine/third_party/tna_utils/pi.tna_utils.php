@@ -26,7 +26,7 @@ class Tna_utils {
 		$filename = $media_source.'_'.$media_date.$seg_suffix.'.mp3';
 		$param_path = $this->EE->TMPL->fetch_param('path');
 		$duration = '';
-		$getID3 = new getID3;
+		//$getID3 = new getID3;
 		
 		
         $getID3 = new getID3_cached('db3', "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.dbm",
