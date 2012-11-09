@@ -2,6 +2,7 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 require_once ("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.php");
+require_once ("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/extension.cache.dbm.php");
 
 class Tna_utils {
     
@@ -26,13 +27,19 @@ class Tna_utils {
 		$param_path = $this->EE->TMPL->fetch_param('path');
 		$duration = '';
 		$getID3 = new getID3;
+		
+		
+        $getID3 = new getID3_cached('db3', "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.dbm",
+        "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.lock");
+        $getID3->encoding = 'UTF-8';
+		
 		$full_path = '';
 		if ($param_path) {
 			$full_path = "{$_SERVER['DOCUMENT_ROOT']}/$param_path";
 		} else {
 			$full_path = "{$_SERVER['DOCUMENT_ROOT']}/radio/export/$filename";
 		}
-		return '';
+		//return 3600;
 		$info = $getID3->analyze($full_path);
 		if (array_key_exists('playtime_seconds', $info)) {
 			$duration = $info['playtime_seconds'];
