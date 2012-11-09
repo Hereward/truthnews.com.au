@@ -27,7 +27,7 @@ class Tna_utils {
 		$param_path = $this->EE->TMPL->fetch_param('path');
 		$duration = '';
 		//$getID3 = new getID3;
-		
+		return 3600;
 		
         $getID3 = new getID3_cached('db3', "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.dbm",
         "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.lock");
