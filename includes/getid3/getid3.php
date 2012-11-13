@@ -47,6 +47,7 @@ if ($open_basedir) {
 if (!$temp_dir) {
 	$temp_dir = '*'; // invalid directory name should force tempnam() to use system default temp dir
 }
+//die($temp_dir);
 // $temp_dir = '/something/else/';  // feel free to override temp dir here if it works better for your system
 define('GETID3_TEMP_DIR', $temp_dir);
 unset($open_basedir, $temp_dir);
@@ -70,6 +71,8 @@ if (!defined('GETID3_INCLUDEPATH')) {
 		}
 	}
 }
+
+//die(GETID3_INCLUDEPATH);
 
 // End: Defines
 

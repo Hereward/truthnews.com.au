@@ -1,8 +1,7 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once ("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.php");
-require_once ("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/extension.cache.dbm.php");
+
 
 class Tna_utils {
     
@@ -14,6 +13,25 @@ class Tna_utils {
 	}
 
 	function get_media_properties() {
+		
+		error_reporting(E_ALL & ~E_DEPRECATED);
+		@ini_set('display_errors', 1);
+		//die(APPPATH);
+		//die($this->EE->config->item('system_path'));
+		require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.php");
+		//require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.lib.php");
+        require_once ("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/extension.cache.mysql.php");
+        
+        $db = array();
+        //die(APPPATH.'config/database.php');
+        include(APPPATH.'config/database.php');
+        //var_dump($db);
+        //die($db['expressionengine']['database']);
+        $getID3 = new getID3_cached_mysql($db['expressionengine']['hostname'], $db['expressionengine']['database'], $db['expressionengine']['username'], $db['expressionengine']['password']);
+		
+       // $getID3 = new getID3_cached_dbm('db2', "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.dbm","{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.lock");
+        $getID3->encoding = 'UTF-8';
+		//getid3_lib::IncludeDependency(GETID3_INCLUDEPATH.'extension.cache.dbm.php', __FILE__, true);
 		
 		//$filename = $this->EE->TMPL->fetch_param('filename');
 		$media_source = $this->EE->TMPL->fetch_param('media_source');
@@ -27,11 +45,9 @@ class Tna_utils {
 		$param_path = $this->EE->TMPL->fetch_param('path');
 		$duration = '';
 		//$getID3 = new getID3;
-		return 3600;
+		//return 3600;
 		
-        $getID3 = new getID3_cached('db3', "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.dbm",
-        "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.lock");
-        $getID3->encoding = 'UTF-8';
+		
 		
 		$full_path = '';
 		if ($param_path) {
