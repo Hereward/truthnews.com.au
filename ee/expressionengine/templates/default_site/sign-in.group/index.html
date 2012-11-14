@@ -1,0 +1,30 @@
+{embed ="framework/doc_head" url="{site_url}radio-archives" title="Truth News Australia Sign In" description="Sign in or create a new account."}
+
+<div id="container">
+	{embed="framework/header"}
+
+	{embed ="framework/navigation"}
+
+
+	<div id="main">
+         <h2>Sign In Page</h2>
+         
+     {if logged_in}
+           <a href="{path='member/profile'}">Edit your profile</a><br>
+           <a href="{path='member/memberlist'}">View the Memberlist</a><br>
+           <a href="{path='logout'}">Log Out</a>
+     {/if}
+     
+     
+     {if logged_out}
+       {embed=sign-in/logged_out}
+     {/if}
+        
+   </div>
+        
+	
+     {embed="framework/right_col"}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}

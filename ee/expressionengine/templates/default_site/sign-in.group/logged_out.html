@@ -1,0 +1,29 @@
+
+ {!--
+           Are you a member? Please <a href="{path='member/login'}">log-in</a>.<br>
+           Not a member? <a href="{path='member/register'}">Register</a>.<br>
+           Have you <a href="{path='member/forgot'}">forgotten your password</a>?
+ --}
+
+       <p style="font-weight:bold; width:222px; padding:5px; border:5px solid #EAE8E8; margin-bottom:20px;">New Members &raquo; <a href="{path='member/register'}">Register Here</a></p>
+
+<h3 style="font-weight:bold">Returning Members</h3>
+{exp:member:login_form return="sign-in"}
+
+<p><label>Username</label><br />
+<input type="text" name="username" value="" maxlength="32" class="input" size="25" /></p>
+
+<p><label>Password</label><br />
+<input type="password" name="password" value="" maxlength="32" class="input" size="25" /></p>
+
+{if auto_login}
+<p><input class='checkbox' type='checkbox' name='auto_login' value='1' /> Auto-login on future visits</p>
+{/if}
+
+<p><input class='checkbox' type='checkbox' name='anon' value='1' checked='checked' /> Show my name in the online users list</p>
+
+<p><input type="submit" name="submit" value="Submit" /></p>
+
+<p><a href="{path='member/forgot_password'}">Forgot your password?</a></p>
+
+{/exp:member:login_form}
