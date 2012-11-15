@@ -1,4 +1,4 @@
-{if !logged_in}
+{if logged_in}
 	<p>Welcome, {screen_name} | <a href="{site_url}member/profile/">Profile</a> | <a href="{path='logout'}">Log Out</a>
 {if:else}
 <p>You are currently visiting as a guest, to login or register please <a href="{path=sign-in}">click here</a>.
