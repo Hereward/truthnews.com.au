@@ -1,6 +1,6 @@
 
 {if logged_out}
-<a name="comment_body" ></a>
+
 <h3>Comments</h3>
 <p>
 In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>. 
@@ -9,7 +9,7 @@ In order to leave a comment you may need to <a href="{site_url}sign-in">register
 
 
 {!-- paginate_base="news/story" --}
-{if logged_in}
+
 <a name="comment_body" ></a>
 <div  class="comment_block">
 <h3>Comments</h3>
@@ -31,4 +31,3 @@ In order to leave a comment you may need to <a href="{site_url}sign-in">register
   {embed="default_site:framework/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
 
 </div>
-{/if}
