@@ -21,7 +21,7 @@
 {/exp:comment:entries}
 
 {if logged_out}
-   <p style="text-align:center; border:1px solid dimgray; padding:10px; margin:5px; font-weight:bold;">In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>.</p>
+   <p style="text-align:center; border:2px dashed dimgray; padding:10px; margin:30px 5px 30px 5px; font-weight:bold;">In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>.</p>
 {if:else}
   {embed="default_site:framework/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
 {/if}
