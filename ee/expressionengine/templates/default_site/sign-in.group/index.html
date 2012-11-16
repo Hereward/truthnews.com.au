@@ -10,9 +10,11 @@
          <h2>Sign In Page</h2>
          
      {if logged_in}
-           <a href="{path='member/profile'}">Edit your profile</a><br>
-           <a href="{path='member/memberlist'}">View the Memberlist</a><br>
-           <a href="{path='logout'}">Log Out</a>
+     <ul>
+           <li><a href="{path='member/profile'}">Edit your profile</a></li>
+           <li><a href="{path='member/memberlist'}">View the Memberlist</a></li>
+           <li><a href="{path='logout'}">Log Out</a></li>
+     </ul>
      {/if}
      
      
