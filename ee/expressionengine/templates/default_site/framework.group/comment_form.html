@@ -3,6 +3,12 @@
 <strong>Enter comments below, then click Submit:</strong><br/>
 
 {if logged_out}
+
+<p>
+In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>. 
+</p>
+
+{!--
 <table>
 <tr>
 <td align="right">Name:</td><td><input type="text" name="name" value="{name}" size="50" /></td>
@@ -17,7 +23,7 @@
 <td align="right">URL:</td><td> <input type="text" name="url" value="{url}" size="50" /></td>
 </tr>
 </table>
-
+--}
 {/if}
 
 <div class="comment_buttons">
