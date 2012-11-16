@@ -1,13 +1,13 @@
-{!--
+
 {if logged_out}
 <p>
-In order to leave a comment you may need to <a href="http://www.wearechange.org.au/site/main/join">register and login</a>. 
+In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>. 
 </p>
 {/if}
---}
+
 
 {!-- paginate_base="news/story" --}
-
+{if logged_in}
 <a name="comment_body" ></a>
 <div  class="comment_block">
 <h3>Comments</h3>
@@ -29,3 +29,4 @@ In order to leave a comment you may need to <a href="http://www.wearechange.org.
   {embed="default_site:framework/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
 
 </div>
+{/if}
