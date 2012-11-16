@@ -20,8 +20,10 @@
 
 {/exp:comment:entries}
 
-
-
+{if logged_out}
+   <p>In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>.</p>
+{if:else}
   {embed="default_site:framework/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
+{/if}
 
 </div>

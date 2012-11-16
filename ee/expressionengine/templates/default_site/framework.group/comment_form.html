@@ -1,14 +1,14 @@
 {exp:comment:form  site="{embed:site}" dynamic="off" entry_id="{embed:entry_id}" preview="framework/comment_preview"}
 
-<strong>Enter comments below, then click Submit:</strong><br/>
 
+{!--
 {if logged_out}
 
 <p>
 In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>. 
 </p>
 
-{!--
+
 <table>
 <tr>
 <td align="right">Name:</td><td><input type="text" name="name" value="{name}" size="50" /></td>
@@ -23,9 +23,11 @@ In order to leave a comment you may need to <a href="{site_url}sign-in">register
 <td align="right">URL:</td><td> <input type="text" name="url" value="{url}" size="50" /></td>
 </tr>
 </table>
---}
-{/if}
 
+{/if}
+--}
+
+<strong>Enter comments below, then click Submit:</strong><br/>
 <div class="comment_buttons">
 {exp:comment_buttons}
 </div>
@@ -45,6 +47,7 @@ In order to leave a comment you may need to <a href="{site_url}sign-in">register
 <input type="text" name="captcha" value="{captcha_word}" size="20" maxlength="20" style="width:140px;" /></p>
 
 {/if}
+
 
 <input type="submit" name="submit" value="Submit" />
 <input type="submit" name="preview" value="Preview" />
