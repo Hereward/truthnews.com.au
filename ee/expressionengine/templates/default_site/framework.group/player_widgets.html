@@ -1,15 +1,16 @@
 <?php 
-   $broadcast_date = DateTime::createFromFormat('Ymd', '{embed:media_date}');
-   $broadcast_date_str = $broadcast_date->format('F j, Y');
+   //$broadcast_date = DateTime::createFromFormat('Ymd', '{embed:media_date}');
+   //$broadcast_date_str = $broadcast_date->format('F j, Y');
    $segments = "{embed:media_segments}";
    for ($segment = 1; $segment <= $segments; $segment++) {
        $media_id = "mediaspace_{embed:entry_id}";
        $media_id .= ($segment>1)?"_$segment":'';
+// Broadcast of [<?=$broadcast_date_str?>] 
 ?>
 
 <div class="player_widget_container">
 <div style="margin-top:15px;" id='<?=$media_id?>'>This text will be replaced</div>
-<div style="margin-bottom:10px;">Broadcast of [<?=$broadcast_date_str?>] Part <?=$segment?> of <?=$segments?> <span style="font-size:16px;">&raquo;</span> Download mp3: 
+<div style="margin-bottom:10px;">Part <?=$segment?> of <?=$segments?> <span style="font-size:16px;">&raquo;</span> Download mp3: 
 {!--
 <a href="http://www.truthnews.com.au/web/radio/download/{embed:media_source}_{embed:media_date}">click here</a>
 --}
