@@ -1,2 +1,40 @@
-{embed="sign-in/index"}
+{embed ="framework/doc_head" url="{site_url}sign-in/fb" title="Truth News Australia Sign In" description="Sign in or create a new account with TNRA before Facebook purges us!"}
 
+<div id="container">
+	{embed="framework/header"}
+
+	{embed ="framework/navigation"}
+
+
+	<div id="main">
+         <h2>A Warm Welcome to all Facebook Refugees!</h2>
+         
+         <p>As you've probably heard, Facebook is currently purging dissidents who promote pro-second amendment and pro-liberty information. 
+         It's time to find alternatives to this CIA-run surveillance behemoth.</p>
+         
+         <p> We now have a <a href="{path=forum}"</a> forum where you can share your ideas and meet people!"</p>
+         
+         <p>TNRA welcomes you with open arms as an honoured member! </p>
+         
+         
+     {if logged_in}
+     <ul>
+           <li><a href="{path='member/profile'}">Edit your profile</a></li>
+           <li><a href="{path='member/memberlist'}">View the Memberlist</a></li>
+           <li><a href="{path='logout'}">Log Out</a></li>
+     </ul>
+     {/if}
+     
+     
+     {if logged_out}
+       {embed=sign-in/logged_out}
+     {/if}
+        
+   </div>
+        
+	
+     {embed="framework/right_col"}
+     {embed="framework/footer"}
+
+</div>
+{embed ="framework/doc_foot"}
