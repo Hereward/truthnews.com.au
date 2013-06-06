@@ -1,17 +1,4 @@
-<?php
-if ($EE_view_disable !== TRUE)
-{
-	$this->load->view('_shared/header');
-	$this->load->view('_shared/main_menu');
-	$this->load->view('_shared/sidebar');
-	$this->load->view('_shared/breadcrumbs');
-}
-?>
-
-
-<div id="mainContent"<?=$maincontent_state?>>
-	<?php $this->load->view('_shared/right_nav')?>
-	<div class="contents">
+<?php extend_template('basic') ?>
 		
 		<div class="heading">
 			<h2><?=$cp_page_title?></h2>
@@ -37,8 +24,21 @@ if ($EE_view_disable !== TRUE)
 				<!-- Tabs -->
 				<ul class="tab_menu" id="tab_menu_tabs">
 					<?php foreach ($tabs as $tab => $tab_fields):?>
+							<?php
+								$has_error = FALSE;
+								foreach($tab_fields as $_field) {
+									if (form_error($_field) != '') {
+										$has_error = TRUE;
+									}
+								}
+							?>
 						<li id="menu_<?=$tab?>" title="<?=form_prep($tab_labels[$tab])?>" class="content_tab">
-							<a href="#" title="menu_<?=$tab?>" class="menu_<?=$tab?>"><?=lang($tab_labels[$tab])?></a>&nbsp;
+							<a href="#" title="menu_<?=$tab?>" class="menu_<?=$tab?>">
+								<?php if ($has_error): ?>
+									<img src="<?=$cp_theme_url?>images/error.png" alt="" width="12" height="12" />
+								<?php endif; ?>
+								<?=lang($tab_labels[$tab])?>
+							</a>&nbsp;
 						</li>
 					<?php endforeach;?>
 					
@@ -249,10 +249,6 @@ if ($EE_view_disable !== TRUE)
 		</div> <!-- /publishPageContents -->
 
 
-	</div> <!-- /contents -->
-</div> <!-- /mainContent -->
-
-
 <!-- Modals -->
 	<div id="write_mode_container">
 		<div id="write_mode_close_container">
@@ -280,14 +276,3 @@ if ($EE_view_disable !== TRUE)
 		</div>
 	<?php endif;?>
 <!-- /Modals -->
-
-
-<?php
-if ($EE_view_disable !== TRUE)
-{
-	$this->load->view('_shared/accessories');
-	$this->load->view('_shared/footer');
-}
-
-/* End of file publish.php */
-/* Location: ./themes/cp_themes/corporate/content/publish.php */

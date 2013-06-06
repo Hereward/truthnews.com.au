@@ -4,9 +4,9 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
+ * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
+ * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
  */
@@ -20,7 +20,7 @@
  * @subpackage	Fieldtypes
  * @category	Fieldtypes
  * @author		EllisLab Dev Team
- * @link		http://expressionengine.com
+ * @link		http://ellislab.com
  */
 class Hidden_ft extends EE_Fieldtype {
 
@@ -35,7 +35,7 @@ class Hidden_ft extends EE_Fieldtype {
 	
 	function display_field($data)
 	{
-		$this->EE->javascript->set_global('publish.hidden_fields', array($this->field_id => $this->field_name));
+		ee()->javascript->set_global('publish.hidden_fields', array($this->field_id => $this->field_name));
 		return form_hidden($this->field_name, $data);
 	}
 }

@@ -35,6 +35,9 @@ $lang = array(
 'ip_not_found' =>
 'There are no results for the IP you submitted.',
 
+'cache_full' =>
+'Cache is full and must be cleared manually to proceed.',
+
 'manage_banlist' =>
 'Manage Your Banned Country List',
 
@@ -81,6 +84,12 @@ $lang = array(
 
 'ip_db_failed' =>
 'IP Databse Update Failed',
+
+'ip_db_connection_403' =>
+'403 Connection Error, please wait 24 hours before attempting to retrieve database.',
+
+'ip_db_connection_error' =>
+'Unable to connect to data provider.',
 
 ''=>''
 );

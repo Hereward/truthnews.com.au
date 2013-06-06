@@ -2,11 +2,11 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * An open source application development framework for PHP 5.2.4 or newer
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2012, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -141,7 +141,7 @@ if ( ! function_exists('reduce_double_slashes'))
 {
 	function reduce_double_slashes($str)
 	{
-		return preg_replace("#(^|[^:])//+#", "\\1/", $str);
+		return preg_replace("#([^/:])/+#", "\\1/", $str);
 	}
 }
 
@@ -234,7 +234,7 @@ if ( ! function_exists('random_string'))
 						$CI =& get_instance();
 						$CI->load->helper('security');
 
-						return do_hash(uniqid(mt_rand(), TRUE), 'sha1');
+						return sha1(uniqid(mt_rand(), TRUE));
 				break;
 		}
 	}

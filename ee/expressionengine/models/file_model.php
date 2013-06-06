@@ -4,9 +4,9 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
+ * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
+ * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
  */
@@ -20,7 +20,7 @@
  * @subpackage	Core
  * @category	Model
  * @author		EllisLab Dev Team
- * @link		http://expressionengine.com
+ * @link		http://ellislab.com
  */
 class File_model extends CI_Model {
 	
@@ -528,7 +528,6 @@ class File_model extends CI_Model {
 		}
 	
 		$this->load->helper('file');
-		$this->load->helper('string');
 		$this->load->helper('text');
 		$this->load->helper('directory');
 		$this->load->library('encrypt');
@@ -672,7 +671,7 @@ class File_model extends CI_Model {
 		/* 'files_after_delete' hook.
 		/*  - Add additional processing after file deletion
 		*/
-			$edata = $this->extensions->call('files_after_delete', $deleted);
+			$this->extensions->call('files_after_delete', $deleted);
 			if ($this->extensions->end_script === TRUE) return;
 		/*
 		/* -------------------------------------------*/

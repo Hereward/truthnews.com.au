@@ -2,11 +2,11 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * An open source application development framework for PHP 5.2.4 or newer
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2012, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -498,6 +498,58 @@
 
 		return $str;
 	}
+	
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('function_usable'))
+{
+	/**
+	 * Function usable
+	 *
+	 * Executes a function_exists() check, and if the Suhosin PHP
+	 * extension is loaded - checks whether the function that is
+	 * checked might be disabled in there as well.
+	 *
+	 * This is useful as function_exists() will return FALSE for
+	 * functions disabled via the *disable_functions* php.ini
+	 * setting, but not for *suhosin.executor.func.blacklist* and
+	 * *suhosin.executor.disable_eval*. These settings will just
+	 * terminate script execution if a disabled function is executed.
+	 *
+	 * @link	http://www.hardened-php.net/suhosin/
+	 * @param	string	$function_name	Function to check for
+	 * @return	bool	TRUE if the function exists and is safe to call,
+	 *			FALSE otherwise.
+	 */
+	function function_usable($function_name)
+	{
+		static $_suhosin_func_blacklist;
+
+		if (function_exists($function_name))
+		{
+			if ( ! isset($_suhosin_func_blacklist))
+			{
+				if (extension_loaded('suhosin'))
+				{
+					$_suhosin_func_blacklist = explode(',', trim(@ini_get('suhosin.executor.func.blacklist')));
+
+					if ( ! in_array('eval', $_suhosin_func_blacklist, TRUE) && @ini_get('suhosin.executor.disable_eval'))
+					{
+						$_suhosin_func_blacklist[] = 'eval';
+					}
+				}
+				else
+				{
+					$_suhosin_func_blacklist = array();
+				}
+			}
+
+			return ! in_array($function_name, $_suhosin_func_blacklist, TRUE);
+		}
+
+		return FALSE;
+	}
+}	
 
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */

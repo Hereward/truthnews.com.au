@@ -2,11 +2,11 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * An open source application development framework for PHP 5.2.4 or newer
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2012, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -23,6 +23,19 @@
  * @link		http://codeigniter.com/user_guide/database/
  */
 class CI_DB_mysql_forge extends CI_DB_forge {
+
+	/**
+	 * The names representing the variable storage engines
+	 * available in MySQL.
+	 */	
+	const ENGINE_INNODB = 'InnoDB';
+	CONST ENGINE_MYISAM = 'MyISAM';
+	const ENGINE_MEMORY = 'MEMORY';
+	const ENGINE_ARCHIVE = 'ARCHIVE';
+	/** 
+	 * The default engine to use when creating new tables.
+	 */
+	const ENGINE_DEFAULT = 'MyISAM';
 
 	/**
 	 * Create database
@@ -138,7 +151,7 @@ class CI_DB_mysql_forge extends CI_DB_forge {
 	 * @param	boolean	should 'IF NOT EXISTS' be added to the SQL
 	 * @return	bool
 	 */
-	function _create_table($table, $fields, $primary_keys, $keys, $if_not_exists)
+	function _create_table($table, $fields, $primary_keys, $keys, $if_not_exists, $engine=self::ENGINE_DEFAULT)
 	{
 		$sql = 'CREATE TABLE ';
 
@@ -177,7 +190,9 @@ class CI_DB_mysql_forge extends CI_DB_forge {
 			}
 		}
 
-		$sql .= "\n) DEFAULT CHARACTER SET {$this->db->char_set} COLLATE {$this->db->dbcollat};";
+		$sql .= "\n)";
+		$sql .= 'ENGINE=' . $engine . ' ';
+		$sql .= "DEFAULT CHARACTER SET {$this->db->char_set} COLLATE {$this->db->dbcollat};";
 
 		return $sql;
 	}
@@ -210,9 +225,11 @@ class CI_DB_mysql_forge extends CI_DB_forge {
 	 * @param	string	the field after which we should add the new field
 	 * @return	object
 	 */
-	function _alter_table($alter_type, $table, $fields, $after_field = '')
+	function _alter_table($alter_type, $table, $fields, $after_field = '', $settings = array())
 	{
-		$sql = 'ALTER TABLE '.$this->db->_protect_identifiers($table)." $alter_type ";
+		$ignore = (isset($settings['ignore']) && $settings['ignore'] == TRUE) ? ' IGNORE ' : '';
+
+		$sql = 'ALTER'.$ignore.' TABLE '.$this->db->_protect_identifiers($table)." $alter_type ";
 
 		// DROP has everything it needs now.
 		if ($alter_type == 'DROP')

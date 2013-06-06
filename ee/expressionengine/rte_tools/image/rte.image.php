@@ -5,9 +5,9 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
+ * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
+ * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @link		http://ellislab.com
  * @since		Version 2.5
  * @filesource
  */
@@ -21,7 +21,7 @@
  * @subpackage	RTE
  * @category	RTE
  * @author		EllisLab Dev Team
- * @link		http://expressionengine.com
+ * @link		http://ellislab.com
  */
 class Image_rte {
 	
@@ -56,7 +56,7 @@ class Image_rte {
 	 */
 	function globals()
 	{
-		$this->EE->lang->loadfile('rte');
+		ee()->lang->loadfile('rte');
 		return array(
 			'rte.image'	=> array(
 				'add'			=> lang('img_add'),
@@ -102,8 +102,8 @@ class Image_rte {
 	{
 		# load the external file
 		$styles	= file_get_contents( 'rte.image.css', TRUE );
-		$theme	= $this->EE->session->userdata('cp_theme');
-		$theme	= $this->EE->config->item('theme_folder_url').'cp_themes/'.($theme ? $theme : 'default').'/';
+		$theme	= ee()->session->userdata('cp_theme');
+		$theme	= ee()->config->item('theme_folder_url').'cp_themes/'.($theme ? $theme : 'default').'/';
 		return str_replace('{theme_folder_url}', $theme, $styles);
 	}
 

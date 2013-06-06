@@ -2,11 +2,11 @@
 /**
  * CodeIgniter
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * An open source application development framework for PHP 5.2.4 or newer
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2012, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -222,6 +222,14 @@
 	function &get_instance()
 	{
 		return CI_Controller::get_instance();
+	}
+
+
+	function ee()
+	{
+		static $EE;
+		if ( ! $EE) $EE = get_instance();
+		return $EE;
 	}
 
 

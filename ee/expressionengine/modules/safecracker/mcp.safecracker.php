@@ -6,9 +6,9 @@
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team, 
  * 		- Original Development by Barrett Newton -- http://barrettnewton.com
- * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
+ * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
+ * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
  */
@@ -22,7 +22,7 @@
  * @subpackage	Modules
  * @category	Modules
  * @author		EllisLab Dev Team
- * @link		http://expressionengine.com
+ * @link		http://ellislab.com
  */
 
 class Safecracker_mcp
@@ -46,12 +46,12 @@ class Safecracker_mcp
 	 */
 	public function index()
 	{
-		if ($this->EE->input->get('member_list'))
+		if (ee()->input->get('member_list'))
 		{
 			return $this->member_list();
 		}
 		
-		$this->EE->functions->redirect(BASE.AMP.'C=addons_extensions'.AMP.'M=extension_settings'.AMP.'file=safecracker');
+		ee()->functions->redirect(BASE.AMP.'C=addons_extensions'.AMP.'M=extension_settings'.AMP.'file=safecracker');
 	}
 
 	// --------------------------------------------------------------------
@@ -63,23 +63,23 @@ class Safecracker_mcp
 	 */
 	public function member_list()
 	{
-		if ( ! $this->EE->session->userdata('member_id') || empty($this->EE->session->access_cp))
+		if ( ! ee()->session->userdata('member_id') || empty(ee()->session->access_cp))
 		{
 			exit;
 		}
 		
-		$this->EE->output->enable_profiler(FALSE);
-		$this->EE->load->model('member_model');
-		$this->EE->load->library('javascript');
-		$this->EE->lang->loadfile('safecracker');
+		ee()->output->enable_profiler(FALSE);
+		ee()->load->model('member_model');
+		ee()->load->library('javascript');
+		ee()->lang->loadfile('safecracker');
 		
 		$members = array('' => lang('safecracker_select_member'));
 		
-		$group_id = ($this->EE->input->get_post('group_id')) ? $this->EE->input->get_post('group_id', TRUE) : '';
-		$offset = ($this->EE->input->get_post('offset')) ? $this->EE->input->get_post('offset', TRUE) : '';
-		$search_value = ($this->EE->input->get_post('search_value')) ? $this->EE->input->get_post('search_value', TRUE) : '';
+		$group_id = (ee()->input->get_post('group_id')) ? ee()->input->get_post('group_id', TRUE) : '';
+		$offset = (ee()->input->get_post('offset')) ? ee()->input->get_post('offset', TRUE) : '';
+		$search_value = (ee()->input->get_post('search_value')) ? ee()->input->get_post('search_value', TRUE) : '';
 		
-		$query = $this->EE->member_model->get_members(
+		$query = ee()->member_model->get_members(
 			$group_id,
 			101,
 			$offset,
@@ -109,7 +109,7 @@ class Safecracker_mcp
 			}
 		}
 
-		return $this->EE->output->send_ajax_response($members);
+		return ee()->output->send_ajax_response($members);
 	}
 }
 

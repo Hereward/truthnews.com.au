@@ -4,9 +4,9 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
+ * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
+ * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
  */
@@ -20,16 +20,16 @@
  * @subpackage	Control Panel
  * @category	Control Panel
  * @author		EllisLab Dev Team
- * @link		http://expressionengine.com
+ * @link		http://ellislab.com
  */
 
-class Members extends CI_Controller {
+class Members extends CP_Controller {
 
 	// Default member groups.  We used these for translation purposes
 	private $english		= array('Guests', 'Banned', 'Members', 'Pending', 'Super Admins');
 	private $no_delete		= array('1', '2', '3', '4'); // Member groups that can not be deleted
 	private $perpage		= 50;  // Number of results on the "View all member" page	
-	
+
 	/**
 	 * Constructor
 	 */
@@ -62,13 +62,10 @@ class Members extends CI_Controller {
 			show_error(lang('unauthorized_access'));
 		}
 
-		$this->cp->set_variable('cp_page_title', lang('members'));
+		$this->view->cp_page_title = lang('members');
+		$this->view->controller = 'members';
 
-		$this->javascript->compile();
-
-		$this->load->vars(array('controller' => 'members'));
-
-		$this->load->view('_shared/overview');
+		$this->cp->render('_shared/overview');
 	}
 	
 	// --------------------------------------------------------------------
@@ -212,9 +209,8 @@ class Members extends CI_Controller {
 			$vars['delete_button_label'] = lang('delete_selected');
 		}
 		
-		$this->javascript->compile();
-		$this->cp->set_variable('cp_page_title', lang('view_members'));
-		$this->load->view('members/view_members', $vars);
+		$this->view->cp_page_title = lang('view_members');
+		$this->cp->render('members/view_members', $vars);
 	}
 
 	// ----------------------------------------------------------------
@@ -258,8 +254,8 @@ class Members extends CI_Controller {
 				'username'		=> '<a href="'.BASE.AMP.'C=myaccount'.AMP.'id='.$member['member_id'].'">'.$member['username'].'</a>',
 				'screen_name'	=> $member['screen_name'],
 				'email'			=> '<a href="mailto:'.$member['email'].'">'.$member['email'].'</a>',
-				'join_date'		=> $this->localize->decode_date('%Y-%m-%d', $member['join_date']),
-				'last_visit'	=> ($member['last_visit'] == 0) ? ' - ' : $this->localize->set_human_time($member['last_visit']),
+				'join_date'		=> $this->localize->format_date('%Y-%m-%d', $member['join_date']),
+				'last_visit'	=> ($member['last_visit'] == 0) ? ' - ' : $this->localize->human_time($member['last_visit']),
 				'group_id'		=> $groups[$member['group_id']],		
 				'_check'		=> '<input class="toggle" type="checkbox" name="toggle[]" value="'.$member['member_id'].'" />'
 			);
@@ -519,9 +515,9 @@ class Members extends CI_Controller {
 			}
 		}
 
-		$this->cp->set_variable('cp_page_title', lang('delete_member'));
+		$this->view->cp_page_title = lang('delete_member');
 		
-		$this->load->view('members/delete_confirm', $vars);
+		$this->cp->render('members/delete_confirm', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -554,7 +550,7 @@ class Members extends CI_Controller {
 			show_error(lang('unauthorized_access'));
 		}
 
-		$this->cp->set_variable('cp_page_title', lang('login_as_member'));
+		$this->view->cp_page_title = lang('login_as_member');
 
 		// Fetch member data
 		$this->db->from('members, member_groups');
@@ -575,7 +571,7 @@ class Members extends CI_Controller {
 
 		$vars['can_access_cp'] = ($query->row('can_access_cp')  == 'y') ? TRUE : FALSE;
 
-		$this->load->view('members/login_as_member', $vars);
+		$this->cp->render('members/login_as_member', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -597,6 +593,18 @@ class Members extends CI_Controller {
 		$id = $this->input->get_post('mid');
 
 		if (($id == '') OR ($this->session->userdata('member_id') == $id))
+		{
+			show_error(lang('unauthorized_access'));
+		}
+
+		// Check password authentication
+		$this->load->library('auth');
+		$validate = $this->auth->authenticate_id(
+			$this->session->userdata['member_id'],
+			$this->input->post('password_auth')
+		);
+
+		if ( ! $validate)
 		{
 			show_error(lang('unauthorized_access'));
 		}
@@ -790,7 +798,6 @@ class Members extends CI_Controller {
 				$notify_address = str_replace($member->email, "", $notify_address);
 			}
 
-			$this->load->helper('string');
 			// Remove multiple commas
 			$notify_address = reduce_multiples($notify_address, ',', TRUE);
 
@@ -820,7 +827,7 @@ class Members extends CI_Controller {
 		/* 'cp_members_member_delete_end' hook.
 		/*  - Additional processing when a member is deleted through the CP
 		*/
-			$edata = $this->extensions->call('cp_members_member_delete_end', $member_ids);
+			$this->extensions->call('cp_members_member_delete_end', $member_ids);
 			if ($this->extensions->end_script === TRUE) return;
 		/*
 		/* -------------------------------------------*/
@@ -899,17 +906,15 @@ class Members extends CI_Controller {
 
 		$vars['paginate'] = $this->pagination->create_links();
 
-		$this->cp->set_variable('cp_page_title', lang('member_groups'));
+		$this->view->cp_page_title = lang('member_groups');
 
 		$this->jquery->tablesorter('.mainTable', '{headers: {1: {sorter: false}, 5: {sorter: false}}, widgets: ["zebra"]}');
-		
-		$this->javascript->compile();
 		
 		$vars['groups'] = $groups;
 
         $this->cp->set_right_nav(array('create_new_member_group' => BASE.AMP.'C=members'.AMP.'M=edit_member_group'));
 
-		$this->load->view('members/member_group_manager', $vars);
+		$this->cp->render('members/member_group_manager', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -918,6 +923,11 @@ class Members extends CI_Controller {
 	 * Edit Member Group
 	 *
 	 * Edit/Create a member group form
+
+	 * FIXME This is currently broken if you try to use the 
+	 * site drop down to switch sites while editing a group.  The group
+	 * only exists for a single site, not all sites.  And so an error is
+	 * thrown.
 	 */		
 	public function edit_member_group()
 	{
@@ -969,8 +979,7 @@ class Members extends CI_Controller {
 			$id = $clone_id;
 		}
 
-		$this->cp->set_variable('cp_page_title', 
-								($group_id !== 0) ? lang('edit_member_group') : lang('create_member_group'));
+		$this->view->cp_page_title = ($group_id !== 0) ? lang('edit_member_group') : lang('create_member_group');
 		$this->cp->set_breadcrumb(BASE.AMP.'C=members'.AMP.'M=member_group_manager', lang('member_groups'));
 		
 		$group_data = $this->_setup_group_data($id, $site_id);
@@ -996,7 +1005,7 @@ class Members extends CI_Controller {
 			'site_id'			=> $site_id,
 		);
 
-		$this->load->view('members/edit_member_group', $data);
+		$this->cp->render('members/edit_member_group', $data);
 	}
 	
 	// --------------------------------------------------------------------
@@ -1600,9 +1609,10 @@ class Members extends CI_Controller {
 	 *
 	 * @return 	array 	$sites_q => DB Object, $sites_dropdown => array
 	 */
-	private function _get_sites()
+	private function _get_sites($group_id = false)
 	{
-		$site_id = $this->config->item('multiple_sites_enabled') == 'y' ? '' : 1;
+		$msm_enabled = ($this->config->item('multiple_sites_enabled') == 'y') ? TRUE : FALSE;
+		$site_id = $msm_enabled ? '' : 1;
 
 		if ($site_id != '')
 		{
@@ -1884,16 +1894,14 @@ class Members extends CI_Controller {
 			}
 		}
 
-		$this->cp->set_variable('cp_page_title', lang('member_prefs'));
+		$this->view->cp_page_title = lang('member_prefs');
 
 		$this->jquery->tablesorter('table', '{
 			headers: {},
 			widgets: ["zebra"]
 		}');
-
-		$this->javascript->compile();
 		
-		$this->load->view('members/member_config', $vars);
+		$this->cp->render('members/member_config', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -1953,7 +1961,7 @@ class Members extends CI_Controller {
 			show_error(lang('only_superadmins_can_admin_groups'));
 		}
 
-		$edit = TRUE;
+		$this->load->model(array('Member_group_model', 'Site_model'));
 		
 		$group_id = $this->input->post('group_id');
 		$clone_id = $this->input->post('clone_id');
@@ -1962,313 +1970,26 @@ class Members extends CI_Controller {
 		unset($_POST['group_id']);
 		unset($_POST['clone_id']);
 
-		// Only super admins can edit the "super admin" group
-		if ($group_id == 1  AND $this->session->userdata['group_id'] != 1)
-		{
-			show_error(lang('unauthorized_access'));
-		}
-
 		// No group name
 		if ( ! $group_title = $this->input->post('group_title'))
 		{
 			show_error(lang('missing_group_title'));
 		}
-		
-		$return = ($this->input->get_post('return')) ? TRUE : FALSE;
-		unset($_POST['return']);
-		
-		// New Group? Find Max
-		
+	
 		if (empty($group_id))
 		{
-			$edit = FALSE;
-			
-			$query = $this->db->query("SELECT MAX(group_id) as max_group FROM exp_member_groups");
-			
-			$group_id = $query->row('max_group') + 1;
-		}
-		
-		// Group Title already exists?
-		$this->db->from('member_groups')
-					->where('group_title', $group_title)
-					->where('group_id !=', $group_id);
-		
-		if ($this->db->count_all_results())
-		{
-			show_error(lang('group_title_exists'));
-		}
-
-		// get existing category privileges if necessary
-		
-		if ($edit == TRUE)
-		{
-			$query = $this->db->query("SELECT site_id, can_edit_categories, can_delete_categories FROM exp_member_groups WHERE group_id = '".$this->db->escape_str($group_id)."'");
-			
-			$old_cat_privs = array();
-			
-			foreach ($query->result_array() as $row)
-			{
-				$old_cat_privs[$row['site_id']]['can_edit_categories'] = $row['can_edit_categories'];
-				$old_cat_privs[$row['site_id']]['can_delete_categories'] = $row['can_delete_categories'];
-			}
-		}
-		
-		if ($this->config->item('multiple_sites_enabled') == 'n')
-		{
-			$this->db->where('site_id', 1);
-		}
-		
-		$query = $this->db->select('site_id')->get('sites');
-		
-		$module_ids = array();
-		$channel_ids = array();
-		$template_ids = array();
-		$module_ids_yes = array();
-		$channel_ids_yes = array();
-		$template_ids_yes = array();
-		$cat_group_privs = array('can_edit_categories', 'can_delete_categories');
-				
-		/** ----------------------------------------------------
-		/**  Remove and Store Channel and Template Permissions
-		/** ----------------------------------------------------*/
-		
-		$data = array('group_title' 		=> $this->input->post('group_title'),
-					  'group_description'	=> $this->input->post('group_description'),
-					  'site_id'				=> $site_id,
-					  'group_id'			=> $group_id);
-		
-		// If editing Super Admin group, the is_locked field doesn't exist, so make sure we
-		// got a value from the form before writing 0 to the database
-		if ($this->input->post('is_locked') !== FALSE)
-		{
-			$data['is_locked'] = $this->input->post('is_locked');
-		}
-		
-		foreach ($_POST as $key => $val)
-		{
-			if (substr($key, 0, strlen($site_id.'_channel_id_')) == $site_id.'_channel_id_')
-			{
-				$channel_id = substr($key, strlen($site_id.'_channel_id_'));
-				$channel_ids[] = $channel_id;
-				
-				if ($val == 'y')
-				{
-					$channel_ids_yes[] = array(
-						'channel_id' => $channel_id,
-						'group_id' => $group_id
-					);
-				}
-			}
-			elseif (substr($key, 0, strlen('module_id_')) == 'module_id_')
-			{
-				$module_id = substr($key, strlen('module_id_'));
-				$module_ids[] = $module_id;
-				
-				if ($val == 'y')
-				{
-					$module_ids_yes[] = array(
-						'module_id' => $module_id,
-						'group_id' => $group_id
-					);
-				}
-			}
-			elseif (substr($key, 0, strlen($site_id.'_template_id_')) == $site_id.'_template_id_')
-			{
-				$template_id = substr($key, strlen($site_id.'_template_id_'));
-				$template_ids[] = $template_id;
-				
-				if ($val == 'y')
-				{
-					$template_ids_yes[] = array(
-						'template_group_id' => $template_id,
-						'group_id' => $group_id
-					);
-				}
-			}
-			elseif (substr($key, 0, strlen($site_id.'_')) == $site_id.'_')
-			{
-				$data[substr($key, strlen($site_id.'_'))] = $_POST[$key];
-			}
-			else
-			{
-				continue;
-			}
-			
-			unset($_POST[$key]);
-		}
-
-		if ($edit === FALSE)
-		{	
-			$this->db->query($this->db->insert_string('exp_member_groups', $data));
-			
-			$uploads = $this->db->query("SELECT exp_upload_prefs.id FROM exp_upload_prefs WHERE site_id = '".$this->db->escape_str($site_id)."'");
-			
-			if ($uploads->num_rows() > 0)
-			{
-				foreach($uploads->result_array() as $upload)
-				{
-					$this->db->query("INSERT INTO exp_upload_no_access (upload_id, upload_loc, member_group) VALUES ('".$this->db->escape_str($upload['id'])."', 'cp', '{$group_id}')");
-				}
-			}
-			
-			if ($group_id != 1)
-			{
-				foreach ($cat_group_privs as $field)
-				{
-					$privs = array(
-									'member_group' => $group_id,
-									'field' => $field,
-									'allow' => ($data[$field] == 'y') ? TRUE : FALSE,
-									'site_id' => $site_id,
-									'clone_id' => $clone_id
-								);
-
-					$this->_update_cat_group_privs($privs);	
-				}
-			}
-			
-			$cp_message = lang('member_group_created').NBS.NBS.$_POST['group_title'];			
+			$cp_message  = $this->Member_group_model->parse_add_form($_POST, $site_id, $clone_id, $group_title);	
 		}
 		else
-		{			
-			unset($data['group_id']);
-			
-			$this->db->query($this->db->update_string('exp_member_groups', $data, "group_id = '$group_id' AND site_id = '{$site_id}'"));
-			
-			if ($group_id != 1)
-			{
-				// update category group discrete privileges
-
-				foreach ($cat_group_privs as $field)
-				{
-					// only modify category group privs if value changed, so we do not
-					// globally overwrite existing defined privileges carelessly
-
-					if ($old_cat_privs[$site_id][$field] != $data[$field])
-					{
-						$privs = array(
-										'member_group' => $group_id,
-										'field' => $field,
-										'allow' => ($data[$field] == 'y') ? TRUE : FALSE,
-										'site_id' => $site_id,
-										'clone_id' => $clone_id
-									);
-
-						$this->_update_cat_group_privs($privs);						
-					}
-				}
-			}
-			
-			$cp_message = lang('member_group_updated').NBS.NBS.$_POST['group_title'];
-		}
-
-		// First, delete old channel, module and template permissions for this site
-		if ( ! empty($channel_ids))
 		{
-			$this->db->where_in('channel_id', $channel_ids);
-			$this->db->delete('channel_member_groups');
-		}
-		if ( ! empty($module_ids))
-		{
-			$this->db->where_in('module_id', $module_ids);
-			$this->db->delete('module_member_groups');
-		}
-		if ( ! empty($template_ids))
-		{
-			$this->db->where_in('template_group_id', $template_ids);
-			$this->db->delete('template_member_groups');
-		}
-		
-		// Then, add back in the only ones that should exist based on the form submission
-		if ( ! empty($channel_ids_yes))
-		{
-			$this->db->insert_batch('channel_member_groups', $channel_ids_yes);
-		}
-		if ( ! empty($module_ids_yes))
-		{
-			$this->db->insert_batch('module_member_groups', $module_ids_yes);
-		}
-		if ( ! empty($template_ids_yes))
-		{
-			$this->db->insert_batch('template_member_groups', $template_ids_yes);
+			$cp_message = $this->Member_group_model->parse_edit_form($_POST, $group_id, $site_id, $clone_id, $group_title);
 		}
 		
 		// Update CP log
 		$this->logger->log_action($cp_message);
 
-  		$_POST['group_id'] = $group_id;
-
 		$this->session->set_flashdata('message_success', $cp_message);
 		$this->functions->redirect(BASE.AMP.'C=members'.AMP.'M=member_group_manager');
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Update Category Group Privileges
-	 *
-	 * Updates exp_category_groups privilege lists for
-	 * editing and deleting categories
-	 *
-	 * @return	mixed
-	 */		
-	private function _update_cat_group_privs($params)
-	{
-		if ( ! is_array($params) OR empty($params))
-		{
-			return FALSE;
-		}
-
-		$expected = array('member_group', 'field', 'allow', 'site_id', 'clone_id');
-		
-		// turn parameters into variables
-		
-		foreach ($expected as $key)
-		{
-			// naughty!
-			
-			if ( ! isset($params[$key]))
-			{
-				return FALSE;
-			}
-			
-			$$key = $params[$key];
-		}
-		
-		$query = $this->db->query("SELECT group_id, ".$this->db->escape_str($field)." FROM exp_category_groups WHERE site_id = '".$this->db->escape_str($site_id)."'");
-		
-		// nothing to do?
-		
-		if ($query->num_rows() == 0)
-		{
-			return FALSE;
-		}
-
-		foreach ($query->result_array() as $row)
-		{
-			$can_do = explode('|', rtrim($row[$field], '|'));
-
-			if ($allow === TRUE)
-			{
-				if (is_numeric($clone_id))
-				{
-					if (in_array($clone_id, $can_do) OR $clone_id == 1)
-					{
-						$can_do[] = $member_group;
-					}						
-				}
-				elseif ($clone_id === FALSE)
-				{
-					$can_do[] = $member_group;
-				}
-			}
-			else
-			{
-				$can_do = array_diff($can_do, array($member_group));
-			}
-
-			$this->db->query($this->db->update_string('exp_category_groups', array($field => implode('|', $can_do)), "group_id = '{$row['group_id']}'"));
-		}
 	}
 
 	// --------------------------------------------------------------------
@@ -2329,11 +2050,9 @@ class Members extends CI_Controller {
 			}		
 		}			
 
-		$this->cp->set_variable('cp_page_title', lang('delete_member_group'));
-			
-		$this->javascript->compile();
+		$this->view->cp_page_title = lang('delete_member_group');
 		
-		$this->load->view('members/delete_member_group_conf', $vars);
+		$this->cp->render('members/delete_member_group_conf', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -2395,7 +2114,7 @@ class Members extends CI_Controller {
 		}
 		
 		$this->lang->loadfile('myaccount');
-		$this->cp->set_variable('cp_page_title', lang('register_member'));
+		$this->view->cp_page_title = lang('register_member');
 		
 		// Find out if the user has access to any member groups
 		$is_locked = ($this->session->userdata['group_id'] == 1) ? array() : array('is_locked' => 'n');
@@ -2408,45 +2127,45 @@ class Members extends CI_Controller {
 		
 		if ($vars['notice'] === TRUE)
 		{
-			return $this->load->view('members/register', $vars);
+			return $this->cp->render('members/register', $vars);
 		}
 		
 		$this->load->library(array('form_validation', 'table'));
-		$this->load->helper(array('string', 'snippets'));
+		$this->load->helper('snippets');
 		$this->load->language('calendar');
 		
 		$vars['custom_profile_fields'] = array();
 		
 		$config = array(
 			array(
-				'field'  => 'username', 
-				'label'  => 'lang:username', 
-				'rules'  => 'required|trim|valid_username[new]'
+				'field' => 'username', 
+				'label' => 'lang:username', 
+				'rules' => 'required|trim|valid_username[new]'
 			),
 			array(
-				'field'  => 'screen_name',
-				'label'  => 'lang:screen_name',
-				'rules'  => 'trim|valid_screen_name[new]'
+				'field' => 'screen_name',
+				'label' => 'lang:screen_name',
+				'rules' => 'trim|valid_screen_name[new]'
 			),
 			array(
-				'field'  => 'password', 
-				'label'  => 'lang:password', 
-				'rules'  => 'required|valid_password[username]'
+				'field' => 'password', 
+				'label' => 'lang:password', 
+				'rules' => 'required|valid_password[username]'
 			),
 			array(
-				'field'  => 'password_confirm', 
-				'label'  => 'lang:password_confirm', 
-				'rules'  => 'required|matches[password]'
+				'field' => 'password_confirm', 
+				'label' => 'lang:password_confirm', 
+				'rules' => 'required|matches[password]'
 			),
 			array(
-				'field'  => 'email', 
-				'label'  => 'lang:email', 
-				'rules'  => 'trim|required|valid_user_email[new]'
+				'field' => 'email', 
+				'label' => 'lang:email', 
+				'rules' => 'trim|required|valid_user_email[new]'
 			),
 			array(
-				'field'  => 'group_id', 
-				'label'  => 'lang:member_group_assignment', 
-				'rules'  => 'required|integer'
+				'field' => 'group_id', 
+				'label' => 'lang:member_group_assignment', 
+				'rules' => 'required|integer|callback_valid_group_id'
 			)
 		);
 
@@ -2514,11 +2233,11 @@ class Members extends CI_Controller {
 			//  Add validation rules for custom fields
 			foreach ($query->result_array() as $row)
 			{
-				$required  = ($row['m_field_required'] == 'n') ? '' : 'required';
+				$required = ($row['m_field_required'] == 'n') ? '' : 'required';
 				$c_config[] = array(
-					'field'  => 'm_field_id_'.$row['m_field_id'], 
-					'label'  => $row['m_field_label'], 
-					'rules'  => $required
+					'field' => 'm_field_id_'.$row['m_field_id'], 
+					'label' => $row['m_field_label'], 
+					'rules' => $required
 				);
 			}
 			
@@ -2530,8 +2249,6 @@ class Members extends CI_Controller {
 
 		if ($this->form_validation->run() === FALSE)
 		{
-			$this->javascript->compile();
-
 			$vars['member_groups'] = array();
 
 			foreach($member_groups->result() as $group)
@@ -2540,7 +2257,7 @@ class Members extends CI_Controller {
 				$vars['member_groups'][$group->group_id] = $group->group_title;
 			}
 
-			$this->load->view('members/register', $vars);
+			$this->cp->render('members/register', $vars);
 		}
 		else
 		{
@@ -2578,7 +2295,7 @@ class Members extends CI_Controller {
 		//  - Take over member creation when done through the CP
 		//  - Added 1.4.2
 		//
-			$edata = $this->extensions->call('cp_members_member_create_start');
+			$this->extensions->call('cp_members_member_create_start');
 			if ($this->extensions->end_script === TRUE) return;
 		//
 		// -------------------------------------------
@@ -2588,25 +2305,29 @@ class Members extends CI_Controller {
 
 		$data['screen_name'] = ($this->input->post('screen_name')) ? $this->input->post('screen_name') : $this->input->post('username');
 
-		// Assign the query data
+		// Get the password information from Auth
+		$this->load->library('auth');
+		$hashed_password = $this->auth->hash_password($this->input->post('password'));
 
+		// Assign the query data
 		$data['username'] 	= $this->input->post('username');
-		$data['password']	= do_hash($this->input->post('password'));
+		$data['password']	= $hashed_password['password'];
+		$data['salt']		= $hashed_password['salt'];
+		$data['unique_id']	= random_string('encrypt');
+		$data['crypt_key']	= $this->functions->random('encrypt', 16);
 		$data['email']		= $this->input->post('email');
 		$data['ip_address']	= $this->input->ip_address();
-		$data['unique_id']	= random_string('encrypt');
 		$data['join_date']	= $this->localize->now;
 		$data['language'] 	= $this->config->item('deft_lang');
 		$data['timezone'] 	= ($this->config->item('default_site_timezone') && $this->config->item('default_site_timezone') != '') ? $this->config->item('default_site_timezone') : $this->config->item('server_timezone');
-		$data['daylight_savings'] = ($this->config->item('default_site_dst') && $this->config->item('default_site_dst') != '') ? $this->config->item('default_site_dst') : $this->config->item('daylight_savings');
 		$data['time_format'] = ($this->config->item('time_format') && $this->config->item('time_format') != '') ? $this->config->item('time_format') : 'us';
 
 		// Was a member group ID submitted?
 
 		$data['group_id'] = ( ! $this->input->post('group_id')) ? 2 : $_POST['group_id'];
 
-		$base_fields = array('bday_y', 'bday_m', 'bday_d', 'url', 'location', 'occupation', 'interests', 'aol_im',
-							'icq', 'yahoo_im', 'msn_im', 'bio');
+		$base_fields = array('bday_y', 'bday_m', 'bday_d', 'url', 'location', 
+			'occupation', 'interests', 'aol_im', 'icq', 'yahoo_im', 'msn_im', 'bio');
 
 		foreach ($base_fields as $val)
 		{
@@ -2615,8 +2336,9 @@ class Members extends CI_Controller {
 
 		if (is_numeric($data['bday_d']) && is_numeric($data['bday_m']))
 		{
+			$this->load->helper('date');
 			$year = ($data['bday_y'] != '') ? $data['bday_y'] : date('Y');
-			$mdays = $this->localize->fetch_days_in_month($data['bday_m'], $year);
+			$mdays = days_in_month($data['bday_m'], $year);
 
 			if ($data['bday_d'] > $mdays)
 			{
@@ -2664,7 +2386,7 @@ class Members extends CI_Controller {
 		// 'cp_members_member_create' hook.
 		//  - Additional processing when a member is created through the CP
 		//
-			$edata = $this->extensions->call('cp_members_member_create', $member_id, $data);
+			$this->extensions->call('cp_members_member_create', $member_id, $data);
 			if ($this->extensions->end_script === TRUE) return;
 		//
 		// -------------------------------------------
@@ -2678,6 +2400,33 @@ class Members extends CI_Controller {
 		));
 		
 		$this->functions->redirect(BASE.AMP.'C=members'.AMP.'M=view_all_members');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Verify that the group ID is a valid choice
+	 * @param  String $group_id Group ID from the form
+	 * @return Boolean          TRUE if valid group, FALSE otherwise
+	 */
+	public function valid_group_id($group_id)
+	{
+		$group_ids = array();
+		$is_locked = (ee()->session->userdata['group_id'] == 1) ? array() : array('is_locked' => 'n');
+		$member_groups = ee()->member_model->get_member_groups('', $is_locked);
+		
+		foreach ($member_groups->result() as $group)
+		{
+			$group_ids[] = $group->group_id;
+		}
+
+		if ( ! in_array($group_id, $group_ids))
+		{
+			ee()->form_validation->set_message('valid_group_id', lang('invalid_group_id'));
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 
 	// --------------------------------------------------------------------
@@ -2749,9 +2498,9 @@ class Members extends CI_Controller {
 			}
 		}
 
-		$this->cp->set_variable('cp_page_title', lang('user_banning'));
+		$this->view->cp_page_title = lang('user_banning');
 
-		$this->load->view('members/member_banning', $vars);
+		$this->cp->render('members/member_banning', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -2775,7 +2524,6 @@ class Members extends CI_Controller {
 			$_POST[$key] = stripslashes($val);
 		}
 	
-		$this->load->helper('string');
 		$this->load->model('site_model');
 
 		$banned_ips				= str_replace(NL, '|', $_POST['banned_ips']);
@@ -2834,15 +2582,13 @@ class Members extends CI_Controller {
 
 		$vars['fields'] = $this->member_model->get_custom_member_fields();
 
-		$this->cp->set_variable('cp_page_title', lang('custom_profile_fields'));
+		$this->view->cp_page_title = lang('custom_profile_fields');
 
 		$this->jquery->tablesorter('.mainTable', '{headers: {3: {sorter: false}, 4: {sorter: false}},	widgets: ["zebra"]}');
-
-		$this->javascript->compile();
 		
 		$this->cp->set_right_nav(array('create_new_profile_field' => BASE.AMP.'C=members'.AMP.'M=edit_profile_field'));
 		
-		$this->load->view('members/custom_profile_fields', $vars);
+		$this->cp->render('members/custom_profile_fields', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -3039,7 +2785,7 @@ class Members extends CI_Controller {
 			}
 		}
 
-		$this->cp->set_variable('cp_page_title', lang($title));
+		$this->view->cp_page_title = lang($title);
 
 		$additional = '<script type="text/javascript">
 					function showhide_element(id)
@@ -3054,10 +2800,8 @@ class Members extends CI_Controller {
 					}
 			</script>';
 		$this->cp->add_to_foot($additional);
-
-		$this->javascript->compile();
 				
-		$this->load->view('members/edit_profile_field', $vars);
+		$this->cp->render('members/edit_profile_field', $vars);
 	}
 
 	// ------------------------------------------------------------------
@@ -3161,9 +2905,6 @@ class Members extends CI_Controller {
 
 		if ($this->input->post('m_field_list_items') != '')
 		{
-			// Load the string helper
-			$this->load->helper('string');
-
 			$_POST['m_field_list_items'] = quotes_to_entities($_POST['m_field_list_items']);
 		}
 
@@ -3280,9 +3021,9 @@ class Members extends CI_Controller {
 		$vars['form_hidden'] = array('m_field_id'=>$m_field_id);
 		$vars['field_name'] = $query->row('m_field_label');
 				
-		$this->cp->set_variable('cp_page_title', lang('delete_field'));
+		$this->view->cp_page_title = lang('delete_field');
 		
-		$this->load->view('members/delete_profile_fields_confirm', $vars);
+		$this->cp->render('members/delete_profile_fields_confirm', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -3351,10 +3092,10 @@ class Members extends CI_Controller {
 				
 		$vars['fields'] = $fields;
 		
-		$this->cp->set_variable('cp_page_title', lang('edit_field_order'));
+		$this->view->cp_page_title = lang('edit_field_order');
 		$this->cp->set_breadcrumb(BASE.AMP.'C=members'.AMP.'M=custom_profile_fields', lang('custom_profile_fields'));
 
-		$this->load->view('members/edit_field_order', $vars);
+		$this->cp->render('members/edit_field_order', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -3414,13 +3155,11 @@ class Members extends CI_Controller {
 		
         $this->load->library('table');
 
-		$this->cp->set_variable('cp_page_title', lang('ip_search'));
-		
-		$this->javascript->compile();
+		$this->view->cp_page_title = lang('ip_search');
 
 		$vars['message'] = $message;
 
-		$this->load->view('members/ip_search', $vars);
+		$this->cp->render('members/ip_search', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -3614,13 +3353,11 @@ class Members extends CI_Controller {
 		
 		}
 
-		$this->cp->set_variable('cp_page_title', lang('ip_search'));
-		
-		$this->javascript->compile();
+		$this->view->cp_page_title = lang('ip_search');
 
 		$vars['grand_total'] = $grand_total;
 
-		$this->load->view('members/ip_search_results', $vars);
+		$this->cp->render('members/ip_search_results', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -3640,7 +3377,7 @@ class Members extends CI_Controller {
 		$this->load->library('table');
 		$vars['message'] = FALSE;
 
-		$this->cp->set_variable('cp_page_title', lang('member_validation'));
+		$this->view->cp_page_title = lang('member_validation');
 	
 		$this->jquery->tablesorter('.mainTable', '{headers: {1: {sorter: false}},	widgets: ["zebra"]}');
 
@@ -3652,8 +3389,6 @@ class Members extends CI_Controller {
 				});
 			});
 		');
-
-		$this->javascript->compile();
 		
 		$group_members = $this->member_model->get_group_members(4);
 
@@ -3671,7 +3406,7 @@ class Members extends CI_Controller {
 			$vars['options']['delete'] = lang('delete_selected');
 		}
 		
-		$this->load->view('members/activate', $vars);
+		$this->cp->render('members/activate', $vars);
 	}
 
 	// --------------------------------------------------------------------
@@ -3789,16 +3524,16 @@ class Members extends CI_Controller {
 		/*  - Additional processing when member(s) are validated in the CP
 		/*  - Added 1.5.2, 2006-12-28
 		*/
-			$edata = $this->extensions->call('cp_members_validate_members');
+			$this->extensions->call('cp_members_validate_members');
 			if ($this->extensions->end_script === TRUE) return;
 		/*
 		/* -------------------------------------------*/
 			
 		$vars['message'] = ($this->input->post('action') == 'activate') ? lang('members_are_validated') : lang('members_are_deleted');
 
-		$this->cp->set_variable('cp_page_title', $vars['message']);
+		$this->view->cp_page_title = $vars['message'];
 
-		$this->load->view("members/message", $vars);
+		$this->cp->render("members/message", $vars);
 	}	
 }
 /* End of file members.php */

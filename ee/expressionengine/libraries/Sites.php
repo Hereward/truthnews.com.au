@@ -24,9 +24,9 @@
  */
 class EE_Sites { 
 
-	public $num_sites_allowed = 'A08NDVQfAHgOSA5VBWFQDQ5g';
-	public $the_sites_allowed = 'ADkObQAVUChREQNODV5XY1Ez';
-	public $sites_allowed_num = 'BQhTBwFzBjMHUANTA2AAPw';
+	public $num_sites_allowed = 'CURUYwJiAUsBRwVeBWEEWV81';
+	public $the_sites_allowed = 'V2gBaVdBVi5SFlIfBFcIPFAy';
+	public $sites_allowed_num = 'AQhTB1URUwUAVwBQDG9Rbg';
 }
 // END CLASS
 

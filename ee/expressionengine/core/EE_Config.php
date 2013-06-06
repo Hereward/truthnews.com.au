@@ -4,9 +4,9 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
+ * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
+ * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
  */
@@ -20,7 +20,7 @@
  * @subpackage	Core
  * @category	Core
  * @author		EllisLab Dev Team
- * @link		http://expressionengine.com
+ * @link		http://ellislab.com
  */
 class EE_Config Extends CI_Config {
 	
@@ -28,9 +28,10 @@ class EE_Config Extends CI_Config {
 	var $database_path		= ''; // Set in the constructor below
 	var $default_ini 		= array();
 	var $exceptions	 		= array();	 // path.php exceptions
-	var $cp_cookie_domain	= '';
+	var $cp_cookie_domain	= '';  // These are set in Core before any MSM site switching
+	var $cp_cookie_prefix	= '';
+	var $cp_cookie_path		= '';
 	var $_global_vars 		= array();	// The global vars from path.php (deprecated but usable for other purposes now)
-	var $special_tlds 		= array('com', 'edu', 'net', 'org', 'gov', 'mil', 'int');	// seven special TLDs for cookie domains
 	var $_config_path_errors = array();
 
 	/**
@@ -58,16 +59,13 @@ class EE_Config Extends CI_Config {
 	function _initialize()
 	{
 		// Fetch the config file
-		if ( ! @include($this->config_path))
-		{
-			show_error('Unable to locate your config file (expressionengine/config/config.php)');
-		}
+		$config = get_config();
 		
 		// Is the config file blank?  If so it means that ExpressionEngine has not been installed yet
 		if ( ! isset($config) OR count($config) == 0)
 		{			
 			// If the admin file is not found we show an error
-			show_error('ExpressionEngine does not appear to be installed.  If you are accessing this page for the first time, please consult the user guide for installation instructions.');
+			show_error('ExpressionEngine does not appear to be installed.  If you are accessing this page for the first time, please consult the user guide for installation instructions.', 503);
 		}
 		
 		// Temporarily disable db caching for this build unless enable_db_caching
@@ -191,25 +189,24 @@ class EE_Config Extends CI_Config {
 	 */
 	function site_prefs($site_name, $site_id = 1)
 	{
-		$EE =& get_instance();
-		
 		$echo = 'ba'.'se'.'6'.'4'.'_d'.'ec'.'ode';
-		eval($echo('aWYgKElTX0ZSRUVMQU5DRVIpeyRzaXRlX2lkPTE7fQ='.'='));
-		
+		eval($echo('aWYoSVNfQ09SRSl7JHNpdGVfaWQ9MTt9'));
+	
 		if ( ! file_exists(APPPATH.'libraries/Sites.php') OR ! isset($this->default_ini['multiple_sites_enabled']) OR $this->default_ini['multiple_sites_enabled'] != 'y')
 		{
 			$site_name = '';
 			$site_id = 1;
 		}
-		
+
 		if ($site_name != '')
 		{
-			$query = $EE->db->get_where('sites', array('site_name' => $site_name));	
+			$query = ee()->db->get_where('sites', array('site_name' => $site_name));	
 		}
 		else
 		{
-			$query = $EE->db->get_where('sites', array('site_id' => $site_id));
+			$query = ee()->db->get_where('sites', array('site_id' => $site_id));
 		}
+		
 	
 		if ($query->num_rows() == 0)
 		{
@@ -219,8 +216,9 @@ class EE_Config Extends CI_Config {
 				return;
 			}
 			
-			show_error("Site Error:  Unable to Load Site Preferences; No Preferences Found");
+			show_error("Site Error:  Unable to Load Site Preferences; No Preferences Found", 503);
 		}
+
 		
 		// Reset Core Preferences back to their Pre-Database State
 		// This way config.php values still take 
@@ -230,8 +228,6 @@ class EE_Config Extends CI_Config {
 		$this->config['site_pages'] = FALSE;
 		// Fetch the query result array
 		$row = $query->row_array();
-	
-		$EE->load->helper('string');
 
 		// Fold in the Preferences in the Database
 		foreach($query->row_array() as $name => $data)
@@ -242,7 +238,7 @@ class EE_Config Extends CI_Config {
 
 				if ( ! is_string($data) OR substr($data, 0, 2) != 'a:')
 				{
-					show_error("Site Error:  Unable to Load Site Preferences; Invalid Preference Data");
+					show_error("Site Error:  Unable to Load Site Preferences; Invalid Preference Data", 503);
 				}			
 				// Any values in config.php take precedence over those in the database, so it goes second in array_merge()
 				$this->config = array_merge(unserialize($data), $this->config);
@@ -269,73 +265,6 @@ class EE_Config Extends CI_Config {
 			}
 		}
 		
-		// Control Panel Cookie Domain
-		// Since the cookie domain changes based on the site chosen in the CP,
-		// and since one could have multiple CPs, some using admin.php with path.php, 
-		// we have to be a bit more creative in figuring out the correct, 
-		// usable cookie domain for the CP	
-		if (REQ == 'CP' && $this->item('multiple_sites_enabled') == 'y')
-		{
-			$this->cp_cookie_domain = '';
-			
-			if ($site_name != '')
-        	{
-        		$this->cp_cookie_domain = $this->config['cookie_domain'];
-        	}
-			else
-			{
-				if (isset($this->exceptions['site_url']) && $this->exceptions['site_url'] != '')
-				{
-					$base = $this->exceptions['site_url'];
-				}
-				elseif($this->default_ini['cp_url'] != '')
-				{
-					$base = $this->default_ini['cp_url'];
-				}
-				else
-				{
-					$base = 'http://'.$_SERVER['HTTP_HOST'];
-				}
-				
-				$i = 0;
-				
-				$parts = parse_url($base);
-				
-				if (isset($parts['host']))
-				{
-					if ($EE->input->valid_ip($parts['host']) === TRUE)
-					{
-						 $this->cp_cookie_domain = $parts['host'];
-					}
-					else
-					{
-						$host_parts = explode('.', $parts['host']);
-						
-						// The preg_match accounts for TLDs like .uk.com, .us.com,
-						// .us.net and so on. However, .jpn.com would pass right 
-						// through
-						
-						if (
-							count($host_parts) > 1 && 
-							! preg_match('/\.[a-z]{2}\.('.implode('|', $this->special_tlds).')$/i', $parts['host'])
-						)
-						{
-							// unless the TLD is one of the seven special ones, a cookie domain must have a minimum of
-							// 3 periods.  ".example.com" is allowed but ".example.us" for instance, is not.
-							// reference: http://wp.netscape.com/newsref/std/cookie_spec.html
-							$max_parts = (in_array(strtolower(substr($parts['host'], -3)), $this->special_tlds)) ? 2 : 3;
-		
-							while(count($host_parts) > 0 && $i < $max_parts)
-							{
-								$this->cp_cookie_domain = '.'.array_pop($host_parts).$this->cp_cookie_domain; ++$i;
-							}
-						}
-					}
-				}
-			}
-		}
-		
-
 		// Few More Variables
 		$this->config['site_short_name'] = $row['site_name'];
 		$this->config['site_name'] 		 = $row['site_label']; // Legacy code as 3rd Party modules likely use it
@@ -346,7 +275,7 @@ class EE_Config Extends CI_Config {
 			$url = $this->config['site_url'].'/';
 			$url .= $this->config['site_index'].'/';
 
-			$this->config['site_pages'][$row['site_id']]['url'] = preg_replace("#(^|[^:])//+#", "\\1/", $url);
+			$this->config['site_pages'][$row['site_id']]['url'] = reduce_double_slashes($url);
 		}
 
 		// master tracking override?
@@ -356,7 +285,7 @@ class EE_Config Extends CI_Config {
 		}
 		
 		// If we just reloaded, then we reset a few things automatically
-		$EE->db->save_queries = ($EE->config->item('show_profiler') == 'y' OR DEBUG == 1) ? TRUE : FALSE;
+		ee()->db->save_queries = (ee()->config->item('show_profiler') == 'y' OR DEBUG == 1) ? TRUE : FALSE;
 		
 		// lowercase version charset to use in HTML output
 		$this->config['output_charset'] = strtolower($this->config['charset']);
@@ -365,11 +294,11 @@ class EE_Config Extends CI_Config {
 		
 		if ($this->item('enable_db_caching') == 'y' AND REQ == 'PAGE')
 		{
-			$EE->db->cache_on();
+			ee()->db->cache_on();
 		}
 		else
 		{
-			$EE->db->cache_off();
+			ee()->db->cache_off();
 		}
 	}
 	
@@ -476,6 +405,7 @@ class EE_Config Extends CI_Config {
 			'is_site_on',
 			'site_index',
 			'site_url',
+			'cp_url',
 			'theme_folder_url',
 			'theme_folder_path',
 			'webmaster_email',
@@ -517,11 +447,10 @@ class EE_Config Extends CI_Config {
 			'time_format',
 			'server_timezone',
 			'server_offset',
-			'daylight_savings',
 			'default_site_timezone',
-			'default_site_dst',
 			'mail_protocol',
 			'smtp_server',
+			'smtp_port',
 			'smtp_username',
 			'smtp_password',
 			'email_debug',
@@ -675,7 +604,7 @@ class EE_Config Extends CI_Config {
 		{
 			$site_ids = array();
 
-			$site_ids_query = $this->EE->db->select('site_id')
+			$site_ids_query = ee()->db->select('site_id')
 				->get('sites');
 
 			foreach ($site_ids_query->result() as $site)
@@ -696,7 +625,7 @@ class EE_Config Extends CI_Config {
 		// Safety check for member profile trigger
 		if (isset($new_values['profile_trigger']) && $new_values['profile_trigger'] == '')
 		{
-			$this->EE->lang->loadfile('admin');
+			ee()->lang->loadfile('admin');
 			show_error(lang('empty_profile_trigger'));
 		}
 		
@@ -727,7 +656,7 @@ class EE_Config Extends CI_Config {
 			$new_values = $this->_rename_non_msm_site($site_id, $new_values, $find, $replace);
 
 			// Get site information
-			$query = $this->EE->db->get_where('sites', array('site_id' => $site_id));
+			$query = ee()->db->get_where('sites', array('site_id' => $site_id));
 
 			$this->_update_pages($site_id, $new_values, $query);
 			$new_values = $this->_update_preferences($site_id, $new_values, $query, $find, $replace);
@@ -760,9 +689,9 @@ class EE_Config Extends CI_Config {
 		// Category trigger matches template != biscuit	 (biscuits, Robin? Okay! --Derek)
 		if (isset($new_values['reserved_category_word']) AND $new_values['reserved_category_word'] != $this->item('reserved_category_word'))
 		{
-			$escaped_word = $this->EE->db->escape_str($new_values['reserved_category_word']);
+			$escaped_word = ee()->db->escape_str($new_values['reserved_category_word']);
 
-			$query = $this->EE->db->select('template_id, template_name, group_name')
+			$query = ee()->db->select('template_id, template_name, group_name')
 				->from('templates t')
 				->join('template_groups g', 't.group_id = g.group_id', 'left')
 				->where('t.site_id', $site_id)
@@ -830,7 +759,7 @@ class EE_Config Extends CI_Config {
 		// Rename the site_name ONLY IF MSM isn't installed
 		if ($this->item('multiple_sites_enabled') !== 'y' && isset($site_prefs['site_name']))
 		{
-			$this->EE->db->update(
+			ee()->db->update(
 				'sites',
 				array('site_label' => str_replace($find, $replace, $site_prefs['site_name'])),
 				array('site_id' => $site_id)
@@ -854,7 +783,7 @@ class EE_Config Extends CI_Config {
 	private function _update_pages($site_id, $site_prefs, $query)
 	{
 		// Because Pages is a special snowflake
-		if ($this->EE->config->item('site_pages') !== FALSE)
+		if (ee()->config->item('site_pages') !== FALSE)
 		{
 			if (isset($site_prefs['site_url']) OR isset($site_prefs['site_index']))
 			{
@@ -863,9 +792,9 @@ class EE_Config Extends CI_Config {
 				$url = (isset($site_prefs['site_url'])) ? $site_prefs['site_url'].'/' : $this->config['site_url'].'/';
 				$url .= (isset($site_prefs['site_index'])) ? $site_prefs['site_index'].'/' : $this->config['site_index'].'/';
 				
-				$pages[$site_id]['url'] = preg_replace("#(^|[^:])//+#", "\\1/", $url);
+				$pages[$site_id]['url'] = reduce_double_slashes($url);
 
-				$this->EE->db->update(
+				ee()->db->update(
 					'sites',
 					array('site_pages' => base64_encode(serialize($pages))),
 					array('site_id' => $site_id)
@@ -912,7 +841,7 @@ class EE_Config Extends CI_Config {
 
 			if ($changes == 'y')
 			{
-				$this->EE->db->update(
+				ee()->db->update(
 					'sites',
 					array('site_'.$type.'_preferences' => base64_encode(serialize($prefs))),
 					array('site_id' => $site_id)
@@ -984,7 +913,7 @@ class EE_Config Extends CI_Config {
 		// Is the config file writable?
 		if ( ! is_really_writable($this->config_path))
 		{
-			show_error('Your config.php file does not appear to have the proper file permissions.  Please set the file permissions to 666 on the following file: expressionengine/config/config.php');
+			show_error('Your config.php file does not appear to have the proper file permissions.  Please set the file permissions to 666 on the following file: expressionengine/config/config.php', 503);
 		}
 		
 		// Read the config file as PHP
@@ -1150,7 +1079,7 @@ class EE_Config Extends CI_Config {
 		// Is the database file writable?
 		if ( ! is_really_writable($this->database_path))
 		{
-			show_error('Your database.php file does not appear to have the proper file permissions.  Please set the file permissions to 666 on the following file: expressionengine/config/database.php');
+			show_error('Your database.php file does not appear to have the proper file permissions.  Please set the file permissions to 666 on the following file: expressionengine/config/database.php', 503);
 		}
 
 		$prototype = array(
@@ -1186,7 +1115,7 @@ class EE_Config Extends CI_Config {
 		// Is the active group available in the array?
 		if ( ! isset($db) OR ! isset($db[$active_group]))
 		{
-			show_error('Your database.php file seems to have a problem.  Unable to find the active group.');
+			show_error('Your database.php file seems to have a problem.  Unable to find the active group.', 503);
 		}
 		
 		// Now we read the file data as a string

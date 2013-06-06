@@ -4,9 +4,9 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2012, EllisLab, Inc.
- * @license		http://expressionengine.com/user_guide/license.html
- * @link		http://expressionengine.com
+ * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
+ * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
  */
@@ -20,7 +20,7 @@
  * @subpackage	Core
  * @category	Core
  * @author		EllisLab Dev Team
- * @link		http://expressionengine.com
+ * @link		http://ellislab.com
  */
 class EE_Xmlrpc extends CI_Xmlrpc {
 
@@ -77,11 +77,11 @@ class EE_Xmlrpc extends CI_Xmlrpc {
 				$this->request(array(
 					$name,
 					$blog_url,
-					$this->EE->config->item('site_index'),
+					ee()->config->item('site_index'),
 					$rss_url
 				));
 				
-				if ( ! $this->EE->xmlrpc->send_request())
+				if ( ! ee()->xmlrpc->send_request())
 				{
 					$this->method('weblogUpdates.ping');
 					$this->request(array(
@@ -105,10 +105,10 @@ class EE_Xmlrpc extends CI_Xmlrpc {
 		}
 		else
 		{
-			if ( ! $license = $this->EE->config->item('license_number'))
+			if ( ! $license = ee()->config->item('license_number'))
 			{
-				$this->EE->lang->loadfile('xmlrpc');
-				$this->error = $this->EE->lang->line('invalid_license');
+				ee()->lang->loadfile('xmlrpc');
+				$this->error = ee()->lang->line('invalid_license');
 				return $this->display_error();
 			}
 			

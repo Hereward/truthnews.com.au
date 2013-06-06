@@ -17,6 +17,9 @@ $lang = array(
 'forum_post' =>
 'Forum Topic',
 
+'password_auth' =>
+'You must submit your current Super Admin password to continue',
+
 'existing_password_exp' =>
 'You must submit the current password to update this page',
 
@@ -220,9 +223,6 @@ $lang = array(
 
 'localization_updated' =>
 'Localization Updated',
-
-'daylight_savings_time' =>
-'Daylight Saving Time',
 
 'timezone' =>
 'Select Time Zone',
@@ -569,6 +569,9 @@ $lang = array(
 'no_unlocked_member_groups' =>
 'You do not have the required permissions to add new members to any group.<br />
 Please <a href="%s">contact your System Admin</a> if you feel this is incorrect.',
+
+'invalid_group_id' =>
+'You must select a valid group.',
 
 ''=>''
 );

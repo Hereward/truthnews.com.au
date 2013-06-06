@@ -2,11 +2,11 @@
 /**
  * Code Igniter
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * An open source application development framework for PHP 5.2.4 or newer
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2012, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -240,7 +240,7 @@ class CI_DB_forge {
 			show_error('A table name is required for that operation.');
 		}
 
-		$sql = $this->_rename_table($table_name, $new_table_name);
+		$sql = $this->_rename_table($this->db->dbprefix.$table_name, $this->db->dbprefix.$new_table_name);
 		return $this->db->query($sql);
 	}
 
@@ -327,13 +327,13 @@ class CI_DB_forge {
 	 * @param	string	the column definition
 	 * @return	bool
 	 */
-	function modify_column($table = '', $field = array())
+	function modify_column($table = '', $field = array(), $settings = array())
 	{
 		if ($table == '')
 		{
 			show_error('A table name is required for that operation.');
 		}
-
+		
 		// add field info into field array, but we can only do one at a time
 		// so we cycle through
 
@@ -346,7 +346,7 @@ class CI_DB_forge {
 				show_error('Field information is required.');
 			}
 
-			$sql = $this->_alter_table('CHANGE', $this->db->dbprefix.$table, $this->fields);
+			$sql = $this->_alter_table('CHANGE', $this->db->dbprefix.$table, $this->fields, '', $settings);
 
 			$this->_reset();
 
