@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<head>
+    
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="description" content="{if embed:description}{embed:description}{if:else}{tna_description}{/if}" />
+	<meta name="keywords" content="911 Truth, WeAreChange, New World Order, freedom, human rights, media, news, research" />
+	<meta name="author" content="Truth News Australia" />
+        {if embed:meta_refresh}
+          <meta http-equiv="refresh" content="{embed:meta_refresh}" /> 
+        {/if}
+        {embed=facebook/meta_tags entry_id="{embed:entry_id}" title="{embed:title}" description="{embed:description}" url="{embed:url}"}
+	<link rel="stylesheet" type="text/css" href="{stylesheet=site-css/main.css}" media="screen,projection" />
+        <link rel="stylesheet" type="text/css" href="{stylesheet=site-css/custom.css}" media="screen,projection" />
+	<link rel="stylesheet" type="text/css" href="{stylesheet=site-css/print.css}" media="print" />
+        <link rel="stylesheet" type="text/css" href="{stylesheet=site-css/comment_buttons.css}" media="screen,projection" />
+        <link rel="stylesheet" type="text/css" href="{stylesheet=site-css/navigation.css}" media="screen,projection" />
+        <link rel="alternate" type="application/rss+xml" title="Truth News Radio Australia" href="http://www.truthnews.com.au/web/feeds/itunes.xml" />
+        <link rel="alternate" type="application/rss+xml" title="Truth News Radio Australia" href="http://www.truthnews.com.au/web/feeds/tna.rss2" />
+	<title>{if embed:title}{embed:title}{if:else}{tna_slogan}{/if} | truthnews.com.au</title>
+        <base href="{site_url}" />
+        <link rel="shortcut icon" type="image/ico" href="{site_url}favicon.ico" />  
+        <script type="text/javascript" src="{path=js/main.js}"></script>
+        <script type="text/javascript" src="http://www.truthnews.com.au/slideshowpro/m/embed.js"></script>
+       
+        {exp:jquery:script_tag}
+
+        {exp:jquery:script_tag plugin='fancybox'}
+
+       
+
+        <script type='text/javascript' src='/js/swfobject.js'></script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-756664-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+
+<!-- DESCRIPTION = {embed:description} -->
+
+</head>
+
+<body>
+ {!-- embed="framework/news_channel_minimal" channel="tna|tna_news|911oz" search="" limit="10" --}
+</body>
+
+</html>
