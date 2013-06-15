@@ -263,6 +263,7 @@ div.facebook {
 }
 
 div.twitter_top_feed {
+  width:400px;
   float:right;
   margin:30px 0px 0px 0px;
 }
