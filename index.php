@@ -25,6 +25,7 @@
  * 
  */
     $system_path = './ee';
+    $assign_to_config['default_site_path'] = '/home/planetonline/websites/truthnews';
 
 
 /*

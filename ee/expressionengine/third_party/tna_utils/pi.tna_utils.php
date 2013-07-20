@@ -14,13 +14,14 @@ class Tna_utils {
 
 	function get_media_properties() {
         //die("cp_url dirname = ".dirname($this->EE->config->item('cp_url')));
+        $default_site_path = $this->EE->config->item('default_site_path');
 		error_reporting(E_ALL & ~E_DEPRECATED);
 		@ini_set('display_errors', 1);
 		//die(APPPATH);
-		die($this->EE->config->item('system_path'));
-		require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.php");
+		//die($this->EE->config->item('system_path'));
+		require_once("$default_site_path/includes/getid3/getid3.php");
 		//require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.lib.php");
-        require_once ("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/extension.cache.mysql.php");
+        require_once ("$default_site_path/includes/getid3/extension.cache.mysql.php");
         
         $db = array();
         //die(APPPATH.'config/database.php');
@@ -51,9 +52,9 @@ class Tna_utils {
 		
 		$full_path = '';
 		if ($param_path) {
-			$full_path = "{$_SERVER['DOCUMENT_ROOT']}/$param_path";
+			$full_path = "$default_site_path/$param_path";
 		} else {
-			$full_path = "{$_SERVER['DOCUMENT_ROOT']}/radio/export/$filename";
+			$full_path = "$default_site_path/radio/export/$filename";
 		}
 		//return 3600;
 		$info = $getID3->analyze($full_path);
