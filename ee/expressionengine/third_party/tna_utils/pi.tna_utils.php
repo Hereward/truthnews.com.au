@@ -13,7 +13,7 @@ class Tna_utils {
 	}
 
 	function get_media_properties() {
-        die("cp_url = ".$this->EE->config->item('cp_url'));
+        die("cp_url dirname = ".dirname($this->EE->config->item('cp_url')));
 		error_reporting(E_ALL & ~E_DEPRECATED);
 		@ini_set('display_errors', 1);
 		//die(APPPATH);
