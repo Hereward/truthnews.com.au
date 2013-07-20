@@ -17,7 +17,7 @@ class Tna_utils {
 		error_reporting(E_ALL & ~E_DEPRECATED);
 		@ini_set('display_errors', 1);
 		//die(APPPATH);
-		//die($this->EE->config->item('system_path'));
+		die($this->EE->config->item('system_path'));
 		require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.php");
 		//require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/getid3.lib.php");
         require_once ("{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/extension.cache.mysql.php");
