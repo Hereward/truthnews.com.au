@@ -13,7 +13,7 @@ class Tna_utils {
 	}
 
 	function get_media_properties() {
-		
+        die("cp_url = ".$this->EE->config->item('cp_url'));
 		error_reporting(E_ALL & ~E_DEPRECATED);
 		@ini_set('display_errors', 1);
 		//die(APPPATH);
@@ -32,7 +32,7 @@ class Tna_utils {
        // $getID3 = new getID3_cached_dbm('db2', "{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.dbm","{$_SERVER['DOCUMENT_ROOT']}/includes/getid3/cache/getid3_cache.lock");
         $getID3->encoding = 'UTF-8';
 		//getid3_lib::IncludeDependency(GETID3_INCLUDEPATH.'extension.cache.dbm.php', __FILE__, true);
-		
+
 		//$filename = $this->EE->TMPL->fetch_param('filename');
 		$media_source = $this->EE->TMPL->fetch_param('media_source');
 		$media_date = $this->EE->TMPL->fetch_param('media_date');
