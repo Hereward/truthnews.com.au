@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+        
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="description" content="{if embed:description}{embed:description}{if:else}{tna_description}{/if}" />
+	<meta name="keywords" content="911 Truth, WeAreChange, New World Order, freedom, human rights, media, news, research" />
+	<meta name="author" content="Truth News Australia" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {if embed:meta_refresh}
+          <meta http-equiv="refresh" content="{embed:meta_refresh}" /> 
+        {/if}
+        {embed=facebook/meta_tags entry_id="{embed:entry_id}" title="{embed:title}" description="{embed:description}" url="{embed:url}"}
+
+	<link rel="stylesheet" type="text/css" href="{stylesheet=site-css/print.css}" media="print" />
+        <link rel="stylesheet" type="text/css" href="{stylesheet=site-css/comment_buttons.css}" media="screen,projection" />
+        <link rel="stylesheet" type="text/css" href="{stylesheet=site-css/navigation.css}" media="screen,projection" />
+
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="/css/custom_2.css" rel="stylesheet">
+        <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+        {!--
+           <link rel="stylesheet" type="text/css" href="{stylesheet=site-css/main.css}" media="screen,projection" />
+        --}
+    {!--
+        <link rel="stylesheet" type="text/css" href="{stylesheet=site-css/custom.css}" media="screen,projection" />
+    --}
+
+
+        <link rel="alternate" type="application/rss+xml" title="Truth News Radio Australia" href="http://www.truthnews.com.au/web/feeds/itunes.xml" />
+        <link rel="alternate" type="application/rss+xml" title="Truth News Radio Australia" href="http://www.truthnews.com.au/web/feeds/tna.rss2" />
+	<title>{if embed:title}{embed:title}{if:else}{tna_slogan}{/if} | truthnews.com.au</title>
+        <base href="{site_url}" />
+        <link rel="shortcut icon" type="image/ico" href="{site_url}favicon.ico" />
+
+        <script type="text/javascript" src="{path=js/main.js}"></script>
+        <script type="text/javascript" src="http://www.truthnews.com.au/slideshowpro/m/embed.js"></script>
+        {!-- "http://sopastrike.com/strike --}
+        {exp:jquery:script_tag}
+        
+        <script language="javascript" src="/js/colorbox.js"></script>
+        
+        <link media="screen" rel="stylesheet" target="_blank" href="/css/colorbox.css" />
+
+        <link media="screen" rel="stylesheet" target="_blank" href="/css/popup.css" />
+
+        {!-- {exp:jquery:script_tag plugin='fancybox'} --}
+
+        {!-- <script type="text/javascript" src="{site_url}themes/javascript/compressed/jquery/jquery.js"></script> --}
+
+        <script type='text/javascript' src='/js/swfobject.js'></script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-756664-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+
+{!-- {embed=framework/subscribe_pop} --}
+
+<!-- DESCRIPTION = {embed:description} -->
+</head>
+
+<body>
+
+
+<div id="fb-root"></div>
+{!--
+{if embed:adzone != "none"}
+  {embed=ad_zones/leaderboard}
+{/if}
+--}

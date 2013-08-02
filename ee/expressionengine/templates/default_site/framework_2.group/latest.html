@@ -1,0 +1,28 @@
+{!--
+<div class="row">
+
+    <div class="span7">
+        <div class="latest">
+            <h2>Most Popular</h2>
+            <ul>
+
+                {exp:channel:entries start_on="2012-01-01 00:00" orderby="comment_total" offset="0" channel="tna_news|911oz" limit="5" sort="desc" status="open"}
+                <li><a href="{channel_url}/{url_title}">{exp:char_limit total="50"}{title}{/exp:char_limit}</a></li>
+                {/exp:channel:entries}
+
+            </ul>
+        </div>
+    </div>
+</div>  <!-- /div class="row" -->
+--}
+
+        <div class="latest">
+            <h2>Latest Posts</h2>
+            <ul>
+                {exp:channel:entries offset="0" channel="tna|tna_news" limit="5" orderby="entry_date" sort="desc" status="open"}
+                <li><a href="{channel_url}/{url_title}">{exp:char_limit total="95"}{title}{/exp:char_limit}</a></li>
+                {/exp:channel:entries}
+            </ul>
+        </div>
+
+

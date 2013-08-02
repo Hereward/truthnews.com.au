@@ -1,0 +1,43 @@
+{!--
+{embed=sign-in/sign_in_snippet}
+{embed=framework/search_simple}
+--}
+
+<div style="margin:0px 0px 15px 0px;">
+<a href="{site_url}web/feeds">
+<img height="56" width="298" style="border:1px solid #672b02;" src="{site_url}storage/images/framework/get_our_rss_feed.jpg" alt="RSS feed icon"/>
+</a>
+
+</div>
+
+{embed=ad_zones/subscribe}
+
+{embed=framework_2/recent_comments}
+
+{embed=ad_zones/medrec}
+
+{embed=facebook/fb_login}
+
+{embed=ad_zones/facebook}
+
+<div style="margin-top: 0px; margin-bottom: 20px;">
+ <img style="border:1px solid black;" width="220" height="170" src="http://www.truthnews.com.au/storage/images/framework/hereward_icon_thumb_02.jpg" alt="Hereward Fenton" title="Hereward Fenton" />
+ <br/><span style="font-size:12px; font-weight:bold;">Hereward Fenton</span>
+</div>
+{!--
+{embed=facebook/fb_activity}
+--}
+{embed=ad_zones/medrec}
+
+<div class="archives">
+<h3>Archives</h3>
+{exp:channel:month_links channel="tna|tna_news|911oz" limit="50"}
+<a href="{path='archives/all'}">{month}, {year}</a><br />
+{/exp:channel:month_links}
+
+</div>
+
+{embed=ad_zones/tnra_01}
+
+{embed=framework/channel_categories}
+                   
