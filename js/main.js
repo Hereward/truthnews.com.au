@@ -52,7 +52,7 @@ function load_video_player_object_generic(id,url,duration) {
 function load_player_object_generic(id,url,duration) {
     // alert("id = " + id);
     // alert("duration = " + duration);
-    var so = new SWFObject('/player/player.swf','mpl','300','60','9');
+    var so = new SWFObject('/player/player.swf','mpl','280','60','9');
     so.addParam('allowfullscreen','true');
     so.addParam('allowscriptaccess','always');
     so.addParam('wmode','opaque');
@@ -68,7 +68,7 @@ function load_player_object_generic(id,url,duration) {
 
 function load_player_object(entry_id,media_date,duration,source,segment) {
     //alert("entry_id = " + entry_id);
-    var so = new SWFObject('/player/player.swf','mpl','300','60','9');
+    var so = new SWFObject('/player/player.swf','mpl','280','60','9');
     var media_url = '';
     var media_id = 'mediaspace'+'_'+entry_id;
     if (segment>1) {
@@ -96,7 +96,7 @@ function load_player_object(entry_id,media_date,duration,source,segment) {
 }
 
 function load_player_object_simple(entry_id,url) {
-    var so = new SWFObject('/player/player.swf','mpl','300','60','9');
+    var so = new SWFObject('/player/player.swf','mpl','280','60','9');
     so.addParam('allowfullscreen','true');
     so.addParam('allowscriptaccess','always');
     so.addParam('wmode','opaque');
