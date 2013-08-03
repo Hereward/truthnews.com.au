@@ -1,0 +1,60 @@
+{!-- category="{embed:category}" --}
+
+{exp:channel:entries cache="yes" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}" orderby="date" sort="desc" paginate="bottom"}
+               <div class="article_container">
+                {if embed:limit > 1}
+		<a class="channel_title" href="{channel_url}/{url_title}"><h2 style="display:inline;" class="channel_title">{title}</h2></a>
+                {if:else}
+                   <h2 style="display:inline;" class="channel_title">{title}</h2>
+                {/if}
+                   {!--
+                 <div>{embed=framework/player entry_id="{entry_id}"}</div>
+                   --}
+                
+		  <p class="timestamp">
+              {!--
+                  <strong>
+                    {entry_date format="%d %F %Y"} 
+                  </strong> 
+                  {if original_date}(Original: {original_date format="%Y-%m-%d"}){/if}
+                  | 
+                  {if original_source}<a target="_blank" href="{original_source}">Source</a> | {/if}
+              --}
+                  
+                       <a href="{channel_url}/{url_title}">Permalink</a> | <a href="{channel_url}/{url_title}#comment_body">comments: {comment_total}</a>
+                       {if original_author}<br/>By <span style="font-style:italic; font-weight:bold;">{original_author}</span>{/if}
+                   
+                  
+                  </p>
+                  <div>
+                     <fb:like href="{channel_url}/{url_title}" send="true" width="450" show_faces="true" font=""></fb:like>
+                  </div>
+                  
+                 <div class="add_this">{embed=framework/add_this add_this_url="{channel_url}/{url_title}"} <div style="margin-top:5px; font-weight:normal; font-size:0.8em;">Categories: [ {categories backspace="2"}<a href="{path='channel/index'}">{category_name}</a>, {/categories} ]</div>
+</div>
+
+                            <div class="article">
+                             
+                             {if (body_short && (segment_2 != 'story')) || ("{always_use_short_body}" == "yes")}
+                                {body_short}
+                                {if "{always_use_short_body}" == "yes"}
+                                  <p style="text-align:right;"><a href="{original_source}">Article Continues &raquo;</a></p>
+                                {if:else}
+                                  <p style="text-align:right;"><a href="{channel_url}/{url_title}">Article Continues &raquo;</a></p>
+                                {/if}
+                            {if:else}
+                                {body_rich}
+                             {/if}
+
+                             {if embed:show_comments}
+                                {embed="facebook/fb_comments"}
+                                {embed="framework/comment_body" site="default_site" entry_id="{entry_id}"}
+                             {/if}
+                            </div>
+                
+                
+               </div>
+               {paginate}
+                 <p>Page {current_page} of {total_pages} pages {exp:low_replace find="index.php"}{pagination_links}{/exp:low_replace}</p>
+               {/paginate}
+{/exp:channel:entries}
