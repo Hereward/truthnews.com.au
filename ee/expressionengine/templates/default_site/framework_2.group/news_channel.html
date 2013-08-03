@@ -12,14 +12,14 @@
                    --}
                 
 		  <p class="timestamp">
-              {!--
+              
                   <strong>
                     {entry_date format="%d %F %Y"} 
                   </strong> 
                   {if original_date}(Original: {original_date format="%Y-%m-%d"}){/if}
                   | 
                   {if original_source}<a target="_blank" href="{original_source}">Source</a> | {/if}
-              --}
+
                   
                        <a href="{channel_url}/{url_title}">Permalink</a> | <a href="{channel_url}/{url_title}#comment_body">comments: {comment_total}</a>
                        {if original_author}<br/>By <span style="font-style:italic; font-weight:bold;">{original_author}</span>{/if}
