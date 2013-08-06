@@ -263,6 +263,10 @@ div.internal_banner_leaderboard {
     margin:25px 0px 0px 0px;
 }
 
+div.internal_banner_leaderboard_tablet {
+    margin:25px 0px 0px 0px;
+}
+
 div.internal_banner_leaderboard_phone {
     /* text-align:center; */
     margin:15px 0px 0px 0px;

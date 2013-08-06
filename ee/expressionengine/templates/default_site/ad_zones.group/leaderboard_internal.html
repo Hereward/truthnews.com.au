@@ -15,12 +15,12 @@
 
   </div>
 {if:elseif "{exp:tna_utils:is_platform type='tablet'}" == 1}
-  <div class="internal_banner_leaderboard visible-desktop visible-large-desktop">
+  <div class="internal_banner_leaderboard_tablet">
    {!--  <div>I'm a TABLET!</div> --}
     {embed=ad_zones/responsive_adsense}
   </div>
 {if:elseif "{exp:tna_utils:is_platform type='phone'}" == 1}
-  <div class="internal_banner_leaderboard_phone visible-phone">
+  <div class="internal_banner_leaderboard_phone">
    {!--  <div>I'm a PHONE!</div> --}
     {embed=ad_zones/responsive_adsense}
   </div>

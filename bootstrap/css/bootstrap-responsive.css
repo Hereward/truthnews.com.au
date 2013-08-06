@@ -79,9 +79,15 @@
         display: inherit !important;
     }
 
+    div.internal_banner_leaderboard_tablet {
+        max-width:480px;
+        overflow: hidden;
+    }
+
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
+
    .visible-large-desktop {
         display: none !important ;
    }
@@ -104,6 +110,11 @@
 
     h3.subscribe {
         padding:0;
+    }
+
+    div.internal_banner_leaderboard_tablet {
+        max-width:480px;
+        overflow: hidden;
     }
 }
 
