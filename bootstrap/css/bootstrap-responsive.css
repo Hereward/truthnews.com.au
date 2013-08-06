@@ -934,6 +934,11 @@
 }
 
 @media (max-width: 480px) {
+
+    .main_box {
+
+        padding: 5px;
+    }
   .nav-collapse {
     -webkit-transform: translate3d(0, 0, 0);
   }
@@ -1148,6 +1153,6 @@
   }
 }
 
-.responsive { width: 280px; height: 50px; }
+.responsive { width: 320px; height: 50px; }
 @media(min-width: 500px) { .responsive { width: 468px; height: 60px; } }
 @media(min-width: 800px) { .responsive { width: 728px; height: 90px; } }

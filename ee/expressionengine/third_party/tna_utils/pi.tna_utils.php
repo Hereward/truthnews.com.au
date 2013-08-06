@@ -12,6 +12,23 @@ class Tna_utils {
 
 	}
 
+    function is_platform($type='') {
+        $default_site_path = $this->EE->config->item('default_site_path');
+        require_once "$default_site_path/includes/Mobile_Detect.php";
+        $detect = new Mobile_Detect;
+
+        $type = ($type)?$type:$this->EE->TMPL->fetch_param('type');
+
+        if ($type == 'mobile') {
+            return ($detect->isMobile())?1:'';
+        } elseif ($type == 'computer') {
+            return ($detect->isMobile())?'':1;
+        } else {
+            return '';
+        }
+
+    }
+
 	function get_media_properties() {
         //die("cp_url dirname = ".dirname($this->EE->config->item('cp_url')));
         $default_site_path = $this->EE->config->item('default_site_path');
