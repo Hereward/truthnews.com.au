@@ -1,5 +1,5 @@
 {if "{exp:tna_utils:is_platform type='computer'}" == 1}
-<div class="internal_banner_leaderboard visible-large-desktop">
+  <div class="internal_banner_leaderboard visible-large-desktop">
 
     <script type="text/javascript"><!--
     google_ad_client = "ca-pub-3116426016611832";
@@ -13,18 +13,17 @@
             src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </script>
 
-</div>
+  </div>
 {if:elseif "{exp:tna_utils:is_platform type='tablet'}" == 1}
-<div class="internal_banner_leaderboard visible-desktop visible-large-desktop">
+  <div class="internal_banner_leaderboard visible-desktop visible-large-desktop">
     <div>I'm a TABLET!</div>
     {embed=ad_zones/responsive_adsense}
-</div>
+  </div>
 {if:elseif "{exp:tna_utils:is_platform type='phone'}" == 1}
-
-<div class="internal_banner_leaderboard visible-phone">
+  <div class="internal_banner_leaderboard_phone visible-phone">
     <div>I'm a PHONE!</div>
     {embed=ad_zones/responsive_adsense}
-</div>
+  </div>
 {/if}
 
 
