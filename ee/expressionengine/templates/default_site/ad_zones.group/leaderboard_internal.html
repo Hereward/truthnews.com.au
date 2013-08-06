@@ -14,20 +14,14 @@
     </script>
 
 </div>
-{if:else}
-<div class="internal_banner_leaderboard">
-    <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <!-- Responsive -->
-    <ins class="adsbygoogle responsive"
-         style="display:inline-block"
-         data-ad-client="ca-pub-3116426016611832"
-         data-ad-slot="8914631382"></ins>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+{if:elseif "{exp:tna_utils:is_platform type='tablet'}" == 1}
+<div class="internal_banner_leaderboard visible-desktop">
+    {embed=ad_zones/responsive_adsense}
 </div>
-
-
+{if:elseif "{exp:tna_utils:is_platform type='phone'}" == 1}
+<div class="internal_banner_leaderboard visible-phone">
+    {embed=ad_zones/responsive_adsense}
+</div>
 {/if}
 
 

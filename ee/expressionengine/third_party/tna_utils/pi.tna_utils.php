@@ -23,6 +23,10 @@ class Tna_utils {
             return ($detect->isMobile())?1:'';
         } elseif ($type == 'computer') {
             return ($detect->isMobile())?'':1;
+        } elseif ($type == 'tablet') {
+            return ($detect->isTablet())?1:'';
+        } elseif ($type == 'phone') {
+            return ($detect->isMobile() && !$detect->isTablet())?1:'';
         } else {
             return '';
         }
