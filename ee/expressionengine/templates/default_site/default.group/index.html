@@ -1,43 +1,34 @@
-{embed ="framework/doc_head"}
-{!--
-{embed="framework/login_details"}
---}
+{embed="framework_2/doc_head"}
 
-<div id="container">
-	{embed="framework/header"}
+<div class="container main_box">
 
-	{embed ="framework/navigation" section="home"}
+    {embed="framework_2/header"}
 
-{!-- boo!
-        <div class="home_presentation">
-           
+    {embed="framework_2/navigation" section="home"}
+
+
+    <div class="row">
+
+        <div class="span8">
+
+            {embed="framework_2/latest"}
+
+            {embed="framework_2/listen_banner"}
+
+            {embed="ad_zones/leaderboard_internal"}
+
+
+            {embed="framework_2/news_channel" channel="tna|tna_news|911oz" search="" limit="10"}
+
         </div>
---}
 
-{!--
-        <div style="min-height:262px;" class="home_presentation">
-               {embed="static/feature"}
-               {embed ="static/home_presentation"}  
-        </div>
---}
 
-	<div id="main">
-	
-	    {embed="framework/listen_banner"}
-	
-        {embed="framework/latest"}
-{!--
-         {embed="framework/tna_blog"}
---}
+        <div class="span4">{embed="framework_2/right_col"}</div>
 
-         {embed="framework/news_channel" channel="tna|tna_news|911oz" search="" limit="10"}
+    </div> <!-- /row -->
 
-	</div>
-        
-	
-     {embed="framework/right_col"}
-     {embed="framework/footer"}
+    {embed="framework_2/footer"}
 
-</div>
+</div> <!-- /container -->
 
-{embed ="framework/doc_foot"}
+{embed ="framework_2/doc_foot"}
