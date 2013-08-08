@@ -79,10 +79,7 @@
         display: inherit !important;
     }
 
-    div.internal_banner_leaderboard_tablet, div.internal_banner_leaderboard {
-        max-width:480px;
-        overflow: hidden;
-    }
+
 
 }
 
@@ -112,10 +109,7 @@
         padding:0;
     }
 
-    div.internal_banner_leaderboard_tablet, div.internal_banner_leaderboard{
-        max-width:480px;
-        overflow: hidden;
-    }
+
 
 
 }
@@ -142,10 +136,7 @@
         font-size: 18px;
     }
 
-    div.internal_banner_leaderboard_tablet, div.internal_banner_leaderboard{
-        max-width:480px;
-        overflow: hidden;
-    }
+
 }
 
 .visible-print {
