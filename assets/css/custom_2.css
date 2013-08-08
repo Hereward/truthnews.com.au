@@ -7,6 +7,7 @@ body {
 .main_box {
     background-color:white;
     padding:0px 30px 10px 30px;
+
 }
 
 .main_container {
@@ -260,16 +261,23 @@ div.banner {
 
 div.internal_banner_leaderboard {
     /* text-align:center; */
-    margin:25px 0px 0px 0px;
+   /* margin:25px 0px 0px 0px; */
+
+   /* text-align:center;
+    margin:0px auto; */
 }
 
 div.internal_banner_leaderboard_tablet {
-    margin:25px 0px 0px 0px;
+   /* margin:25px 0px 0px 0px; */
+    /*
+    text-align:center;
+    margin:0px auto;
+    */
 }
 
 div.internal_banner_leaderboard_phone {
     /* text-align:center; */
-    margin:15px 0px 0px 0px;
+
     text-align:center;
     margin:0px auto;
 }
@@ -733,3 +741,4 @@ div.article {
     border-left: 1px solid #EAE8E8;
     padding-left:20px;
 }
+
