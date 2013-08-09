@@ -502,7 +502,7 @@
   }
 }
 
-
+/*
 @media (min-width: 768px) and (max-width: 979px) {
   .row {
     margin-left: -20px;
@@ -843,8 +843,8 @@
     width: 28px;
   }
 }
-
-@media (max-width: 767px) {
+*/
+@media (max-width: 979px) {
   body {
     padding-right: 0px;
     padding-left: 0px;
@@ -1002,7 +1002,7 @@
         font-size: 14px;
     }
 }
-
+/*
 @media (max-width: 979px) {
   body {
     padding-top: 0;
@@ -1154,6 +1154,8 @@
     padding-left: 10px;
   }
 }
+
+*/
 
 @media (min-width: 980px) {
   .nav-collapse.collapse {

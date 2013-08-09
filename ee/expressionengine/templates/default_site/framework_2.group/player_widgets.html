@@ -1,29 +1,39 @@
-<?php 
+<div class="row">
+    <?php
    $broadcast_date = DateTime::createFromFormat('Ymd', "{embed:media_date}");
    $broadcast_date_str = $broadcast_date->format('F j, Y');
-   $segments = "{embed:media_segments}";
-   for ($segment = 1; $segment <= $segments; $segment++) {
-       $media_id = "mediaspace_{embed:entry_id}";
-       $media_id .= ($segment>1)?"_$segment":'';
-// Broadcast of [$broadcast_date_str ] 
-?>
+    $segments = "{embed:media_segments}";
+    $span_width = ($segments>1)?4:8;
+    $media_url = '';
+    for ($segment = 1; $segment <= $segments; $segment++) {
+    $media_id = "mediaspace_{embed:entry_id}";
+    $media_id .= ($segment>1)?"_$segment":'';
 
-<div class="player_widget_container">
-<div style="margin-top:15px;" id='<?=$media_id?>'>This text will be replaced</div>
-<div style="margin-bottom:10px;">Broadcast of <?=$broadcast_date_str?>. Part <?=$segment?> of <?=$segments?> <span style="font-size:16px;">&raquo;</span> Download mp3: 
-{!--
-<a href="http://www.truthnews.com.au/web/radio/download/{embed:media_source}_{embed:media_date}">click here</a>
---}
+    if ($segment>1) {
+    $media_url = "/radio/export/{embed:media_source}_{embed:media_date}_$segment.mp3";
+    } else {
+    $media_url = "/radio/export/{embed:media_source}_{embed:media_date}.mp3";
+    }
+    ?>
 
-<a href ="{exp:tna_utils:get_media_url segment="<?=$segment?>" media_date="{embed:media_date}" media_source="{embed:media_source}"}">click here</a>
+    <div class="span<?=$span_width?>">
+        <audio style="margin-top:15px;" id="<?=$media_id?>" src="<?=$media_url?>" type="audio/mp3" controls="controls">
+        </audio>
+        <div style="margin-bottom:10px;">Broadcast of <?=$broadcast_date_str?>, part <?=$segment?> of <?=$segments?>.
+            <br/>
+            Download mp3 <span style="font-size:16px;">&raquo;</span>
+            <a href ="{exp:tna_utils:get_media_url segment='<?=$segment?>' media_date='{embed:media_date}' media_source='{embed:media_source}'}">click here</a>
+        </div>
+    </div>
 
-</div>
-
-{embed=default_site:framework_2/player_object segment="<?=$segment?>" entry_id="{embed:entry_id}" media_date="{embed:media_date}" media_source="{embed:media_source}"}
-</div>
-
-<?php 
+    <?php
   }
 ?>
 
+    <script>
+        $('audio,video').mediaelementplayer({
+            audioWidth: 280
+        });
+    </script>
+</div>
 
