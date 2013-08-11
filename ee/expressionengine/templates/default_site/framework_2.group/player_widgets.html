@@ -3,7 +3,7 @@
    $broadcast_date = DateTime::createFromFormat('Ymd', "{embed:media_date}");
    $broadcast_date_str = $broadcast_date->format('F j, Y');
     $segments = "{embed:media_segments}";
-    $span_width = ($segments>1)?4:8;
+    $span_width = ($segments>1)?6:12;
     $media_url = '';
     for ($segment = 1; $segment <= $segments; $segment++) {
     $media_id = "mediaspace_{embed:entry_id}";
@@ -16,7 +16,7 @@
     }
     ?>
 
-    <div class="span<?=$span_width?>">
+    <div class="col-lg-<?=$span_width?>">
         <audio style="margin-top:15px;" id="<?=$media_id?>" src="<?=$media_url?>" type="audio/mpeg" controls="controls">
         </audio>
         <div style="margin-bottom:10px;">Broadcast of <?=$broadcast_date_str?>, part <?=$segment?> of <?=$segments?>.

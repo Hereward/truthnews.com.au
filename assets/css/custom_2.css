@@ -71,7 +71,7 @@ div.latest {
 */
 
 div.latest ul {
-    list-style-image:url('http://www.truthnews.com.au/storage/images/framework/green_square.jpg');
+    list-style-image:url('/storage/images/framework/green_square.jpg');
     margin-bottom:5px;
 }
 div.latest h2 {
@@ -442,6 +442,7 @@ h1.header {
 }
 */
 
+/*
 #header_01 {
     padding:5px 0px 0px 0px;
     margin:0px 0px 13px 0px;
@@ -453,7 +454,7 @@ h1.header {
     color:white;
     margin:0px;
 }
-
+*/
 blockquote {
     border-left:4px solid #E0E0E0;
     margin:20px;
@@ -502,12 +503,12 @@ h1.logo {
     color:white;
 }
 */
-
+/*
 #logo_new {
     height:81px;
     width:362px;
     margin:20px auto 0px auto;
-    /*background: white url(storage/images/framework/waca_logo2.gif) top left no-repeat; */
+
     border: 1px white none;
     padding:3px;
 }
@@ -520,7 +521,7 @@ h1.logo {
     float:left;
     margin:0px 20px 0px 0px;
 }
-
+*/
 
 .feature {
     float:right;
@@ -638,6 +639,7 @@ p.continued {
     margin-top:10px;
 }
 
+/*
 .header-left {
     float:left;
     margin:15px auto 10px auto;
@@ -659,7 +661,9 @@ p.continued {
     background-color:black;
 
 }
+*/
 
+/*
 a.meetup, a.meetup:link, a.meetup:visited {
     border-style:none;
     padding:0px;
@@ -671,7 +675,7 @@ a.meetup:hover {
     color: #F40023;
     border-style:none;
 }
-
+*/
 
 a.join_mailing_list, a.join_mailing_list:link, a.join_mailing_list:visited {
     display:block;
@@ -702,6 +706,7 @@ a.click_zone, a.click_zone:link, a.click_zone:visited {
     border-style:none;
 }
 
+/*
 a.meetup_link, a.meetup_link:link, a.meetup_link:hover {
     border-style:none;
 }
@@ -726,6 +731,8 @@ p.mission_statement {
 
 }
 
+*/
+
 div.article {
     /* max-width:700px; */
 
@@ -741,4 +748,14 @@ div.article {
     border-left: 1px solid #EAE8E8;
     padding-left:20px;
 }
+
+img {
+    height:auto !important;
+    max-width: 100%;
+}
+
+.responsive { width: 320px; height: 50px; }
+@media(min-width: 500px) { .responsive { width: 468px; height: 60px; } }
+@media(min-width: 1200px) { .responsive { width: 728px; height: 90px; } }
+
 
