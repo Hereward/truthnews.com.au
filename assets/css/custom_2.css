@@ -6,6 +6,7 @@ body {
 
 .main_box {
     background-color:white;
+
     padding:5px 30px 10px 30px;
 
 }
@@ -769,9 +770,9 @@ img {
 @media(min-width: 500px) { .responsive { width: 468px; height: 60px; } }
 @media(min-width: 1200px) { .responsive { width: 728px; height: 90px; } }
 
-@media (max-width: 480px) {
+@media screen and (max-width: 400px) {
     .main_box {
-        padding: 5px;
+        padding: 0px !important;
     }
 
     .navbar {
