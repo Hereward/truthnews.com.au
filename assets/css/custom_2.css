@@ -773,6 +773,7 @@ img {
 @media screen and (max-width: 400px) {
     .main_box {
         padding: 0px !important;
+        margin: -5px;
     }
 
     .navbar {
