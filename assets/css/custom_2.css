@@ -6,7 +6,7 @@ body {
 
 .main_box {
     background-color:white;
-    padding:0px 30px 10px 30px;
+    padding:5px 30px 10px 30px;
 
 }
 
@@ -72,7 +72,10 @@ div.latest {
 
 div.latest ul {
     list-style-image:url('/storage/images/framework/green_square.jpg');
+    list-style-position:outside;
     margin-bottom:5px;
+    padding-left: 15px;
+
 }
 div.latest h2 {
     color:white; /*#FCEBD9;*/
@@ -103,7 +106,7 @@ div.latest {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    max-width:700px;
+    max-width:718px;
 
 
     /* border-bottom: 1px solid #EAE8E8; */
@@ -168,7 +171,7 @@ div.logos {
 }
 
 div.listen {
-    margin:10px 0px 0px 0px;
+    margin:0;
     text-align:center;
 
 }
@@ -247,7 +250,7 @@ div.fb_feed {
 }
 
 div.add_this {
-    margin:0px 0px 20px 0px;
+    margin:0px 0px 5px 0px;
 }
 
 div.promote {
@@ -735,6 +738,7 @@ p.mission_statement {
 
 div.article {
     /* max-width:700px; */
+    margin-top:10px;
 
 }
 
@@ -754,8 +758,49 @@ img {
     max-width: 100%;
 }
 
+/*
+.row {
+    margin-bottom: 10px;
+}
+
+*/
+
 .responsive { width: 320px; height: 50px; }
 @media(min-width: 500px) { .responsive { width: 468px; height: 60px; } }
 @media(min-width: 1200px) { .responsive { width: 728px; height: 90px; } }
+
+@media (max-width: 480px) {
+    .main_box {
+        padding: 5px;
+    }
+
+    .navbar {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main_box {
+        padding: 5px;
+    }
+
+    .navbar {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+}
+
+h1.header {
+    margin-top:0;
+}
+/*
+@media (min-width: 768px) and (max-width: 991px) {
+    .main_box {
+        padding: 5px;
+    }
+}
+*/
 
 
