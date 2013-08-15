@@ -42,7 +42,8 @@ input[type="radio"],input[type="checkbox"]{margin-top:0}
     width: 25%;
 }
 .col-lg-4 {
-    width: 33.33333333333333%;
+    /* width: 33.33333333333333%; */
+    width:auto;
 }
 .col-lg-5 {
     width: 41.66666666666667%;

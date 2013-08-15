@@ -108,3 +108,10 @@ function load_player_object_simple(entry_id,url) {
     so.addVariable('skin','http://www.longtailvideo.com/jw/upload/stylish.swf');
     so.write('mediaspace'+'_'+entry_id);
 }
+
+function get_social_media($,base_url)
+{
+    url = base_url + 'assets/js/fb.js';
+    //alert('URL = ['+url+']');
+    $.getScript(url);
+}
