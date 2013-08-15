@@ -114,4 +114,5 @@ function get_social_media($,base_url)
     url = base_url + 'assets/js/fb.js';
     //alert('URL = ['+url+']');
     $.getScript(url);
+    $.getScript('http://s7.addthis.com/js/250/addthis_widget.js#username=xa-4d2158e9345372da');
 }
