@@ -780,13 +780,15 @@ img {
         margin-left: 15px;
         margin-right: 15px;
     }
-
+/*
     div.internal_banner_leaderboard_phone {
-        /* text-align:center; */
+
 
         text-align:center;
         margin-left:-10px;
+        margin-right:-10px;
     }
+*/
 }
 
 @media (max-width: 768px) {
