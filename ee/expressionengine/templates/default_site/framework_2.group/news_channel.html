@@ -2,7 +2,7 @@
 
 {exp:channel:entries cache="yes" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}" orderby="date" sort="desc" paginate="bottom"}
 {if count < 4}
-{embed="ad_zones/leaderboard_internal"}
+  {embed="ad_zones/leaderboard_internal"}
 {/if}
 <div class="article_container">
     {if embed:limit > 1}
@@ -40,11 +40,13 @@
         </div>
 
     </div>
+
     <div class="row">
         <div class="col-lg-12">
             <p class="text-muted"><small><strong>Categories: </strong>[ {categories backspace="2"}<a href="{path='channel/index'}">{category_name}</a>, {/categories} ]</small></p>
         </div>
     </div>
+
 
     <div class="article">
 

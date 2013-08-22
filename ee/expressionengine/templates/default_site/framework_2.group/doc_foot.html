@@ -40,16 +40,23 @@
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 --}
+
+
+
+<script>
+
+    $(window).bind("load", function() {
+        get_social_media($,"{site_url}");
+    });
+
+    //document.onload = get_social_media($,"{site_url}");
+</script>
+
 <script>
     $('audio,video').mediaelementplayer({
         audioWidth: 280
     });
 </script>
-<script>
-    $(window).bind("load", function() {
-        get_social_media($,"{site_url}");
-    });
-    //document.onload = get_social_media($,"{site_url}");
-</script>
+
 </body>
 </html>
