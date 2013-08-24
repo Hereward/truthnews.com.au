@@ -62,14 +62,7 @@ h3.listen_live {
     text-decoration:underline;
 }
 
-/*
-div.latest {
-    margin:10px 0px 10px 0px;
-    padding-bottom:20px;
-    border-bottom: 1px solid #EAE8E8;
 
-}
-*/
 
 div.latest ul {
     list-style-image:url('/storage/images/framework/green_square.jpg');
@@ -107,7 +100,7 @@ div.latest {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    max-width:718px;
+    max-width:728px;
 
 
     /* border-bottom: 1px solid #EAE8E8; */
