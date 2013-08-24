@@ -1,13 +1,9 @@
-body {
-    background: url("/storage/images/framework/gradient.jpg") repeat-x scroll left top #444040;
-    color: #303030;
-    padding: 0;
-}
+
 
 .main_box {
     background-color:white;
 
-    padding:5px 30px 10px 30px;
+    /* padding:5px 30px 10px 30px; */
 
 }
 
@@ -743,31 +739,57 @@ img {
 @media(min-width: 1200px) { .responsive { width: 728px; height: 90px; } }
 
 @media screen and (max-width: 400px) {
+    /*
     .main_box {
         padding: 0px !important;
         margin: -5px -5px -5px -5px;
     }
 
+    */
+/*
     .navbar {
         margin-left: 15px;
         margin-right: 15px;
     }
+*/
+
 
     div.internal_banner {
-        margin-left:-10px;
-        margin-right:-10px;
+       margin-left:-19px;
     }
+
 
 }
 
 @media (max-width: 768px) {
+    /*
     .main_box {
         padding: 5px;
     }
 
+    */
+/*
     .navbar {
         margin-left: 15px;
         margin-right: 15px;
+    }
+*/
+
+}
+
+@media (min-width: 1200px) {
+    .main_box {
+        /* background-color:white; */
+        /*padding-right: 20px;*/
+        padding-left: 20px;
+        /* padding:5px 30px 10px 30px; */
+
+    }
+
+    body {
+        background: url("/storage/images/framework/gradient.jpg") repeat-x scroll left top #444040;
+        color: #303030;
+        padding: 0;
     }
 
 }
