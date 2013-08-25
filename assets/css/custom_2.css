@@ -45,6 +45,7 @@ h3.listen_live {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
+    max-width: 728px;
     /*font-size: 27px; */
 }
 
