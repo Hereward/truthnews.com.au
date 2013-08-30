@@ -756,7 +756,7 @@ img {
 
 
     div.internal_banner {
-       margin-left:-18px;
+        margin:10px 0px 10px -15px;
     }
 
 
@@ -827,7 +827,7 @@ div.EDGE-460776 {
 }
 
 .tnra_banner_small {
-    margin:0px 0px 20px 0px;
+    margin:10px 0px 10px -15px;
 }
 
 .tnra_banner_large {
