@@ -760,6 +760,10 @@ img {
     }
 
 
+    .tnra_banner_large {
+        margin:10px auto;
+        max-width:320px;
+    }
 
 
 }
