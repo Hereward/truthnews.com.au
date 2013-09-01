@@ -1,4 +1,11 @@
+.tnra_banner_large {
+    margin-top:20px;
+    margin-bottom:20px;
+}
 
+.tnra_banner_small {
+    text-align:center;
+}
 
 .main_box {
     background-color:white;
@@ -773,24 +780,25 @@ img {
 }
 
 @media (max-width: 768px) {
-    /*
-    .main_box {
-        padding: 5px;
-    }
 
-    */
-/*
-    .navbar {
-        margin-left: 15px;
-        margin-right: 15px;
-    }
-*/
     .tnra_banner_large {
-        margin:20px auto;
-        max-width:500px;
+        margin:10px auto;
+        /* max-width:400px; */
     }
 
 }
+
+/*
+@media (max-width: 560px) {
+
+    .tnra_banner_large {
+       display:none;
+
+    }
+
+}
+*/
+
 
 @media (min-width: 1200px) {
     .main_box {
@@ -832,11 +840,3 @@ div.EDGE-460776 {
 
 
 
-.tnra_banner_large {
-    margin-top:20px;
-    margin-bottom:20px;
-}
-
-.tnra_banner_small {
-    text-align:center;
-}
