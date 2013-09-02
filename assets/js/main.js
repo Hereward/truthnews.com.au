@@ -109,10 +109,12 @@ function load_player_object_simple(entry_id,url) {
     so.write('mediaspace'+'_'+entry_id);
 }
 
-function get_social_media($,base_url)
+function get_social_media($)
 {
-    url = base_url + 'assets/js/fb.js';
+    url_fb =  '/assets/js/fb.js';
+    url_tw =  '/assets/js/twitter.js';
     //alert('URL = ['+url+']');
-    $.getScript(url);
+    $.getScript(url_fb);
     $.getScript('http://s7.addthis.com/js/250/addthis_widget.js#username=xa-4d2158e9345372da');
+    $.getScript(url_tw);
 }
