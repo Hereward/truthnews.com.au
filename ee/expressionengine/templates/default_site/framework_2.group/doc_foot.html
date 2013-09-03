@@ -22,38 +22,7 @@
 </script>
 
 
-        {!--
-<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
-        --}
-
 <div id="fb-root"></div>
-
-
-
-
-{!--
-<script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=139602146115546";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
---}
-
-
-
-<script>
-
-    $(window).bind("load", function() {
-        get_social_media($);
-        //load_player($,"{site_url}");
-    });
-
-    //document.onload = get_social_media($,"{site_url}");
-</script>
-
-
 
 <script>
     $('audio,video').mediaelementplayer({
@@ -70,12 +39,31 @@
 {if "{exp:tna_utils:is_platform type='phone'}" != 1}
 <script type="text/javascript" charset="utf-8" src="/storage/banners/TNRA_banner_1/TNRA_banner_1_edgePreload.js"></script>
 {/if}
-{!-- <script type="text/javascript" charset="utf-8" src="/storage/banners/TNRA_banner_2/TNRA_banner_2_edgePreload.js"></script> --}
+
 <style>
     .edgeLoad-EDGE-460776 { visibility:hidden; }
    /* .edgeLoad-EDGE-460777 { visibility:hidden; } */
 </style>
 <!--Adobe Edge Runtime End-->
+
+
+<script>
+    $(window).bind("load", function() {
+        get_social_media($);
+        //load_player($,"{site_url}");
+    });
+    //document.onload = get_social_media($,"{site_url}");
+</script>
+
+{!--
+<script>
+    var tick=1;
+    function scrolldown(tick) {
+        $("#twitter-widget-0").scrollTop(tick*100);
+    }
+    self.setInterval("scrolldown("+(tick+1)+")",5000);
+</script>
+--}
 
 </body>
 </html>
