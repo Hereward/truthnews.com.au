@@ -53,6 +53,7 @@ h3.listen_live {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     max-width: 728px;
+    margin-top: 0px;
     /*font-size: 27px; */
 }
 
