@@ -1,28 +1,33 @@
-{!--
-<div class="row">
-
-    <div class="span7">
-        <div class="latest">
-            <h2>Most Popular</h2>
-            <ul>
-
-                {exp:channel:entries start_on="2012-01-01 00:00" orderby="comment_total" offset="0" channel="tna_news|911oz" limit="5" sort="desc" status="open"}
-                <li><a href="{channel_url}/{url_title}">{exp:char_limit total="50"}{title}{/exp:char_limit}</a></li>
-                {/exp:channel:entries}
-
-            </ul>
-        </div>
+<div class="latest">
+    <h2>Recent Posts</h2>
+    <div id="posts">
+      <ul>
+        {exp:channel:entries offset="0" channel="tna|tna_news" limit="5" orderby="entry_date" sort="desc" status="open"}
+        <li>
+            <a href="#article_{entry_id}">{exp:char_limit total="95"}{title}{/exp:char_limit}</a><br/>
+            <small>{exp:char_limit total="150"}{standfirst}{/exp:char_limit}</small>
+        </li>
+        {/exp:channel:entries}
+      </ul>
     </div>
-</div>  <!-- /div class="row" -->
+</div>
+
+
+<script>
+    (function($){
+        $(window).load(function(){
+            $("#posts").mCustomScrollbar();
+        });
+    })(jQuery);
+</script>
+
+{!--
+<script>
+    function tick(){
+        //$('#recent_posts li:first').animate({'opacity':0}, 200, function () { $(this).appendTo($('#recent_posts')).css('opacity', 1); });
+        $('#recent_posts li:first').slideUp( function () { $(this).appendTo($('#recent_posts')).slideDown(); });
+        //$('#recent_posts li:first').slideUp( function () { $(this).appendTo($('#recent_posts')).slideUp(); });
+    }
+    setInterval(function(){ tick () }, 5000);
+</script>
 --}
-
-        <div class="latest">
-            <h2>Latest Posts</h2>
-            <ul>
-                {exp:channel:entries offset="0" channel="tna|tna_news" limit="5" orderby="entry_date" sort="desc" status="open"}
-                <li><a href="{channel_url}/{url_title}">{exp:char_limit total="95"}{title}{/exp:char_limit}</a></li>
-                {/exp:channel:entries}
-            </ul>
-        </div>
-
-
