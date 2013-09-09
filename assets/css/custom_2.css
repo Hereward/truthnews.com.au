@@ -1,6 +1,18 @@
+
+div.header {
+    margin-bottom:15px;
+    margin-top:15px;
+    padding-bottom:5px;
+    border-bottom:1px solid #EAE8E8;
+}
+
+.listen img {
+    max-height:78px;
+}
+
 .tnra_banner_large {
-    margin-top:20px;
-    margin-bottom:20px;
+    margin-top:17px;
+    margin-bottom:10px;
 }
 
 .tnra_banner_small {
@@ -87,7 +99,7 @@ div.latest h2 {
 }
 
 div.latest {
-    background-color: #1E1C1D;
+    background-color: #222222; /* #1E1C1D; */
     /*
     min-width:260px;
     max-width:300px;
@@ -100,11 +112,13 @@ div.latest {
 
     /*max-height:250px; */
     text-align:left;
-    margin: 0px 0px 10px 0;
+    margin: 0px 0px 20px 0;
     padding:8px 10px 5px 18px;
+
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
+
     max-width:728px;
 
     /* border-bottom: 1px solid #EAE8E8; */
@@ -157,7 +171,7 @@ div.logos {
 }
 
 div.listen {
-    margin:5px 0 0;
+    margin:15px 0 0 0;
     text-align:center;
 
 }
@@ -410,27 +424,6 @@ h1.header {
 
 
 
-/*
-h1.header {
-    margin:10px 0px 0px 0px;
-    padding:0;
-    border-style:none;
-}
-*/
-
-/*
-#header_01 {
-    padding:5px 0px 0px 0px;
-    margin:0px 0px 13px 0px;
-}
-
-
-
-#header p {
-    color:white;
-    margin:0px;
-}
-*/
 blockquote {
     border-left:4px solid #E0E0E0;
     margin:20px;
@@ -615,43 +608,6 @@ p.continued {
     margin-top:10px;
 }
 
-/*
-.header-left {
-    float:left;
-    margin:15px auto 10px auto;
-    width:250px;
-    height:115px;
-}
-
-.header-right {
-    float:right;
-    margin:10px auto;
-    width:auto;
-    height:auto;
-}
-
-.header-left-box {
-    text-align:center;
-    border:1px none #FA9054;
-    padding:10px 10px 5px 10px;
-    background-color:black;
-
-}
-*/
-
-/*
-a.meetup, a.meetup:link, a.meetup:visited {
-    border-style:none;
-    padding:0px;
-    margin:0px 0px 5px 0px;
-
-}
-
-a.meetup:hover {
-    color: #F40023;
-    border-style:none;
-}
-*/
 
 a.join_mailing_list, a.join_mailing_list:link, a.join_mailing_list:visited {
     display:block;
@@ -766,14 +722,24 @@ img {
         font-size: 16px;
     }
 
+    div.header {
+        margin-bottom:5px;
+        margin-top:5px;
+
+    }
 
 }
 
 @media (max-width: 768px) {
-
+/*
     .tnra_banner_large {
         margin:10px auto;
-        /* max-width:400px; */
+
+    }
+*/
+    div.header {
+        margin-bottom:10px;
+        margin-top:10px;
     }
 
 }
@@ -794,18 +760,46 @@ img {
     .main_box {
         /* background-color:white; */
         /*padding-right: 20px;*/
-        padding-left: 20px;
+        padding-left: 25px;
+        padding-right: 25px;
         /* padding:5px 30px 10px 30px; */
-
+        /*
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+       */
+        border-right: 1px solid #EAE8E8;
+        border-left: 1px solid #EAE8E8;
     }
 
     body {
-        background: url("/storage/images/framework/gradient.jpg") repeat-x scroll left top #444040;
+
+       /* background: url("/storage/images/framework/gradient.jpg") repeat-x scroll left top #444040; */
         color: #303030;
+        background-color:#F8F8F8; /*  #222222; #444040; */
         padding: 0;
+
+    }
+
+    div.header {
+        margin-bottom:20px;
+        margin-top:20px;
+    }
+
+    .listen img {
+        max-height:98px;
     }
 
 }
+
+.tnra_navbar {
+    /* background-color:#222222; */
+    border-color:#F8F8F8;
+}
+
+
+
+
 
 h1.header {
     margin-top:0;
@@ -828,5 +822,9 @@ div.EDGE-460776 {
 
 }
 
+
+body {
+    padding-top: 50px;
+}
 
 
