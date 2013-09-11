@@ -117,6 +117,93 @@ class Tna_utils {
 	}
 
 
+    function get_url_contents($url) {
+        $ch = curl_init();
+        $timeout = 5;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
+
+    function get_latest_show() {
+        $feed_url = 'http://feeds.feedburner.com/LogosRadioNetworkTruthNewsRadioAustralia?format=xml';
+        $tagdata = $this->EE->TMPL->tagdata;
+        $vars = array(
+            'pretty_date' => '2013-09-04',
+            'mp3_url' => 'http://mp3.logosradionetwork.com/TNRA/64k/TNRA_2013-09-04_64k.mp3'
+        );
+        //libxml_use_internal_errors(true);
+
+        //$opts = array('http' => array('timeout' => 1));
+
+        //$context = stream_context_create($opts);
+        //libxml_set_streams_context($context);
+
+        $raw_feed = $this->get_url_contents($feed_url);
+
+       // $feed = simplexml_load_file();
+        if (!$raw_feed) {
+            $output = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
+            return $output;
+        }
+
+        $feed = new SimpleXMLElement($raw_feed);
+
+        $item = $feed->channel->item[0];
+        $content_links = $item->children('http://purl.org/rss/1.0/modules/content/');
+        $links = $item->children('http://rssnamespace.org/feedburner/ext/1.0');
+        $fb_links = $item->children('http://rssnamespace.org/feedburner/ext/1.0');
+        $raw_date = $item->pubDate;
+        $pubdate = str_replace('+0000', '', $raw_date);
+        $mp3_url = $fb_links->origEnclosureLink;
+        preg_match('/TNRA_(.+)_64k\.mp3$/', $mp3_url, $matches);
+
+        $pod_date_raw = $matches[1];
+        $parsed_date = strtotime($pod_date_raw);
+        $pretty_date = date("F j, Y", $parsed_date);
+
+        $output = '';
+
+        //$output .= "DESCRIPTION = ". $item->description ."<br/>\n";
+        /*
+        $output .= "DATE = ". $pubdate."<br/>\n";
+        $output .= "origEnclosureLink = ". $mp3_url ."<br/>\n";
+        $output .= "POD DATE = ". $pod_date_raw ."<br/>\n";
+        $output .= "PRETTY DATE = ". $pretty_date ."<br/>\n";
+        */
+
+        $vars['pretty_date'] = $pretty_date;
+        $vars['mp3_url'] = $mp3_url;
+
+
+        $output = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
+
+        return $output;
+
+        //die($output);
+
+        /*
+        foreach($feed->channel->item as $item) {
+            $title = $item->title;
+            $raw_author = $item->author;
+            //$author = str_replace('gabriele.romanato@gmail.com', '', $raw_author);
+            //$author = str_replace('(', '', $author);
+            //$author = str_replace(')', '', $author);
+            $links = $item->children('http://rssnamespace.org/feedburner/ext/1.0');
+            $link = $links->origLink;
+            $raw_date = $item->pubDate;
+            $pubdate = str_replace('+0000', '', $raw_date);
+            die("LINK = $link");
+
+        }
+        */
+
+    }
+
+
 	function boo() {
 		return "boo";
 	}
