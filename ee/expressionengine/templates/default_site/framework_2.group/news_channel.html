@@ -1,7 +1,7 @@
 {!-- category="{embed:category}" --}
 
 {exp:channel:entries cache="yes" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}" orderby="date" sort="desc" paginate="bottom"}
-{if count < 4}
+{if count < 4 && count > 1}
   {embed="ad_zones/leaderboard_internal"}
 {/if}
 <div class="article_container">
