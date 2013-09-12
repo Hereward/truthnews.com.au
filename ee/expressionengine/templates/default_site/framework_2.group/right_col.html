@@ -4,10 +4,12 @@
 --}
 {embed=sign-in/sign_in_snippet}
 
-<div class="latest_show">
-   <h3>Latest LIVE show</h3>
-   {embed=framework_2/latest_show}
-</div>
+{if "{exp:tna_utils:is_platform type='computer'}" == 1}
+   <div class="latest_show">
+      <h3>Latest LIVE show</h3>
+      {embed=framework_2/latest_show}
+   </div>
+{/if}
 
 {!--
 <div style="margin-top: 0px; margin-bottom: 20px;">

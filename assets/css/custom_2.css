@@ -457,6 +457,17 @@ h2.channel_title {
     text-decoration:none;
 }
 
+
+h2.latest_live_show {
+
+    font-weight:bold;
+    /* font-size:2.5em; */
+    color:black;
+    /* margin:5px 0px 10px 0px;*/
+    text-decoration:none;
+    margin-top:0px;
+}
+
 .latest_show h3 {
 
     /* font-weight:bold; */
