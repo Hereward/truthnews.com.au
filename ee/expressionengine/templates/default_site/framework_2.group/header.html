@@ -1,15 +1,16 @@
 <div class="row header">
-    <div class="col-lg-3 col-md-3">
+    <div class="col-md-3 col-lg-3">
         <h1 class="header"><a href="{site_url}"><img width="270" height="123" src="{site_url}storage/images/framework/logo_20130727_270X123_2.png" alt="Truth News Australia" /></a>
         </h1>
 
     </div>
 
-
+    {!--
     <div class="col-md-1 col-lg-1 visible-lg visible-md">
-        {!--embed="framework_2/listen_banner_2"--}
-       {!--  <div style="width:100%; height:90px; border:1px solid black;"></div>  --}
+        embed="framework_2/listen_banner_2"
+
     </div>
+    --}
 
 
 
@@ -26,11 +27,12 @@
       </div>
     {/if}
 --}
-    {if "{exp:tna_utils:is_platform type='phone'}" != 1}
-        <div class="col-lg-8 col-md-9 col-lg-offset-1 top_banner">
+    {!-- if "{exp:tna_utils:is_platform type='phone'}" != 1 --}
+
+        <div class="col-md-8 col-lg-8 col-lg-offset-1 top_banner">
             {embed=ad_zones/responsive_adsense}
         </div>
-    {/if}
+    
 {!--
     {if "{exp:tna_utils:is_platform type='phone'}" == 1}
 
