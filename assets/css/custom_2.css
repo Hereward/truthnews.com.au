@@ -5,6 +5,10 @@
     margin-rigt:auto;
 }
 
+div.news_channel_home_page_container {
+   margin-top:20px;
+}
+
 div.header {
     /*
 
@@ -479,7 +483,7 @@ h2.latest_live_show {
 }
 
 div.latest_show {
-    margin-bottom:20px;
+    margin-bottom:10px;
 }
 
 div.latest_show p {

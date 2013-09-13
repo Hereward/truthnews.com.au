@@ -10,12 +10,12 @@
         <div class="col-md-9 col-lg-8">
 
             <div class="row hidden-xs">
-
                 <div class="col-lg-12">
                     {embed="framework_2/latest"}
                 </div>
-
             </div>
+
+
 
 
             {if "{exp:tna_utils:is_platform type='computer'}" != 1}
@@ -25,7 +25,9 @@
                 </div>
             {/if}
             {embed="framework_2/listen_banner"}
-            {embed="framework_2/news_channel" channel="tna|tna_news|911oz" search="" limit="5"}
+            <div class="news_channel_home_page_container">
+              {embed="framework_2/news_channel" channel="tna|tna_news|911oz" search="" limit="5"}
+            </div>
         </div>
 
 

@@ -128,12 +128,25 @@ class Tna_utils {
         return $data;
     }
 
+    function latest_show_date() {
+        $date = strtotime('last Wednesday');
+        return $date;
+    }
+
+    function media_date_of_last_show() {
+
+        $date = $this->latest_show_date();
+        $output = date("Ymd", $date);
+        return $output;
+    }
+
     function get_latest_show() {
         $feed_url = 'http://feeds.feedburner.com/LogosRadioNetworkTruthNewsRadioAustralia?format=xml';
         $tagdata = $this->EE->TMPL->tagdata;
         $vars = array(
-            'pretty_date' => '2013-09-04',
-            'mp3_url' => 'http://mp3.logosradionetwork.com/TNRA/64k/TNRA_2013-09-04_64k.mp3'
+            'pretty_date' => '',
+            'mp3_url' => '',
+            'last_show_date'=>''
         );
         //libxml_use_internal_errors(true);
 
@@ -164,6 +177,7 @@ class Tna_utils {
         $pod_date_raw = $matches[1];
         $parsed_date = strtotime($pod_date_raw);
         $pretty_date = date("F j, Y", $parsed_date);
+        $last_show_date = date("Ymd", $parsed_date);
 
         $output = '';
 
@@ -177,6 +191,7 @@ class Tna_utils {
 
         $vars['pretty_date'] = $pretty_date;
         $vars['mp3_url'] = $mp3_url;
+        $vars['last_show_date'] = $last_show_date;
 
 
         $output = $this->EE->TMPL->parse_variables_row($tagdata, $vars);

@@ -1,0 +1,10 @@
+{exp:channel:entries cache="yes" dynamic="no" status="draft|open" channel="tna"
+search:media_date="={embed:last_show_date}"}
+         {if no_results} {embed="framework_2/latest_show"} {/if}
+          {!-- <div>[{status}] [{media_date}] [{embed:last_show_date}]</div> --}
+         {!-- if "{status}" == 'Draft' --}
+            {embed=framework_2/latest_show standfirst="{standfirst}" last_show_date="{media_date}"
+status="{status}"}
+
+{/exp:channel:entries}
+
