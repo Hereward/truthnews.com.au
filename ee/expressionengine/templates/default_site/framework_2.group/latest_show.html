@@ -8,23 +8,16 @@
 "{last_show_date}")) }
        <h3>Latest LIVE show</h3>
         {if "{embed:status}" == 'Draft' || "{embed:status}" == ''}
-           {embed=framework_2/mejs_raw_url date="{pretty_date}" url="{mp3_url}" id='latest_show'}
+            {embed=framework_2/mejs_raw_url url="{mp3_url}" id='latest_show'}
         {if:elseif "{embed:status}" == 'open'}
-
             {embed=framework_2/mejs_raw_url
-            date="{embed:last_show_date}" url="{site_url}radio/export/TNRA_{embed:last_show_date}.mp3"
-id='latest_show'}
-
+            url="{site_url}radio/export/TNRA_{embed:last_show_date}.mp3" id='latest_show'}
         {/if}
 
-       <img src="/storage/images/framework/hereward_icon_thumb_06.jpg" alt="Hereward Fenton" title="Hereward Fenton" />
-       <p>
-           <strong>{pretty_date}</strong> <br/>{if "{embed:standfirst}"}{embed:standfirst}{if:else}Climb aboard the ship of truth as we plough through uncharted waters of geo-politics, scandals, cover-ups,  war and tyranny.{/if}
-       </p>
-       <div class="clearfix"></div>
+       {embed=framework_2/latest_show_notes pretty_date="{pretty_date}" standfirst="{embed:standfirst}"}
    {if:elseif "{embed:status}" == 'open'}
-        {embed=framework_2/mejs_raw_url date="{embed:last_show_date}"
-          url="/radio/export/TNRA_{embed:last_show_date}.mp3" id='latest_show'}
+        {embed=framework_2/mejs_raw_url url="/radio/export/TNRA_{embed:last_show_date}.mp3" id='latest_show'}
+        {embed=framework_2/latest_show_notes pretty_date="{embed:last_show_date}" standfirst="{embed:standfirst}"}
    {/if}
 {/exp:tna_utils:get_latest_show}
 
