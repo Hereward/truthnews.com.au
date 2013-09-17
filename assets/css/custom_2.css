@@ -504,6 +504,8 @@ div.latest_show, div.latest_show_l {
 
 div.latest_show p, div.latest_show_l p {
     margin-top:5px;
+    line-height: 17px;
+    font-size:12px;
 }
 
 div.latest_show img, div.latest_show_l img {
@@ -781,6 +783,11 @@ img {
 @media(min-width: 1200px) { .responsive { width: 728px; height: 90px; } }
 
 @media screen and (max-width: 400px) {
+
+    div.latest_show p, div.latest_show_l p {
+        line-height: auto;
+        font-size:14px;
+    }
 
     div.news_channel_home_page_container {
         margin-top:10px;
