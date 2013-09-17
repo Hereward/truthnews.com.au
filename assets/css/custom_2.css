@@ -504,8 +504,6 @@ div.latest_show, div.latest_show_l {
 
 div.latest_show p, div.latest_show_l p {
     margin-top:5px;
-    line-height: 17px;
-    font-size:12px;
 }
 
 div.latest_show img, div.latest_show_l img {
@@ -784,11 +782,6 @@ img {
 
 @media screen and (max-width: 400px) {
 
-    div.latest_show p, div.latest_show_l p {
-        line-height: auto;
-        font-size:14px;
-    }
-
     div.news_channel_home_page_container {
         margin-top:10px;
     }
@@ -877,6 +870,7 @@ img {
        */
         border-right: 1px solid #EAE8E8;
         border-left: 1px solid #EAE8E8;
+
     }
 
     body {
@@ -899,6 +893,11 @@ img {
 
     .listen img {
         max-height:98px;
+    }
+
+    div.latest_show p, div.latest_show_l p {
+        line-height: 17px;
+        font-size:12px;
     }
 
 }
