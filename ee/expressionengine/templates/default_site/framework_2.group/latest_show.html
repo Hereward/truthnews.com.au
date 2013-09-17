@@ -10,12 +10,14 @@
 
             {embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}"}
         {if:elseif "{embed:status}" == 'open'}
+            {embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}"}
             {!-- {embed=framework_2/latest_show_player_container default_label="Hour 1" segments="{embed:segments}" last_show_date="{embed:last_show_date}"} --}
         {/if}
         {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="{embed:channel_url}" url_title="{embed:url_title}"
         pretty_date="{pretty_date}" standfirst="{embed:standfirst}"}
    {if:elseif "{embed:status}" == 'open'}
         {!-- {embed=framework_2/latest_show_player_container default_label="Hour 1" segments="{embed:segments}" last_show_date="{embed:last_show_date}"} --}
+        {embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}"}
         {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="{embed:channel_url}" url_title="{embed:url_title}" pretty_date="{embed:last_show_date}"
         standfirst="{embed:standfirst}"}
    {/if}
