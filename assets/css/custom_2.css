@@ -782,11 +782,6 @@ img {
 
 @media screen and (max-width: 400px) {
 
-    div.news_channel_home_page_container {
-        margin-top:10px;
-    }
-
-
     div.internal_banner {
         margin:10px 0px 10px -15px;
     }
