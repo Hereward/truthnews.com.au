@@ -468,6 +468,18 @@ h2 {
     font-size: 25px;
 }
 
+h2.recent_shows {
+    color:white;
+    background-color:#D4D1D1;
+    padding:5px;
+    max-width: 728px;
+
+    /*
+    border-top:1px solid dimgray;
+    border-bottom:1px solid dimgray;
+    */
+}
+
 
 
 
@@ -747,6 +759,8 @@ img {
 }
 
 */
+
+
 
 .responsive { width: 320px; height: 50px; }
 @media(min-width: 500px) { .responsive { width: 468px; height: 60px; } }
