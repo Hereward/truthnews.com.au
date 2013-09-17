@@ -92,13 +92,14 @@ h3.listen_live {
 h3.recent_shows {
     color:white;
     background-color:#BCB6B6;
-    padding:10px 0px 10px 20px;
+    padding:10px 10px 10px 10px;
     max-width: 728px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
     margin-top: 0px;
     font-weight:bold;
+    text-align: center;
     /*
     border-top:1px solid dimgray;
     border-bottom:1px solid dimgray;
