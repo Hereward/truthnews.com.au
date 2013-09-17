@@ -1,6 +1,12 @@
 <img src="/storage/images/framework/hereward_icon_thumb_06.jpg" alt="Hereward Fenton" title="Hereward Fenton" />
    <p>
-       <a class='listen_now' href="{embed:channel_url}/{embed:url_title}">{embed:pretty_date}</a> <br/>
+       {if embed:url_title}
+       <a class='listen_now' href="{embed:channel_url}/{embed:url_title}">{embed:pretty_date}</a>
+       {if:else}
+       <strong>{embed:pretty_date}</strong>
+       {/if}
+
+       <br/>
 
        {if "{embed:standfirst}"}{embed:standfirst}{if:else}Climb aboard the
        ship of truth with Hereward Fenton at the helm, as we plough through uncharted waters of geo-politics, scandals, cover-ups, war and tyranny.{/if}
