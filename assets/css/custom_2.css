@@ -369,6 +369,10 @@ a.subscribe:hover {
     text-decoration:underline;
 }
 
+a.listen_now, a.listen_now:link, a.listen_now:visited {
+    font-weight:bold;
+}
+
 #right_col {
     float:right;
     width:300px;
@@ -509,7 +513,7 @@ div.latest_show p, div.latest_show_l p {
 div.latest_show img, div.latest_show_l img {
     border:1px solid black;
     float:left;
-    margin: 8px 10px 2px 0px;
+    margin: 4px 10px 2px 0px;
 }
 
 div.latest_show h2 {
