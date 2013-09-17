@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-md-9 col-lg-8">
-
+            {embed="framework_2/listen_banner"}
             <div class="row hidden-xs">
                 <div class="col-lg-12">
                     {embed="framework_2/latest"}
@@ -20,11 +20,12 @@
 
             {!-- {if "{exp:tna_utils:is_platform type='computer'}" != 1}  --}
             {!-- visible-xs visible-small visible-md --}
+
                 <div class="latest_show_l hidden-lg">
                     {embed=framework_2/latest_show_container player_id="left_col_latest_show" last_show_date="{exp:tna_utils:media_date_of_last_show}"}
                 </div>
 
-            {embed="framework_2/listen_banner"}
+
             <div class="news_channel_home_page_container">
               <h3 class="recent_shows">Recent Shows</h3>
               {embed="framework_2/news_channel" channel="tna|tna_news|911oz" search="" limit="5"}
