@@ -5,7 +5,7 @@
 <div>STATUS: {embed:status}</div>
 --}
 {if "{mp3_url}" && (("{last_show_date}" == "{embed:last_show_date}") || ("{embed:last_show_date}" == '' && "{last_show_date}")) }
-        <h3>Latest LIVE show</h3>
+        <h2>Latest LIVE show</h2>
         {if "{embed:status}" == 'Draft' || "{embed:status}" == ''}
 
             {embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}"}
