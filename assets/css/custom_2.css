@@ -25,7 +25,7 @@ padding-bottom:5px;
 }
 
 div.latest_show h2 {
-    font-weight:bold;
+    margin-top:10px;
 }
 
 .listen img {
@@ -460,35 +460,19 @@ blockquote {
     font-style:italic;
 }
 
-h2.channel_title {
+h2 {
 
     font-weight:bold;
     /* font-size:2.5em; */
     color:black;
     /* margin:5px 0px 10px 0px;*/
     text-decoration:none;
+    font-size: 25px;
 }
 
 
-h2.latest_live_show {
 
-    font-weight:bold;
-    /* font-size:2.5em; */
-    color:black;
-    /* margin:5px 0px 10px 0px;*/
-    text-decoration:none;
-    margin-top:0px;
-}
 
-.latest_show h3 {
-
-    /* font-weight:bold; */
-    /* font-size:2.5em; */
-    color:black;
-    /* margin:5px 0px 10px 0px;*/
-    text-decoration:none;
-    margin-top:0px;
-}
 
 div.latest_show {
     margin-bottom:10px;
