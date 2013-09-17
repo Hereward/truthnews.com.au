@@ -892,6 +892,7 @@ img {
 
     div.latest_show p, div.latest_show_l p {
         line-height: 17px;
+        font-size:13px;
     }
 
 }
