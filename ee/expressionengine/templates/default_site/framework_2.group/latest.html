@@ -7,8 +7,10 @@
         {exp:channel:entries offset="0" channel="tna|tna_news" limit="5" orderby="entry_date" sort="desc" status="open"}
           {if "{exp:tna_utils:media_date_of_last_show}" != "{media_date}"}
               <li>
+                <small>
                 <a href="{channel_url}/{url_title}">{exp:char_limit total="95"}{title}{/exp:char_limit}</a><br/>
-                <small>{exp:char_limit total="150"}{standfirst}{/exp:char_limit}</small>
+                {exp:char_limit total="150"}{standfirst}{/exp:char_limit}
+                </small>
               </li>
           {/if}
         {/exp:channel:entries}
