@@ -4,11 +4,12 @@
 --}
 {embed=sign-in/sign_in_snippet}
 
-{if "{exp:tna_utils:is_platform type='computer'}" == 1}
-   <div class="latest_show">
-      {embed=framework_2/latest_show_channel_data last_show_date="{exp:tna_utils:media_date_of_last_show}"}
+{!-- {if "{exp:tna_utils:is_platform type='computer'}" == 1} --}
+
+   <div class="latest_show visible-md visible-lg">
+      {embed=framework_2/latest_show_container player_id="right_col_latest_show" last_show_date="{exp:tna_utils:media_date_of_last_show}"}
    </div>
-{/if}
+
 
 {!--
 <div style="margin-top: 0px; margin-bottom: 20px;">

@@ -5,6 +5,10 @@
     margin-rigt:auto;
 }
 
+.latest_show_player_container {
+    margin-bottom:10px;
+}
+
 div.news_channel_home_page_container {
    margin-top:20px;
 }
@@ -145,7 +149,7 @@ div.latest {
 
 div#posts {
     overflow:hidden;
-    height:150px;
+    height:240px;
 }
 
 div.latest li {

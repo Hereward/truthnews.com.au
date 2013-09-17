@@ -1,9 +1,10 @@
 {exp:channel:entries cache="yes" dynamic="no" status="draft|open" channel="tna"
 search:media_date="={embed:last_show_date}"}
-         {if no_results} {embed="framework_2/latest_show"} {/if}
+         {if no_results} {embed="framework_2/latest_show" player_id="{embed:player_id}"} {/if}
           {!-- <div>[{status}] [{media_date}] [{embed:last_show_date}]</div> --}
          {!-- if "{status}" == 'Draft' --}
-            {embed=framework_2/latest_show standfirst="{standfirst}" channel_url="{channel_url}" url_title="{url_title}" last_show_date="{media_date}"
+            {embed=framework_2/latest_show player_id="{embed:player_id}" standfirst="{standfirst}" channel_url="{channel_url}" url_title="{url_title}"
+last_show_date="{media_date}"
 status="{status}" segments="{media_segments}"}
 
 {/exp:channel:entries}

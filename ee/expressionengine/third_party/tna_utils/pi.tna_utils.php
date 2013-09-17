@@ -162,8 +162,12 @@ class Tna_utils {
             $output = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
             return $output;
         }
-
-        $feed = new SimpleXMLElement($raw_feed);
+        libxml_use_internal_errors(true);
+        $feed = simplexml_load_string($raw_feed);
+        if ($feed === false) {
+            $output = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
+            return $output;
+        }
 
         $item = $feed->channel->item[0];
         $content_links = $item->children('http://purl.org/rss/1.0/modules/content/');

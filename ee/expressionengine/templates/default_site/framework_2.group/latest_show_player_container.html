@@ -1,0 +1,15 @@
+<div class="latest_show_player_container">
+    {if embed:url}
+         {embed="framework_2/mejs_raw_url" player_id="{embed:player_id}" label="{embed:label}" url="{embed:url}"}
+    {if:else}
+        {!-- {embed="framework_2/mejs_raw_url" label="Hour 1" url="/radio/export/TNRA_{embed:last_show_date}.mp3" id='latest_show'}  --}
+    {/if}
+{!--
+    {if embed:segments == 2}
+       {embed="framework_2/mejs_raw_url" label="Hour 2" url="/radio/export/TNRA_{embed:last_show_date}_2.mp3" id='latest_show_2'}
+    {/if}
+--}
+</div>
+
+
+

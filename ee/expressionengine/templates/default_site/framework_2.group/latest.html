@@ -5,12 +5,16 @@
     <div id="posts">
       <ul>
         {exp:channel:entries offset="0" channel="tna|tna_news" limit="5" orderby="entry_date" sort="desc" status="open"}
-        <li>
-            <a href="{channel_url}/{url_title}">{exp:char_limit total="95"}{title}{/exp:char_limit}</a><br/>
-            <small>{exp:char_limit total="150"}{standfirst}{/exp:char_limit}</small>
-        </li>
+          {if "{exp:tna_utils:get_latest_show}{last_show_date}{/exp:tna_utils:get_latest_show}" != "{media_date}"}
+              <li>
+                <a href="{channel_url}/{url_title}">{exp:char_limit total="95"}{title}{/exp:char_limit}</a><br/>
+                <small>{exp:char_limit total="150"}{standfirst}{/exp:char_limit}</small>
+              </li>
+          {/if}
         {/exp:channel:entries}
       </ul>
+
+
     </div>
 </div>
 

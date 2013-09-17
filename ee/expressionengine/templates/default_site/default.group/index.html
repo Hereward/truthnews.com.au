@@ -18,11 +18,11 @@
 
 
 
-            {if "{exp:tna_utils:is_platform type='computer'}" != 1}
-                <div class="latest_show">
-                    {embed=framework_2/latest_show_channel_data last_show_date="{exp:tna_utils:media_date_of_last_show}"}
+            {!-- {if "{exp:tna_utils:is_platform type='computer'}" != 1}  --}
+                <div class="latest_show visible-xs visible-small">
+                    {embed=framework_2/latest_show_container player_id="left_col_latest_show" last_show_date="{exp:tna_utils:media_date_of_last_show}"}
                 </div>
-            {/if}
+
             {embed="framework_2/listen_banner"}
             <div class="news_channel_home_page_container">
               {embed="framework_2/news_channel" channel="tna|tna_news|911oz" search="" limit="5"}

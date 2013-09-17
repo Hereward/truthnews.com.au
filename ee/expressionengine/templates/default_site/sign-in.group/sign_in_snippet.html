@@ -1,7 +1,9 @@
 <div class="sign_in_snippet">
-{if logged_in}
-	<p>Welcome, {screen_name} | <a href="{site_url}member/profile/">Profile</a> | <a href="{path='logout'}">Log Out</a>
-{if:else}
-<p>You are currently visiting as a guest, to login or register please <a href="{path=sign-in}">click here</a>.
-{/if}
+    <p><small>
+      {if logged_in}
+	     Welcome, <strong>{screen_name}</strong> | <a href="{site_url}member/profile/">Profile</a> | <a href="{path='logout'}">Log Out</a>
+      {if:else}
+         You are currently visiting as a guest, to login or register please <a href="{path=sign-in}">click here</a>.
+      {/if}
+    </small></p>
 </div>

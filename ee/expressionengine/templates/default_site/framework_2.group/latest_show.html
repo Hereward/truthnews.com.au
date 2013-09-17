@@ -4,20 +4,21 @@
 <div>CALC: {embed:last_show_date}</div>
 <div>STATUS: {embed:status}</div>
 --}
-   {if "{mp3_url}" && (("{last_show_date}" == "{embed:last_show_date}") || ("{embed:last_show_date}" == '' &&
-"{last_show_date}")) }
-       <h3>Latest LIVE show</h3>
+{if "{mp3_url}" && (("{last_show_date}" == "{embed:last_show_date}") || ("{embed:last_show_date}" == '' && "{last_show_date}")) }
+        <h3>Latest LIVE show</h3>
         {if "{embed:status}" == 'Draft' || "{embed:status}" == ''}
-            {embed=framework_2/mejs_raw_url url="{mp3_url}" id='latest_show'}
-        {if:elseif "{embed:status}" == 'open'}
-            {embed=framework_2/mejs_raw_url
-            url="{site_url}radio/export/TNRA_{embed:last_show_date}.mp3" id='latest_show'}
-        {/if}
 
-       {embed=framework_2/latest_show_notes pretty_date="{pretty_date}" standfirst="{embed:standfirst}"}
+            {embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}"}
+        {if:elseif "{embed:status}" == 'open'}
+            {!-- {embed=framework_2/latest_show_player_container default_label="Hour 1" segments="{embed:segments}" last_show_date="{embed:last_show_date}"} --}
+        {/if}
+        {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="{embed:channel_url}" url_title="{embed:url_title}"
+        pretty_date="{pretty_date}" standfirst="{embed:standfirst}"}
    {if:elseif "{embed:status}" == 'open'}
-        {embed=framework_2/mejs_raw_url url="/radio/export/TNRA_{embed:last_show_date}.mp3" id='latest_show'}
-        {embed=framework_2/latest_show_notes pretty_date="{embed:last_show_date}" standfirst="{embed:standfirst}"}
+        {!-- {embed=framework_2/latest_show_player_container default_label="Hour 1" segments="{embed:segments}" last_show_date="{embed:last_show_date}"} --}
+        {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="{embed:channel_url}" url_title="{embed:url_title}" pretty_date="{embed:last_show_date}"
+        standfirst="{embed:standfirst}"}
    {/if}
+
 {/exp:tna_utils:get_latest_show}
 
