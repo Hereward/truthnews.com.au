@@ -98,6 +98,7 @@ h3.recent_shows {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     margin-top: 0px;
+    font-weight:bold;
     /*
     border-top:1px solid dimgray;
     border-bottom:1px solid dimgray;
