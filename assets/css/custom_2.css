@@ -103,7 +103,7 @@ h3.recent_shows {
 */
 
 h3.recent_shows {
-    background-color: #030000; /* #222222; */
+    background-color: #222222; /* #030000 #222222; */
 
     color: #FFFFFF;
     font-size: 16px;
@@ -144,7 +144,7 @@ div.latest h2 {
 }
 
 div.latest {
-    background-color: #222222; /*#030000;   #1E1C1D; */
+    background-color: #030000; /* #222222;  #1E1C1D; */
     /*
     min-width:260px;
     max-width:300px;
