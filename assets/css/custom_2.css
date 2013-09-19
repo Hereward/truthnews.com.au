@@ -10,7 +10,7 @@
 }
 
 div.news_channel_home_page_container {
-   margin-top:20px;
+   margin-top:0px;
 }
 
 div.header {
@@ -26,9 +26,7 @@ padding-bottom:5px;
 
 
 
-.listen img {
-    max-height:78px;
-}
+
 
 .tnra_banner_large {
     margin-top:17px;
@@ -85,6 +83,7 @@ h3.listen_live {
     border-radius: 10px;
     max-width: 728px;
     margin-top: 0px;
+    margin-bottom: 20px;
     /*font-size: 27px; */
 }
 
@@ -104,7 +103,8 @@ h3.recent_shows {
 */
 
 h3.recent_shows {
-    background-color: #222222;
+    background-color: #030000; /* #222222; */
+
     color: #FFFFFF;
     font-size: 16px;
     font-weight: bold;
@@ -144,7 +144,7 @@ div.latest h2 {
 }
 
 div.latest {
-    background-color: #222222; /* #1E1C1D; */
+    background-color: #030000; /* #222222;  #1E1C1D; */
     /*
     min-width:260px;
     max-width:300px;
@@ -216,9 +216,8 @@ div.logos {
 }
 
 div.listen {
-    margin:15px 0 0 0;
-    text-align:center;
-
+    margin:0 0 20px 0;
+    /* text-align:center; */
 }
 
 div.top_banner {
@@ -890,9 +889,7 @@ img {
 
     }
 
-    .listen img {
-        max-height:98px;
-    }
+
 
     div.latest_show p, div.latest_show_l p {
         line-height: 17px;
