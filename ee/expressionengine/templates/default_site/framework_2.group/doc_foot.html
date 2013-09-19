@@ -6,7 +6,7 @@
 <script type="text/javascript" src="/assets/third_party/bootstrap-ie7/js/bootstrap.min.js"></script>
 <![endif]-->
 
-
+{!--
 <script type="text/javascript">
 
     var _gaq = _gaq || [];
@@ -20,6 +20,7 @@
     })();
 
 </script>
+--}
 
 
 <div id="fb-root"></div>
@@ -52,6 +53,7 @@
 
 <script>
     $(window).bind("load", function() {
+        get_google_stuff($);
         get_social_media($);
         //load_player($,"{site_url}");
     });

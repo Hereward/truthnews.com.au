@@ -118,3 +118,8 @@ function get_social_media($)
     $.getScript('http://s7.addthis.com/js/250/addthis_widget.js#username=xa-4d2158e9345372da');
     $.getScript(url_tw);
 }
+
+function get_google_stuff() {
+    $.getScript('/assets/js/analytics.js');
+  //  $.getScript('http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
+}
