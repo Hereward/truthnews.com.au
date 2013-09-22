@@ -1,0 +1,24 @@
+{!-- paginate_base="news/story" --}
+
+<a name="comment_body" ></a>
+<div  class="comment_block">
+    <h3>Comments</h3>
+
+    {exp:comment:entries site="{embed:site}" dynamic="off" entry_id="{embed:entry_id}" sort="asc" limit="20" paginate="bottom" }
+        <div class="comment_entry">
+           {comment}
+        </div>
+
+        <p class="comment_data">By <strong>{name}</strong> on {comment_date format="%Y %m %d - %H:%i:%s"}</p>
+        {paginate}
+            <p>Page {current_page} of {total_pages} pages {exp:low_replace find="index.php" replace=""}{pagination_links}{/exp:low_replace}</p>
+        {/paginate}
+    {/exp:comment:entries}
+
+    {if logged_out}
+         <p style="text-align:center; border:2px dashed dimgray; padding:10px; margin:30px 5px 30px 5px; font-weight:bold;">In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>.</p>
+    {if:else}
+        {embed="default_site:framework_2/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
+    {/if}
+
+</div>

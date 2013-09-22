@@ -54,19 +54,19 @@
     <div class="article">
 
         {if (body_short && (segment_2 != 'story')) || ("{always_use_short_body}" == "yes")}
-        {body_short}
-        {if "{always_use_short_body}" == "yes"}
-        <p style="text-align:right;"><a href="{original_source}">Article Continues &raquo;</a></p>
+            {body_short}
+            {if "{always_use_short_body}" == "yes"}
+                 <p style="text-align:right;"><a href="{original_source}">Article Continues &raquo;</a></p>
+            {if:else}
+                 <p style="text-align:right;"><a href="{channel_url}/{url_title}">Article Continues &raquo;</a></p>
+            {/if}
         {if:else}
-        <p style="text-align:right;"><a href="{channel_url}/{url_title}">Article Continues &raquo;</a></p>
-        {/if}
-        {if:else}
-        {body_rich}
+            {body_rich}
         {/if}
 
         {if embed:show_comments}
-        {embed="facebook/fb_comments"}
-        {embed="framework/comment_body" site="default_site" entry_id="{entry_id}"}
+            {embed="facebook/fb_comments"}
+            {embed="framework_2/comment_body" site="default_site" entry_id="{entry_id}"}
         {/if}
     </div>
 
