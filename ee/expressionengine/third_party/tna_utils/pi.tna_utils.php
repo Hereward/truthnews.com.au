@@ -140,6 +140,12 @@ class Tna_utils {
         return $output;
     }
 
+    function pretty_date_of_last_show() {
+        $date = $this->latest_show_date();
+        $output = date("F j, Y", $date);
+        return $output;
+    }
+
     function get_latest_show() {
         $feed_url = 'http://feeds.feedburner.com/LogosRadioNetworkTruthNewsRadioAustralia?format=xml';
         $tagdata = $this->EE->TMPL->tagdata;

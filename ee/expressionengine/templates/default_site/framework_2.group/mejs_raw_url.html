@@ -1,6 +1,8 @@
+{if "{embed:url}"}
 <div class='mejs_raw_player'>
-    {if embed:label}<h4>{embed:label}</h4>{/if}
+    {!-- {if embed:label}<h4>{embed:label}</h4>{/if} --}
     <audio style="margin-top:15px;" id="{embed:player_id}" src="{embed:url}" type="audio/mpeg" controls="controls" preload="none">
     </audio>
 </div>
+{/if}
 

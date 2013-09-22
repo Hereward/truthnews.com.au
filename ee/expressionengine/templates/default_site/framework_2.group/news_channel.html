@@ -1,15 +1,15 @@
 {!-- category="{embed:category}" --}
 
 {exp:channel:entries cache="yes" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}" orderby="date" sort="desc" paginate="bottom"}
-{if count < 4 && count > 1}
+{if count == 2 || count == 4}
   {embed="ad_zones/leaderboard_internal"}
 {/if}
 <div class="article_container">
 
     {if embed:limit > 1}
-    <a id="article_{entry_id}" class="channel_title" href="{channel_url}/{url_title}"><h2 style="display:inline;" class="channel_title">{title}</h2></a>
+       <a id="article_{entry_id}" class="channel_title" href="{channel_url}/{url_title}"><h2 style="display:inline;" class="channel_title">{title}</h2></a>
     {if:else}
-    <h2 style="display:inline;" class="channel_title">{title}</h2>
+       <h2 class="channel_title">{title}</h2>
     {/if}
 
  <div>{embed=framework_2/mejs_player entry_id="{entry_id}"}</div>

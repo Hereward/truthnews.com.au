@@ -493,10 +493,15 @@ h2 {
     color:black;
     /* margin:5px 0px 10px 0px;*/
     text-decoration:none;
+}
+
+.news_channel_home_page_container h2 {
     font-size: 25px;
 }
 
-
+.news_channel_container {
+    margin-top:0px;
+}
 
 
 
@@ -533,13 +538,15 @@ h3.archives {
     /* font-size:1.7em; */
 }
 
+.channel_title {
+    margin:5px 0px 10px 0px;
+}
+
 a.channel_title,  a.channel_title:link, a.channel_title:visited {
     border-bottom:1px dotted white;
     border-top:1px dotted white;
     text-decoration:none;
     padding:2px 0px 2px 0px;
-    margin:5px 0px 10px 0px;
-
     display:block;
 }
 
@@ -894,6 +901,10 @@ img {
     div.latest_show p, div.latest_show_l p {
         line-height: 17px;
         font-size:13px;
+    }
+
+    h3.recent_shows {
+        margin-bottom:20px;
     }
 
 }
