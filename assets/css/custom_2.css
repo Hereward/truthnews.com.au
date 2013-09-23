@@ -940,15 +940,16 @@ h1.header {
 }
 */
 
-.sign_in_snippet {
-    /* color:white; */
-    margin-bottom: 10px;
-    /* padding-top:5px; */
-    padding-bottom:5px;
-    /* border-top: 1px solid gray; */
-    border-bottom: 1px solid #EAE8E8;
+.right_col_sign_in_snippet {
+    /* border-bottom: 1px solid #EAE8E8; */
+    max-width:300px;
+
 }
 
+.sign_in_snippet a, .sign_in_snippet a:link, .sign_in_snippet a:hover, .sign_in_snippet a:visited {
+    font-weight:bold;
+
+}
 
 div.EDGE-460776 {
 
