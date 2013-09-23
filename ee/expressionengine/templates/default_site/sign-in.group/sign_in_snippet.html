@@ -2,12 +2,21 @@
   <small>
       {if logged_in}
           <div class="alert alert-success">
-              Hi <strong>{screen_name}</strong> | <a href="{site_url}member/profile/">Profile</a> | <a href="{path='logout'}">Log Out</a>
+              Welcome, <a href="{site_url}member/profile/">{screen_name}</a> | <a href="{path='logout'}">Log Out</a>
           </div>
       {if:else}
-          <div class="alert alert-warning">
-             You are currently visiting as a guest, to login or register please <a href="{path=sign-in}">click here</a>.
-          </div>
+
+
+      <div class="guest_warning alert alert-success">
+              You are currently visiting as a guest. For a better user experience, <a href="{path=sign-in}">sign in or register as a
+              TNRA member</a>.
+      </div>
+
       {/if}
   </small>
 </div>
+
+        {!--
+You are currently visiting as a guest. For a better user experience, sign in or register as a
+TNRA member.
+        --}
