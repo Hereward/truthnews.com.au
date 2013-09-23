@@ -1,16 +1,19 @@
 <div class="sign_in_snippet">
   <small>
       {if logged_in}
-          <div class="alert alert-success">
+          <div class="signed_in alert alert-success">
               Welcome, <a href="{site_url}member/profile/">{screen_name}</a> | <a href="{path='logout'}">Log Out</a>
           </div>
       {if:else}
 
 
-      <div class="guest_warning alert alert-success">
-              You are currently visiting as a guest. For a better user experience, <a href="{path=sign-in}">sign in or register as a
-              TNRA member</a>.
-      </div>
+
+      <a href="{path=sign-in}" class="guest_warning alert alert-success">
+      {!-- <div class="alert alert-success"> --}
+
+          You are visiting as a guest. Sign in or register now for FREE membership!
+
+      </a>
 
       {/if}
   </small>

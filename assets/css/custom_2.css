@@ -946,11 +946,37 @@ h1.header {
 
 }
 
-.sign_in_snippet a, .sign_in_snippet a:link, .sign_in_snippet a:hover, .sign_in_snippet a:visited {
+
+.signed_in a, .signed_in a:link, .signed_in a:hover, .signed_in a:visited {
     font-weight:bold;
     color:inherit;
+}
+
+
+a.guest_warning, a.guest_warning:link, a.guest_warning:visited {
+    font-weight:normal;
+    text-decoration:none;
+    display:block;
 
 }
+
+a.guest_warning:hover {
+    font-weight:normal;
+    text-decoration:none;
+    display:block;
+    color:#315F32;
+    /* background-color:white;*/
+}
+
+
+/*
+a.guest_warning, a.guest_warning:link, a.guest_warning:hover, a.guest_warning:visited {
+    display:block;
+    font-weight:normal;
+    color:inherit;
+}
+*/
+
 
 /*
 .guest_warning a, .guest_warning a:link, .guest_warning a:visited {
