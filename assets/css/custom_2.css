@@ -958,7 +958,7 @@ a.guest_warning, a.guest_warning:link, a.guest_warning:visited {
     font-weight:normal;
     text-decoration:none;
     display:block;
-
+    text-align:center;
 }
 
 a.guest_warning:hover {
