@@ -799,13 +799,11 @@ img {
 
 @media screen and (max-width: 400px) {
 
-    .navbar-collapse .collapse {
-        overflow-y: visible !important;
-    }
-
+    /*
     ul.dropdown-menu {
         background-color:#333333 !important;
     }
+    */
 
     div.internal_banner {
         margin:10px 0px 10px -15px;
