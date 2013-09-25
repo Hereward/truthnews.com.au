@@ -17,7 +17,7 @@
                 </button>
                 <a href="#" class="navbar-brand visible-xs">Truth News Australia</a>
             </div>
-            <div class="navbar-collapse collapse" style="overflow-y: visible;">
+            <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li {if !"{segment_1}"}class="active"{/if}><a href="{site_url}">Home</a></li>
                     <li {if "{segment_1}" == "radio"}class="active"{/if}><a href="{site_url}web/radio">Radio</a></li>
@@ -30,8 +30,8 @@
 
                     <li class="dropdown" >
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">More <b class="caret"></b></a>
-                        <ul class="dropdown-menu" style="background-color:#333333;">
-                            <li {if "{segment_1}" == "promote"}class="active"{/if}><a href="{path=promote}">Promote</a></li>
+                        <ul class="dropdown-menu">
+                           <li {if "{segment_1}" == "promote"}class="active"{/if}><a href="{path=promote}">Promote</a></li>
                            <li {if "{segment_1}" == "contribute"}class="active"{/if}><a href="{path=contribute}">Contribute</a></li>
                         </ul>
                     </li>
