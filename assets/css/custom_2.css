@@ -800,11 +800,11 @@ img {
 @media screen and (max-width: 400px) {
 
     .navbar-collapse .collapse {
-        overflow-y: visible;
+        overflow-y: visible !important;
     }
 
     ul.dropdown-menu {
-        background-color:#333333;
+        background-color:#333333 !important;
     }
 
     div.internal_banner {
