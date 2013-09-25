@@ -54,12 +54,14 @@ We reserve the right to remove, edit, or move any messages for any reason.
 
 <div>
     {if captcha}
+    <div class="captcha">
     <p><span class="highlight">*</span> {lang:captcha}</p>
     <p>
         {captcha}
         <br />
         <input type="text" name="captcha" value="" size="20" maxlength="20" style="width:140px;" />
     </p>
+    </div>
     {/if}
 </div>
 

@@ -830,7 +830,10 @@ img {
         margin-bottom:5px;
         margin-top:5px;
        */
+    }
 
+    div.captcha {
+        margin:0px 0px 0px -15px;
     }
 
 }
