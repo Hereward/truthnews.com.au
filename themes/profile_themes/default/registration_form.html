@@ -37,10 +37,22 @@
     <input type="email" class="form-control" name="url" id="url" placeholder="email">
 </div>
 
+    {custom_fields}
+    </tr><tr>
+    <td class='tableCellTwo' style="width:45%;">
+        <div class='defaultBold'>{required}<span class="highlight">*</span>{/required} {field_name}</div>
+        {if field_description}
+        <div class='default'>{field_description}</div>
+        {/if}
+    </td>
+    <td class='tableCellOne' style="width:55%;">{field}</td>
+    {/custom_fields}
+
+{!--
 <label for="m_field_id_1">*Introduction - Introduce yourself here. Please let us know your main areas of interest and reasons for becoming a member of this website. NOTE: your
     response is important to us - if this field is left blank or contains irrelevant information we will assume you are a spam-bot and your registration will not be activated.</label>
 <textarea type="text" class="form-control" name="m_field_id_1" id="m_field_id_1" rows="3"></textarea>
-
+--}
 
 <h3>{lang:terms_of_service}</h3>
 

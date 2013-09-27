@@ -799,11 +799,20 @@ img {
 
 @media screen and (max-width: 400px) {
 
-    /*
-    ul.dropdown-menu {
+
+    .navbar-inverse ul.dropdown-menu {
         background-color:#333333 !important;
+
     }
-    */
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: white;
+    }
+
+    .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+        color: white;
+    }
+
 
     div.internal_banner {
         margin:10px 0px 10px -15px;
@@ -1025,4 +1034,8 @@ body {
 ul.live_show_call_in_numbers {
     margin-top:20px;
     margin-bottom:20px;
+}
+
+.navbar_color_correction {
+    background-color: #2E2E2E;
 }
