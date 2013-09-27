@@ -800,9 +800,8 @@ img {
 @media screen and (max-width: 400px) {
 
 
-    .navbar-inverse ul.dropdown-menu {
+    .navbar-inverse ul.dropdown-menu, .navbar-inverse .navbar-form {
         background-color:#333333 !important;
-
     }
 
     .navbar-inverse .navbar-nav > li > a {
@@ -871,8 +870,20 @@ img {
         margin-bottom:10px;
         margin-top:10px;
         */
-
     }
+
+    .navbar-inverse ul.dropdown-menu, .navbar-inverse .navbar-form {
+        background-color:#333333 !important;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: white;
+    }
+
+    .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+        color: white;
+    }
+
 
 
 
@@ -1036,6 +1047,6 @@ ul.live_show_call_in_numbers {
     margin-bottom:20px;
 }
 
-.navbar_color_correction {
-    background-color: #2E2E2E;
+.right_col_simple_search {
+    margin-bottom:20px;
 }
