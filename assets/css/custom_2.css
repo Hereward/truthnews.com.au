@@ -1050,3 +1050,21 @@ ul.live_show_call_in_numbers {
 .right_col_simple_search {
     margin-bottom:20px;
 }
+
+div.logos_player {
+    margin-bottom:20px;
+}
+
+div.jp-interface ul.jp-controls {
+    height: 38px;
+}
+
+div.jp-audio-stream {
+    min-width: 250px;
+    min-height:100px;
+    margin: 0 auto;
+}
+
+div.jp-title {
+    display:none;
+}
