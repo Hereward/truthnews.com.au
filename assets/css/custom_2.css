@@ -1068,3 +1068,9 @@ div.jp-audio-stream {
 div.jp-title {
     display:none;
 }
+
+ul.nav_categories {
+    list-style-type: none;
+    margin:0;
+    padding:0;
+}
