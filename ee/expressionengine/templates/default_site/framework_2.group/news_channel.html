@@ -1,6 +1,6 @@
 {!-- category="{embed:category}" --}
-{if no_results} {embed="default/404"} {/if}
 {exp:channel:entries cache="yes" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}" orderby="date" sort="desc" paginate="bottom"}
+{if no_results} {embed="default/404"} {/if}
 {if count == 2 || count == 4}
   {embed="ad_zones/leaderboard_internal"}
 {/if}
