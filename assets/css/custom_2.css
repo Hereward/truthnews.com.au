@@ -799,6 +799,10 @@ img {
 
 @media screen and (max-width: 400px) {
 
+    .news_channel_home_page_container iframe .news_channel_container iframe, .article_container iframe {
+        width:100%;
+    }
+
 
     .navbar-inverse ul.dropdown-menu, .navbar-inverse .navbar-form {
         background-color:#333333 !important;
@@ -1074,3 +1078,4 @@ ul.nav_categories {
     margin:0;
     padding:0;
 }
+
