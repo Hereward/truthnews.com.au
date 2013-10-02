@@ -1,3 +1,11 @@
+p.paginate {
+
+}
+
+p.paginate span.paginate_links {
+
+}
+
 .header, .internal_banner {
     /* margin-top:20px; */
     text-align:center;
@@ -801,10 +809,11 @@ img {
 
     p.paginate {
         font-size:18px;
+        text-align: center;
     }
     p.paginate span.paginate_links {
         display:block;
-        font-size:24px;
+        font-size:28px;
     }
 
     .news_channel_home_page_container iframe .news_channel_container iframe, .article_container iframe {
