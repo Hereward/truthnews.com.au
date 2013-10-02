@@ -74,6 +74,6 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
 
 </div>
 {paginate}
-<p class="paginate">Page {current_page} of {total_pages} pages {exp:low_replace find="index.php"}{pagination_links}{/exp:low_replace}</p>
+<p class="paginate">Page {current_page} of {total_pages} pages <span class="paginate_links">{exp:low_replace find="index.php"}{pagination_links}{/exp:low_replace}</span></p>
 {/paginate}
 {/exp:channel:entries}

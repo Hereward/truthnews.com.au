@@ -802,6 +802,10 @@ img {
     p.paginate {
         font-size:18px;
     }
+    p.paginate span.paginate_links {
+        display:block;
+        font-size:24px;
+    }
 
     .news_channel_home_page_container iframe .news_channel_container iframe, .article_container iframe {
         width:100%;
