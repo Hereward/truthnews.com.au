@@ -799,6 +799,10 @@ img {
 
 @media screen and (max-width: 400px) {
 
+    p.paginate {
+        font-size:14px;
+    }
+
     .news_channel_home_page_container iframe .news_channel_container iframe, .article_container iframe {
         width:100%;
     }
