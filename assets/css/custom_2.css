@@ -816,6 +816,10 @@ img {
         font-size:30px;
     }
 
+    span.paginate_links a, span.paginate_links a:link, span.paginate_links a:hover, span.paginate_links a:visited {
+        display:block;
+    }
+
     .news_channel_home_page_container iframe .news_channel_container iframe, .article_container iframe {
         width:100%;
     }
