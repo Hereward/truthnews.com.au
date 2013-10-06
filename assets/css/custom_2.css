@@ -1104,3 +1104,8 @@ ul.nav_categories {
     padding:0;
 }
 
+blockquote p {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: normal;
+}
