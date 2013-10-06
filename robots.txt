@@ -1,4 +1,4 @@
-User-agent: *
-Disallow: /
+User-Agent: *
+Allow: /
 
 Sitemap: http://www.truthnews.com.au/sitemap.xml
