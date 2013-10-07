@@ -8,7 +8,7 @@
 
        <br/>
 
-       {if "{embed:standfirst}"}{embed:standfirst}{if:else}Climb aboard the
+       {if "{embed:standfirst}"}{exp:char_limit total="150"}{embed:standfirst}{/exp:char_limit}{if:else}Climb aboard the
        ship of truth with Hereward Fenton at the helm, as we plough through uncharted waters of geo-politics, scandals, cover-ups, war and tyranny.{/if}
        {if embed:status == "open"}
          <a class='listen_now' href="{embed:channel_url}/{embed:url_title}" >Get&nbsp;the&nbsp;podcast&nbsp;&raquo;</a>
@@ -16,3 +16,5 @@
 
    </p>
 <div class="clearfix"></div>
+
+
