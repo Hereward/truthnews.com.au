@@ -234,8 +234,8 @@ div.listen {
 }
 
 div.top_banner {
-    margin:13px auto 0 auto;
-    text-align:center;
+    margin:13px 0px 0px 0px;
+    text-align:left;
     padding:0;
 
 }
@@ -485,10 +485,9 @@ p, .article, .article p {
 
 h1.header {
     text-align:center;
+    margin-top:0;
     /* display:inline; */
 }
-
-
 
 
 
@@ -807,6 +806,10 @@ img {
 
 @media screen and (max-width: 400px) {
 
+    h1.header {
+        text-align:center;
+    }
+
     p.paginate {
         font-size:18px;
         text-align: center;
@@ -848,6 +851,7 @@ img {
 
     div.top_banner {
         margin:10px 0px 0px -15px;
+        text-align:center;
     }
 
 
@@ -886,13 +890,19 @@ img {
 
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
 /*
     .tnra_banner_large {
         margin:10px auto;
 
     }
 */
+
+    h1.header {
+        text-align:center;
+    }
+
+
     div.header {
         margin-bottom:10px;
         /*
@@ -911,6 +921,11 @@ img {
 
     .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
         color: white;
+    }
+
+    div.top_banner {
+        margin:13px auto 0 auto;
+        text-align:center;
     }
 
 
@@ -981,6 +996,15 @@ img {
         padding-left:20px;
     }
 
+
+    .header_logo_constraint {
+        max-width:350px;
+    }
+
+    h1.header {
+        text-align:left;
+    }
+
 }
 
 .tnra_navbar {
@@ -993,9 +1017,7 @@ img {
 
 
 
-h1.header {
-    margin-top:0;
-}
+
 /*
 @media (min-width: 768px) and (max-width: 991px) {
     .main_box {
@@ -1109,3 +1131,4 @@ blockquote p {
     font-weight: normal;
     line-height: normal;
 }
+

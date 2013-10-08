@@ -352,3 +352,13 @@ body {
 .EDGE-460776 {
 
 }
+
+div.top_banner {
+    margin-left:30px;
+}
+
+/*
+.collapse {
+    display: block;
+}
+*/
