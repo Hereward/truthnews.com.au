@@ -1,14 +1,18 @@
 {exp:channel:entries entry_id="{embed:entry_id}" site="default_site" channel="tna" limit="1" orderby="date" sort="desc"}
     {if "{media_date}"}
         {embed=default_site:framework_2/player_widgets media_segments="{media_segments}" entry_id="{entry_id}" media_date="{media_date}" media_source="{media_source}"}
-    {if:else}
-{!--
-  <div style="margin-top:15px;" id='mediaspace_{embed:entry_id}'>This text will be replaced</div>
-  <div style="margin-bottom:10px;">Download mp3: <a href ="{media_url}">click here</a></div>
- 
-<script type='text/javascript'>
-  load_player_object_simple("{entry_id}","{media_url}");  
-</script>
- --}
+    {if:elseif "{media_url}"}
+        <div class="col-lg-12">
+
+            <audio style="margin-top:15px;" id="raw_player_{embed:entry_id}" controls="controls" preload="none">
+                <source src="{media_url}" type="audio/mpeg">
+            </audio>
+
+            <div style="margin-top:5px; margin-bottom:10px;">
+                Download mp3 <span style="font-size:16px;">&raquo;</span>
+                <a href ="{media_url}">click here</a>
+            </div>
+
+        </div>
     {/if}
 {/exp:channel:entries}
