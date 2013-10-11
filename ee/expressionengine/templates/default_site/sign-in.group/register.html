@@ -1,0 +1,90 @@
+{embed="framework_2/doc_head" url="{site_url}sign-in" title="Truth News Australia Sign In" description="Sign in or create a new account."}
+{embed="framework_2/navigation" section="home"}
+
+<div class="container main_box">
+    {embed="framework_2/header"}
+
+    <div class="row">
+        <div class="col-md-9 col-lg-8">
+            <div class="login_form_container">
+                <h3 class="recent_shows">Member Registration</h3>
+                {exp:user:register return="sign-in/registration-successful" error_page="sign-in/error"
+                required="username|screen_name|password|password_confirm|email|email_confirm|introduction|captcha|accept_terms" }
+
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="screen_name">Screen Name:</label>
+                        <input type="text" class="form-control" name="screen_name" id="screen_name" placeholder="screen name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirm">Confirm Password:</label>
+                        <input type="password" class="form-control" name="password_confirm" id="password_confirm" placeholder="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email_confirm">Confirm Email:</label>
+                        <input type="email" class="form-control" name="email_confirm" id="email_confirm" placeholder="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="url">URL:</label>
+                        <input type="text" class="form-control" name="url" id="url" placeholder="URL">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Introduction">Introduce yourself here. Please let us know your main areas of interest and reasons for becoming a member of this
+                            website. NOTE: your response is important to us - if this field is left blank or contains irrelevant information we will assume you are a spam-bot and your registration will not be activated.
+                        </label>
+                        <textarea class="form-control" name="Introduction" id="Introduction" rows="3"></textarea>
+                    </div>
+
+                    {if captcha}
+                        <div class="form-group">
+                            <label for="captcha">Please type the words you see below:</label>
+                            <p>{captcha}</p>
+                            {!--
+                            <input class="form-control" type="text" id="captcha" name="captcha" />
+                            --}
+                        </div>
+                    {/if}
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="accept_terms" name="accept_terms" value="y" /> Accept Terms?
+                        </label>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-default">Submit</button>
+
+                    {if no_results}
+                        <p>You're currently logged in, and must be logged out to view this form.</p>
+                    {/if}
+
+            {/exp:user:register}
+
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-4">{embed="framework_2/right_col"}</div>
+    </div> <!-- /row -->
+
+    {embed="framework_2/footer"}
+
+</div> <!-- /container -->
+
+{embed ="framework_2/doc_foot"}
