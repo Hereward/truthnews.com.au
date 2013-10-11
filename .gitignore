@@ -1,0 +1,7 @@
+storage/images/*.*
+slideshowpro/app/tmp/*
+slideshowpro/album-audio/
+slideshowpro/albums/
+slideshowpro/xml_cache/*
+slideshowpro/config/conf.php
+slideshowpro/api/classes/cache/*
