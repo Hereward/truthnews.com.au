@@ -8,7 +8,7 @@
         <div class="col-md-9 col-lg-8">
             <div class="login_form_container">
                 <h3 class="recent_shows">Member Registration</h3>
-                {exp:user:register return="sign-in/registration-successful" error_page="sign-in/error"
+                {exp:user:register form:class="registration_form" return="sign-in/registration-successful" error_page="sign-in/error"
                 required="username|screen_name|password|password_confirm|email|email_confirm|introduction|captcha|accept_terms" }
 
                     <div class="form-group">
@@ -63,6 +63,12 @@
                         </div>
                     {/if}
 
+                    <p><small>
+                        All messages posted at this site express the views of the author, and do not necessarily reflect the views of the owners and administrators of this site.
+                        By registering at this site you agree not to post any messages that are obscene, vulgar, slanderous, hateful, threatening, or that violate any laws.   We will permanently ban all users who do so.
+                        We reserve the right to remove, edit, or move any messages for any reason.
+                    </small></p>
+
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" id="accept_terms" name="accept_terms" value="y" /> Accept Terms?
@@ -86,5 +92,58 @@
     {embed="framework_2/footer"}
 
 </div> <!-- /container -->
+    <script>
+        $().ready(function() {
+        // $('#test').validate( {invalidHandler: $.watermark.showAll} );
 
+            $(".registration_form").validate({
+                rules: {
+                        username: {
+                            required: true,
+                            minlength: 2
+                        },
+                        screen_name: "required",
+                        password: {
+                            required: true,
+                            minlength: 5
+                        },
+                        password_confirm: {
+                            required: true,
+                            minlength: 5,
+                            equalTo: "#password"
+                        },
+                        email: {
+                            required: true,
+                            email: true
+                        },
+                        email_confirm: {
+                            required: true,
+                            email: true,
+                            equalTo: "#email"
+                        },
+                        Introduction: "required",
+                        accept_terms:"required"
+                    },
+                messages: {
+                        username: {
+                            required: "Please enter a username",
+                            minlength: "Your username must consist of at least 2 characters"
+                        },
+                        screen_name: "Please enter a screen name",
+                        password: {
+                            required: "Please provide a password",
+                            minlength: "Your password must be at least 5 characters long"
+                        },
+                        password_confirm: {
+                            required: "Please confirm your password",
+                            minlength: "Your password must be at least 5 characters long",
+                            equalTo: "Please enter the same password as above"
+                        },
+                        email: "Please enter a valid email address",
+                        email_confirm: "Please confirm your email address",
+                        Introduction: "Please introduce yourself here."
+                    }
+            });
+        });
+    </script>
 {embed ="framework_2/doc_foot"}
