@@ -25,14 +25,33 @@
                     <li {if "{segment_1}" == "contact"}class="active"{/if}><a href="{path=contact}">Contact</a></li>
                     <li {if "{segment_1}" == "subscribe"}class="active"{/if}><a href="{site_url}subscribe">Subscribe</a></li>
 
-                    <li {if "{segment_1}" == "forum"}class="active"{/if}><a href="{path=forum}">Forum</a></li>
+
                     <li {if "{segment_1}" == "radio-archives"}class="active"{/if}><a href="{path=radio-archives}">Archives</a></li>
+
+
+                    <li class="dropdown" >
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Members <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {if logged_in}
+                                <li><a href="{path='logout'}">Log Out</a></li>
+                                <li {if "{segment_1}" == "members" && segment_2==""}class="active"{/if}><a href="{path=members}">Members</a></li>
+                                <li {if "{segment_1}" == "members" && segment_2=="profile"}class="active"{/if}><a href="{site_url}members/profile/{member_id}">My Profile</a></li>
+                            {/if}
+                            {if logged_out}
+                                <li><a href="{path=sign-in}">Log In</a></li>
+                            {/if}
+
+                        </ul>
+                    </li>
+
 
                     <li class="dropdown" >
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">More <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                            <li {if "{segment_1}" == "promote"}class="active"{/if}><a href="{path=promote}">Promote</a></li>
                            <li {if "{segment_1}" == "contribute"}class="active"{/if}><a href="{path=contribute}">Contribute</a></li>
+
+                           <li {if "{segment_1}" == "forum"}class="active"{/if}><a href="{path=forum}">Forum</a></li>
                         </ul>
                     </li>
                 </ul>

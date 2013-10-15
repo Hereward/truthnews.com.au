@@ -1,0 +1,35 @@
+{embed="framework_2/doc_head" url="{site_url}members" title="Truth News Australia Members Area" description="Sign in or create a new account."}
+{embed="framework_2/navigation" section="home"}
+
+<div class="container main_box">
+    {embed="framework_2/header"}
+
+    <div class="row">
+        <div class="col-md-9 col-lg-8">
+            <div class="news_channel_container">
+                <h3 class="recent_shows">Member List</h3>
+                {!-- if logged_in --}
+
+                <ul>
+                    {exp:user:users orderby="screen_name" sort="asc" limit="25" paginate="bottom"}
+                        <li><a href="{path='members/profile'}/{member_id}">{screen_name}</a></li>
+                        {if user_no_results}
+                            <li>Sorry, no results were found.</li>
+                        {/if}
+                        {user_paginate}
+                        <li>Page {user_current_page} of {user_total_pages} pages
+                            {user_pagination_links}</li>
+                        {/user_paginate}
+                    {/exp:user:users}
+                </ul>
+
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-4">{embed="framework_2/right_col"}</div>
+    </div> <!-- /row -->
+
+    {embed="framework_2/footer"}
+
+</div> <!-- /container -->
+
+{embed ="framework_2/doc_foot"}

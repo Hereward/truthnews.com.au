@@ -6,17 +6,15 @@
 
     <div class="row">
         <div class="col-md-9 col-lg-8">
-            <div class="login_form_container">
+            <div class="login_form_container lead">
 
                 {if logged_in}
                     <h3 class="recent_shows">You're Signed In!</h3>
-                    <p> You are currently signed in as <strong>{screen_name}</strong> | <a href="{site_url}member/profile/"
-                         >Profile</a> | <a href="{path='logout'}">Log Out</a>
-                    </p>
+                    <p> You are currently signed in as <strong>{screen_name}</strong></p>
 
                     <ul>
-                      <li><a href="{path='member/profile'}">Edit your profile</a></li>
-                      <li><a href="{path='member/memberlist'}">View the Memberlist</a></li>
+                      <li><a href="{path='members/profile/{member_id}'}">View/Edit your profile</a></li>
+                      <li><a href="{path='members'}">View the Memberlist</a></li>
                       <li><a href="{path='logout'}">Log Out</a></li>
                     </ul>
                 {/if}

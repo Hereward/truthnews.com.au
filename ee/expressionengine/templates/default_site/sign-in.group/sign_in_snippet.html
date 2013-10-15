@@ -2,7 +2,7 @@
   <small>
       {if logged_in}
           <div class="signed_in alert alert-success">
-              Welcome, <a href="{site_url}member/profile/">{screen_name}</a> | <a href="{path='logout'}">Log Out</a>
+              Welcome, <a href="{site_url}members/profile/{member_id}">{screen_name}</a> | <a href="{path='logout'}">Log Out</a>
           </div>
       {if:else}
 
