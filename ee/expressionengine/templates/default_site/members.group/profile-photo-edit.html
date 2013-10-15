@@ -1,37 +1,7 @@
 {embed="framework_2/doc_head_minimal"}
 <div class="edit_image">
 
-{!--
-    {if segment_3 == "success"}
-    <div class="user_success">You've successfully updated your Avatar or Profile Photo!</div>
-    {/if}
-
-    <h5>Your Avatar</h5>
-    {exp:user:edit return="user_main/update_avatar_photo/success" override_return="user_main/update_avatar_photo/success" error_page="user_inc/error_template"}
-    <p>{if avatar_filename}<label>Current Avatar: </label><img src="{avatar_url}{avatar_filename}" width="{avatar_width}" height="{avatar_height}" />{if:else}You currently do not have an avatar uploaded.{/if}</p>
-    <p><label for="avatar_filename">Upload a New Avatar: </label><input type="file" name="avatar_filename" id="avatar_filename" /></p>
-    <p><input type="submit" value="Update" /> <input type="submit" name="remove_avatar" value="Remove Current Avatar?" /></p>
-    {/exp:user:edit}
-
-    <hr />
-
-    <h5>Your Profile Photo</h5>
-    {exp:user:edit return="user_main/update_avatar_photo/success" override_return="user_main/update_avatar_photo/success" error_page="user_inc/error_template"}
-    <p>{if photo_filename}<label>Current Profile Photo: </label><img src="{photo_url}{photo_filename}" width="{photo_width}" height="{photo_height}" />{if:else}You currently do not have a profile photo uploaded.{/if}</p>
-    <p><label for="photo_filename">Upload a New Profile Photo: </label><input type="file" name="photo_filename" id="photo_filename" /></p>
-    <p><input type="submit" value="Update" /> <input type="submit" name="remove_photo" value="Remove Current Photo?" /></p>
-    <input type="hidden" name="Introduction" value="{Introduction}" />
-    {/exp:user:edit}
---}
-
-
-
     {exp:user:edit override_return="members/profile-photo-edit" return="members/profile-photo-edit" error_page="sign-in/error"}
-{!--
-        {if segment_3 == "success"}
-            <div class="success">You've successfully updated your Avatar or Profile Photo!</div>
-        {/if}
---}
          <div class="form-group">
             <p><strong>Current Photo:</strong></p>
             <div class="edit_image_container">
