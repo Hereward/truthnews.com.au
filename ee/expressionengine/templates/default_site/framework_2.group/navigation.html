@@ -34,7 +34,7 @@
                         <ul class="dropdown-menu">
                             {if logged_in}
                                 <li><a href="{path='logout'}">Log Out</a></li>
-                                <li {if "{segment_1}" == "members" && segment_2==""}class="active"{/if}><a href="{path=members}">Members</a></li>
+                                <li {if "{segment_1}" == "members" && segment_2==""}class="active"{/if}><a href="{path=members}">Member List</a></li>
                                 <li {if "{segment_1}" == "members" && segment_2=="profile"}class="active"{/if}><a href="{site_url}members/profile/{member_id}">My Profile</a></li>
                             {/if}
                             {if logged_out}
