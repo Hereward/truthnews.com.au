@@ -189,6 +189,8 @@ class Tna_utils {
         $pretty_date = date("F j, Y", $parsed_date);
         $last_show_date = date("Ymd", $parsed_date);
 
+        //die("mp3_url = [$mp3_url]  last_show_date = [$last_show_date]");
+
         $output = '';
 
         //$output .= "DESCRIPTION = ". $item->description ."<br/>\n";
