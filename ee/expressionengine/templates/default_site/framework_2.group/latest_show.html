@@ -1,15 +1,16 @@
 
+{exp:tna_utils:get_latest_show}
+
+{!--
 <div>CALC: [{embed:last_show_date}]</div>
 <div>STATUS: [{embed:status}]</div>
-
-
-{exp:tna_utils:get_latest_show}
 <div>URL: [{mp3_url}]</div>
 <div>LOGOS: [{last_show_date}]</div>
-        
+--}
+
 <h2>Latest LIVE show</h2>
 {if "{mp3_url}" && (("{last_show_date}" == "{embed:last_show_date}") || ("{embed:last_show_date}" == '' && "{last_show_date}")) }
-        <div>FLAG 1</div>
+
         {if "{embed:status}" == 'Draft' || "{embed:status}" == ''}
 
             {embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}"}
@@ -20,13 +21,13 @@
         {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="{embed:channel_url}" url_title="{embed:url_title}"
         pretty_date="{pretty_date}" standfirst="{embed:standfirst}"}
    {if:elseif "{embed:status}" == 'open'}
-         <div>FLAG 2</div>
+
         {!-- {embed=framework_2/latest_show_player_container default_label="Hour 1" segments="{embed:segments}" last_show_date="{embed:last_show_date}"} --}
         {!-- embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}" --}
         {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="{embed:channel_url}" url_title="{embed:url_title}" pretty_date="{embed:last_show_date}"
         standfirst="{embed:standfirst}"}
    {if:else}
-        <div>FLAG 3</div>
+
         {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="" url_title=""
         pretty_date="{exp:tna_utils:pretty_date_of_last_show}" standfirst="{embed:standfirst}"}
 <p class="text-warning"><small>Podcast temporarily unavailable - please try again later.</small></p>
