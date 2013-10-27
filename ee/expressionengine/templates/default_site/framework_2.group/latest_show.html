@@ -1,12 +1,12 @@
-{exp:tna_utils:get_latest_show}
 
-
-<div>LOGOS: [{last_show_date}]</div>
 <div>CALC: [{embed:last_show_date}]</div>
 <div>STATUS: [{embed:status}]</div>
+
+
+{exp:tna_utils:get_latest_show}
 <div>URL: [{mp3_url}]</div>
-
-
+<div>LOGOS: [{last_show_date}]</div>
+        
 <h2>Latest LIVE show</h2>
 {if "{mp3_url}" && (("{last_show_date}" == "{embed:last_show_date}") || ("{embed:last_show_date}" == '' && "{last_show_date}")) }
         <div>FLAG 1</div>
