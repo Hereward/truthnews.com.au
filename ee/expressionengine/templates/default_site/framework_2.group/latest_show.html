@@ -25,6 +25,10 @@
         pretty_date="{pretty_date}" standfirst="{embed:standfirst}"}
    {if:elseif "{embed:status}" == 'open'}
 
+        {if "{embed:live_player_podcast_url}"}
+            {embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{embed:live_player_podcast_url}"}
+        {/if}
+
 
         {!-- {embed=framework_2/latest_show_player_container default_label="Hour 1" segments="{embed:segments}" last_show_date="{embed:last_show_date}"} --}
         {!-- embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}" --}
