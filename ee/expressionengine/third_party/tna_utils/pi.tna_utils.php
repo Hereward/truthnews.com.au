@@ -182,8 +182,16 @@ class Tna_utils {
         $raw_date = $item->pubDate;
         $pubdate = str_replace('+0000', '', $raw_date);
         $mp3_url = $fb_links->origEnclosureLink;
-        echo "<div>origEnclosureLink = [$mp3_url]</div>";
+        //echo "<div>origEnclosureLink = [$mp3_url]</div>";
         preg_match('/TNRA_(.+)_64k\.mp3$/', $mp3_url, $matches);
+
+        if (!count($matches)) {
+            preg_match('/TNRA_(.+)_16k\.mp3$/', $mp3_url, $matches);
+        }
+        if (!count($matches)) {
+            $output = $this->EE->TMPL->parse_variables_row($tagdata, $vars);
+            return $output;
+        }
 
         $pod_date_raw = $matches[1];
         $parsed_date = strtotime($pod_date_raw);
