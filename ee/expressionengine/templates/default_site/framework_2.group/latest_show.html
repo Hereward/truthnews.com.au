@@ -1,12 +1,14 @@
 
-{exp:tna_utils:get_latest_show}
+{exp:tna_utils:get_latest_show lsd_db="{embed:last_show_date}"}
 
 {!--
 <div>CALC: [{embed:last_show_date}]</div>
 <div>STATUS: [{embed:status}]</div>
 <div>URL: [{mp3_url}]</div>
 <div>LOGOS: [{last_show_date}]</div>
+<div>lsd_db_output = {lsd_db_output}</div>
 --}
+
 
 <h2>Latest LIVE show</h2>
 {!--  || ("{embed:last_show_date}" == '' && "{last_show_date}") --}
@@ -28,7 +30,7 @@
 
         {!-- {embed=framework_2/latest_show_player_container default_label="Hour 1" segments="{embed:segments}" last_show_date="{embed:last_show_date}"} --}
         {!-- embed=framework_2/latest_show_player_container player_id="{embed:player_id}" label="" url="{mp3_url}" --}
-        {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="{embed:channel_url}" url_title="{embed:url_title}" pretty_date="{embed:last_show_date}"
+        {embed=framework_2/latest_show_notes status="{embed:status}" channel_url="{embed:channel_url}" url_title="{embed:url_title}" pretty_date="{lsd_db_output}"
         standfirst="{embed:standfirst}"}
    {if:else}
 

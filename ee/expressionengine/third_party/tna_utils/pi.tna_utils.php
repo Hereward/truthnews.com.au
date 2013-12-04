@@ -147,12 +147,23 @@ class Tna_utils {
     }
 
     function get_latest_show() {
+        $lsd_db_output = '';
+        $lsd_db = $this->EE->TMPL->fetch_param('lsd_db');
+        if ($lsd_db) {
+            $lsd_db_parsed = strtotime($lsd_db);
+            $lsd_db_output = date("F j, Y", $lsd_db_parsed);
+        }
+
+
+        //die("$lsd_db|$lsd_db_output");
+        //die($lsd_db);
         $feed_url = 'http://feeds.feedburner.com/LogosRadioNetworkTruthNewsRadioAustralia?format=xml';
         $tagdata = $this->EE->TMPL->tagdata;
         $vars = array(
             'pretty_date' => '',
             'mp3_url' => '',
-            'last_show_date'=>''
+            'last_show_date'=>'',
+            'lsd_db_output' => $lsd_db_output
         );
         //libxml_use_internal_errors(true);
 
