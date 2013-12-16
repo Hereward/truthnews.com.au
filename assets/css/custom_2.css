@@ -233,6 +233,19 @@ div.listen {
     /* text-align:center; */
 }
 
+div.subscribe_now_small {
+    margin:0 0 20px 0;
+    /* text-align:center; */
+}
+
+.terms dd {
+    margin-bottom:10px;
+}
+
+form.subscribe_form {
+    margin:20px 0 20px 0;
+}
+
 div.top_banner {
     margin:13px 0px 0px 0px;
     text-align:left;
