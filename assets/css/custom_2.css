@@ -1,3 +1,19 @@
+#wrapper_small { width: 320px; height: 40px; padding: 0; overflow: hidden; }
+#scaled-frame_small { width: 728px; height: 90px; border: 0px; }
+#scaled-frame_small {
+    zoom: 0.5;
+    -moz-transform: scale(0.439);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.439);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.439);
+    -webkit-transform-origin: 0 0;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #scaled-frame_small  { zoom: 1;  }
+}
+
 p.paginate {
 
 }
@@ -861,6 +877,10 @@ img {
 
     div.internal_banner {
         margin:10px 0px 10px -15px;
+    }
+
+    div.subscribe_banner {
+        margin:0px 0px 0px 15px;
     }
 
     div.top_banner {

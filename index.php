@@ -66,7 +66,7 @@
  * Enable it only if you have a good reason to.
  * 
  */
-	$debug = 0;
+	$debug = 1;
 
 /*
  * --------------------------------------------------------------------
@@ -170,7 +170,7 @@
  */	
 	if (DEBUG == 1)
 	{
-		error_reporting(E_ALL);
+		error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 		@ini_set('display_errors', 1);
 	}
 	else
