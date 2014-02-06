@@ -1,3 +1,11 @@
+div#subscribe_banner_css_3 {
+    display:none;
+}
+
+div#subscribe_banner_legacy {
+    display:none;
+}
+
 #wrapper_small {
     width: 320px;
     height: 40px;

@@ -77,5 +77,19 @@
 </script>
 --}
 
+
+  <script src="/assets/third_party/modernizr/modernizr.js"></script>
+
+  <script>
+
+      if (Modernizr.csstransitions) {
+          $( "#subscribe_banner_css_3" ).show();
+      } else {
+          $( "#subscribe_banner_legacy" ).show();
+          // Use jquery if CSS transitions are not supported
+      }
+
+  </script>
+
 </body>
 </html>

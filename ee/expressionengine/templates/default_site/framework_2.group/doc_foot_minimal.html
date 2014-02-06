@@ -20,5 +20,16 @@
     //document.onload = get_social_media($,"{site_url}");
 </script>
 
+<script src="/assets/third_party/modernizr/modernizr.js"></script>
+
+<script>
+    if (Modernizr.csstransitions) {
+        $( "#subscribe_banner_css_3" ).show();
+    } else {
+        $( "#subscribe_banner_legacy" ).show();
+    }
+
+</script>
+
 </body>
 </html>
