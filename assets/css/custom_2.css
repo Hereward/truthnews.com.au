@@ -21,6 +21,7 @@
 }
 */
 
+/*
 #scaled-frame_small {
     zoom: 0.5;
     -moz-transform: scale(0.439);
@@ -34,6 +35,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     #scaled-frame_small  { zoom: 1;  }
 }
+*/
 
 p.paginate {
 
