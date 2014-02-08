@@ -25,15 +25,16 @@
                 </div>
             </div>
 
-            {if "{exp:tna_utils:is_platform type='phone'}" == 1}
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="subscribe_banner_small_phone"><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_320X50.png"/></a></div>
-                    </div>
-                </div>
-            {/if}
+
 
             {embed="framework_2/listen_banner"}
+
+            {if "{exp:tna_utils:is_platform type='phone'}" == 1}
+
+                    <div class="subscribe_banner_small_phone"><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_320X50.png"/></a></div>
+
+            {/if}
+
             <div class="news_channel_home_page_container">
               <h3 class="recent_shows">Recent News &amp; Podcasts</h3>
               {embed="framework_2/news_channel" channel="tna|tna_news|911oz" search="" limit="8"}
