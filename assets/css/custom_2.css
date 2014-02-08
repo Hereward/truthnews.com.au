@@ -906,6 +906,11 @@ img {
         margin:0px 0px 0px 15px;
     }
 
+    div.subscribe_banner_small_phone {
+        text-align:center;
+        margin:0px 0px 15px 0px;
+    }
+
     div.top_banner {
         margin:10px 0px 0px -15px;
         text-align:left;
