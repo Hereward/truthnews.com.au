@@ -1,0 +1,14 @@
+{if ("{embed:is_computer}" == 1 || "{embed:is_tablet}" == 1) && ("{embed:random}" == 1)}
+    {embed=ad_zones/subscribe_banner_large}
+{if:elseif ("{embed:is_computer}" == 1 || "{embed:is_tablet}" == 1) && ("{embed:random}" == 2)}
+    <div class="col-md-9 col-lg-8 top_banner">
+        {embed=ad_zones/subscribe_banner_static}
+    </div>
+{if:elseif "{embed:is_phone}" == 1}
+    <div class="col-md-9 col-lg-8 top_banner visible-xs">
+        {embed=ad_zones/responsive_adsense}
+    </div>
+{/if}
+
+
+

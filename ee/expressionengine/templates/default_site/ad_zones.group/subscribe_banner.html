@@ -1,20 +1,48 @@
-{if "{exp:tna_utils:is_platform type='computer'}" == 1 || "{exp:tna_utils:is_platform type='tablet'}" == 1}
+{embed=ad_zones/subscribe_banner_components
+    is_computer="{exp:tna_utils:is_platform type='computer'}"
+    is_tablet="{exp:tna_utils:is_platform type='tablet'}"
+    is_phone="{exp:tna_utils:is_platform type='phone'}"
+    random="{exp:low_random:number from='1' to='2'}"}
 
-<div class="col-md-9 col-lg-8 top_banner visible-sm visible-md visible-lg">
+{!--
+
+{if "{exp:tna_utils:is_platform type='computer'}" == 1}
+
+            {if {exp:low_random:number from='1' to='2'} == 1}
+                <div class="col-md-9 col-lg-8 top_banner visible-sm visible-md visible-lg">
+                  <iframe id="subscribe_banner_css_3" width="728" height="90" frameborder='0' scrolling="no" src="/storage/banners/subscribe_01/"></iframe>
+                  <div id="subscribe_banner_legacy"><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_728X90.png"/></a></a></div>
+                </div>
+            {if:else}
+                <div class="col-md-9 col-lg-8 top_banner">
+                  <div><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_728X90.png"/></a></a></div>
+                </div>
+            {/if}
+
+{if:elseif "{exp:tna_utils:is_platform type='tablet'}" == 1}
+
         {if {exp:low_random:number from='1' to='2'} == 1}
-               <iframe id="subscribe_banner_css_3" width="728" height="90" frameborder='0' scrolling="no" src="/storage/banners/subscribe_01/"></iframe>
-               <div id="subscribe_banner_legacy"><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_728X90.png"/></a></a></div>
-        {if:else}
-               <div><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_728X90.png"/></a></a></div>
+               <div class="col-md-9 col-lg-8 top_banner visible-sm visible-md visible-lg">
+                   <iframe id="subscribe_banner_css_3" width="728" height="90" frameborder='0' scrolling="no" src="/storage/banners/subscribe_01/"></iframe>
+                   <div id="subscribe_banner_legacy"><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_728X90.png"/></a></a></div>
+               </div>
 
+               <div class="col-md-9 col-lg-8 top_banner">
+                   <div><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_728X90.png"/></a></a></div>
+               </div>
+        {if:else}
+               <div class="col-md-9 col-lg-8 top_banner visible-xs">
+                   <div><a href="{site_url}subscribe"><img alt="Subscribe to TNRA"src="{site_url}storage/images/framework/subscribe_now_728X90.png"/></a></a></div>
+               </div>
         {/if}
-    </div>
+
 {if:elseif "{exp:tna_utils:is_platform type='phone'}" == 1}
     <div class="col-md-9 col-lg-8 top_banner visible-xs">
         {embed=ad_zones/responsive_adsense}
     </div>
 {/if}
 
+--}
 
 
 
