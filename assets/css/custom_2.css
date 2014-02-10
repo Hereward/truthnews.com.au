@@ -391,6 +391,11 @@ div.leaderboard {
     text-align:center;
 }
 
+div.top_banner_large {
+    margin:0px 0px 20px 0px;
+}
+
+
 div.medrec {
     margin:0px 0px 20px 0px;
 }
@@ -915,7 +920,6 @@ img {
         margin:10px 0px 0px -15px;
         text-align:left;
     }
-
 
     .tnra_banner_large {
         margin:10px auto;
