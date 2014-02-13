@@ -66,7 +66,7 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
         {/if}
 
         {if embed:show_comments}
-            {embed="facebook/fb_comments"}
+            {!-- {embed="facebook/fb_comments"} --}
             {embed="framework_2/comment_body" site="default_site" entry_id="{entry_id}"}
         {/if}
     </div>

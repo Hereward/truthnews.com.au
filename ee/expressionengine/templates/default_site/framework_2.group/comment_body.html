@@ -14,11 +14,15 @@
             <p>Page {current_page} of {total_pages} pages {exp:low_replace find="index.php" replace=""}{pagination_links}{/exp:low_replace}</p>
         {/paginate}
     {/exp:comment:entries}
-
+{!--
     {if logged_out}
          <p style="text-align:center; border:2px dashed dimgray; padding:10px; margin:30px 5px 30px 5px; font-weight:bold;">In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>.</p>
     {if:else}
         {embed="default_site:framework_2/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
     {/if}
+--}
+
+    {embed="default_site:framework_2/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
+
 
 </div>
