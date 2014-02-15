@@ -7,25 +7,39 @@
 <p>
 In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>. 
 </p>
-
-
+{/if}
+--}
+{!--
 <table>
 <tr>
 <td align="right">Name:</td><td><input type="text" name="name" value="{name}" size="50" /></td>
 </tr>
 <tr>
-<td align="right">Email:</td><td> <input type="text" name="email" value="{email}" size="50" /></td>
+<td align="right">Email:</td><td> <input class="form-control" type="text" name="email" value="{email}" size="50" /></td>
 </tr>
 <tr>
-<td align="right">Location:</td><td> <input type="text" name="location" value="{location}" size="50" /></td>
+<td align="right">Location:</td><td> <input class="form-control" type="text" name="location" value="{location}" size="50" /></td>
 </tr>
 <tr>
-<td align="right">URL:</td><td> <input type="text" name="url" value="{url}" size="50" /></td>
+<td align="right">URL:</td><td> <input class="form-control" type="text" name="url" value="{url}" size="50" /></td>
 </tr>
 </table>
-
-{/if}
 --}
+
+<label for="name">Name</label>
+<p><input class="form-control" type="text" name="name" value="{name}" placeholder="" /></p>
+
+<label for="email">Email</label>
+<p><input class="form-control" type="text" name="email" value="{email}" placeholder="" /></p>
+
+<label for="location">Location</label>
+<p><input class="form-control" type="text" name="location" value="{location}" placeholder="" /></p>
+
+<label for="url">URL</label>
+<p><input class="form-control" type="text" name="url" value="{url}" placeholder="" /></p>
+
+
+
 
 <strong>Enter comments below, then click Submit:</strong><br/>
 <div class="comment_buttons hidden-xs">
