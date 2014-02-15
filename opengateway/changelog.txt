@@ -1,0 +1,97 @@
+OPENGATEWAY CHANGELOG February 3rd, 2014
+
+===================================================
+[2014-02-03] Show "failed" image properly when a client is suspended.
+[2014-02-03] Updated to 1.993.
+[2014-02-03] If sending a Notification to EE 2.7+, send it as a GET request. Otherwise EE requires an XID for POST requests and it will fail. This upgrade requires a simultaneous upgrade of Membrr or EE Donations.
+[2013-11-05] Upgraded to 1.992. Exchanged TinyEditor for WYSIWYG editing.
+[2013-10-19] Salt passwords.
+[2013-10-02] Patched bugs in SagePay controller that would stop execution of script when $debug was TRUE.
+[2013-08-13] Remove PHP short tags from installer for compatibility.
+[2013-08-08] Added additional database indexing for higher performance on larger sites.
+[2013-08-05] Fixed two warnings that appear in the OpenGateway and SagePay libraries if E_STRICT is enabled.
+[2013-07-28] Never timeout the cron execution.
+[2013-06-13] Upgraded to 1.99. Modified order data to store values as TEXT so that the SagePay PaReq code is not truncated.
+[2013-06-11] URLencoded the ACSURL in SagePay - Brock.
+[2013-04-24] Correct small inconstancy with Exact gateway that was incompatible with their new updates.
+[2013-02-18] Shipping Name for PayPal Express now correctly sent.
+[2013-01-11] Updated version to 1.985
+[2013-01-11] Updated dataset library to allow exports of all results, not just the current page. May break on very large exports.
+[2013-01-07] same_day_every_month option should be default FALSE for PayPal library.
+[2012-11-29] Only retrieve $plan_details in gateway_model->Recur() if it's set.
+[2012-11-27] Updated PayPal Express to latest API standards.
+[2012-11-06] Updated version to 1.984
+[2012-11-06] Compatibility update for PHP 5.3.3
+[2012-11-01] Fixed issue with date variable in triggertrip_helper for delayed recurring charges.
+[2012-08-27] No longer creates PHP Errors on transactions page when no gateways exists.
+[2012-07-24] Authorize.com gateway now does proper authorization of charges during free trials.
+[2012-07-24] Added logging features to PayPal Express gateway.
+[2012-07-10] Added default timezone of GMT to prevent PHP 5.3 notice kicking up.
+[2012-06-11] SubscriptionMaintenance corncobs checks PayPal only once per day, allowing it to be run more than once per day if needed.
+[2012-05-24] Fixed a rare bug that would send more than 2 decimal places to PayPal Pro when a coupon was used.
+[2012-05-23] PayPal Express now has flag that allows same-day-every-month charges.
+[2012-05-11] Updated eWay gateway.
+[2012-05-02] Loaded chargemodel in SagePay process().
+[2012-04-29] Don't show "issue refund" for charge if status was failed.
+[2012-04-19] Allow query string variables to check_coupon.php.
+[2012-04-16] Beefed up the is_ssl() function.
+[2012-04-09] PayPal EC free trial fix.
+[2012-04-04] Count straight from DB, and not by calling GetX with no limit.
+[2012-04-03] Decreased to 5000 transactions listed.
+[2012-04-03] Updated to 1.981.
+[2012-04-03] Show full gateway names in Transactions list dropdown.
+[2012-04-03] Reduced transaction count for not getting total rows in OG > Transactions.
+[2012-04-03] Don't issue PayPal charge if amount == 0.
+[2012-03-28] Fixed bug for people who do not have deleted gateways viewing transactions.
+[2012-03-23] Transaction filter fixes.
+[2012-03-23] Validate coupon start date.
+[2012-03-22] Added gateway column to Transactions.
+[2012-03-22] Added ISK to Wirecard gateway.
+[2012-03-20] Added Swiss Franc to PayPal currencies.
+[2012-03-15] Fixed SagePay.
+[2012-03-07] Fixed code bug in gateway_model.
+[2012-03-05] Don't create PayPal Pro profile for 1 charge.
+[2012-03-05] Ensure that E-xact transactions have bank authorization.
+[2012-02-24] Fixed error in Auth.net gateway that kept certain characters from being translated correctly into XML.
+[2012-02-17] Fixed coupon ID bug in OG editing form.
+[2012-02-17] Fixed Authnet XML bugs.
+[2012-02-03] Fixed bug that prevented eWay initial test connection to fail.
+[2012-02-02] Fixed OG SagePay library.
+[2012-01-20] Added x_invoice_num to Authnet single charges.
+[2012-01-16] Don't send BillingState for Canada in SagePay.
+[2012-01-12] Only show coupon select if less than 100 coupons on new charge page.
+[2012-01-12] Added pagination for coupons.
+[2012-01-10] Upgraded to 1.98.
+[2012-01-10] Allow for null recurring charges to be processed by using the gateway's "Charge" API.
+[2012-01-02] Customers list now shows only active subscription plans.
+[2011-12-09] Updated to 1.97.
+[2011-12-09] Fixed date calculations.
+[2011-12-08] Fixed incorrect listing of the cronjob command.
+[2011-12-01] Added queue_process_limit configuration variable.
+[2011-11-23] Added Stripe Gateway Integration.
+[2011-11-17] Cronjob automatically ran if it has never been ran before. Still reports warning if hasn't run for longer than 24 hours.
+[2011-11-17] Added Singapore Dollar to PayPal EC currency.
+[2011-11-16] Added CW and SX as countries.  Updated to 1.95.
+[2011-11-12] Added explicit cronjob setup information.
+[2011-11-11] Changed email validation in universal.js.
+[2011-11-02] Fixed non-XML response types.
+[2011-11-02] End subscriptions on next charge, even if card expires prior.
+[2011-11-01] Updated to version 1.93.
+[2011-11-01] Show a warning when cronjobs are not running.
+[2011-11-01] New Cronjob menu item to assist setting up cron jobs.
+[2011-10-15] Updated to 1.92.
+[2011-10-12] Fixed errors on eWay gateway for live gateways.
+[2011-10-07] Fixed error that would cause certain API calls to create an SQL error when sending a notification.
+[2011-10-06] We no longer pass totalbillingcycles to PayPal, because we pre-emptively cancel anyways and don't want to limit ourselves down the road.
+[2011-10-05] Fixed E-xact bug.
+[2011-10-04] Fixed eWay bug that kept it permanently in debug mode.
+[2011-09-30] Added support for password field-types in gateway edit screens.
+[2011-09-29] Updated to version 1.91.
+[2011-09-29] Fixed anticipatory fix in PayPal.
+[2011-09-20] Fixed error with Authorize.net when not hosted with an SSL certificate.
+[2011-09-19] Added support for QuantumGateway payment processor.
+[2011-09-15] plan_type is no longer required when creating a plan.
+[2011-09-13] Updated to 1.90.
+[2011-09-13] Email sent with PayPal Pro Charge requests.
+[2011-08-27] Modified the system_info.php license info generator.
+[2011-08-26] Modified the license system info retrieval.
