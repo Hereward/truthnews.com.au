@@ -107,7 +107,7 @@ $lang = array(
 'The URL you submitted is not valid.',
 
 'submission_error' =>
-'The form you submitted contained the following errors',
+'May we have your attention please...',
 
 'general_error' =>
 'The following errors were encountered',

@@ -94,7 +94,7 @@ $lang = array(
 This will override all of the above settings.",
 
 "input_is_spam" =>
-"Computer says your input might be spam, so it will be moderated first.",
+"Your comment has been received by our system, thanks! It has been placed in our moderation queue and will become visible very soon!",
 
 "input_discarded" =>
 "Computer says your input might be spam, so it is discarded.",
