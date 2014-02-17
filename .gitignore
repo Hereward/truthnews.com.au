@@ -6,3 +6,4 @@ slideshowpro/albums/
 slideshowpro/xml_cache/*
 slideshowpro/config/conf.php
 slideshowpro/api/classes/cache/*
+robots.txt
