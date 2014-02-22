@@ -1,0 +1,186 @@
+{embed ="framework_2/doc_head" url="{site_url}subscribe" description="If you subscribe to TNRA, you will receive an email weekly with information about our latest show. Please
+make sure to whitelist our email address in your SPAM filter." title="Subscribe to our Mailing List"}
+{embed="framework_2/navigation" section="home"}
+
+<div class="container main_box">
+    {embed="framework_2/header"}
+
+    <div class="row">
+        <div class="col-md-9 col-lg-8">
+            <div class="news_channel_container">
+                {exp:membrr:plans id="1000"}
+                <h3 class="recent_shows">TNRA {name} Subscription</h3>
+                <ul>
+                        <li>{description}</li>
+                        <li>{interval}</li>
+                        <li>${price}</li>
+                </ul>
+                {/exp:membrr:plans}
+
+                {exp:membrr:order_form redirect_url="/subscribe/thank_you"}
+                {if errors}
+                <div class="errors">
+                    {errors}
+                </div>
+                {/if}
+                <form method="{form_method}" action="{form_action}">
+                    <input type="hidden" name="membrr_order_form" value="1" />
+                    <input type="hidden" name="plan_id" value="1000" />
+                    <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
+                    <fieldset>
+                        <legend>Billing Information</legend>
+                        <ul>
+                            <li>
+                                <label>Credit Card Number</label>
+                                <input type="text" name="cc_number" value="" />
+                            </li>
+                            <li>
+                                <label>Credit Card Name</label>
+                                <input type="text" name="cc_name" value="" />
+                            </li>
+                            <li>
+                                <label>Expiry Date</label>
+                                <select name="cc_expiry_month">{cc_expiry_month_options}</select>&nbsp;&nbsp;<select name="cc_expiry_year">{cc_expiry_year_options}</select>
+                            </li>
+                            <li>
+                                <label>Security Code</label>
+                                <input type="text" name="cc_cvv2" value="" />
+                            </li>
+                        </ul>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Billing Address</legend>
+                        <ul>
+                            <li>
+                                <label for="first_name">First Name</label>
+                                <input type="text" id="first_name" name="first_name" maxlength="100" value="{first_name}" />
+                            </li>
+                            <li>
+                                <label for="last_name">Last Name</label>
+                                <input type="text" id="last_name" name="last_name" maxlength="100" value="{last_name}" />
+                            </li>
+                            <li>
+                                <label for="company">Company</label>
+                                <input type="text" id="company" name="company" value="{company}" />
+                            </li>
+                            <li>
+                                <label for="address">Street Address</label>
+                                <input type="text" id="address" name="address" maxlength="100" value="{address}" />
+                            </li>
+                            <li>
+                                <label for="address_2">Address Line 2</label>
+                                <input type="text" id="address_2" name="address_2" maxlength="100" value="{address_2}" />
+                            </li>
+                            <li>
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" maxlength="100" value="{city}" />
+                            </li>
+                            <li>
+                                <label for="region">State/Province</label>
+                                <select id="region" name="region">{region_options}</select>&nbsp;&nbsp;<input type="text" id="region_other" name="region_other" value="{region_other}" />
+                            </li>
+                            <li>
+                                <label for="country">Country</label>
+                                <select name="country" id="country">{country_options}</select>
+                            </li>
+                            <li>
+                                <label for="postal_code">Zip/Postal Code</label>
+                                <input type="text" id="postal_code" name="postal_code" maxlength="100" value="{postal_code}" />
+                            </li>
+                            <li>
+                                <label for="email">Email Address</label>
+                                <input type="text" id="email" name="email" maxlength="100" value="{email}" />
+                            </li>
+                            <li>
+                                <label for="phone">Phone Number</label>
+                                <input type="text" id="phone" name="phone" value="{phone}" />
+                            </li>
+                        </ul>
+                    </fieldset>
+                    {if logged_out}
+                    <fieldset>
+                        <legend>Registration</legend>
+                        <ul>
+                            <li>
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" maxlength="100" value="{username}" />
+                            </li>
+                            <li>
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" maxlength="100" value="" />
+                            </li>
+                            <li>
+                                <label for="password2">Confirm Password</label>
+                                <input type="password" id="password2" name="password2" maxlength="100" value="" />
+                            </li>
+                        </ul>
+                    </fieldset>
+                    {/if}
+                    <fieldset>
+                        <legend>Coupon</legend>
+                        <ul>
+                            <li>
+                                <label for="coupon">Coupon</label>
+                                <input type="text" id="coupon" name="coupon" maxlength="100" value="" />
+                            </li>
+                        </ul>
+                    </fieldset>
+                    {if captcha}
+                    <!-- Enable in Membrr > Settings -->
+                    <fieldset>
+                        <legend>Human Verification</legend>
+                        <ul>
+                            <li>
+                                {captcha}
+                            </li>
+                            <li>
+                                <label for="captcha">Enter the text above</label>
+                                <input type="text" id="captcha" name="captcha" maxlength="100" value="" />
+                            </li>
+                        </ul>
+                    </fieldset>
+                    {/if}
+                    <fieldset>
+                        <legend>Review and Confirm Order</legend>
+                        <input type="submit" value="Purchase My Subscription">
+                    </fieldset>
+                </form>
+                {/exp:membrr:order_form}
+            </div>
+
+            <a name="terms" ></a>
+            <h3 class="recent_shows">Terms and Conditions</h3>
+
+            <dl class="terms">
+                <dt>General</dt>
+                <dd>All prices are in Australian dollars.</dd>
+                <dd>In accepting these terms of agreement, you are giving permission for Truth News to charge your Credit Card account on a recurring basis, depending on the nature of your subscription.</dd>
+                <dd> While we attempt to be as accurate as possible and eliminate errors associated with our Services, we do not guarantee that any product or service, pricing or other information is accurate or free of error.
+                    In the event of an error, in an order confirmation or in processing an order, we reserve the right to correct such error and revise your order accordingly if necessary (including charging the correct price) or to cancel the order and provide you with a merchandise or service credit . Your remedy in the event of an error is to cancel your order and please contact us through our contact us page so we can rectify the error.
+                </dd>
+
+                <dt>Cancellation</dt>
+                <dd>You are free to cancel your subscription at any time at which point recurring charges will cease.</dd>
+
+                <dt>TNRA T-shirt</dt>
+                <dd> When you purchase a 12 month subscription you are entitled to a FREE TNRA T-shirt for which you will be able to choose your size from the range XS, S, M, L,
+                    XL. In the event that we are out of stock for a given size we will get the t-shirt to you as soon as possible and will keep you updated on the progress of your order.</dd>
+
+
+                <dt>Privacy</dt>
+                <dd>We will not share or sell your personal information for any reason.</dd>
+
+            </dl>
+
+            <p><strong><a href="{site_url}subscribe#subscribe_form"}> &laquo; Go Back</a></strong></p>
+
+        </div>
+        <div class="col-md-3 col-lg-4">{embed="framework_2/right_col"}</div>
+    </div> <!-- /row -->
+
+    {embed="framework_2/footer"}
+
+</div> <!-- /container -->
+
+{embed ="framework_2/doc_foot"}
+
