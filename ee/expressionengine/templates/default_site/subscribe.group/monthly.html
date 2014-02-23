@@ -12,8 +12,7 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                 <h3 class="recent_shows">TNRA {name} Subscription</h3>
                 <ul>
                         <li>{description}</li>
-                        <li>{interval}</li>
-                        <li>${price}</li>
+                        <li>Your nominated credit card will be charged ${price} every {interval} days.</li>
                 </ul>
                 {/exp:membrr:plans}
 
@@ -32,19 +31,19 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                         <ul>
                             <li>
                                 <label>Credit Card Number</label>
-                                <input type="text" name="cc_number" value="" />
+                                <input class="form-control" type="text" name="cc_number" value="" />
                             </li>
                             <li>
                                 <label>Credit Card Name</label>
-                                <input type="text" name="cc_name" value="" />
+                                <input class="form-control" type="text" name="cc_name" value="" />
                             </li>
                             <li>
                                 <label>Expiry Date</label>
-                                <select name="cc_expiry_month">{cc_expiry_month_options}</select>&nbsp;&nbsp;<select name="cc_expiry_year">{cc_expiry_year_options}</select>
+                                <select class="form-control" name="cc_expiry_month">{cc_expiry_month_options}</select>&nbsp;&nbsp;<select name="cc_expiry_year">{cc_expiry_year_options}</select>
                             </li>
                             <li>
                                 <label>Security Code</label>
-                                <input type="text" name="cc_cvv2" value="" />
+                                <input class="form-control" type="text" name="cc_cvv2" value="" />
                             </li>
                         </ul>
                     </fieldset>
@@ -53,47 +52,47 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                         <ul>
                             <li>
                                 <label for="first_name">First Name</label>
-                                <input type="text" id="first_name" name="first_name" maxlength="100" value="{first_name}" />
+                                <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="{first_name}" />
                             </li>
                             <li>
                                 <label for="last_name">Last Name</label>
-                                <input type="text" id="last_name" name="last_name" maxlength="100" value="{last_name}" />
+                                <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="{last_name}" />
                             </li>
                             <li>
                                 <label for="company">Company</label>
-                                <input type="text" id="company" name="company" value="{company}" />
+                                <input class="form-control" type="text" id="company" name="company" value="{company}" />
                             </li>
                             <li>
                                 <label for="address">Street Address</label>
-                                <input type="text" id="address" name="address" maxlength="100" value="{address}" />
+                                <input class="form-control" type="text" id="address" name="address" maxlength="100" value="{address}" />
                             </li>
                             <li>
                                 <label for="address_2">Address Line 2</label>
-                                <input type="text" id="address_2" name="address_2" maxlength="100" value="{address_2}" />
+                                <input class="form-control" type="text" id="address_2" name="address_2" maxlength="100" value="{address_2}" />
                             </li>
                             <li>
                                 <label for="city">City</label>
-                                <input type="text" id="city" name="city" maxlength="100" value="{city}" />
+                                <input class="form-control" type="text" id="city" name="city" maxlength="100" value="{city}" />
                             </li>
                             <li>
                                 <label for="region">State/Province</label>
-                                <select id="region" name="region">{region_options}</select>&nbsp;&nbsp;<input type="text" id="region_other" name="region_other" value="{region_other}" />
+                                <select class="form-control" id="region" name="region">{region_options}</select>&nbsp;&nbsp;<input type="text" id="region_other" name="region_other" value="{region_other}" />
                             </li>
                             <li>
                                 <label for="country">Country</label>
-                                <select name="country" id="country">{country_options}</select>
+                                <select class="form-control" name="country" id="country">{country_options}</select>
                             </li>
                             <li>
                                 <label for="postal_code">Zip/Postal Code</label>
-                                <input type="text" id="postal_code" name="postal_code" maxlength="100" value="{postal_code}" />
+                                <input class="form-control" type="text" id="postal_code" name="postal_code" maxlength="100" value="{postal_code}" />
                             </li>
                             <li>
                                 <label for="email">Email Address</label>
-                                <input type="text" id="email" name="email" maxlength="100" value="{email}" />
+                                <input class="form-control" type="text" id="email" name="email" maxlength="100" value="{email}" />
                             </li>
                             <li>
                                 <label for="phone">Phone Number</label>
-                                <input type="text" id="phone" name="phone" value="{phone}" />
+                                <input class="form-control" type="text" id="phone" name="phone" value="{phone}" />
                             </li>
                         </ul>
                     </fieldset>
@@ -101,17 +100,19 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                     <fieldset>
                         <legend>Registration</legend>
                         <ul>
+
                             <li>
-                                <label for="username">Username</label>
-                                <input type="text" id="username" name="username" maxlength="100" value="{username}" />
+                                <label for="screen_name">Screen Name</label>
+                                <input class="form-control" type="text" id="screen_name" name="screen_name" maxlength="100" value="{screen_name}" />
                             </li>
+
                             <li>
                                 <label for="password">Password</label>
-                                <input type="password" id="password" name="password" maxlength="100" value="" />
+                                <input class="form-control" type="password" id="password" name="password" maxlength="100" value="" />
                             </li>
                             <li>
                                 <label for="password2">Confirm Password</label>
-                                <input type="password" id="password2" name="password2" maxlength="100" value="" />
+                                <input class="form-control" type="password" id="password2" name="password2" maxlength="100" value="" />
                             </li>
                         </ul>
                     </fieldset>
@@ -121,7 +122,7 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                         <ul>
                             <li>
                                 <label for="coupon">Coupon</label>
-                                <input type="text" id="coupon" name="coupon" maxlength="100" value="" />
+                                <input class="form-control" type="text" id="coupon" name="coupon" maxlength="100" value="" />
                             </li>
                         </ul>
                     </fieldset>
@@ -135,14 +136,21 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                             </li>
                             <li>
                                 <label for="captcha">Enter the text above</label>
-                                <input type="text" id="captcha" name="captcha" maxlength="100" value="" />
+                                <input class="form-control" type="text" id="captcha" name="captcha" maxlength="100" value="" />
                             </li>
                         </ul>
                     </fieldset>
                     {/if}
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> I have read and agree with the <a href="{site_url}subscribe#terms"}>Terms and Conditions</a>.
+                        </label>
+                    </div>
+
                     <fieldset>
                         <legend>Review and Confirm Order</legend>
-                        <input type="submit" value="Purchase My Subscription">
+                        <input class="btn btn-default" type="submit" value="Purchase My Subscription">
                     </fieldset>
                 </form>
                 {/exp:membrr:order_form}
