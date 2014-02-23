@@ -38,10 +38,15 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                                 <input class="form-control" type="text" name="cc_name" value="" />
                         </div>
                         <div class="form-group">
-                                <label>Expiry Date</label>
+                                <label>Expiry: Day & Month</label>
                                 <select class="form-control" name="cc_expiry_month">{cc_expiry_month_options}</select>&nbsp;&nbsp;
-                                <select class="form-control" name="cc_expiry_year">{cc_expiry_year_options}</select>
                         </div>
+
+                        <div class="form-group">
+                            <label>Expiry: Year</label>
+                            <select class="form-control" name="cc_expiry_year">{cc_expiry_year_options}</select>
+                        </div>
+
                         <div class="form-group">
                                 <label>Security Code</label>
                                 <input class="form-control" type="text" name="cc_cvv2" value="" />
