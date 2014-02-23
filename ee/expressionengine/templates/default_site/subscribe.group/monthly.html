@@ -26,121 +26,122 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                     <input type="hidden" name="membrr_order_form" value="1" />
                     <input type="hidden" name="plan_id" value="1000" />
                     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
-                    <fieldset>
+
                         <legend>Billing Information</legend>
-                        <ul>
-                            <li>
+
+                        <div class="form-group">
                                 <label>Credit Card Number</label>
                                 <input class="form-control" type="text" name="cc_number" value="" />
-                            </li>
-                            <li>
+                        </div>
+                        <div class="form-group">
                                 <label>Credit Card Name</label>
                                 <input class="form-control" type="text" name="cc_name" value="" />
-                            </li>
-                            <li>
+                        </div>
+                        <div class="form-group">
                                 <label>Expiry Date</label>
                                 <select class="form-control" name="cc_expiry_month">{cc_expiry_month_options}</select>&nbsp;&nbsp;
                                 <select class="form-control" name="cc_expiry_year">{cc_expiry_year_options}</select>
-                            </li>
-                            <li>
+                        </div>
+                        <div class="form-group">
                                 <label>Security Code</label>
                                 <input class="form-control" type="text" name="cc_cvv2" value="" />
-                            </li>
-                        </ul>
-                    </fieldset>
-                    <fieldset>
+                        </div>
+
+
+
                         <legend>Billing Address</legend>
-                        <ul>
-                            <li>
+
+                            <div class="form-group">
                                 <label for="first_name">First Name</label>
                                 <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="{first_name}" />
-                            </li>
-                            <li>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="last_name">Last Name</label>
                                 <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="{last_name}" />
-                            </li>
-                            <li>
+                            </div>
+                            <div class="form-group">
                                 <label for="company">Company</label>
                                 <input class="form-control" type="text" id="company" name="company" value="{company}" />
-                            </li>
-                            <li>
+                            </div>
+                            <div class="form-group">
                                 <label for="address">Street Address</label>
                                 <input class="form-control" type="text" id="address" name="address" maxlength="100" value="{address}" />
-                            </li>
-                            <li>
+                            </div>
+                            <div class="form-group">
                                 <label for="address_2">Address Line 2</label>
                                 <input class="form-control" type="text" id="address_2" name="address_2" maxlength="100" value="{address_2}" />
-                            </li>
-                            <li>
+                            </div>
+                            <div class="form-group">
                                 <label for="city">City</label>
                                 <input class="form-control" type="text" id="city" name="city" maxlength="100" value="{city}" />
-                            </li>
-                            <li>
+                            </div>
+                            <div class="form-group">
                                 <label for="region_other">State/Province</label>
                                 <input class="form-control" type="text" id="region_other" name="region_other" value="{region_other}" />
-                            </li>
-                            <li>
+                            </div>
+                            <div class="form-group">
                                 <label for="country">Country</label>
                                 <select class="form-control" name="country" id="country">{country_options}</select>
-                            </li>
-                            <li>
+                            </div>
+                            <div class="form-group">
                                 <label for="postal_code">Postal Code/Zip</label>
                                 <input class="form-control" type="text" id="postal_code" name="postal_code" maxlength="100" value="{postal_code}" />
-                            </li>
-                            <li>
+                            </div
+                            <div class="form-group">
                                 <label for="email">Email Address</label>
                                 <input class="form-control" type="text" id="email" name="email" maxlength="100" value="{email}" />
-                            </li>
-                            <li>
+                            </div>
+                            <div class="form-group">
                                 <label for="phone">Phone Number</label>
                                 <input class="form-control" type="text" id="phone" name="phone" value="{phone}" />
-                            </li>
-                        </ul>
-                    </fieldset>
-                    {if logged_out}
-                    <fieldset>
-                        <legend>Registration</legend>
-                        <ul>
+                            </div>
 
-                            <li>
+
+                    {if logged_out}
+
+                        <legend>Registration</legend>
+
+
+                        <div class="form-group">
                                 <label for="screen_name">Screen Name</label>
                                 <input class="form-control" type="text" id="screen_name" name="screen_name" maxlength="100" value="{screen_name}" />
-                            </li>
+                        </div>
 
-                            <li>
+                        <div class="form-group">
                                 <label for="password">Password</label>
                                 <input class="form-control" type="password" id="password" name="password" maxlength="100" value="" />
-                            </li>
-                            <li>
+                        </div>
+                        <div class="form-group">
                                 <label for="password2">Confirm Password</label>
                                 <input class="form-control" type="password" id="password2" name="password2" maxlength="100" value="" />
-                            </li>
-                        </ul>
-                    </fieldset>
+                        </div>
+
+
                     {/if}
-                    <fieldset>
+
                         <legend>Coupon</legend>
-                        <ul>
-                            <li>
+
+                        <div class="form-group">
                                 <label for="coupon">Coupon</label>
                                 <input class="form-control" type="text" id="coupon" name="coupon" maxlength="100" value="" />
-                            </li>
-                        </ul>
-                    </fieldset>
+                        </div>
+
+
                     {if captcha}
                     <!-- Enable in Membrr > Settings -->
-                    <fieldset>
+
                         <legend>Human Verification</legend>
-                        <ul>
-                            <li>
+
+                        <div class="form-group">
                                 {captcha}
-                            </li>
-                            <li>
+                        </div>
+                        <div class="form-group">
                                 <label for="captcha">Enter the text above</label>
                                 <input class="form-control" type="text" id="captcha" name="captcha" maxlength="100" value="" />
-                            </li>
-                        </ul>
-                    </fieldset>
+                        </div>
+
+
                     {/if}
 
                     <div class="checkbox">
@@ -149,10 +150,11 @@ make sure to whitelist our email address in your SPAM filter." title="Subscribe 
                         </label>
                     </div>
 
-                    <fieldset>
+                    <div class="form-group">
                         <legend>Review and Confirm Order</legend>
                         <input class="btn btn-default" type="submit" value="Purchase My Subscription">
-                    </fieldset>
+                    </div>
+
                 </form>
                 {/exp:membrr:order_form}
             </div>
