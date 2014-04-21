@@ -488,6 +488,10 @@ div.rss_subscribe {
     margin:0px 0px 20px 0px;
 }
 
+div.t_shirt_subscribe {
+    margin:0px 0px 20px 0px;
+}
+
 /*
 
 div.twitter_top_feed .twtr-timeline {
@@ -542,8 +546,14 @@ p, .article, .article p {
 
 h1.header {
     text-align:center;
-    margin-top:0;
+
     /* display:inline; */
+}
+
+.wide_logo {
+
+    text-align:center !important;
+
 }
 
 
