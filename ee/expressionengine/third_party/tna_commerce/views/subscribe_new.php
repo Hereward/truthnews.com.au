@@ -1,6 +1,12 @@
-<form action="<?= $site_url ?>subscribe/payment" method="post">
-    <input type="hidden" name="membrr_order_form" value="1" />
-    <input type="hidden" name="plan_id" value="1000" />
+<?
+foreach ($errors as $error) {
+    echo "<p>Error: $error</p>\n";
+}
+?>
+
+<form action="<?= $site_url ?>subscribe" method="post">
+    <input type="hidden" name="create_member" value="1" />
+
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
 
    {!-- <legend>Billing Information</legend> --}
@@ -30,12 +36,9 @@
     <div class="form-group">
         <label for="email">Email Address</label>
         <input class="form-control" type="text" id="email" name="email" maxlength="100" value="" />
+        <p class="help-block">Your email address will be your username when you sign-in.</p>
     </div>
-
-    <div class="form-group">
-        <div><strong>Note: </strong>Your email address will be your username when you sign-in.</div>
-    </div>
-
+{!--
     <div class="form-group">
         <label for="password">Password</label>
         <input class="form-control" type="password" id="password" name="password" maxlength="100" value="" />
@@ -44,6 +47,7 @@
         <label for="password2">Confirm Password</label>
         <input class="form-control" type="password" id="password2" name="password2" maxlength="100" value="" />
     </div>
+--}
 
     <div class="form-group">
         <label for="Introduction">Introduction (optional) - tell us a little about yourself!</label>

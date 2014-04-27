@@ -1,13 +1,19 @@
+<div class="alert alert-success"><strong>Note:</strong> An account has been created with this password: <?=$decrypted_password?>.
+    <br/>
+
+</div>
+
 <form method="post">
 
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
 
     {!-- <legend>Credit or Debit Card Information</legend>  --}
-
+{!--
     <div class="form-group">
         <label>Credit Card Name</label>
         <input class="form-control" type="text" name="cc_name" value="" />
     </div>
+--}
 
     <div class="form-group">
         <label for="first_name">First Name (as it appears on card)</label>
@@ -44,7 +50,7 @@
     </div>
     
     <div class="form-group">
-        <label>Expiration: Month</label>
+        <label>Expiration: Year</label>
 
             <select class="form-control" name="cc_expiry_year">
                 <option value="2014">2014</option>

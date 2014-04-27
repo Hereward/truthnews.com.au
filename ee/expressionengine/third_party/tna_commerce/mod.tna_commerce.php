@@ -20,9 +20,7 @@ class Tna_commerce {
     	return $obj->$action($args);
 	}
 	
-     public function keyword_search($args='') {
-    	 return $this->load(__FUNCTION__.'_controller',$args);
-     }
+
 	
     public function test($args='') {
     	 return $this->load(__FUNCTION__.'_controller',$args);
