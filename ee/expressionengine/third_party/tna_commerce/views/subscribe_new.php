@@ -4,7 +4,7 @@ foreach ($errors as $error) {
 }
 ?>
 
-<form action="<?= $site_url ?>subscribe" method="post">
+<form action="<?= $https_site_url ?>subscribe" method="post">
     <input type="hidden" name="create_member" value="1" />
 
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->

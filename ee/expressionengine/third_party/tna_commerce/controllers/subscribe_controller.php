@@ -23,7 +23,7 @@ class subscribe_controller extends Base_Controller {
         //die(var_dump($str));
 
         if ($this->EE->input->post('create_existing_member') && ($this->logged_in)) {
-            redirect("/subscribe/payment/$this->member_id");
+            redirect($this->https_site_url."subscribe/payment/$this->member_id");
         } elseif ($this->EE->input->post('create_member')) {
             return $this->store();
         } elseif ($this->logged_in) {
@@ -44,7 +44,7 @@ class subscribe_controller extends Base_Controller {
 
     public function create() {
         $errors = array();
-        $vars = array('site_url'=>$this->site_url, 'errors'=>$errors);
+        $vars = array('site_url'=>$this->site_url, 'https_site_url'=>$this->https_site_url, 'errors'=>$errors);
         return $this->EE->load->view('subscribe_new', $vars, TRUE);
 
     }
@@ -56,6 +56,7 @@ class subscribe_controller extends Base_Controller {
             'errors'=>$errors,
             'username'=>$this->EE->session->userdata['username'],
             'email'=>$this->EE->session->userdata['email'],
+            'https_site_url'=>$this->https_site_url,
         );
         return $this->EE->load->view('subscribe_existing', $vars, TRUE);
 
@@ -79,7 +80,11 @@ class subscribe_controller extends Base_Controller {
 
         //die("CC =[$cc]");
 
-        $vars = array('site_url'=>$this->site_url, 'countrycode' => $cc, 'countrylist' => $countrylist);
+        $vars = array('site_url'=>$this->site_url,
+            'countrycode' => $cc,
+            'countrylist' => $countrylist,
+            'https_site_url'=>$this->https_site_url,
+        );
         return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
 
     }
@@ -205,7 +210,7 @@ class subscribe_controller extends Base_Controller {
 
             $this->EE->member_model->delete_member($member_id);
 
-            redirect("/subscribe/payment");
+            redirect($this->https_site_url."subscribe/payment");
         }
 
         //$this->EE->member_model->delete_member($member_id);

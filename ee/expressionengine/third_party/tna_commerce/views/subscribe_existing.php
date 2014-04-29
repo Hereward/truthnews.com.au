@@ -4,7 +4,7 @@ foreach ($errors as $error) {
 }
 ?>
 
-<form action="<?= $site_url ?>subscribe" method="post">
+<form action="<?= $https_site_url ?>subscribe" method="post">
     <input type="hidden" name="create_existing_member" value="1" />
     <div class="form-group">
         <label>Subscription Type</label>

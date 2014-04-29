@@ -7,6 +7,7 @@ abstract class Base_Controller {
 
     protected $logged_in = false;
     protected $site_url;
+    protected $https_site_url;
     protected $default_site_path;
     protected $password_key;
     protected $encrypted_password;
@@ -32,6 +33,7 @@ abstract class Base_Controller {
         }
 
         $this->site_url = $this->EE->config->item('site_url');
+        $this->https_site_url = $this->EE->config->item('https_site_url');
         $this->EE->load->helper('url');
         $this->default_site_path = $this->EE->config->item('default_site_path');
         $this->password_key = "bazooka";
