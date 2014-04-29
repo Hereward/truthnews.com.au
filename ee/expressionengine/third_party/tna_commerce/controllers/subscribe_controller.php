@@ -16,7 +16,11 @@ class subscribe_controller extends Base_Controller {
     public function index() {
         //$this->resolved = $this->EE->TMPL->fetch_param('resolved');
         //$this->EE->load->model('keyword_search_model');
-        $this->EE->load->library('table');
+
+
+
+        //$str = $this->EE->eway_model->config_vars();
+        //die(var_dump($str));
 
         if ($this->EE->input->post('create_existing_member') && ($this->logged_in)) {
             redirect("/subscribe/payment/$this->member_id");
@@ -28,20 +32,12 @@ class subscribe_controller extends Base_Controller {
             return $this->create();
         }
 
-
         //die("LOGGED_IN = $this->logged_in");
-
-
         //$this->return_data = $this->EE->TMPL->tagdata;
-
        // $variables[] = array('action' => 'soap.php');
        // return $this->EE->TMPL->parse_variables($this->EE->TMPL->tagdata, $variables);
-
-
         //$tbl_tmpl = array ( 'table_open'  => '<table border="1" cellpadding="5" cellspacing="1" class="mytable">' );
         //$this->EE->table->set_template($tbl_tmpl);
-
-
         //return $this->EE->load->view('resolve_classification', $vars, TRUE);
 
     }
@@ -67,27 +63,32 @@ class subscribe_controller extends Base_Controller {
 
     public function payment() {
 
-        $url_encoded_encrypted_password = $_COOKIE["tna_subscribe_tempdata"];
-
-        $this->password_key = $_COOKIE["tna_subscribe_tempdata_2"];
-
-        $encrypted_password = $_COOKIE["tna_subscribe_tempdata_1"];
-
         //$url_decoded_password = urldecode($url_encoded_encrypted_password);
-
         //$decrypted_url_decoded_password = $this->decrypt($url_decoded_password);
-
-        $decrypted_password = $this->decrypt($encrypted_password);
-
+       // $decrypted_password = $this->decrypt($encrypted_password);
         //die("$encrypted_password<br/>$decrypted_password");
-
         //$url_decoded_password = urldecode($url_encoded_encrypted_password);
-
         //$decrypted_url_decoded_password = $this->decrypt($encrypted_password);
 
-        $vars = array('site_url'=>$this->site_url, 'decrypted_password'=>$decrypted_password);
+
+        $countrylist = $this->EE->eway_model->get_countrylist();
+
+        $cc = $this->EE->eway_model->ip2location('countryCode');
+
+        // $cc = $this->EE->eway_model->visitor_country();
+
+        //die("CC =[$cc]");
+
+        $vars = array('site_url'=>$this->site_url, 'countrycode' => $cc, 'countrylist' => $countrylist);
         return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
 
+    }
+
+
+    public function get_cookies() {
+        $this->encrypted_password = $_COOKIE["tna_subscribe_tempdata_1"];
+        $this->password_key = $_COOKIE["tna_subscribe_tempdata_2"];
+        $this->member_id = $_COOKIE["tna_subscribe_tempdata_3"];
     }
 
     public function store() {
@@ -100,6 +101,10 @@ class subscribe_controller extends Base_Controller {
         require_once("$this->default_site_path/includes/pwgen.class.php");
         require_once("$this->default_site_path/includes/Encryption_tnra.php");
 
+        $fullname = $this->EE->input->post('first_name').' '.$this->EE->input->post('last_name');
+
+        $screen_name =  ($this->EE->input->post('screen_name'))?$this->EE->input->post('screen_name'):$fullname;
+
         $enc = new Encryption_tnra();
 
         $pwgen = new PWGen();
@@ -107,6 +112,7 @@ class subscribe_controller extends Base_Controller {
         $this->password_key = $pwgen->generate();
 
         $data['username']     = $this->EE->input->post('email');
+        $data['screen_name']     = $screen_name;
         //$data['password']    = do_hash($this->EE->input->post('password'));
         $data['password']    = do_hash($password);
         $data['email']        = $this->EE->input->post('email');
@@ -117,7 +123,7 @@ class subscribe_controller extends Base_Controller {
         $data['timezone']     = ($this->EE->config->item('default_site_timezone') && $this->EE->config->item('default_site_timezone') != '') ? $this->EE->config->item('default_site_timezone') : $this->EE->config->item('server_timezone');
         //$data['daylight_savings'] = ($this->EE->config->item('default_site_dst') && $this->EE->config->item('default_site_dst') != '') ? $this->EE->config->item('default_site_dst') : $this->EE->config->item('daylight_savings');
         $data['time_format'] = ($this->EE->config->item('time_format') && $this->EE->config->item('time_format') != '') ? $this->EE->config->item('time_format') : 'us';
-        $data['group_id'] = 1;
+        $data['group_id'] = $this->subscriber_group_id;
 
         //$email = '';
         $email_query_result = $this->EE->db->where('email',$data['email'])->get('exp_members');
@@ -177,9 +183,29 @@ class subscribe_controller extends Base_Controller {
 
             $member_id = $this->EE->member_model->create_member($data);
 
-            //$this->EE->member_model->delete_member($member_id);
+            // handle custom fields passed in POST
+            $exp_member_fields_result = $this->EE->db->get('exp_member_fields');
+            $fields = array();
+            if ($exp_member_fields_result->num_rows() > 0) {
+                foreach ($exp_member_fields_result->result_array() as $field) {
+                    $fields[$field['m_field_name']] = 'm_field_id_' . $field['m_field_id'];
+                }
 
-            redirect("/subscribe/payment/$member_id");
+                $update_fields = array();
+
+                foreach ($fields as $name => $column) {
+                    $update_fields[$column] = ($this->EE->input->post($name)) ? $this->EE->input->post($name) : '';
+                }
+
+                $this->EE->member_model->update_member_data($member_id, $update_fields);
+            }
+
+            setcookie("tna_subscribe_tempdata_3",$member_id);
+
+
+            $this->EE->member_model->delete_member($member_id);
+
+            redirect("/subscribe/payment");
         }
 
         //$this->EE->member_model->delete_member($member_id);

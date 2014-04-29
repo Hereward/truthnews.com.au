@@ -34,6 +34,11 @@ foreach ($errors as $error) {
     </div>
 
     <div class="form-group">
+        <label for="screen_name">Screen Name (optional)</label>
+        <input class="form-control" type="text" id="screen_name" name="screen_name" maxlength="100" value="" />
+    </div>
+
+    <div class="form-group">
         <label for="email">Email Address</label>
         <input class="form-control" type="text" id="email" name="email" maxlength="100" value="" />
         <p class="help-block">Your email address will be your username when you sign-in.</p>

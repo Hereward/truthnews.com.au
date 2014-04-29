@@ -1,7 +1,9 @@
-<div class="alert alert-success"><strong>Note:</strong> An account has been created with this password: <?=$decrypted_password?>.
+{!--
+<div class="alert alert-success"><strong>Note:</strong> Blah....
     <br/>
 
 </div>
+--}
 
 <form method="post">
 
@@ -14,6 +16,7 @@
         <input class="form-control" type="text" name="cc_name" value="" />
     </div>
 --}
+
 
     <div class="form-group">
         <label for="first_name">First Name (as it appears on card)</label>
@@ -92,26 +95,37 @@
         <input class="form-control" type="text" id="address_2" name="address_2" maxlength="100" value="" />
     </div>
     <div class="form-group">
-        <label for="city">City</label>
-        <input class="form-control" type="text" id="city" name="city" maxlength="100" value="" />
+        <label for="city">Suburb/City</label>
+        <input class="form-control" type="text" id="suburb" name="suburb" maxlength="100" value="" />
     </div>
     <div class="form-group">
         <label for="region_other">State/Province</label>
-        <input class="form-control" type="text" id="region_other" name="region_other" value="" />
+        <input class="form-control" type="text" id="state" name="state" value="" />
     </div>
     <div class="form-group">
         <label for="country">Country</label>
-        <select class="form-control" name="country" id="country"></select>
+        <select class="form-control" name="country" id="country">
+            <?
+            foreach ($countrylist as $key => $value) {
+                $selected = ($key==$countrycode)?'selected':'';
+                echo "<option $selected value='$value' label='$value'>$value</option>";
+            }
+
+            ?>
+
+        </select>
     </div>
     <div class="form-group">
         <label for="postal_code">Postal Code/Zip</label>
         <input class="form-control" type="text" id="postal_code" name="postal_code" maxlength="100" value="" />
     </div>
 
+    {!--
     <div class="form-group">
         <label for="phone">Phone Number</label>
         <input class="form-control" type="text" id="phone" name="phone" value="" />
     </div>
+    --}
 
 
     {!--
