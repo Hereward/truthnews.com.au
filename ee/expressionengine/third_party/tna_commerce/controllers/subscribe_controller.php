@@ -104,7 +104,7 @@ class subscribe_controller extends Base_Controller {
 
         $this->EE->load->helper('security');
         require_once("$this->default_site_path/includes/pwgen.class.php");
-        require_once("$this->default_site_path/includes/Encryption_tnra.php");
+        require_once("$this->default_site_path/includes/encryption_tnra.php");
 
         $fullname = $this->EE->input->post('first_name').' '.$this->EE->input->post('last_name');
 
