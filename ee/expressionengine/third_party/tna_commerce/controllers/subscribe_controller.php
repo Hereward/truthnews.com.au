@@ -135,7 +135,7 @@ class subscribe_controller extends Base_Controller {
         //$user_query_result = $this->EE->db->where('username',$email)->get('exp_members');
 
         if ($email_query_result->num_rows() > 0) {
-            die("FUCK 2");
+
             $errors[] = 'Your email is already registered to an account.  Please login to your account if you have already registered.';
             $vars = array('site_url'=>$this->site_url, 'errors'=>$errors);
             return $this->EE->load->view('subscribe_new', $vars, TRUE);
@@ -149,9 +149,6 @@ class subscribe_controller extends Base_Controller {
             //$this->EE->output->show_user_error('submission', 'Username already exists!!!!');
 */
         } else {
-
-            die("FUCK 3");
-
 
             //$encrypted_password = $enc->encode($password);
             //$decrypted_password = $enc->decode($encrypted_password);
