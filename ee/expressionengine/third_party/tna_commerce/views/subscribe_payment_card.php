@@ -5,7 +5,7 @@
 </div>
 --}
 
-<form method="post">
+<form id="cc_form" name="cc_form" method="post">
 
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
 
@@ -72,10 +72,12 @@
 
     </div>
 
+{!--
     <div class="form-group">
         <label>Security Code</label>
         <input class="form-control" type="text" name="cc_cvv2" value="" />
     </div>
+--}
 
 
 
@@ -151,7 +153,7 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox"> I have read and agree with the <a href="/subscribe/monthly#terms">Terms and Conditions</a>.
+            <input id="terms" name="terms" type="checkbox"> I have read and agree with the <a href="/subscribe/monthly#terms">Terms and Conditions</a>.
         </label>
     </div>
 
@@ -160,4 +162,70 @@
     </div>
 
 </form>
+
+
+
+<script>
+        $().ready(function() {
+            //alert("boooo");
+        // $('#test').validate( {invalidHandler: $.watermark.showAll} );
+
+            $("#cc_form").validate({
+                rules: {
+                        first_name: {
+                            required: true,
+                            minlength: 2,
+                            
+                        },
+                        last_name: {
+                            required: true,
+                            minlength: 2,
+                            
+                        },
+                        address: {
+                            required: true
+                        },
+                        suburb: {
+                            required: true
+                        },
+                        state: {
+                            required: true
+                        },
+                        postal_code: {
+                            required: true
+                        },
+                        country: {
+                            required: true
+                        },
+                        terms: {
+                            required: true
+                        },
+                        cc_number: {
+                            required: true,
+                            creditcard: true
+                        }
+                    },
+                messages: {
+                        first_name: {
+                            required: "Please enter a first name",
+                            minlength: "Your first name must consist of at least 2 characters"
+                        },
+                         last_name: {
+                            required: "Please enter a last name",
+                            minlength: "Your last name must consist of at least 2 characters"
+                        },
+                        address: "Please enter a street address",
+                        suburb: "Please enter a suburb or city",
+                        state: "Please enter a State or Province",
+                        country: "Please enter a country",
+                        postal_code: "Please enter a postal or zip code",
+                        cc_number: {
+                            required: "Please enter a credit card number",
+                            creditcard: "Please enter a valid credit card number"
+                        },
+                        terms: "Please confirm that you agree with our terms and conditions."
+                    }
+            });
+        });
+    </script>
 

@@ -4,7 +4,7 @@ foreach ($errors as $error) {
 }
 ?>
 
-<form class="subscribe_form" id="subscribe" name="subscribe" action="<?= $https_site_url ?>subscribe" method="post">
+<form id="subscribe_form" name="subscribe_form" action="<?= $https_site_url ?>subscribe" method="post">
     <input type="hidden" name="create_member" value="1" />
 
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
@@ -73,7 +73,7 @@ foreach ($errors as $error) {
             //alert("boooo");
         // $('#test').validate( {invalidHandler: $.watermark.showAll} );
 
-            $(".subscribe_form").validate({
+            $("#subscribe_form").validate({
                 rules: {
                         first_name: {
                             required: true,
@@ -85,7 +85,6 @@ foreach ($errors as $error) {
                             minlength: 2,
                             alphanumeric:true
                         },
-                        screen_name: "required",
                         
                         email: {
                             required: true,
