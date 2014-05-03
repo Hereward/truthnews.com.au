@@ -17,6 +17,8 @@ class Base_model extends CI_Model {
         $this->eway_path = PATH_THIRD.'tna_commerce/gateways/eway';
         $this->set_countrylist();
 
+        $this->EE->load->model('member_model');
+
         //$this->ppo_db = $this->EE->load->database('ppo', TRUE);
         //$this->base_url = $this->EE->config->config['base_url'];
         //set a global object

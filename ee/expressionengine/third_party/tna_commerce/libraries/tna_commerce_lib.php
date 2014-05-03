@@ -21,6 +21,53 @@ class Tna_commerce_lib
 	public function library_test() {
 		return "Library test was successful";
 	}
+        
+        
+         function encrypt($string='') {
+        //$encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($this->password_key), $string, MCRYPT_MODE_CBC, md5(md5($this->password_key))));
+
+        $iv = mcrypt_create_iv(
+            mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC),
+            MCRYPT_DEV_URANDOM
+        );
+
+        $encrypted = base64_encode(
+            $iv .
+                mcrypt_encrypt(
+                    MCRYPT_RIJNDAEL_256,
+                    hash('sha256', $this->password_key, true),
+                    $string,
+                    MCRYPT_MODE_CBC,
+                    $iv
+                )
+        );
+
+
+
+        return $encrypted;
+    }
+
+    function decrypt($encrypted_string='') {
+        //$decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($this->password_key), base64_decode($encrypted_string), MCRYPT_MODE_CBC, md5(md5($this->password_key))), "\0");
+
+
+        $data = base64_decode($encrypted_string);
+        $iv = substr($data, 0, mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC));
+
+        $decrypted = rtrim(
+            mcrypt_decrypt(
+                MCRYPT_RIJNDAEL_256,
+                hash('sha256', $this->password_key, true),
+                substr($data, mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC)),
+                MCRYPT_MODE_CBC,
+                $iv
+            ),
+            "\0"
+        );
+
+        return $decrypted;
+    }
+
 	
 	
 /*

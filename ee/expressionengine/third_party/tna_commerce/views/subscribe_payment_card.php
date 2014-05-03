@@ -20,12 +20,12 @@
 
     <div class="form-group">
         <label for="first_name">First Name (as it appears on card)</label>
-        <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="" />
+        <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="<?=$first_name?>" />
     </div>
 
     <div class="form-group">
         <label for="last_name">Last Name (as it appears on card)</label>
-        <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="" />
+        <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="<?=$last_name?>" />
     </div>
 
     <div class="form-group">

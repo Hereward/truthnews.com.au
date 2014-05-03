@@ -4,10 +4,14 @@ class subscribe_controller extends Base_Controller {
 
     protected $EE;
 
+    public $subscribe_stage;
+
     public function __construct($args='') {
         //die('boo');
 
         parent::__construct($args);
+
+
 
         //$this->member_id = $this->EE->session->userdata('member_id');
     }
@@ -16,11 +20,9 @@ class subscribe_controller extends Base_Controller {
     public function index() {
         //$this->resolved = $this->EE->TMPL->fetch_param('resolved');
         //$this->EE->load->model('keyword_search_model');
-
-
-
         //$str = $this->EE->eway_model->config_vars();
         //die(var_dump($str));
+        $this->subscribe_stage = 1;
 
         if ($this->EE->input->post('create_existing_member') && ($this->logged_in)) {
             redirect($this->https_site_url."subscribe/payment/$this->member_id");
@@ -44,7 +46,8 @@ class subscribe_controller extends Base_Controller {
 
     public function create() {
         $errors = array();
-        $vars = array('site_url'=>$this->site_url, 'https_site_url'=>$this->https_site_url, 'errors'=>$errors);
+        $this->set_defaults();
+        $vars = array('site_url'=>$this->site_url, 'errors'=>$errors);
         return $this->EE->load->view('subscribe_new', $vars, TRUE);
 
     }
@@ -56,12 +59,11 @@ class subscribe_controller extends Base_Controller {
             'errors'=>$errors,
             'username'=>$this->EE->session->userdata['username'],
             'email'=>$this->EE->session->userdata['email'],
-            'https_site_url'=>$this->https_site_url,
         );
         return $this->EE->load->view('subscribe_existing', $vars, TRUE);
 
     }
-
+/*
     public function payment() {
 
         //$url_decoded_password = urldecode($url_encoded_encrypted_password);
@@ -70,6 +72,13 @@ class subscribe_controller extends Base_Controller {
         //die("$encrypted_password<br/>$decrypted_password");
         //$url_decoded_password = urldecode($url_encoded_encrypted_password);
         //$decrypted_url_decoded_password = $this->decrypt($encrypted_password);
+
+        $this->subscribe_stage = 2;
+
+        if (!$this->logged_in) {
+            $this->member_id = $this->uri->segment(3, 0);
+            $this->subscription_in_progress = ($this->member_id)?true:false;
+        }
 
 
         $countrylist = $this->EE->eway_model->get_countrylist();
@@ -83,18 +92,20 @@ class subscribe_controller extends Base_Controller {
         $vars = array('site_url'=>$this->site_url,
             'countrycode' => $cc,
             'countrylist' => $countrylist,
-            'https_site_url'=>$this->https_site_url,
         );
         return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
 
     }
+ 
+ */
 
-
+/*
     public function get_cookies() {
         $this->encrypted_password = $_COOKIE["tna_subscribe_tempdata_1"];
         $this->password_key = $_COOKIE["tna_subscribe_tempdata_2"];
         $this->member_id = $_COOKIE["tna_subscribe_tempdata_3"];
     }
+*/
 
     public function store() {
 
@@ -131,12 +142,14 @@ class subscribe_controller extends Base_Controller {
         $data['group_id'] = $this->subscriber_group_id;
 
         //$email = '';
-        $email_query_result = $this->EE->db->where('email',$data['email'])->get('exp_members');
+        //$email_query_result = $this->EE->db->where('email',$data['email'])->get('exp_members');
+
+        $error = $this->EE->subscribers_model->find_duplicate_members($data['email']);
         //$user_query_result = $this->EE->db->where('username',$email)->get('exp_members');
 
-        if ($email_query_result->num_rows() > 0) {
+        if ($error) {
 
-            $errors[] = 'Your email is already registered to an account.  Please login to your account if you have already registered.';
+            $errors[] = $error;
             $vars = array('site_url'=>$this->site_url, 'errors'=>$errors);
             return $this->EE->load->view('subscribe_new', $vars, TRUE);
 
@@ -156,7 +169,7 @@ class subscribe_controller extends Base_Controller {
 
 
 
-            $encrypted_password = $this->encrypt($password);
+            //$encrypted_password = $this->encrypt($password);
 
             //$url_encoded_encrypted_password = urlencode($encrypted_password);
 
@@ -164,12 +177,15 @@ class subscribe_controller extends Base_Controller {
 
            // $decrypted_url_decoded_password = $this->decrypt($url_decoded_password);
 
-            setcookie("tna_subscribe_tempdata_1",$encrypted_password);
+            //setcookie("tna_subscribe_tempdata_1",$encrypted_password);
 
-            setcookie("tna_subscribe_tempdata_2",$this->password_key);
+            //setcookie("tna_subscribe_tempdata_2",$this->password_key);
 
+            $member_id = $this->EE->subscribers_model->create_ee_member($data);
 
+            //$data['member_id'] = $member_id;
 
+            $this->EE->subscribers_model->create_tna_subscriber($member_id,$password);
 
 
             //die("$password<br/>$encrypted_password<br/>$url_encoded_encrypted_password<br/>$url_decoded_password<br/>$decrypted_url_decoded_password");
@@ -182,6 +198,8 @@ class subscribe_controller extends Base_Controller {
            // $decrypted_password = urldecode($this->decrypt($encrypted_password));
 
            // die("PASS=[$password] ENC=[$encrypted_password] DEC=[$decrypted_password] KEY=[$this->password_key]");
+
+            /*
 
             $member_id = $this->EE->member_model->create_member($data);
 
@@ -204,10 +222,12 @@ class subscribe_controller extends Base_Controller {
 
             setcookie("tna_subscribe_tempdata_3",$member_id);
 
+            */
+
 
             $this->EE->member_model->delete_member($member_id);
 
-            redirect($this->https_site_url."subscribe/payment");
+            redirect($this->https_site_url."subscribe/payment/$member_id");
         }
 
         //$this->EE->member_model->delete_member($member_id);
@@ -229,52 +249,10 @@ class subscribe_controller extends Base_Controller {
 
     }
 
-
-    function encrypt($string='') {
-        //$encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($this->password_key), $string, MCRYPT_MODE_CBC, md5(md5($this->password_key))));
-
-        $iv = mcrypt_create_iv(
-            mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC),
-            MCRYPT_DEV_URANDOM
-        );
-
-        $encrypted = base64_encode(
-            $iv .
-                mcrypt_encrypt(
-                    MCRYPT_RIJNDAEL_256,
-                    hash('sha256', $this->password_key, true),
-                    $string,
-                    MCRYPT_MODE_CBC,
-                    $iv
-                )
-        );
+    
 
 
-
-        return $encrypted;
-    }
-
-    function decrypt($encrypted_string='') {
-        //$decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($this->password_key), base64_decode($encrypted_string), MCRYPT_MODE_CBC, md5(md5($this->password_key))), "\0");
-
-
-        $data = base64_decode($encrypted_string);
-        $iv = substr($data, 0, mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC));
-
-        $decrypted = rtrim(
-            mcrypt_decrypt(
-                MCRYPT_RIJNDAEL_256,
-                hash('sha256', $this->password_key, true),
-                substr($data, mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC)),
-                MCRYPT_MODE_CBC,
-                $iv
-            ),
-            "\0"
-        );
-
-        return $decrypted;
-    }
-
+   
 
 
 
