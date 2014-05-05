@@ -18,8 +18,14 @@ class payment_controller extends Base_Controller {
 
 
     public function index() {
+        
+         if ($this->EE->input->post('submit_payment')) {
+            return $this->store();
+         } else {
+             return $this->create();
+         }
    
-        return $this->create();
+        
     }
 
  
@@ -32,6 +38,9 @@ class payment_controller extends Base_Controller {
         //die("$encrypted_password<br/>$decrypted_password");
         //$url_decoded_password = urldecode($url_encoded_encrypted_password);
         //$decrypted_url_decoded_password = $this->decrypt($encrypted_password);
+        
+        
+        $vars = array();
 
        
         $this->subscribe_stage = 2;
@@ -53,11 +62,14 @@ class payment_controller extends Base_Controller {
         // $cc = $this->EE->eway_model->visitor_country();
 
         //die("CC =[$cc]");
-
-        $vars = array('site_url'=>$this->site_url,
-            'countrycode' => $cc,
-            'countrylist' => $countrylist,
-        );
+        
+        //$terms = $this->EE->load->view('terms', $vars, TRUE);
+        
+       
+        $vars['countrycode'] = $cc;
+        $vars['countrylist'] = $countrylist;
+        $vars['member_id'] = $this->member_id;
+          
         return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
 
     }
@@ -71,7 +83,20 @@ class payment_controller extends Base_Controller {
 */
 
     public function store() {
+        $member_id = $this->EE->input->post('member_id');
+        
+        $params = array();
+        
+        $subscriber_details_fields = $this->EE->subscribers_model->get_details_fields();
+        
+        foreach ($subscriber_details_fields as $field) {
+            $params[$field] = $this->EE->input->post($field);
+        }
+        
+        //die($this->EE->input->post('country_id'));
 
+        $this->EE->subscribers_model->update_tna_subscriber_details($member_id,$params);
+        redirect($this->https_site_url."subscribe/success/$member_id");
     }
 
     public function show() {

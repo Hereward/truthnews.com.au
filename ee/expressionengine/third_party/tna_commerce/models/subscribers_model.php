@@ -7,7 +7,8 @@ class Subscribers_model extends Base_model {
 
 	public $my_var = 'My Var is EMPTY';
 	public $orig = '[EMPTY GiGi]';
-    public $default_db_prefix;
+        public $default_db_prefix;
+        
 
 
 	/*
@@ -72,7 +73,36 @@ class Subscribers_model extends Base_model {
     
     public function get_subscriber($member_id = '') {
         $this->remove_prefix();
-        $result = $this->EE->db->where('member_id',$member_id)->get('tna_subscribers');
+        //$this->EE->db->select('*');
+        $this->EE->db->select('tna_subscribers.*', FALSE);
+       // $this->EE->db->select('tna_subscriber_details.*', FALSE);
+        //$this->EE->db->select('tna_subscriber_details.id AS sd_id', FALSE);
+        //$this->EE->db->select('tna_subscriber_details.created AS sd_created', FALSE);
+        //$this->EE->db->select('tna_subscriber_details.modified AS sd_modified', FALSE);
+        
+        $this->EE->db->select('tna_subscriber_details.first_name, '
+                . 'tna_subscriber_details.last_name, '
+                . 'tna_subscriber_details.company, '
+                . 'tna_subscriber_details.address, '
+                . 'tna_subscriber_details.address_2, '
+                . 'tna_subscriber_details.postal_code, '
+                . 'tna_subscriber_details.suburb, '
+                . 'tna_subscriber_details.state, '
+                . 'tna_subscriber_details.payment_method, ',
+                FALSE);
+        
+        $this->EE->db->from('tna_subscribers');
+        $this->EE->db->where('tna_subscribers.member_id', $member_id); 
+        $this->EE->db->join('tna_subscriber_details', 'tna_subscribers.member_id = tna_subscriber_details.member_id');
+        
+        $sql_string = $this->EE->db->_compile_select();
+        
+        //die("SQL = ".$sql_string);
+                
+        $result = $this->EE->db->get();
+        
+        
+        //$result = $this->EE->db->where('member_id',$member_id)->get('tna_subscribers');
         $error = '';
         $output = '';
         if ($result->num_rows() > 0) {
@@ -87,34 +117,56 @@ class Subscribers_model extends Base_model {
 
     public function find_duplicate_members($email = '') {
         $result = $this->EE->db->where('email',$email)->get('exp_members');
-        $error = '';
+        //$error = '';
+        $output = false;
         if ($result->num_rows() > 0) {
+            $output = $result->row();
 
-            $errors = 'Your email is already registered to an account.  Please login to your account if you have already registered.';
+           // $errors = 'Your email is already registered to an account.  Please login to your account if you have already registered.';
         }
-        return $error;
+        return $output;
     }
-
-
-    public function create_tna_subscriber($member_id,$password){
+    
+    public function update_tna_subscriber_details($member_id,$params){
         $this->remove_prefix();
 
+        $this->EE->db->where('member_id', $member_id);
+        $this->EE->db->update('tna_subscriber_details', $params);
+        
+        if ($this->get_error()) {
+            return false;
+        } else {
+            return true;
+        }  
+        
+        $this->restore_prefix();
+    }
+    
 
+    public function create_tna_subscriber($params){
+        $this->remove_prefix();
         $now = date("Y-m-d H:i:s");
 
         $data = array(
-            'member_id' => $member_id,
-            'temp_password' => $password,
-            'first_name' => $this->EE->input->post('first_name'),
-            'last_name' => $this->EE->input->post('last_name'),
+            'member_id' => $params['member_id'],
+            'temp_password' => $params['password'],
             'status' => 'pending',
+            'existing_member' => $params['existing_member'],
+            'type' => $params['type'],
             'created' => $now,
             'modified' => $now
         );
 
         $this->EE->db->insert('tna_subscribers', $data);
+        
+        $data = array(
+            'member_id' => $params['member_id'],
+            'created' => $now,
+            'modified' => $now
+        );
+        
+        $this->EE->db->insert('tna_subscriber_details', $data);
         $this->restore_prefix();
-
     }
 
 

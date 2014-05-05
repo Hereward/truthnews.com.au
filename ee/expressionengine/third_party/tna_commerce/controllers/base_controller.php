@@ -17,6 +17,7 @@ abstract class Base_Controller {
     protected $subscription_in_progress = false;
     protected $subscriber = '';
     protected $subscribe_stage;
+    protected $uri_string;
 
     protected function __construct() {
 
@@ -27,10 +28,6 @@ abstract class Base_Controller {
         $this->EE->load->library('tna_commerce_lib');
         //$this->EE->load->model('member_model');
 
-
-
-
-
         $this->member_id = $this->EE->session->userdata('member_id');
 
         //print_r($this->EE->session->userdata);
@@ -39,11 +36,18 @@ abstract class Base_Controller {
         if ($this->member_id) {
             $this->logged_in = true;
         }
+        
+        
 
 
         $this->site_url = $this->EE->config->item('site_url');
+        $this->uri_string = $this->EE->uri->uri_string();
         $this->https_site_url = $this->EE->config->item('https_site_url');
-        $globals = array('https_site_url' => $this->https_site_url);
+        $globals = array(
+            'site_url' => $this->site_url,
+            'https_site_url' => $this->https_site_url,
+            'uri_string' => $this->uri_string, 
+        );
         $this->EE->load->vars($globals);
 
         $this->EE->load->helper('url');

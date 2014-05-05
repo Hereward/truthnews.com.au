@@ -6,6 +6,8 @@
 --}
 
 <form id="cc_form" name="cc_form" method="post">
+    
+    <input type="hidden" name="member_id" value="<?=$member_id?>" />
 
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
 
@@ -110,7 +112,7 @@
             <?
             foreach ($countrylist as $key => $value) {
                 $selected = ($key==$countrycode)?'selected':'';
-                echo "<option $selected value='$value' label='$value'>$value</option>";
+                echo "<option $selected value='$key' label='$value'>$value</option>";
             }
 
             ?>
@@ -153,15 +155,19 @@
 
     <div class="checkbox">
         <label>
-            <input id="terms" name="terms" type="checkbox"> I have read and agree with the <a href="/subscribe/monthly#terms">Terms and Conditions</a>.
+            <input id="terms" name="terms" type="checkbox"> I have read and agree with the 
+            <a href="<?=$https_site_url.$uri_string?>#terms">Terms and Conditions</a>.
         </label>
     </div>
 
     <div class="form-group">
-        <input class="btn btn-default" type="submit" value="Purchase My Subscription">
+        <input class="btn btn-success" name="submit_payment" id="submit_payment" type="submit" value="Purchase My Subscription">
     </div>
 
 </form>
+
+
+<? $this->view('terms'); ?>
 
 
 

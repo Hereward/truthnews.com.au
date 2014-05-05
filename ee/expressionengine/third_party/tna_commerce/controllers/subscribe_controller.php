@@ -36,8 +36,8 @@ class subscribe_controller extends Base_Controller {
 
         //die("LOGGED_IN = $this->logged_in");
         //$this->return_data = $this->EE->TMPL->tagdata;
-       // $variables[] = array('action' => 'soap.php');
-       // return $this->EE->TMPL->parse_variables($this->EE->TMPL->tagdata, $variables);
+        // $variables[] = array('action' => 'soap.php');
+        // return $this->EE->TMPL->parse_variables($this->EE->TMPL->tagdata, $variables);
         //$tbl_tmpl = array ( 'table_open'  => '<table border="1" cellpadding="5" cellspacing="1" class="mytable">' );
         //$this->EE->table->set_template($tbl_tmpl);
         //return $this->EE->load->view('resolve_classification', $vars, TRUE);
@@ -63,64 +63,60 @@ class subscribe_controller extends Base_Controller {
         return $this->EE->load->view('subscribe_existing', $vars, TRUE);
 
     }
-/*
-    public function payment() {
+    /*
+        public function payment() {
 
-        //$url_decoded_password = urldecode($url_encoded_encrypted_password);
-        //$decrypted_url_decoded_password = $this->decrypt($url_decoded_password);
-       // $decrypted_password = $this->decrypt($encrypted_password);
-        //die("$encrypted_password<br/>$decrypted_password");
-        //$url_decoded_password = urldecode($url_encoded_encrypted_password);
-        //$decrypted_url_decoded_password = $this->decrypt($encrypted_password);
+            //$url_decoded_password = urldecode($url_encoded_encrypted_password);
+            //$decrypted_url_decoded_password = $this->decrypt($url_decoded_password);
+           // $decrypted_password = $this->decrypt($encrypted_password);
+            //die("$encrypted_password<br/>$decrypted_password");
+            //$url_decoded_password = urldecode($url_encoded_encrypted_password);
+            //$decrypted_url_decoded_password = $this->decrypt($encrypted_password);
 
-        $this->subscribe_stage = 2;
+            $this->subscribe_stage = 2;
 
-        if (!$this->logged_in) {
-            $this->member_id = $this->uri->segment(3, 0);
-            $this->subscription_in_progress = ($this->member_id)?true:false;
+            if (!$this->logged_in) {
+                $this->member_id = $this->uri->segment(3, 0);
+                $this->subscription_in_progress = ($this->member_id)?true:false;
+            }
+
+
+            $countrylist = $this->EE->eway_model->get_countrylist();
+
+            $cc = $this->EE->eway_model->ip2location('countryCode');
+
+            // $cc = $this->EE->eway_model->visitor_country();
+
+            //die("CC =[$cc]");
+
+            $vars = array('site_url'=>$this->site_url,
+                'countrycode' => $cc,
+                'countrylist' => $countrylist,
+            );
+            return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
+
         }
 
+     */
 
-        $countrylist = $this->EE->eway_model->get_countrylist();
-
-        $cc = $this->EE->eway_model->ip2location('countryCode');
-
-        // $cc = $this->EE->eway_model->visitor_country();
-
-        //die("CC =[$cc]");
-
-        $vars = array('site_url'=>$this->site_url,
-            'countrycode' => $cc,
-            'countrylist' => $countrylist,
-        );
-        return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
-
-    }
- 
- */
-
-/*
-    public function get_cookies() {
-        $this->encrypted_password = $_COOKIE["tna_subscribe_tempdata_1"];
-        $this->password_key = $_COOKIE["tna_subscribe_tempdata_2"];
-        $this->member_id = $_COOKIE["tna_subscribe_tempdata_3"];
-    }
-*/
+    /*
+        public function get_cookies() {
+            $this->encrypted_password = $_COOKIE["tna_subscribe_tempdata_1"];
+            $this->password_key = $_COOKIE["tna_subscribe_tempdata_2"];
+            $this->member_id = $_COOKIE["tna_subscribe_tempdata_3"];
+        }
+    */
 
     public function store() {
-
         $errors = array();
-
-
+        $member_id = '';
+        $existing_member = 0;
 
         $this->EE->load->helper('security');
         require_once("$this->default_site_path/includes/pwgen.class.php");
         require_once("$this->default_site_path/includes/encryption_tnra.php");
-
         $fullname = $this->EE->input->post('first_name').' '.$this->EE->input->post('last_name');
-
         $screen_name =  ($this->EE->input->post('screen_name'))?$this->EE->input->post('screen_name'):$fullname;
-
         $enc = new Encryption_tnra();
 
         $pwgen = new PWGen();
@@ -144,93 +140,30 @@ class subscribe_controller extends Base_Controller {
         //$email = '';
         //$email_query_result = $this->EE->db->where('email',$data['email'])->get('exp_members');
 
-        $error = $this->EE->subscribers_model->find_duplicate_members($data['email']);
+        $duplicate = $this->EE->subscribers_model->find_duplicate_members($data['email']);
         //$user_query_result = $this->EE->db->where('username',$email)->get('exp_members');
 
-        if ($error) {
-
-            $errors[] = $error;
-            $vars = array('site_url'=>$this->site_url, 'errors'=>$errors);
-            return $this->EE->load->view('subscribe_new', $vars, TRUE);
-
-/*
-        if ($this->EE->member_model->get_members('', '', '', $data['username'], '', 'username')->num_rows() > 0)
-        {
-            $errors[] = "Username already {$data['username']} already exists.";
-            $vars = array('site_url'=>$this->site_url, 'errors'=>$errors);
-            return $this->EE->load->view('subscribe_new', $vars, TRUE);
-            //$this->EE->output->show_user_error('submission', 'Username already exists!!!!');
-*/
-        } else {
-
-            //$encrypted_password = $enc->encode($password);
-            //$decrypted_password = $enc->decode($encrypted_password);
-
-
-
-
-            //$encrypted_password = $this->encrypt($password);
-
-            //$url_encoded_encrypted_password = urlencode($encrypted_password);
-
-           // $url_decoded_password = urldecode($url_encoded_encrypted_password);
-
-           // $decrypted_url_decoded_password = $this->decrypt($url_decoded_password);
-
-            //setcookie("tna_subscribe_tempdata_1",$encrypted_password);
-
-            //setcookie("tna_subscribe_tempdata_2",$this->password_key);
-
+        if (!$duplicate) {
             $member_id = $this->EE->subscribers_model->create_ee_member($data);
-
-            //$data['member_id'] = $member_id;
-
-            $this->EE->subscribers_model->create_tna_subscriber($member_id,$password);
-
-
-            //die("$password<br/>$encrypted_password<br/>$url_encoded_encrypted_password<br/>$url_decoded_password<br/>$decrypted_url_decoded_password");
-
-
-            //urldecode($encrypted_password);
-
-            //$encrypted_password = $this->encrypt(urlencode($password));
-
-           // $decrypted_password = urldecode($this->decrypt($encrypted_password));
-
-           // die("PASS=[$password] ENC=[$encrypted_password] DEC=[$decrypted_password] KEY=[$this->password_key]");
-
-            /*
-
-            $member_id = $this->EE->member_model->create_member($data);
-
-            // handle custom fields passed in POST
-            $exp_member_fields_result = $this->EE->db->get('exp_member_fields');
-            $fields = array();
-            if ($exp_member_fields_result->num_rows() > 0) {
-                foreach ($exp_member_fields_result->result_array() as $field) {
-                    $fields[$field['m_field_name']] = 'm_field_id_' . $field['m_field_id'];
-                }
-
-                $update_fields = array();
-
-                foreach ($fields as $name => $column) {
-                    $update_fields[$column] = ($this->EE->input->post($name)) ? $this->EE->input->post($name) : '';
-                }
-
-                $this->EE->member_model->update_member_data($member_id, $update_fields);
-            }
-
-            setcookie("tna_subscribe_tempdata_3",$member_id);
-
-            */
-
-
             $this->EE->member_model->delete_member($member_id);
+        } else {
+            $member_id = $duplicate->member_id;
+            $existing_member = 1;
 
-            redirect($this->https_site_url."subscribe/payment/$member_id");
         }
+        //$data['member_id'] = $member_id;
 
-        //$this->EE->member_model->delete_member($member_id);
+        $params = array(
+            'member_id' => $member_id,
+            '$password' => $password,
+            'existing_member' => $existing_member,
+            'type' => $this->EE->input->post('subscription_type'),
+        );
+
+        //$this->EE->input->post('last_name');
+
+        $this->EE->subscribers_model->create_tna_subscriber($params);
+        redirect($this->https_site_url."subscribe/payment/$member_id");
     }
 
     public function show() {
@@ -249,10 +182,10 @@ class subscribe_controller extends Base_Controller {
 
     }
 
-    
 
 
-   
+
+
 
 
 

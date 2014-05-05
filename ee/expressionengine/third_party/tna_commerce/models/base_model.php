@@ -8,6 +8,8 @@ class Base_model extends CI_Model {
     protected $EE;
     public $eway_path;
     public $country_list;
+    public $error = '';
+    public $subscriber_details_fields;
     //public $base_url;
 
     public function __construct()
@@ -18,11 +20,48 @@ class Base_model extends CI_Model {
         $this->set_countrylist();
 
         $this->EE->load->model('member_model');
+        
+        $this->set_details_fields_template();
 
         //$this->ppo_db = $this->EE->load->database('ppo', TRUE);
         //$this->base_url = $this->EE->config->config['base_url'];
         //set a global object
         //$this->EE->tna_commerce = $this;
+    }
+    
+    public function set_details_fields_template() {
+
+        $this->subscriber_details_fields = array(
+            'first_name',
+            'last_name',
+            'company',
+            'address',
+            'address_2',
+            'suburb',
+            'state',
+            'postal_code',
+            'country',
+            'payment_method',
+        );
+    }
+    
+    public function get_details_fields() {
+        return $this->subscriber_details_fields;
+    }
+    
+    
+    
+    public function get_error() {
+        
+        if ($this->EE->db->_error_message()) {
+            $error_num = $this->db->_error_number();
+            $this->error = "Database error ($error_num): ".$this->EE->db->_error_message();
+            return 1;
+        } else {
+            $this->error = '';
+            return '';
+        }
+        
     }
 
 

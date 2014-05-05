@@ -14,8 +14,8 @@ foreach ($errors as $error) {
         </select>
     </div>
 
-    <div class="alert alert-success"><strong>Note:</strong> Your subscription will be applied to the currently logged in member, <strong><?=$username?></strong>,
-        with the following email address: <strong><?=$email?></strong>.
+    <div class="alert alert-success"><strong>Note:</strong> You are currently logged in as <strong><?=$username?></strong>,
+        with the following email address: <strong><?=$email?></strong>. Your subscription will be applied to this account.
         <br/>
 
     </div>

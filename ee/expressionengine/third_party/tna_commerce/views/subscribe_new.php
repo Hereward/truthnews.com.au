@@ -22,7 +22,7 @@ foreach ($errors as $error) {
         </select>
 
     </div>
-
+{!--
     <div class="form-group">
         <label for="first_name">First Name</label>
         <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="<?=$first_name?>" />
@@ -32,17 +32,20 @@ foreach ($errors as $error) {
         <label for="last_name">Last Name</label>
         <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="<?=$last_name?>" />
     </div>
-
-    <div class="form-group">
-        <label for="screen_name">Screen Name (optional)</label>
-        <input class="form-control" type="text" id="screen_name" name="screen_name" maxlength="100" value="<?=$screen_name?>" />
-    </div>
+--}
 
     <div class="form-group">
         <label for="email">Email Address</label>
         <input class="form-control" type="text" id="email" name="email" maxlength="100" value="" />
-        <p class="help-block">Your email address will be your username when you sign-in.</p>
+        {!-- <p class="help-block">Your email address will be your username when you sign-in.</p> --}
     </div>
+
+    <div class="form-group">
+        <label for="screen_name">Screen Name</label>
+        <input class="form-control" type="text" id="screen_name" name="screen_name" maxlength="100" value="<?=$screen_name?>" />
+    </div>
+
+
 {!--
     <div class="form-group">
         <label for="password">Password</label>
@@ -62,7 +65,7 @@ foreach ($errors as $error) {
 
     <div class="form-group">
 
-        <input class="btn btn-default" type="submit" value="Proceed to Checkout &raquo;">
+        <input class="btn btn-success" type="submit" value="Proceed to Checkout &raquo;">
     </div>
 
 
@@ -75,17 +78,10 @@ foreach ($errors as $error) {
 
             $("#subscribe_form").validate({
                 rules: {
-                        first_name: {
+                        screen_name: {
                             required: true,
-                            minlength: 2,
-                            alphanumeric:true
+                            minlength: 2
                         },
-                        last_name: {
-                            required: true,
-                            minlength: 2,
-                            alphanumeric:true
-                        },
-                        
                         email: {
                             required: true,
                             email: true
@@ -93,16 +89,10 @@ foreach ($errors as $error) {
   
                     },
                 messages: {
-                        first_name: {
-                            required: "Please enter a first name",
-                            minlength: "Your first name must consist of at least 2 characters"
+                    screen_name: {
+                            required: "Please enter a screen name",
+                            minlength: "Your screen name must consist of at least 2 characters"
                         },
-                         last_name: {
-                            required: "Please enter a last name",
-                            minlength: "Your last name must consist of at least 2 characters"
-                        },
-                        screen_name: "Please enter a screen name",
-                        
                         email: "Please enter a valid email address"
                        
                     }
