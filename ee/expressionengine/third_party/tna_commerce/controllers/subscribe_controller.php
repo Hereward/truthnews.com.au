@@ -155,7 +155,7 @@ class subscribe_controller extends Base_Controller {
 
         $params = array(
             'member_id' => $member_id,
-            '$password' => $password,
+            'password' => $password,
             'existing_member' => $existing_member,
             'type' => $this->EE->input->post('subscription_type'),
         );
