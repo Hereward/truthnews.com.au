@@ -59,11 +59,25 @@ class payment_controller extends Base_Controller {
         
         
         if ($existing_subscriber) {
-            $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress."; 
+            $view = '';
+            if ($this->logged_in) {
+                $errors[] = "Your email address: [$duplicate->email] is already registered to a subscriber account. Please <strong><a href='$this->https_site_url?ACT=10&return=%2Fsubscribe'>log out</a></strong> and supply a different email adddress."; 
+            } else {
+                $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress."; 
+            }
             $vars['errors'] = $errors;
-            return $this->EE->load->view('subscribe_new', $vars, TRUE);
-            exit();
+            $vars['member_id'] = $this->member_id;
             
+            if ($this->logged_in) {   
+                $vars['username'] = $this->EE->session->userdata['username'];
+                $vars['email'] = $this->EE->session->userdata['email'];
+                $view = 'subscribe_existing';
+            } else {
+                $view = 'subscribe_new';
+            }
+
+            return $this->EE->load->view($view, $vars, TRUE);  
+            exit(); 
         }
         
         
