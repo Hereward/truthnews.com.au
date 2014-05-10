@@ -42,8 +42,12 @@ class Subscribers_model extends Base_model {
 
 
     public function create_ee_member($data) {
+        //var_dump($data);
+        //die();
 
         $member_id = $this->EE->member_model->create_member($data);
+        
+        
 
         // handle custom fields passed in POST
         $exp_member_fields_result = $this->EE->db->get('exp_member_fields');
@@ -65,9 +69,28 @@ class Subscribers_model extends Base_model {
        // setcookie("tna_subscribe_tempdata_3",$member_id);
 
 
-        $this->EE->member_model->delete_member($member_id);
+        //$this->EE->member_model->delete_member($member_id);
 
         return $member_id;
+    }
+    
+    public function get_subscription_details($type) {
+        $this->remove_prefix();
+        $result = $this->db->get_where('tna_subscription_types', array('name' => $type));
+        $this->restore_prefix();
+        return $result->row();
+    }
+    
+    public function is_subscriber($member_id = '') {
+        $this->remove_prefix();
+        $result = $this->EE->db->where('member_id',$member_id)->get('tna_subscribers');
+        
+         $output = false;
+        if ($result->num_rows() > 0) {
+            $output = $result->row();
+        }
+        $this->restore_prefix();
+        return $output;
     }
     
     
@@ -88,18 +111,28 @@ class Subscribers_model extends Base_model {
                 . 'tna_subscriber_details.postal_code, '
                 . 'tna_subscriber_details.suburb, '
                 . 'tna_subscriber_details.state, '
-                . 'tna_subscriber_details.payment_method, ',
+                . 'tna_subscriber_details.payment_method, '
+                . 'tna_subscriber_details.tshirt_size, ',
                 FALSE);
+        
+        $this->EE->db->select('exp_members.email, '
+                . 'exp_members.screen_name, ',
+                FALSE);
+          
+        
         
         $this->EE->db->from('tna_subscribers');
         $this->EE->db->where('tna_subscribers.member_id', $member_id); 
         $this->EE->db->join('tna_subscriber_details', 'tna_subscribers.member_id = tna_subscriber_details.member_id');
+        $this->EE->db->join('exp_members', 'tna_subscribers.member_id = exp_members.member_id');
         
         $sql_string = $this->EE->db->_compile_select();
         
         //die("SQL = ".$sql_string);
                 
         $result = $this->EE->db->get();
+        
+        //die("NUM ROWS = ". $result->num_rows() . " SQL = ".$sql_string);
         
         
         //$result = $this->EE->db->where('member_id',$member_id)->get('tna_subscribers');
@@ -114,8 +147,17 @@ class Subscribers_model extends Base_model {
         return $output;
     }
     
+    public function nuke_subscriber() { 
+        $this->EE->member_model->delete_member($member_id);
+        $this->remove_prefix();
+        $this->EE->db->delete('tna_subscribers', array('member_id' => $member_id));
+        $this->EE->db->delete('tna_subscriber_details', array('member_id' => $member_id));
+        $this->EE->db->delete('tna_eway_customers', array('member_id' => $member_id));
+        $this->restore_prefix();
+    }
+    
 
-    public function find_duplicate_members($email = '') {
+    public function find_duplicate($email = '') {
         $result = $this->EE->db->where('email',$email)->get('exp_members');
         //$error = '';
         $output = false;
@@ -144,12 +186,15 @@ class Subscribers_model extends Base_model {
     
 
     public function create_tna_subscriber($params){
+         $tshirt_size = $this->EE->input->post('tshirt_size');
+         
+         //die("FUCKING T_SHIRT: $tshirt_size");
         $this->remove_prefix();
         $now = date("Y-m-d H:i:s");
 
         $data = array(
             'member_id' => $params['member_id'],
-            'temp_password' => $params['password'],
+            'temp_password' => $params['temp_password'],
             'status' => 'pending',
             'existing_member' => $params['existing_member'],
             'type' => $params['type'],
@@ -159,9 +204,11 @@ class Subscribers_model extends Base_model {
 
         $this->EE->db->insert('tna_subscribers', $data);
         
+       
         $data = array(
             'member_id' => $params['member_id'],
-            'created' => $now,
+            'tshirt_size' => $tshirt_size,
+            'created' => $now, 
             'modified' => $now
         );
         

@@ -23,14 +23,18 @@ class subscribe_controller extends Base_Controller {
         //$str = $this->EE->eway_model->config_vars();
         //die(var_dump($str));
         $this->subscribe_stage = 1;
-
-        if ($this->EE->input->post('create_existing_member') && ($this->logged_in)) {
+        
+        /*
+         if ($this->EE->input->post('create_existing_member') && ($this->logged_in)) {
             redirect($this->https_site_url."subscribe/payment/$this->member_id");
         } elseif ($this->EE->input->post('create_member')) {
             return $this->store();
-        } elseif ($this->logged_in) {
+         */
+
+        
+        if ($this->logged_in) {
             return $this->create_existing();
-        } elseif (!$this->logged_in) {
+        } else {
             return $this->create();
         }
 
@@ -45,6 +49,10 @@ class subscribe_controller extends Base_Controller {
     }
 
     public function create() {
+        
+       // $this->EE->member_model->delete_member(19992);
+        
+
         $errors = array();
         $this->set_defaults();
         $vars = array('site_url'=>$this->site_url, 'errors'=>$errors);
@@ -55,11 +63,13 @@ class subscribe_controller extends Base_Controller {
     public function create_existing() {
         $errors = array();
         //$this->EE->session->userdata->username;
-        $vars = array('site_url'=>$this->site_url,
+        $vars = array(
             'errors'=>$errors,
             'username'=>$this->EE->session->userdata['username'],
             'email'=>$this->EE->session->userdata['email'],
+            'member_id'=>$this->member_id
         );
+        
         return $this->EE->load->view('subscribe_existing', $vars, TRUE);
 
     }
@@ -142,15 +152,23 @@ class subscribe_controller extends Base_Controller {
 
         $duplicate = $this->EE->subscribers_model->find_duplicate_members($data['email']);
         //$user_query_result = $this->EE->db->where('username',$email)->get('exp_members');
-
-        if (!$duplicate) {
-            $member_id = $this->EE->subscribers_model->create_ee_member($data);
-            $this->EE->member_model->delete_member($member_id);
-        } else {
-            $member_id = $duplicate->member_id;
-            $existing_member = 1;
-
+        
+        if ($duplicate) {
+            $this->EE->subscribers_model->nuke_subscriber($member_id);
+            
         }
+
+        
+        $member_id = $this->EE->subscribers_model->create_ee_member($data);
+        
+        //die("BOOO ".$member_id);
+            //$this->EE->member_model->delete_member($member_id);
+       
+            
+         // $member_id = $duplicate->member_id;
+         // $existing_member = 1;
+
+      
         //$data['member_id'] = $member_id;
 
         $params = array(

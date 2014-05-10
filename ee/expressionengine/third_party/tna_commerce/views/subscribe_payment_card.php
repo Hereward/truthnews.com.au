@@ -1,3 +1,8 @@
+<? $this->view('errors'); ?>
+
+<? $this->view('go_back_1'); ?>
+
+
 {!--
 <div class="alert alert-success"><strong>Note:</strong> Blah....
     <br/>
@@ -8,6 +13,10 @@
 <form id="cc_form" name="cc_form" method="post">
     
     <input type="hidden" name="member_id" value="<?=$member_id?>" />
+    <input type="hidden" name="email" value="<?=$email?>" />
+    <input type="hidden" name="subscription_type" value="<?=$subscription_type?>" />
+    <input type="hidden" name="tshirt_size" value="<?=$tshirt_size?>" />
+    
 
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
 
@@ -22,12 +31,12 @@
 
     <div class="form-group">
         <label for="first_name">First Name (as it appears on card)</label>
-        <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="<?=$first_name?>" />
+        <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="" />
     </div>
 
     <div class="form-group">
         <label for="last_name">Last Name (as it appears on card)</label>
-        <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="<?=$last_name?>" />
+        <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="" />
     </div>
 
     <div class="form-group">
@@ -160,8 +169,9 @@
         </label>
     </div>
 
+
     <div class="form-group">
-        <input class="btn btn-success" name="submit_payment" id="submit_payment" type="submit" value="Purchase My Subscription">
+         <input class="btn btn-success" name="submit_payment" id="submit_payment" type="submit" value="Purchase My Subscription">
     </div>
 
 </form>
@@ -175,6 +185,10 @@
         $().ready(function() {
             //alert("boooo");
         // $('#test').validate( {invalidHandler: $.watermark.showAll} );
+        $('#go_back').click(function(){
+            parent.history.back();
+            return false;
+        });
 
             $("#cc_form").validate({
                 rules: {

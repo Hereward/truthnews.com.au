@@ -1,15 +1,11 @@
-<?
-foreach ($errors as $error) {
-    echo "<p>Error: $error</p>\n";
-}
-?>
+<? $this->view('errors'); ?>
 
-<form id="subscribe_form" name="subscribe_form" action="<?= $https_site_url ?>subscribe" method="post">
+<form id="subscribe_form" name="subscribe_form" action="<?= $https_site_url ?>subscribe/payment" method="post">
     <input type="hidden" name="create_member" value="1" />
 
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
 
-   {!-- <legend>Billing Information</legend> --}
+  
 
     <div class="form-group">
         <label>Subscription Type</label>
@@ -22,71 +18,60 @@ foreach ($errors as $error) {
         </select>
 
     </div>
-{!--
-    <div class="form-group">
-        <label for="first_name">First Name</label>
-        <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="<?=$first_name?>" />
-    </div>
+    
+    <div id="tshirt_group" class="form-group">
+        <label>T-Shirt Size</label>
+        {!-- <p class="help-block">With this subscription you are entitled to a free TNRA t-shirt!</p> --}
 
-    <div class="form-group">
-        <label for="last_name">Last Name</label>
-        <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="<?=$last_name?>" />
+        <select class="form-control" name="tshirt_size" id="tshirt_size">
+            <option value="XS">Extra Small</option>
+            <option value="S">Small</option>
+            <option value="M">Medium</option>
+            <option selected value="L">Large</option>
+            <option value="XL">Extra Large</option> 
+        </select>
+
     </div>
---}
 
     <div class="form-group">
         <label for="email">Email Address</label>
         <input class="form-control" type="text" id="email" name="email" maxlength="100" value="" />
         {!-- <p class="help-block">Your email address will be your username when you sign-in.</p> --}
     </div>
-
+{!--
     <div class="form-group">
         <label for="screen_name">Screen Name</label>
         <input class="form-control" type="text" id="screen_name" name="screen_name" maxlength="100" value="<?=$screen_name?>" />
     </div>
+--}
 
 
 {!--
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input class="form-control" type="password" id="password" name="password" maxlength="100" value="" />
-    </div>
-    <div class="form-group">
-        <label for="password2">Confirm Password</label>
-        <input class="form-control" type="password" id="password2" name="password2" maxlength="100" value="" />
-    </div>
---}
-
     <div class="form-group">
         <label for="Introduction">Introduction (optional) - tell us a little about yourself!</label>
         <textarea id="Introduction" name="Introduction" class="form-control" rows="3"></textarea>
 
     </div>
+--}
 
     <div class="form-group">
 
         <input class="btn btn-success" type="submit" value="Proceed to Checkout &raquo;">
     </div>
+    
+
 
 
 </form>
 
 <script>
         $().ready(function() {
-            //alert("boooo");
-        // $('#test').validate( {invalidHandler: $.watermark.showAll} );
-
             $("#subscribe_form").validate({
                 rules: {
-                        screen_name: {
-                            required: true,
-                            minlength: 2
-                        },
                         email: {
                             required: true,
                             email: true
                         }
-  
                     },
                 messages: {
                     screen_name: {
@@ -99,4 +84,12 @@ foreach ($errors as $error) {
             });
         });
     </script>
-
+    
+   
+    <script>
+        $( "#subscription_type" ).change(function() {
+            $('#tshirt_group').toggle()
+        });
+    </script>
+    
+ 

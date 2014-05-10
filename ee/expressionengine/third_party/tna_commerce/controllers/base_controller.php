@@ -62,7 +62,9 @@ abstract class Base_Controller {
 
     function get_option($name) {
         $val = '';
-
+        $defaults = array();
+        
+        /*
         if ($this->subscriber) {
             $defaults = array(
                 'first_name' => $this->subscriber->first_name,
@@ -70,6 +72,8 @@ abstract class Base_Controller {
                 'screen_name' => "",
             );
         }
+         
+        */
 
         if (isset($defaults[$name])) {
             $val = $defaults[$name];
@@ -87,9 +91,6 @@ abstract class Base_Controller {
         if ($this->subscribe_stage == 1) {
 
             $form_defaults = array(
-                'first_name' => $this->get_option('first_name'),
-                'last_name' => $this->get_option('last_name'),
-                'screen_name' => $this->get_option('screen_name'),
                 'email' => $this->get_option('email'),
             );
         } elseif ($this->subscribe_stage == 2) {
