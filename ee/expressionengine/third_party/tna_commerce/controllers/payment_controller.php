@@ -49,6 +49,7 @@ class payment_controller extends Base_Controller {
             $this->subscription_in_progress = true; 
         }
         
+        
         //$this->subscriber = $this->EE->subscribers_model->get_subscriber($this->member_id);
         
         $email = $this->EE->input->post('email');

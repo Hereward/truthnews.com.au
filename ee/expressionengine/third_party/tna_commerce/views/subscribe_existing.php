@@ -1,6 +1,6 @@
 <? $this->view('errors'); ?>
 
-<form action="<?= $https_site_url ?>subscribe" method="post">
+<form action="<?= $https_site_url ?>subscribe/payment" method="post">
     <input type="hidden" name="create_existing_member" value="1" />
     <input type="hidden" name="member_id" value="<?=$member_id?>" />
     <input type="hidden" name="email" value="<?=$email?>" />
