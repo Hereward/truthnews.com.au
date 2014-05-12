@@ -22,6 +22,7 @@ abstract class Base_Controller {
     protected function __construct() {
 
         //die('weeeeeee');
+        error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
         $this->EE = & get_instance();
         $this->EE->load->add_package_path(PATH_THIRD . '/tna_commerce');
 
@@ -37,9 +38,6 @@ abstract class Base_Controller {
             $this->logged_in = true;
         }
         
-        
-
-
         $this->site_url = $this->EE->config->item('site_url');
         $this->uri_string = $this->EE->uri->uri_string();
         $this->https_site_url = $this->EE->config->item('https_site_url');
@@ -74,13 +72,16 @@ abstract class Base_Controller {
         }
          
         */
-
         if (isset($defaults[$name])) {
             $val = $defaults[$name];
         }
-
+/*
         if (isset($_POST[$name])) {
             $val = $_POST[$name];
+        }
+*/
+        if ($this->EE->input->post($name)) {
+            $val = $this->EE->input->post($name);
         }
 
         return $val;
@@ -94,16 +95,69 @@ abstract class Base_Controller {
                 'email' => $this->get_option('email'),
             );
         } elseif ($this->subscribe_stage == 2) {
-           
+            
+            $years = array('2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024');
+            $months = array('01','02','03','04','05','06','07','08','09','10','11','12');
+            $this->EE->load->vars(array('months'=>$months, 'years'=>$years));
+         
+            
+             $form_default_fields = array(
+                'subscription_type',
+                'tshirt_size',
+                'email',
+                'first_name',
+                'last_name',
+                'cc_number',
+                'cc_expiry_month',
+                'cc_expiry_year',
+                'company',
+                'address',
+                'address_2',
+                'suburb',
+                'state',
+                'country',
+                'postal_code',
+                'state'
+            );
+             
+             $form_defaults = array();
+             
+             foreach ($form_default_fields as $field) {
+                 $form_defaults[$field] = $this->get_option($field);
+             }
+             
+            // die($this->EE->input->post('cc_expiry_year'). ' ' . $form_defaults['cc_expiry_year']);
+             
+             
+             
+             
+             //  => $this->get_option('subscription_type')
+           /*
             $form_defaults = array(
+                'subscription_type' => $this->get_option('subscription_type'),
+                'tshirt_size' => $this->get_option('tshirt_size'),
+                'email' => $this->get_option('email'),
                 'first_name' => $this->get_option('first_name'),
                 'last_name' => $this->get_option('last_name'),
-                'email' => $this->get_option('email'),
+                'cc_number' => $this->get_option('cc_number'),
+                'cc_expiry_month' => $this->get_option('cc_expiry_month'),
+                'cc_expiry_year' => $this->get_option('cc_expiry_year'),
+                'company' => $this->get_option('company'),
+                'address' => $this->get_option('address'),
+                'address_2' => $this->get_option('address_2'),
+                'suburb' => $this->get_option('suburb'),
+                'state' => $this->get_option('state'),
+                'country' => $this->get_option('country'),
+                'postal_code' => $this->get_option('postal_code'),
+                'state' => $this->get_option('state'),
             );
+            
+            */
         }
 
 
         $this->EE->load->vars($form_defaults);
+        
     }
 
 }

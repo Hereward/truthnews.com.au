@@ -47,8 +47,6 @@ class Subscribers_model extends Base_model {
 
         $member_id = $this->EE->member_model->create_member($data);
         
-        
-
         // handle custom fields passed in POST
         $exp_member_fields_result = $this->EE->db->get('exp_member_fields');
         $fields = array();
@@ -136,7 +134,7 @@ class Subscribers_model extends Base_model {
         
         
         //$result = $this->EE->db->where('member_id',$member_id)->get('tna_subscribers');
-        $error = '';
+        //$error = '';
         $output = '';
         if ($result->num_rows() > 0) {
             $output = $result->row();
@@ -147,7 +145,7 @@ class Subscribers_model extends Base_model {
         return $output;
     }
     
-    public function nuke_subscriber() { 
+    public function nuke_subscriber($member_id='') { 
         $this->EE->member_model->delete_member($member_id);
         $this->remove_prefix();
         $this->EE->db->delete('tna_subscribers', array('member_id' => $member_id));
@@ -170,25 +168,26 @@ class Subscribers_model extends Base_model {
     }
     
     public function update_tna_subscriber_details($member_id,$params){
+        $output = true;
         $this->remove_prefix();
 
         $this->EE->db->where('member_id', $member_id);
         $this->EE->db->update('tna_subscriber_details', $params);
-        
-        if ($this->get_error()) {
-            return false;
-        } else {
-            return true;
+
+        if ($this->get_db_error()) {
+            $output = false; 
         }  
+         $this->restore_prefix();
+         return $output;
         
-        $this->restore_prefix();
     }
     
 
-    public function create_tna_subscriber($params){
-         $tshirt_size = $this->EE->input->post('tshirt_size');
-         
-         //die("FUCKING T_SHIRT: $tshirt_size");
+    public function create_tna_subscriber($params) {
+        $output = true;
+        $tshirt_size = $this->EE->input->post('tshirt_size');
+
+        //die("FUCKING T_SHIRT: $tshirt_size");
         $this->remove_prefix();
         $now = date("Y-m-d H:i:s");
 
@@ -203,32 +202,26 @@ class Subscribers_model extends Base_model {
         );
 
         $this->EE->db->insert('tna_subscribers', $data);
+
+        if ($this->get_db_error()) {
+            $output = false;
+        } else {
+            $data = array(
+                'member_id' => $params['member_id'],
+                'tshirt_size' => $tshirt_size,
+                'created' => $now,
+                'modified' => $now
+            );
+
+            $this->EE->db->insert('tna_subscriber_details', $data);
+            if ($this->get_db_error()) {
+                $output = false;
+            }
+        }
         
-       
-        $data = array(
-            'member_id' => $params['member_id'],
-            'tshirt_size' => $tshirt_size,
-            'created' => $now, 
-            'modified' => $now
-        );
-        
-        $this->EE->db->insert('tna_subscriber_details', $data);
-        $this->restore_prefix();
+         $this->restore_prefix();
+         return $output;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 // End Class

@@ -18,14 +18,11 @@ class payment_controller extends Base_Controller {
 
 
     public function index() {
-        
          if ($this->EE->input->post('submit_payment')) {
             return $this->store();
          } else {
-             return $this->create();
+            return $this->create();
          }
-   
-        
     }
     
  
@@ -56,46 +53,44 @@ class payment_controller extends Base_Controller {
         
         $duplicate = $this->EE->subscribers_model->find_duplicate($email);
         $existing_subscriber = ($duplicate)?$this->EE->subscribers_model->is_subscriber($duplicate->member_id):false;
-        
+       
         
         if ($existing_subscriber) {
-            $view = '';
-            if ($this->logged_in) {
-                $errors[] = "Your email address: [$duplicate->email] is already registered to a subscriber account. Please <strong><a href='$this->https_site_url?ACT=10&return=%2Fsubscribe'>log out</a></strong> and supply a different email adddress."; 
+            if ($email == 'editor@truthnews.com.au') {
+                $this->EE->subscribers_model->nuke_subscriber($duplicate->member_id);
             } else {
-                $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress."; 
-            }
-            $vars['errors'] = $errors;
-            $vars['member_id'] = $this->member_id;
-            
-            if ($this->logged_in) {   
-                $vars['username'] = $this->EE->session->userdata['username'];
-                $vars['email'] = $this->EE->session->userdata['email'];
-                $view = 'subscribe_existing';
-            } else {
-                $view = 'subscribe_new';
-            }
+                $view = '';
+                if ($this->logged_in) {
+                    $errors[] = "Your email address: [$duplicate->email] is already registered to a subscriber account. Please <strong><a href='$this->https_site_url?ACT=10&return=%2Fsubscribe'>log out</a></strong> and supply a different email adddress.";
+                } else {
+                    $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress.";
+                }
+                $vars['errors'] = $errors;
+                $vars['member_id'] = $this->member_id;
 
-            return $this->EE->load->view($view, $vars, TRUE);  
-            exit(); 
+                if ($this->logged_in) {
+                    $vars['username'] = $this->EE->session->userdata['username'];
+                    $vars['email'] = $this->EE->session->userdata['email'];
+                    $view = 'subscribe_existing';
+                } else {
+                    $view = 'subscribe_new';
+                }
+
+                return $this->EE->load->view($view, $vars, TRUE);
+                exit();
+            }
         }
-        
-        
-        
+
         $subscription_type = $this->EE->input->post('subscription_type');
         $subscription_details = $this->EE->subscribers_model->get_subscription_details($subscription_type);
         $tshirt_size = $this->EE->input->post('tshirt_size');
         
         $this->set_defaults();
 
-
         $countrylist = $this->EE->eway_model->get_countrylist();
 
         $cc = $this->EE->eway_model->ip2location('countryCode');
         
-        
-        
-
         // $cc = $this->EE->eway_model->visitor_country();
         //die("CC =[$cc]");
         //$terms = $this->EE->load->view('terms', $vars, TRUE);
@@ -105,15 +100,13 @@ class payment_controller extends Base_Controller {
         $vars['countrylist'] = $countrylist;
         $vars['member_id'] = $this->member_id;
         //$vars['subscriber'] = $this->subscriber;
-        $vars['subscription_type'] = $subscription_type;
+        //$vars['subscription_type'] = $subscription_type;
         $vars['subscription_details'] = $subscription_details;
         
-        $vars['email'] = $email;
-        $vars['tshirt_size'] = $tshirt_size;
+        //$vars['email'] = $email;
+        //$vars['tshirt_size'] = $tshirt_size;
         $vars['errors'] = $errors;
         
-        
-          
         return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
 
     }
@@ -127,23 +120,45 @@ class payment_controller extends Base_Controller {
 */
 
     public function store() {
+        $this->subscribe_stage = 2;
+        $errors = array();
         $member_id = $this->EE->input->post('member_id');
         
         $params = array();
-        
-        
-        
+
         /*
         foreach ($subscriber_details_fields as $field) {
             $params[$field] = $this->EE->input->post($field);
-        }
-         
+        } 
          */
         
         //die($this->EE->input->post('country_id'));
         
-        $this->store_subscriber();
+        $cc_result = $this->EE->eway_model->create_customer();
+        
+        if ($cc_result['Result'] != "Success") {
+            $errors[] = $this->EE->eway_model->eway_error;
+            $msg = 'create_customer error = '.print_r($cc_result,true);
+                
+            log_message('info', $msg);
+            $this->set_defaults();
+            $vars['member_id'] = $this->member_id;
+            //$vars['tshirt_size'] = $this->EE->input->post('tshirt_size');
+            //$vars['subscription_type'] = $this->EE->input->post('subscription_type');
+            $vars['errors'] = $errors;
+            $countrylist = $this->EE->eway_model->get_countrylist();
+            $cc = $this->EE->eway_model->ip2location('countryCode');
+            $vars['countrycode'] = $cc;
+            $vars['countrylist'] = $countrylist;
+      
+            
+            return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
+            exit();
+        }
 
+        //if $cc_result
+        
+        $this->store_subscriber();
         //$this->EE->subscribers_model->update_tna_subscriber_details($member_id,$params);
         redirect($this->https_site_url."subscribe/success/$member_id");
     }
@@ -218,13 +233,7 @@ class payment_controller extends Base_Controller {
         }
 
             //$this->EE->member_model->delete_member($member_id);
-        
-      
-        
-        
-        
-       
-            
+
          // $member_id = $duplicate->member_id;
          // $existing_member = 1;
 

@@ -1,6 +1,6 @@
 <? $this->view('errors'); ?>
 
-<? $this->view('go_back_1'); ?>
+<? if (count($errors) == 0) { $this->view('go_back_1'); } ?>
 
 
 {!--
@@ -31,56 +31,43 @@
 
     <div class="form-group">
         <label for="first_name">First Name (as it appears on card)</label>
-        <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="" />
+        <input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" value="<?=$first_name?>" />
     </div>
 
     <div class="form-group">
         <label for="last_name">Last Name (as it appears on card)</label>
-        <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="" />
+        <input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" value="<?=$last_name?>" />
     </div>
 
     <div class="form-group">
         <label>Card Number</label>
-        <input class="form-control" type="text" name="cc_number" value="" />
+        <input class="form-control" type="text" name="cc_number" value="<?=$cc_number?>" />
     </div>
 
     <div class="form-group">
 
         <label>Expiration: Month</label>
 
-        <select class="form-control" name="cc_expiry_month"><option value="01">01</option>
-            <option value="02">02</option>
-            <option value="03">03</option>
-            <option value="04">04</option>
-            <option value="05">05</option>
-            <option value="06">06</option>
-            <option value="07">07</option>
-            <option value="08">08</option>
-            <option value="09">09</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
+        <select class="form-control" name="cc_expiry_month">
+            <?
+            foreach ($months as $month) {
+                $selected = ($month==$cc_expiry_month)?'selected':'';
+                echo "<option $selected value='$month' label='$month'>$month</option>";
+            }
+            ?>
         </select>
     </div>
     
     <div class="form-group">
         <label>Expiration: Year</label>
-
-            <select class="form-control" name="cc_expiry_year">
-                <option value="2014">2014</option>
-                <option value="2015">2015</option>
-                <option value="2016">2016</option>
-                <option value="2017">2017</option>
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
+            <select class="form-control" name="cc_expiry_year">  
+                <?
+                 foreach ($years as $year) {
+                    $selected = ($year==$cc_expiry_year)?'selected':'';
+                    echo "<option $selected value='$year' label='$year'>$year</option>";
+                 }
+                ?> 
             </select>
-
-
     </div>
 
 {!--
@@ -97,30 +84,35 @@
 
     <div class="form-group">
         <label for="company">Company</label>
-        <input class="form-control" type="text" id="company" name="company" value="" />
+        <input class="form-control" type="text" id="company" name="company" value="<?=$company?>" />
     </div>
     <div class="form-group">
         <label for="address">Street Address</label>
-        <input class="form-control" type="text" id="address" name="address" maxlength="100" value="" />
+        <input class="form-control" type="text" id="address" name="address" maxlength="100" value="<?=$address?>" />
     </div>
+    
     <div class="form-group">
         <label for="address_2">Address Line 2</label>
-        <input class="form-control" type="text" id="address_2" name="address_2" maxlength="100" value="" />
+        <input class="form-control" type="text" id="address_2" name="address_2" maxlength="100" value="<?=$address_2?>" />
     </div>
+    
     <div class="form-group">
         <label for="city">Suburb/City</label>
-        <input class="form-control" type="text" id="suburb" name="suburb" maxlength="100" value="" />
+        <input class="form-control" type="text" id="suburb" name="suburb" maxlength="100" value="<?=$suburb?>" />
     </div>
     <div class="form-group">
         <label for="region_other">State/Province</label>
-        <input class="form-control" type="text" id="state" name="state" value="" />
+        <input class="form-control" type="text" id="state" name="state" value="<?=$state?>" />
     </div>
     <div class="form-group">
         <label for="country">Country</label>
         <select class="form-control" name="country" id="country">
             <?
+            $selected_country = ($countrycode)?$countrycode:'';
+            $selected_country = ($country)?$country:$selected_country;
+            
             foreach ($countrylist as $key => $value) {
-                $selected = ($key==$countrycode)?'selected':'';
+                $selected = ($key==$selected_country)?'selected':'';
                 echo "<option $selected value='$key' label='$value'>$value</option>";
             }
 
@@ -130,7 +122,7 @@
     </div>
     <div class="form-group">
         <label for="postal_code">Postal Code/Zip</label>
-        <input class="form-control" type="text" id="postal_code" name="postal_code" maxlength="100" value="" />
+        <input class="form-control" type="text" id="postal_code" name="postal_code" maxlength="100" value="<?=$postal_code?>" />
     </div>
 
     {!--

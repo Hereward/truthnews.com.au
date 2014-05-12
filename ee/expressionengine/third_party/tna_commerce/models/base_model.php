@@ -8,7 +8,7 @@ class Base_model extends CI_Model {
     protected $EE;
     public $eway_path;
     public $country_list;
-    public $error = '';
+    public $db_error = '';
     public $subscriber_details_fields;
     //public $base_url;
 
@@ -51,14 +51,14 @@ class Base_model extends CI_Model {
     
     
     
-    public function get_error() {
+    public function get_db_error() {
         
         if ($this->EE->db->_error_message()) {
             $error_num = $this->db->_error_number();
-            $this->error = "Database error ($error_num): ".$this->EE->db->_error_message();
+            $this->db_error = "Database error ($error_num): ".$this->EE->db->_error_message();
             return 1;
         } else {
-            $this->error = '';
+            $this->db_error = '';
             return '';
         }
         
