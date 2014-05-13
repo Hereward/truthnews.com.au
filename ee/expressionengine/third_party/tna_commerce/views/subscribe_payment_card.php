@@ -16,6 +16,8 @@
     <input type="hidden" name="email" value="<?=$email?>" />
     <input type="hidden" name="subscription_type" value="<?=$subscription_type?>" />
     <input type="hidden" name="tshirt_size" value="<?=$tshirt_size?>" />
+    <input type="hidden" name="RebillCustomerID" value="<?=$RebillCustomerID?>" />
+    
     
 
     <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->

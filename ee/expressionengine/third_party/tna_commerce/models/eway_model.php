@@ -60,19 +60,19 @@ class Eway_model extends Base_model {
     }
 
     public function create_customer() {
-/*
-        $requestbody = array(
-            'man:customerCompany' => $this->EE->input->post('company'),
-            'man:customerFirstName' => $this->EE->input->post('first_name'),
-            'man:customerLastName' => $this->EE->input->post('last_name'),
-            'man:customerAddress' => $this->EE->input->post('address') . ' ' . $this->EE->input->post('address_2'),
-            'man:customerSuburb' => $this->EE->input->post('suburb'),
-            'man:customerState' => $this->EE->input->post('state'),
-            'man:customerPostCode' => $this->EE->input->post('postal_code'),
-            'man:customerCountry' => $this->EE->input->post('country'),
-            'man:customerEmail' => $this->EE->input->post('email')
-        );
-*/
+        /*
+          $requestbody = array(
+          'man:customerCompany' => $this->EE->input->post('company'),
+          'man:customerFirstName' => $this->EE->input->post('first_name'),
+          'man:customerLastName' => $this->EE->input->post('last_name'),
+          'man:customerAddress' => $this->EE->input->post('address') . ' ' . $this->EE->input->post('address_2'),
+          'man:customerSuburb' => $this->EE->input->post('suburb'),
+          'man:customerState' => $this->EE->input->post('state'),
+          'man:customerPostCode' => $this->EE->input->post('postal_code'),
+          'man:customerCountry' => $this->EE->input->post('country'),
+          'man:customerEmail' => $this->EE->input->post('email')
+          );
+         */
         //"man:customerTitle" => "",
         $requestbody = array(
             "man:customerTitle" => "",
@@ -97,24 +97,80 @@ class Eway_model extends Base_model {
         log_message('info', print_r($requestbody, true));
         $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/CreateRebillCustomer';
         $result = $this->client->call('man:CreateRebillCustomer', $requestbody, '', $soapaction);
-        $this->eway_error = $result['ErrorDetails'];
+        $this->eway_error = $this->get_eway_error($result);
+        //$result['ErrorDetails'];
         //$this->get_eway_error($result);
+        return $result;
+    }
+
+    function create_event($subscription_details, $RebillCustomerID) {
+        $subscription_type = $this->EE->input->post('subscription_type');
+
+        $RebillIntervalType = '';
+        if ($subscription_type == 'yearly') {
+            $RebillIntervalType = 3;
+        } elseif ($subscription_type == 'monthly') {
+            $RebillIntervalType = 4;
+        }
+
+        $RebillInterval = 1;
+        $now = date("d/m/Y");
+        $end = date("d/m/Y", strtotime("+20 years"));
+        $RebillRecurAmt = $subscription_details->aud_price*100;
+
+        $requestbody = array(
+            'man:RebillCustomerID' => $RebillCustomerID,
+            'man:RebillInvRef' => '',
+            'man:RebillInvDes' => '',
+            'man:RebillCCName' => $this->EE->input->post('first_name') . ' ' . $this->EE->input->post('last_name'),
+            'man:RebillCCNumber' => $this->EE->input->post('cc_number'),
+            'man:RebillCCExpMonth' => $this->EE->input->post('cc_expiry_month'),
+            'man:RebillCCExpYear' => $this->EE->input->post('cc_expiry_year'),
+            'man:RebillInitAmt' => 0,
+            'man:RebillInitDate' => $now,
+            'man:RebillRecurAmt' => $RebillRecurAmt,
+            'man:RebillStartDate' => $now,
+            'man:RebillInterval' => $RebillInterval,
+            'man:RebillIntervalType' => $RebillIntervalType,
+            'man:RebillEndDate' => $end
+        );
+        log_message('info', print_r($requestbody, true));
+        
+        //die('boo');
+
+        $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/CreateRebillEvent';
+        $result = $this->client->call('man:CreateRebillEvent', $requestbody, '', $soapaction);
+        log_message('info', print_r($result, true));
+        $this->eway_error = $this->get_eway_error($result);
         return $result;
     }
 
     function get_eway_error($result) {
         $output = '';
         if ($this->client->fault) {
-            $output .= 'The request contains an invalid SOAP body.';
-            //$output .= print_r($result,true).'</br>';
+            $output = 'There is a problem with the network. Please try again in a few minutes.';
         } else {
-            $err = $this->client->getError();
-            if ($err) {
-                $output .= '<pre>' . $err . '</pre>';
-            }
+            $output = $result['ErrorDetails'];
         }
         return $output;
     }
+
+    /*
+      function get_eway_error($result) {
+      $output = '';
+      if ($this->client->fault) {
+      $output .= 'The request contains an invalid SOAP body.';
+      //$output .= print_r($result,true).'</br>';
+      } else {
+      $err = $this->client->getError();
+      if ($err) {
+      $output .= '<pre>' . $err . '</pre>';
+      }
+      }
+      return $output;
+      }
+     *
+     */
 
     /*
      * 'man:customerTitle' => $_POST['customerTitle'],

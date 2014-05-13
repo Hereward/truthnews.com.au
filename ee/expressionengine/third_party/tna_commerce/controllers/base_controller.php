@@ -102,6 +102,7 @@ abstract class Base_Controller {
          
             
              $form_default_fields = array(
+                'RebillCustomerID',
                 'subscription_type',
                 'tshirt_size',
                 'email',
@@ -125,34 +126,7 @@ abstract class Base_Controller {
              foreach ($form_default_fields as $field) {
                  $form_defaults[$field] = $this->get_option($field);
              }
-             
-            // die($this->EE->input->post('cc_expiry_year'). ' ' . $form_defaults['cc_expiry_year']);
-             
-             
-             
-             
-             //  => $this->get_option('subscription_type')
-           /*
-            $form_defaults = array(
-                'subscription_type' => $this->get_option('subscription_type'),
-                'tshirt_size' => $this->get_option('tshirt_size'),
-                'email' => $this->get_option('email'),
-                'first_name' => $this->get_option('first_name'),
-                'last_name' => $this->get_option('last_name'),
-                'cc_number' => $this->get_option('cc_number'),
-                'cc_expiry_month' => $this->get_option('cc_expiry_month'),
-                'cc_expiry_year' => $this->get_option('cc_expiry_year'),
-                'company' => $this->get_option('company'),
-                'address' => $this->get_option('address'),
-                'address_2' => $this->get_option('address_2'),
-                'suburb' => $this->get_option('suburb'),
-                'state' => $this->get_option('state'),
-                'country' => $this->get_option('country'),
-                'postal_code' => $this->get_option('postal_code'),
-                'state' => $this->get_option('state'),
-            );
-            
-            */
+
         }
 
 
