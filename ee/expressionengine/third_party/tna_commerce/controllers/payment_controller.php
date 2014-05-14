@@ -163,7 +163,7 @@ class payment_controller extends Base_Controller {
                 $cc_result = $this->EE->eway_model->create_customer();
                 dev_log::write('payment_controller:store create_customer() = DONE');
 
-                if ($cc_result['Result'] != "Success") {
+                if ($this->EE->eway_model->eway_error) {
                     dev_log::write($this->EE->eway_model->eway_error);
                     //trigger_error($this->EE->eway_model->eway_error);
                    // log_message('error', $this->EE->eway_model->eway_error);
@@ -182,7 +182,7 @@ class payment_controller extends Base_Controller {
                 $ce_result = $this->EE->eway_model->create_event($this->subscription_details, $RebillCustomerID);
                 dev_log::write('payment_controller:store create_event() = DONE');
                 dev_log::write('ERRORRRR = ['.$this->EE->eway_model->eway_error.']');
-                if ($ce_result['Result'] != "Success") {
+                if ($this->EE->eway_model->eway_error) {
                      //trigger_error($this->EE->eway_model->eway_error);
                      dev_log::write($this->EE->eway_model->eway_error);
                     //$vars = $this->process_eway_error();

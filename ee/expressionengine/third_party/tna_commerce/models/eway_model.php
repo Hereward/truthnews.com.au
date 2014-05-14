@@ -325,6 +325,9 @@ class Eway_model extends Base_model {
     }
 
     function get_eway_rebill_error($result) {
+        $result_str = print_r($result,true);
+        dev_log::write("eway_model:get_eway_rebill_error: result_str = $result_str");
+        
         $output = '';
         if ($this->client->fault) {
             $output = 'There is a problem with the network. Please try again in a few minutes.';
