@@ -161,6 +161,7 @@ class payment_controller extends Base_Controller {
 
             if (!$RebillCustomerID) {
                 $cc_result = $this->EE->eway_model->create_customer();
+                dev_log::write('payment_controller:store create_customer() = DONE');
 
                 if ($cc_result['Result'] != "Success") {
                     dev_log::write($this->EE->eway_model->eway_error);
@@ -169,6 +170,8 @@ class payment_controller extends Base_Controller {
                     //$vars = $this->process_eway_error();
                     //return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
                     //exit();
+                } else {
+                    dev_log::write('payment_controller:store create_customer() = SUCCESS');
                 }
                 $RebillCustomerID = $cc_result['RebillCustomerID'];
             }
@@ -177,6 +180,7 @@ class payment_controller extends Base_Controller {
 
             if ($RebillCustomerID) {
                 $ce_result = $this->EE->eway_model->create_event($this->subscription_details, $RebillCustomerID);
+                dev_log::write('payment_controller:store create_event() = DONE');
 
                 if ($ce_result['Result'] != "Success") {
                      //trigger_error($this->EE->eway_model->eway_error);
@@ -185,6 +189,8 @@ class payment_controller extends Base_Controller {
                     //$vars['RebillCustomerID'] = $RebillCustomerID;
                     //return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
                     //exit();
+                } else {
+                    dev_log::write('payment_controller:store create_event() = SUCCESS');
                 }
             }
            // dev_log::write("payment_controller:180");
