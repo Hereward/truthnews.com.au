@@ -8,8 +8,9 @@
     <div class="form-group">
         <label>Subscription Type</label>
         <select class="form-control" name="subscription_type" id="subscription_type">
-            <option value="yearly">Yearly - AUD $65.00 per year (includes T-shirt)</option>
-            <option value="monthly">Monthly - AUD $6.50 per month</option>
+            <option value="yearly">Yearly - AUD <?=$yearly_amount?> per year (includes T-shirt)</option>
+            <option value="monthly">Monthly - AUD <?=$monthly_amount?> per month</option>
+
         </select>
     </div>
     

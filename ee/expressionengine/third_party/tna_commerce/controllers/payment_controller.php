@@ -15,8 +15,7 @@ class payment_controller extends Base_Controller {
         //die('boo');
 
         parent::__construct($args);
-
-
+        $this->EE->load->model('eway_model');
 
         //$this->member_id = $this->EE->session->userdata('member_id');
     }
@@ -32,6 +31,16 @@ class payment_controller extends Base_Controller {
     }
 
     public function init() {
+        $eway_init = $this->EE->eway_model->init();
+
+        if (!$eway_init) {
+            $vars = array();
+            $errors = array();
+            $errors[] = $this->EE->eway_model->eway_error;
+            $vars['errors'] = $errors;
+            return $this->EE->load->view('subscribe_new', $vars, TRUE);
+            exit();
+        }
         $subscription_type = $this->EE->input->post('subscription_type');
         $this->subscription_details = $this->EE->subscribers_model->get_subscription_details($subscription_type);
         $this->country_list = $this->EE->eway_model->get_countrylist();
@@ -39,6 +48,7 @@ class payment_controller extends Base_Controller {
     }
 
     public function create() {
+        dev_log::write("payment_controller:create");
         $errors = array();
 
         //$url_decoded_password = urldecode($url_encoded_encrypted_password);
@@ -94,7 +104,7 @@ class payment_controller extends Base_Controller {
 
         //$subscription_type = $this->EE->input->post('subscription_type');
         //$subscription_details = $this->EE->subscribers_model->get_subscription_details($subscription_type);
-        $tshirt_size = $this->EE->input->post('tshirt_size');
+        //$tshirt_size = $this->EE->input->post('tshirt_size');
 
         $this->set_defaults();
 
@@ -129,45 +139,71 @@ class payment_controller extends Base_Controller {
      */
 
     public function store() {
+        //dev_log::write("payment_controller:store");
+        $RebillCustomerID = '';
         $this->subscribe_stage = 2;
         $errors = array();
-        $member_id = $this->EE->input->post('member_id');
+        //$member_id = $this->EE->input->post('member_id');
         $params = array();
-        $cc_result = '';
-        $RebillCustomerID = $this->EE->input->post('RebillCustomerID');
-
-        if (!$RebillCustomerID) {
-            $cc_result = $this->EE->eway_model->create_customer();
-
-            if ($cc_result['Result'] != "Success") {
-                $vars = $this->process_eway_error();
-                
-                return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
-                exit();
-            }
-            $RebillCustomerID = $cc_result['RebillCustomerID'];
-        }
-
-
         
+        $sd = print_r($this->subscription_details,true);
+        dev_log::write("sd = $sd");
+        $payment_good = $this->EE->eway_model->process_direct_payment($this->subscription_details);
+        
+        $eway_auth_code = '';
+        
+        //dev_log::write("payment_controller: [$payment_good]");
 
-        $ce_result = $this->EE->eway_model->create_event($this->subscription_details, $RebillCustomerID);
+        if ($payment_good) {
+            $eway_auth_code = $this->EE->eway_model->eway_auth_code;
+            $cc_result = '';
+            $RebillCustomerID = $this->EE->input->post('RebillCustomerID');
 
-        if ($ce_result['Result'] != "Success") {
+            if (!$RebillCustomerID) {
+                $cc_result = $this->EE->eway_model->create_customer();
+
+                if ($cc_result['Result'] != "Success") {
+                    dev_log::write($this->EE->eway_model->eway_error);
+                    //trigger_error($this->EE->eway_model->eway_error);
+                   // log_message('error', $this->EE->eway_model->eway_error);
+                    //$vars = $this->process_eway_error();
+                    //return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
+                    //exit();
+                }
+                $RebillCustomerID = $cc_result['RebillCustomerID'];
+            }
+           // dev_log::write("payment_controller:166");
+
+
+            if ($RebillCustomerID) {
+                $ce_result = $this->EE->eway_model->create_event($this->subscription_details, $RebillCustomerID);
+
+                if ($ce_result['Result'] != "Success") {
+                     //trigger_error($this->EE->eway_model->eway_error);
+                     dev_log::write($this->EE->eway_model->eway_error);
+                    //$vars = $this->process_eway_error();
+                    //$vars['RebillCustomerID'] = $RebillCustomerID;
+                    //return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
+                    //exit();
+                }
+            }
+           // dev_log::write("payment_controller:180");
+
+
+
+            //if $cc_result
+
+            $this->store_subscriber();
+            //$this->EE->subscribers_model->update_tna_subscriber_details($member_id,$params);
+            redirect($this->https_site_url . "subscribe/success/$this->member_id/$eway_auth_code");
+        } else {
             $vars = $this->process_eway_error();
-            $vars['RebillCustomerID'] = $RebillCustomerID;
             return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
-            exit();
         }
-
-        //if $cc_result
-
-        $this->store_subscriber();
-        //$this->EE->subscribers_model->update_tna_subscriber_details($member_id,$params);
-        redirect($this->https_site_url . "subscribe/success/$member_id");
     }
 
     public function process_eway_error() {
+        $errors = array();
         $vars = array();
         $this->set_defaults();
         $errors[] = $this->EE->eway_model->eway_error;
@@ -182,7 +218,7 @@ class payment_controller extends Base_Controller {
         $errors = array();
         $member_id = '';
         $existing_member = false;
-        $existing_subscriber = false;
+        //$existing_subscriber = false;
 
         $this->EE->load->helper('security');
         require_once("$this->default_site_path/includes/pwgen.class.php");
@@ -216,14 +252,15 @@ class payment_controller extends Base_Controller {
 
         $duplicate = $this->EE->subscribers_model->find_duplicate($data['email']);
 
-        $existing_subscriber = ($duplicate) ? $this->EE->subscribers_model->is_subscriber($duplicate->member_id) : false;
-
+        //$existing_subscriber = ($duplicate) ? $this->EE->subscribers_model->is_subscriber($duplicate->member_id) : false;
+/*
         if ($existing_subscriber) {
             $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress";
             $vars['errors'] = $errors;
             return $this->EE->load->view('subscribe_new', $vars, TRUE);
             exit();
         }
+ */
         //$user_query_result = $this->EE->db->where('username',$email)->get('exp_members');
 
         if ($duplicate) {
@@ -266,6 +303,7 @@ class payment_controller extends Base_Controller {
         }
 
         $this->EE->subscribers_model->update_tna_subscriber_details($member_id, $params);
+        $this->member_id = $member_id;
 
         //$this->EE->input->post('last_name');
         //redirect($this->https_site_url."subscribe/payment/$member_id");

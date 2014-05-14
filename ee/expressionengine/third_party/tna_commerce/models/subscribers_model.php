@@ -8,6 +8,7 @@ class Subscribers_model extends Base_model {
 	public $my_var = 'My Var is EMPTY';
 	public $orig = '[EMPTY GiGi]';
         public $default_db_prefix;
+        public $subscription_types = array();
         
 
 
@@ -78,6 +79,18 @@ class Subscribers_model extends Base_model {
         $this->restore_prefix();
         return $result->row();
     }
+    
+     public function set_subscription_types() {
+        $this->remove_prefix();
+        $m_result = $this->db->get_where('tna_subscription_types', array('name' => 'monthly'));
+        $this->subscription_types['monthly'] = $m_result->row();
+        $y_result = $this->db->get_where('tna_subscription_types', array('name' => 'yearly'));
+        $this->subscription_types['yearly'] = $y_result->row();
+        $this->restore_prefix();
+        //return $result;
+    }
+    
+    
     
     public function is_subscriber($member_id = '') {
         $this->remove_prefix();

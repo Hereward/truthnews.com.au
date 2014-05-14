@@ -23,6 +23,7 @@ abstract class Base_Controller {
 
         //die('weeeeeee');
         error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+        
         $this->EE = & get_instance();
         $this->EE->load->add_package_path(PATH_THIRD . '/tna_commerce');
 
@@ -53,7 +54,7 @@ abstract class Base_Controller {
         $this->password_key = "bazooka";
 
         $this->EE->load->library('table');
-        $this->EE->load->model('eway_model');
+        
         $this->EE->load->model('subscribers_model');
         //$this->EE->load->model('member_model');
     }
@@ -93,6 +94,8 @@ abstract class Base_Controller {
 
             $form_defaults = array(
                 'email' => $this->get_option('email'),
+                'yearly_amount' => $this->EE->subscribers_model->subscription_types['yearly']->aud_price,
+                'monthly_amount' => $this->EE->subscribers_model->subscription_types['monthly']->aud_price,
             );
         } elseif ($this->subscribe_stage == 2) {
             
@@ -111,6 +114,7 @@ abstract class Base_Controller {
                 'cc_number',
                 'cc_expiry_month',
                 'cc_expiry_year',
+                'cc_cvn',
                 'company',
                 'address',
                 'address_2',

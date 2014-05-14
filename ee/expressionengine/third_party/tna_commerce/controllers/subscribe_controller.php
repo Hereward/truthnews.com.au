@@ -15,9 +15,15 @@ class subscribe_controller extends Base_Controller {
 
         //$this->member_id = $this->EE->session->userdata('member_id');
     }
+    
+    public function init() {
+      $this->EE->subscribers_model->set_subscription_types();
+
+    }
 
 
     public function index() {
+        $this->init();
         //$this->resolved = $this->EE->TMPL->fetch_param('resolved');
         //$this->EE->load->model('keyword_search_model');
         //$str = $this->EE->eway_model->config_vars();
@@ -49,6 +55,16 @@ class subscribe_controller extends Base_Controller {
     }
 
     public function create() {
+        //$socket_timeout = ini_get('default_socket_timeout');
+        dev_log::write("subscribe_controller:create");
+        //error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+        //error_reporting(0);
+        //@ini_set('log_errors', 1);
+        //@ini_set('display_errors',0);
+        //trigger_error("BLAHHHHHHHHHHHHHH",E_USER_ERROR);
+        //trigger_er
+        
+        //dev_log::write("subscribe_controller:socket_timeout = [$socket_timeout]");
         
        // $this->EE->member_model->delete_member(19992);
         
