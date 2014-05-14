@@ -181,7 +181,7 @@ class payment_controller extends Base_Controller {
             if ($RebillCustomerID) {
                 $ce_result = $this->EE->eway_model->create_event($this->subscription_details, $RebillCustomerID);
                 dev_log::write('payment_controller:store create_event() = DONE');
-
+                dev_log::write('ERRORRRR = ['.$this->EE->eway_model->eway_error.']');
                 if ($ce_result['Result'] != "Success") {
                      //trigger_error($this->EE->eway_model->eway_error);
                      dev_log::write($this->EE->eway_model->eway_error);

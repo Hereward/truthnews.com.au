@@ -288,6 +288,8 @@ class Eway_model extends Base_model {
         $start = date("d/m/Y", strtotime($start_offset));
         $end = date("d/m/Y", strtotime("+20 years"));
         $RebillRecurAmt = $subscription_details->aud_price * 100;
+        
+        dev_log::write("eway_model:create_event: RebillRecurAmt = $RebillRecurAmt");
 
         $requestbody = array(
             'man:RebillCustomerID' => $RebillCustomerID,
@@ -305,6 +307,12 @@ class Eway_model extends Base_model {
             'man:RebillIntervalType' => $RebillIntervalType,
             'man:RebillEndDate' => $end
         );
+        
+        $ce_body = print_r($requestbody,true);
+        
+        dev_log::write("eway_model:create_event: ce_body = $ce_body");
+        
+        
         //log_message('info', print_r($requestbody, true));
 
         //die('boo');
