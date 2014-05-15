@@ -43,8 +43,8 @@ class payment_controller extends Base_Controller {
         }
         $subscription_type = $this->EE->input->post('subscription_type');
         $this->subscription_details = $this->EE->subscribers_model->get_subscription_details($subscription_type);
-        $this->country_list = $this->EE->eway_model->get_countrylist();
-        $this->country_code = $this->EE->eway_model->ip2location('countryCode');
+        $this->country_list = $this->EE->tna_commerce_lib->get_countrylist();
+        $this->country_code = $this->EE->tna_commerce_lib->ip2location('countryCode');
     }
 
     public function create() {
