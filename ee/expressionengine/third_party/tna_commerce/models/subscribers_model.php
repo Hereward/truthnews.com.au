@@ -39,6 +39,7 @@ class Subscribers_model extends Base_model {
     public function remove_prefix() {
         $this->db->dbprefix = '';
     }
+    
 
 
 
@@ -164,6 +165,7 @@ class Subscribers_model extends Base_model {
         $this->EE->db->delete('tna_subscribers', array('member_id' => $member_id));
         $this->EE->db->delete('tna_subscriber_details', array('member_id' => $member_id));
         $this->EE->db->delete('tna_eway_customers', array('member_id' => $member_id));
+        
         $this->restore_prefix();
     }
     
@@ -194,6 +196,38 @@ class Subscribers_model extends Base_model {
          return $output;
         
     }
+    
+     public function set_rebill_details($member_id,$rebill_details) {
+         
+        dev_log::write("set_rebill_details [$member_id]");
+        
+        $rebill_details_str = print_r($rebill_details,true);
+        dev_log::write($rebill_details_str);
+        
+        
+        $this->remove_prefix();
+        $now = date("Y-m-d H:i:s");
+
+        $data = array(
+            'member_id' => $member_id,
+            'customer_id' => $rebill_details['RebillCustomerID'],
+            'rebill_id' => $rebill_details['RebillID'],
+            'created' => $now,
+            'modified' => $now
+        );
+
+        $this->EE->db->insert('tna_eway_customers', $data);
+        
+         if ($this->get_db_error()) {
+             dev_log::write("DB ERROR = $this->db_error");
+             
+         }
+         
+         dev_log::write("SQL STRING = $this->sql_string");
+         
+        $this->restore_prefix();
+        return $output;
+     }
     
 
     public function create_tna_subscriber($params) {

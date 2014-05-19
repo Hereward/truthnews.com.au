@@ -1,5 +1,5 @@
 {embed ="framework_2/doc_head_ssl" url="{site_url}subscribe" description="If you subscribe to TNRA, you will receive an email weekly with information about our latest show. Please
-make sure to whitelist our email address in your SPAM filter." title="Subscription Complete"}
+make sure to whitelist our email address in your SPAM filter." title="Confirm Billing Details"}
 {embed="framework_2/navigation" section="home"}
 
 <div class="container main_box">
@@ -9,9 +9,13 @@ make sure to whitelist our email address in your SPAM filter." title="Subscripti
         <div class="col-md-9 col-lg-8">
             <div class="news_channel_container">
                 <a name="subscribe_form" ></a>
-                <h3 class="recent_shows">Subscription Complete</h3>  
+                <h3 class="recent_shows">Subscription Complete</h3>
+                
                 {exp:tna_commerce:payment action="subscribe_success"}
+          
+
             </div>
+
 
         </div>
        <div class="col-md-3 col-lg-4">{embed="framework_2/right_col_subscribe"}</div>

@@ -23,9 +23,9 @@ class subscribe_controller extends Base_Controller {
 
 
     public function index() {
-        $email_result = $this->EE->tna_commerce_lib->email_test_2();
+        //$email_result = $this->EE->tna_commerce_lib->email_test_2();
         //$msg = ($email_result)?"email_test: success":"email_test: fail";
-        dev_log::write($email_result);
+        //dev_log::write($email_result);
         
         $this->init();
         //$this->resolved = $this->EE->TMPL->fetch_param('resolved');

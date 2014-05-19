@@ -10,6 +10,7 @@ class Base_model extends CI_Model {
     public $country_list;
     public $db_error = '';
     public $subscriber_details_fields;
+    public $sql_string;
     //public $base_url;
 
     public function __construct()
@@ -56,6 +57,7 @@ class Base_model extends CI_Model {
         if ($this->EE->db->_error_message()) {
             $error_num = $this->db->_error_number();
             $this->db_error = "Database error ($error_num): ".$this->EE->db->_error_message();
+            $this->sql_string = $this->EE->db->_compile_select();
             return 1;
         } else {
             $this->db_error = '';

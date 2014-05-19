@@ -15,6 +15,8 @@ class Tna_commerce_lib {
     public function __construct() {
         $this->EE = & get_instance();
         $this->default_site_path = $this->EE->config->item('default_site_path');
+        require_once("$this->default_site_path/includes/phpmailer/PHPMailerAutoload.php");
+        $this->admin_email = $this->EE->config->item('admin_email');
 
         //set a global object
         //$this->EE->tna_commerce = $this;
@@ -33,7 +35,7 @@ class Tna_commerce_lib {
 
     public function email_test_2() {
         require_once("$this->default_site_path/includes/phpmailer/PHPMailerAutoload.php");
-        
+
         $mail = new PHPMailer;
 
         $mail->From = 'hereward@planetonline.com.au'; //truth.news.australia@gmail.com hereward@planetonline.com.au
@@ -56,11 +58,50 @@ class Tna_commerce_lib {
         $msg = '';
         if (!$mail->send()) {
             $msg = 'Message could not be sent. ';
-            $msg .=  'Mailer Error: ' . $mail->ErrorInfo;
+            $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
             $msg = 'Message has been sent';
         }
-        
+
+        return $msg;
+    }
+
+    public function send_cc_confirmation($vars = array()) {
+        $plain_path = 'email/cc_confirmation_plain';
+        $html_path = 'email/cc_confirmation_html';
+        //$customer_subject = 'Credit Card Payment received!'
+        //$admin_subject = "Credit Card Payment [{$vars['cc_email']}]";
+        $plain = $this->EE->load->view($plain_path, $vars, TRUE);
+        $html = $this->EE->load->view($html_path, $vars, TRUE);
+
+        $mail = new PHPMailer;
+
+        $mail->From = $this->admin_email; //truth.news.australia@gmail.com hereward@planetonline.com.au
+        $mail->FromName = 'Truth News Australia';
+        $mail->addAddress($vars['cc_email']);
+        $mail->addCC($this->admin_email);
+
+        $mail->addReplyTo($this->admin_email, 'Truth News Australia');
+
+        $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+        //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = 'Credit Card Payment received!';
+        $mail->Body = $html;
+        $mail->AltBody = $plain;
+
+        $msg = '';
+        if (!$mail->send()) {
+            $msg = "Message to {$vars['cc_email']} was not sent.";
+            $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            $msg = "Message to {$vars['cc_email']} was sent.";
+        }
+
+        dev_log::write($msg);
+
         return $msg;
     }
 
