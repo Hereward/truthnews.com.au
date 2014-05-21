@@ -115,7 +115,8 @@ class Subscribers_model extends Base_model {
         //$this->EE->db->select('tna_subscriber_details.created AS sd_created', FALSE);
         //$this->EE->db->select('tna_subscriber_details.modified AS sd_modified', FALSE);
         
-        $this->EE->db->select('tna_subscriber_details.first_name, '
+        $this->EE->db->select('tna_subscriber_details.member_id, '
+                . 'tna_subscriber_details.first_name, '
                 . 'tna_subscriber_details.last_name, '
                 . 'tna_subscriber_details.company, '
                 . 'tna_subscriber_details.address, '
@@ -123,12 +124,14 @@ class Subscribers_model extends Base_model {
                 . 'tna_subscriber_details.postal_code, '
                 . 'tna_subscriber_details.suburb, '
                 . 'tna_subscriber_details.state, '
+                . 'tna_subscriber_details.country, '
                 . 'tna_subscriber_details.payment_method, '
                 . 'tna_subscriber_details.tshirt_size, ',
                 FALSE);
         
         $this->EE->db->select('exp_members.email, '
-                . 'exp_members.screen_name, ',
+                . 'exp_members.screen_name, '
+                . 'username, ',
                 FALSE);
           
         
@@ -198,7 +201,7 @@ class Subscribers_model extends Base_model {
     }
     
      public function set_rebill_details($member_id,$rebill_details) {
-         
+        $output = '';
         dev_log::write("set_rebill_details [$member_id]");
         
         $rebill_details_str = print_r($rebill_details,true);
@@ -207,23 +210,22 @@ class Subscribers_model extends Base_model {
         
         $this->remove_prefix();
         $now = date("Y-m-d H:i:s");
+        
+        $cid = (isset($rebill_details['RebillCustomerID']))?$rebill_details['RebillCustomerID']:0;
+        $rid = (isset($rebill_details['RebillID']))?$rebill_details['RebillID']:0;
 
         $data = array(
             'member_id' => $member_id,
-            'customer_id' => $rebill_details['RebillCustomerID'],
-            'rebill_id' => $rebill_details['RebillID'],
+            'customer_id' => $cid,
+            'rebill_id' => $rid,
             'created' => $now,
             'modified' => $now
         );
 
         $this->EE->db->insert('tna_eway_customers', $data);
-        
-         if ($this->get_db_error()) {
-             dev_log::write("DB ERROR = $this->db_error");
-             
-         }
+
          
-         dev_log::write("SQL STRING = $this->sql_string");
+         //dev_log::write("SQL STRING = $this->sql_string");
          
         $this->restore_prefix();
         return $output;
@@ -249,6 +251,12 @@ class Subscribers_model extends Base_model {
         );
 
         $this->EE->db->insert('tna_subscribers', $data);
+        
+        //$query = $this->db->query('SELECT name, title, email FROM my_table');
+        
+        //dev_log::write("INSERT tna_subscribers = ".$this->EE->db->last_query());
+        
+        //die("FUCK");
 
         if ($this->get_db_error()) {
             $output = false;

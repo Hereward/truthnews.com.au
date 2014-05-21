@@ -6,6 +6,7 @@ if (!defined('BASEPATH'))
 class Tna_commerce_lib {
 
     public $default_site_path;
+    protected $password_key;
 
     /**
      * constructor
@@ -17,9 +18,30 @@ class Tna_commerce_lib {
         $this->default_site_path = $this->EE->config->item('default_site_path');
         require_once("$this->default_site_path/includes/phpmailer/PHPMailerAutoload.php");
         $this->admin_email = $this->EE->config->item('admin_email');
+        $this->password_key = "bazooka";
 
         //set a global object
         //$this->EE->tna_commerce = $this;
+    }
+    
+    function debug_string_backtrace() { 
+        ob_start(); 
+        debug_print_backtrace(); 
+        $trace = ob_get_contents(); 
+        ob_end_clean(); 
+
+        // Remove first item from backtrace as it's this function which 
+        // is redundant. 
+        $trace = preg_replace ('/^#0\s+' . __FUNCTION__ . "[^\n]*\n/", '', $trace, 1); 
+
+        // Renumber backtrace items. 
+        $trace = preg_replace ('/^#(\d+)/me', '\'#\' . ($1 - 1)', $trace); 
+
+        return $trace; 
+    } 
+    
+    public function set_password_key($password_key) {
+        $this->password_key = $password_key;
     }
 
     public function email_test() {
@@ -65,8 +87,70 @@ class Tna_commerce_lib {
 
         return $msg;
     }
+    
+    public function send_email_notification($params = array()) {
+        $plain_path = $params['plain_path']; //'email/cc_confirmation_plain';
+        $html_path = $params['html_path']; //'email/cc_confirmation_html';
+        //$customer_subject = 'Credit Card Payment received!'
+        //$admin_subject = "Credit Card Payment [{$vars['cc_email']}]";
+        $plain = $this->EE->load->view($plain_path, $params, TRUE);
+        $html = $this->EE->load->view($html_path, $params, TRUE);
 
-    public function send_cc_confirmation($vars = array()) {
+        $mail = new PHPMailer;
+
+        $mail->From = $this->admin_email; //truth.news.australia@gmail.com hereward@planetonline.com.au
+        $mail->FromName = 'Truth News Australia';
+        $mail->addAddress($params['customer_email']);
+        $mail->addBCC($this->admin_email);
+
+        $mail->addReplyTo($this->admin_email, 'Truth News Australia');
+
+        $mail->WordWrap = 70;                                 // Set word wrap to 50 characters
+        //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = $params['subject'];
+        $mail->Body = $html;
+        $mail->AltBody = $plain;
+
+        $msg = '';
+        if (!$mail->send()) {
+            $msg = "{$params['tag']} message to {$params['customer_email']} was not sent.";
+            $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            $msg = "{$params['tag']} message to {$params['customer_email']} was sent.";
+        }
+
+        dev_log::write($msg);
+
+        return $msg;
+    }
+    
+    
+     public function send_subscription_confirmation($params = array()) {
+        $params['plain_path'] = 'email/subscribe_success_plain';
+        $params['html_path'] = 'email/subscribe_success_html';
+        $params['subject'] = 'Your Truth News Australia Subscription';
+        $params['customer_email'] =  $params['subscriber']->email;
+        $params['tag'] = 'subscription confirmation';
+        
+        return $this->send_email_notification($params);
+        
+        //These details have also been sent to your email address: $subscriber->email
+     }
+    
+
+    public function send_cc_confirmation($params = array()) {
+        
+        $params['plain_path'] = 'email/cc_confirmation_plain';
+        $params['html_path'] = 'email/cc_confirmation_html';
+        $params['subject'] = 'Credit Card payment received';
+        $params['tag'] = 'payment confirmation';
+        
+        return $this->send_email_notification($params);
+        
+        /*
         $plain_path = 'email/cc_confirmation_plain';
         $html_path = 'email/cc_confirmation_html';
         //$customer_subject = 'Credit Card Payment received!'
@@ -88,7 +172,7 @@ class Tna_commerce_lib {
         //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
         $mail->isHTML(true);                                  // Set email format to HTML
 
-        $mail->Subject = 'Credit Card Payment received!';
+        $mail->Subject = 'Credit Card payment received';
         $mail->Body = $html;
         $mail->AltBody = $plain;
 
@@ -103,6 +187,8 @@ class Tna_commerce_lib {
         dev_log::write($msg);
 
         return $msg;
+         * 
+         */
     }
 
     public function library_test() {

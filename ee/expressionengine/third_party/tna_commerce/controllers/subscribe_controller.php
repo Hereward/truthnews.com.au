@@ -147,7 +147,7 @@ class subscribe_controller extends Base_Controller {
         require_once("$this->default_site_path/includes/encryption_tnra.php");
         $fullname = $this->EE->input->post('first_name').' '.$this->EE->input->post('last_name');
         $screen_name =  ($this->EE->input->post('screen_name'))?$this->EE->input->post('screen_name'):$fullname;
-        $enc = new Encryption_tnra();
+        //$enc = new Encryption_tnra();
 
         $pwgen = new PWGen();
         $password = $pwgen->generate();

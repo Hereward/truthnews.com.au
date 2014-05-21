@@ -5,7 +5,7 @@
         <td><strong>Name on Card:</strong></td><td><?=$cc_name?></td>
     </tr>
     <tr>
-        <td><strong>Email:</strong></td><td><?=$cc_email?></td>
+        <td><strong>Email:</strong></td><td><?=$customer_email?></td>
     </tr>
     <tr>
         <td><strong>Amount:</strong></td><td><?=$cc_amount?></td>

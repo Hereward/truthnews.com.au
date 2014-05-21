@@ -5,7 +5,7 @@ Your credit card payment to Truth News Australia has been received.
 
 Name on Card: <?=$cc_name?>
 
-Email: <?=$cc_email?>
+Email: <?=$customer_email?>
     
 Amount: <?=$cc_amount?>
         

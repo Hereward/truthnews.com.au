@@ -56,8 +56,13 @@ class Base_model extends CI_Model {
         
         if ($this->EE->db->_error_message()) {
             $error_num = $this->db->_error_number();
-            $this->db_error = "Database error ($error_num): ".$this->EE->db->_error_message();
-            $this->sql_string = $this->EE->db->_compile_select();
+            $this->db_error = "DB error ($error_num): ".$this->EE->db->_error_message();
+            $this->sql_string = $this->EE->db->last_query();
+            $backtrace = $this->EE->tna_commerce_lib->debug_string_backtrace();
+            dev_log::write($this->db_error);
+            dev_log::write($backtrace);
+            
+           // $this->sql_string = $this->EE->db->_compile_select();
             return 1;
         } else {
             $this->db_error = '';

@@ -48,20 +48,58 @@ class payment_controller extends Base_Controller {
         $this->country_code = $this->EE->tna_commerce_lib->ip2location('countryCode');
     }
     
+    public function delete_cookie() {
+        setcookie('tna_subscribe_result_1', '', time() - 3600);
+        setcookie('tna_subscribe_result_2', '', time() - 3600);
+    }
+    
+    public function get_cookie() {
+        $cookie = (isset($_COOKIE['tna_subscribe_result_1'])) ? $_COOKIE['tna_subscribe_result_1'] : '';
+        
+         if ($cookie) {
+            $password_key = $_COOKIE['tna_subscribe_result_2'];
+            $this->EE->tna_commerce_lib->set_password_key($password_key);
+            $member_id = $this->EE->tna_commerce_lib->decrypt($cookie);
+            return $member_id;
+         } else {
+             return '';
+         }
+    }
+
     public function subscribe_success() {
+        dev_log::write('subscribe_success: 1');
+        //$this->member_id = $this->EE->uri->segment(3, 0);
+        $cookie = $this->get_cookie();
         
-        $this->member_id = $this->EE->uri->segment(3, 0);
-        $auth_code = $this->EE->uri->segment(3, 0);
-        $this->subscriber = $this->EE->subscribers_model->get_subscriber($this->member_id);
-        
-       // die("weee!");
-        
-        $vars = array(
-            'subscriber' => $this->subscriber
-        );
-        
-        return $this->EE->load->view('subscribe_success', $vars, TRUE);
-        
+        if ($cookie) {
+            $this->member_id = $cookie;
+            $this->delete_cookie();
+            
+            dev_log::write("decrypted cookie = [$this->member_id]");
+            $auth_code = $this->EE->uri->segment(3, 0);
+            $this->subscriber = $this->EE->subscribers_model->get_subscriber($this->member_id);
+
+            $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
+
+            dev_log::write('subscribe_success: 2');
+
+            //$vars['logged_in'] = $this->logged_in;
+            // die("weee!");
+
+            $vars = array(
+                'subscriber' => $this->subscriber,
+                'countrylist' => $countrylist,
+                'logged_in' => $this->logged_in,
+            );
+            
+            $this->EE->tna_commerce_lib->send_subscription_confirmation($vars);
+
+            //dev_log::write('Subscription confirmation email sent.');
+
+            return $this->EE->load->view('subscribe_success', $vars, TRUE);
+        } else {
+            redirect($this->https_site_url . "subscribe");
+        }
     }
 
     public function create() {
@@ -163,28 +201,28 @@ class payment_controller extends Base_Controller {
         $errors = array();
         //$member_id = $this->EE->input->post('member_id');
         $params = array();
-        
-        $sd = print_r($this->subscription_details,true);
+
+        $sd = print_r($this->subscription_details, true);
         dev_log::write("sd = $sd");
         $payment_good = $this->EE->eway_model->process_direct_payment($this->subscription_details);
-        
+
         $eway_auth_code = '';
-        
+
         //dev_log::write("payment_controller: [$payment_good]");
 
         if ($payment_good) {
             $eway_auth_code = $this->EE->eway_model->eway_auth_code;
             //send_cc_confirmation
-             $email_vars = array(
-                 'cc_auth' => $eway_auth_code,
-                 'cc_date' => date("j F, Y, g:i a"),
-                 'cc_name' => $this->EE->input->post('first_name') . ' ' . $this->EE->input->post('last_name'),
-                 'cc_amount' => $this->subscription_details->aud_price,  
-                 'cc_email' => $this->EE->input->post('email'),
-             );
-             
-             $email_result = $this->EE->tna_commerce_lib->send_cc_confirmation($email_vars);
-            
+            $email_vars = array(
+                'cc_auth' => $eway_auth_code,
+                'cc_date' => date("j F, Y, g:i a"),
+                'cc_name' => $this->EE->input->post('first_name') . ' ' . $this->EE->input->post('last_name'),
+                'cc_amount' => $this->subscription_details->aud_price,
+                'customer_email' => $this->EE->input->post('email'),
+            );
+
+            $email_result = $this->EE->tna_commerce_lib->send_cc_confirmation($email_vars);
+
             $cc_result = '';
             $RebillCustomerID = $this->EE->input->post('RebillCustomerID');
 
@@ -195,7 +233,7 @@ class payment_controller extends Base_Controller {
                 if ($this->EE->eway_model->eway_error) {
                     dev_log::write($this->EE->eway_model->eway_error);
                     //trigger_error($this->EE->eway_model->eway_error);
-                   // log_message('error', $this->EE->eway_model->eway_error);
+                    // log_message('error', $this->EE->eway_model->eway_error);
                     //$vars = $this->process_eway_error();
                     //return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
                     //exit();
@@ -205,17 +243,17 @@ class payment_controller extends Base_Controller {
                 $RebillCustomerID = $cc_result['RebillCustomerID'];
                 $RebillID = $cc_result['RebillCustomerID'];
             }
-           // dev_log::write("payment_controller:166");
+            // dev_log::write("payment_controller:166");
 
 
             if ($RebillCustomerID) {
                 $ce_result = $this->EE->eway_model->create_event($this->subscription_details, $RebillCustomerID);
                 $this->rebill_details = $ce_result;
                 dev_log::write('payment_controller:store create_event() = DONE');
-                dev_log::write('ERRORRRR = ['.$this->EE->eway_model->eway_error.']');
+                dev_log::write('ERRORRRR = [' . $this->EE->eway_model->eway_error . ']');
                 if ($this->EE->eway_model->eway_error) {
-                     //trigger_error($this->EE->eway_model->eway_error);
-                     dev_log::write($this->EE->eway_model->eway_error);
+                    //trigger_error($this->EE->eway_model->eway_error);
+                    dev_log::write($this->EE->eway_model->eway_error);
                     //$vars = $this->process_eway_error();
                     //$vars['RebillCustomerID'] = $RebillCustomerID;
                     //return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
@@ -224,15 +262,22 @@ class payment_controller extends Base_Controller {
                     dev_log::write('payment_controller:store create_event() = SUCCESS');
                 }
             }
-           // dev_log::write("payment_controller:180");
-
-
-
+            // dev_log::write("payment_controller:180");
             //if $cc_result
 
             $this->store_subscriber();
             //$this->EE->subscribers_model->update_tna_subscriber_details($member_id,$params);
-            redirect($this->https_site_url . "subscribe/success/$this->member_id/$eway_auth_code");
+            
+            $pwgen = new PWGen();
+            $password_key = $pwgen->generate();
+            $this->EE->tna_commerce_lib->set_password_key($password_key);
+            $id = $this->EE->tna_commerce_lib->encrypt($this->member_id);
+
+            setcookie('tna_subscribe_result_1', $id, time() + 3600);
+            
+            setcookie('tna_subscribe_result_2', $password_key, time() + 3600);
+            
+            redirect($this->https_site_url . "subscribe/success");
         } else {
             $vars = $this->process_eway_error();
             return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
@@ -259,10 +304,10 @@ class payment_controller extends Base_Controller {
 
         $this->EE->load->helper('security');
         require_once("$this->default_site_path/includes/pwgen.class.php");
-        require_once("$this->default_site_path/includes/encryption_tnra.php");
+        //require_once("$this->default_site_path/includes/encryption_tnra.php");
         $fullname = $this->EE->input->post('first_name') . ' ' . $this->EE->input->post('last_name');
         $screen_name = ($this->EE->input->post('screen_name')) ? $this->EE->input->post('screen_name') : $fullname;
-        $enc = new Encryption_tnra();
+        //$enc = new Encryption_tnra();
 
         $pwgen = new PWGen();
         $password = $pwgen->generate();
@@ -290,14 +335,14 @@ class payment_controller extends Base_Controller {
         $duplicate = $this->EE->subscribers_model->find_duplicate($data['email']);
 
         //$existing_subscriber = ($duplicate) ? $this->EE->subscribers_model->is_subscriber($duplicate->member_id) : false;
-/*
-        if ($existing_subscriber) {
-            $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress";
-            $vars['errors'] = $errors;
-            return $this->EE->load->view('subscribe_new', $vars, TRUE);
-            exit();
-        }
- */
+        /*
+          if ($existing_subscriber) {
+          $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress";
+          $vars['errors'] = $errors;
+          return $this->EE->load->view('subscribe_new', $vars, TRUE);
+          exit();
+          }
+         */
         //$user_query_result = $this->EE->db->where('username',$email)->get('exp_members');
 
         if ($duplicate) {
@@ -341,7 +386,7 @@ class payment_controller extends Base_Controller {
 
         $this->EE->subscribers_model->update_tna_subscriber_details($member_id, $params);
         $this->EE->subscribers_model->set_rebill_details($member_id, $this->rebill_details);
-        
+
         $this->member_id = $member_id;
 
         //$this->EE->input->post('last_name');
