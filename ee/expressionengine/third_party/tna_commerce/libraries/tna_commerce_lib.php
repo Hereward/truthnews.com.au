@@ -26,7 +26,7 @@ class Tna_commerce_lib {
     
     function debug_string_backtrace() { 
         ob_start(); 
-        debug_print_backtrace(); 
+        debug_print_backtrace(0,3); 
         $trace = ob_get_contents(); 
         ob_end_clean(); 
 

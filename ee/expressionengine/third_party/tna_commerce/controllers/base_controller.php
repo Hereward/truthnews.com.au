@@ -13,11 +13,13 @@ abstract class Base_Controller {
     protected $default_site_path;
     protected $password_key;
     protected $encrypted_password;
-    protected $subscriber_group_id = 12;
+    protected $subscriber_group_id = 0;
+    protected $member_group_id = 0;
     protected $subscription_in_progress = false;
     protected $subscriber = '';
     protected $subscribe_stage;
     protected $uri_string;
+    protected $member_groups;
 
     protected function __construct() {
 
@@ -42,6 +44,8 @@ abstract class Base_Controller {
         $this->site_url = $this->EE->config->item('site_url');
         $this->uri_string = $this->EE->uri->uri_string();
         $this->https_site_url = $this->EE->config->item('https_site_url');
+        
+        
         $globals = array(
             'site_url' => $this->site_url,
             'https_site_url' => $this->https_site_url,
@@ -56,7 +60,43 @@ abstract class Base_Controller {
         $this->EE->load->library('table');
         
         $this->EE->load->model('subscribers_model');
+        $this->member_groups = $this->get_member_groups();
+        
+        $this->subscriber_group_id = $this->member_groups['subscribers'];
+        $this->member_group_id = $this->member_groups['members'];
+        
+        //$msg = "Is Subscriber? ".$this->is_subscriber();
+        //die($msg);
+        
         //$this->EE->load->model('member_model');
+    }
+    
+    public function is_subscriber() {
+        
+        if (!$this->logged_in) {
+            return false;
+        }
+        $query = $this->EE->member_model->get_member_data($this->member_id);
+        $row = $query->row(); 
+        
+        if ($row->group_id = $this->subscriber_group_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function get_member_groups() {
+        $query = $this->EE->member_model->get_member_groups();
+        $groups = array();
+
+        foreach ($query->result_array() as $row) {
+            $title = strtolower($row['group_title']);
+            $id =  $row['group_id'];
+            $groups[$title] = $id;
+        }
+        
+        return $groups;
     }
 
     function get_option($name) {

@@ -105,6 +105,23 @@ class Subscribers_model extends Base_model {
         return $output;
     }
     
+    public function assign_member_to_group($member_id,$group_id) {
+        $output = true;
+        
+        $params = array(
+            'group_id' => $group_id
+        );
+       
+        $this->EE->db->where('member_id', $member_id);
+        $this->EE->db->update('exp_members', $params);
+
+        if ($this->get_db_error()) {
+            $output = false; 
+        }  
+   
+         return $output;
+    }
+    
     
     public function get_subscriber($member_id = '') {
         $this->remove_prefix();
@@ -125,13 +142,16 @@ class Subscribers_model extends Base_model {
                 . 'tna_subscriber_details.suburb, '
                 . 'tna_subscriber_details.state, '
                 . 'tna_subscriber_details.country, '
-                . 'tna_subscriber_details.payment_method, '
-                . 'tna_subscriber_details.tshirt_size, ',
+                . 'tna_subscriber_details.payment_method, ',
                 FALSE);
         
         $this->EE->db->select('exp_members.email, '
                 . 'exp_members.screen_name, '
-                . 'username, ',
+                . 'exp_members.username, ',
+                FALSE);
+        
+        $this->EE->db->select('tna_subscriber_tshirts.tshirt_size, '
+                . 'tna_subscriber_tshirts.tshirt_status, ',
                 FALSE);
           
         
@@ -140,12 +160,15 @@ class Subscribers_model extends Base_model {
         $this->EE->db->where('tna_subscribers.member_id', $member_id); 
         $this->EE->db->join('tna_subscriber_details', 'tna_subscribers.member_id = tna_subscriber_details.member_id');
         $this->EE->db->join('exp_members', 'tna_subscribers.member_id = exp_members.member_id');
+        $this->EE->db->join('tna_subscriber_tshirts', 'tna_subscribers.member_id = tna_subscriber_tshirts.member_id');
         
         $sql_string = $this->EE->db->_compile_select();
         
         //die("SQL = ".$sql_string);
                 
         $result = $this->EE->db->get();
+        
+        $error = $this->get_db_error();
         
         //die("NUM ROWS = ". $result->num_rows() . " SQL = ".$sql_string);
         
@@ -159,6 +182,8 @@ class Subscribers_model extends Base_model {
         
         $this->restore_prefix();
         
+        dev_log::write("get_subscriber: email = $output->email");
+        
         return $output;
     }
     
@@ -168,8 +193,44 @@ class Subscribers_model extends Base_model {
         $this->EE->db->delete('tna_subscribers', array('member_id' => $member_id));
         $this->EE->db->delete('tna_subscriber_details', array('member_id' => $member_id));
         $this->EE->db->delete('tna_eway_customers', array('member_id' => $member_id));
-        
+        $this->EE->db->delete('tna_subscriber_tshirts', array('member_id' => $member_id));
+
         $this->restore_prefix();
+    }
+    
+    public function delete_subscriber($member_id='',$target_group_id='') { 
+        $output = true;
+        $this->remove_prefix();
+        
+        $this->EE->db->delete('tna_subscribers', array('member_id' => $member_id));
+        $this->EE->db->delete('tna_subscriber_details', array('member_id' => $member_id));
+        $this->EE->db->delete('tna_eway_customers', array('member_id' => $member_id));
+        $this->EE->db->delete('tna_subscriber_tshirts', array('member_id' => $member_id));
+        
+        $member_data = array(
+            'group_id' => $target_group_id
+        );
+        
+        $this->EE->member_model->update_member($member_id, $member_data);
+        
+        /*
+        
+        $params = array(
+            'status' => 'deleted',
+        );
+
+        $this->EE->db->where('member_id', $member_id);
+        $this->EE->db->update('tna_subscribers', $params);
+
+        if ($this->get_db_error()) {
+            $output = false; 
+        }  
+         * 
+         * 
+         */
+        $this->restore_prefix();
+        return $output;
+        
     }
     
 
@@ -182,6 +243,20 @@ class Subscribers_model extends Base_model {
 
            // $errors = 'Your email is already registered to an account.  Please login to your account if you have already registered.';
         }
+        return $output;
+    }
+    
+     public function eway_customer($member_id = '') {
+        $this->remove_prefix();
+        $result = $this->EE->db->where('member_id',$member_id)->get('tna_eway_customers');
+        //$error = '';
+        $output = false;
+        if ($result->num_rows() > 0) {
+            $output = $result->row();
+
+           // $errors = 'Your email is already registered to an account.  Please login to your account if you have already registered.';
+        }
+        $this->restore_prefix();
         return $output;
     }
     
@@ -243,7 +318,7 @@ class Subscribers_model extends Base_model {
         $data = array(
             'member_id' => $params['member_id'],
             'temp_password' => $params['temp_password'],
-            'status' => 'pending',
+            'status' => 'active',
             'existing_member' => $params['existing_member'],
             'type' => $params['type'],
             'created' => $now,
@@ -251,6 +326,11 @@ class Subscribers_model extends Base_model {
         );
 
         $this->EE->db->insert('tna_subscribers', $data);
+        
+        if ($this->get_db_error()) {
+                $this->restore_prefix();
+                return false;
+        }
         
         //$query = $this->db->query('SELECT name, title, email FROM my_table');
         
@@ -263,14 +343,29 @@ class Subscribers_model extends Base_model {
         } else {
             $data = array(
                 'member_id' => $params['member_id'],
-                'tshirt_size' => $tshirt_size,
                 'created' => $now,
                 'modified' => $now
             );
 
             $this->EE->db->insert('tna_subscriber_details', $data);
             if ($this->get_db_error()) {
-                $output = false;
+                $this->restore_prefix();
+                return false;
+            }
+            
+            $data = array(
+                'member_id' => $params['member_id'],
+                'tshirt_size' => $tshirt_size,
+                'tshirt_status' => 'pending',
+                'created' => $now,
+                'modified' => $now
+            );
+
+            $this->EE->db->insert('tna_subscriber_tshirts', $data);
+            
+            if ($this->get_db_error()) {
+                $this->restore_prefix();
+                return false;
             }
         }
         

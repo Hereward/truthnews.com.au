@@ -184,6 +184,17 @@ class payment_controller extends Base_Controller {
 
         return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
     }
+    
+    public function delete_subscriber($member_id) {
+        $customer = $this->EE->subscribers_model->eway_customer($member_id);
+        $this->EE->eway_model->delete_customer($customer->customer_id);
+        $this->EE->subscribers_model->delete_subscriber($member_id,$this->member_group_id);
+        //update_member($member_id = '', $data = array(), $additional_where = array())
+        //$this->EE->subscribers_model->assign_member_to_group($member_id,$this->member_group_id);
+                
+        //$this->EE->subscribers_model->delete_subscriber($member_id);
+        //delete_customer($id)
+    }
 
     /*
       public function get_cookies() {
@@ -346,7 +357,6 @@ class payment_controller extends Base_Controller {
         //$user_query_result = $this->EE->db->where('username',$email)->get('exp_members');
 
         if ($duplicate) {
-            //$this->EE->subscribers_model->nuke_subscriber($member_id);
             $existing_member = true;
             $member_id = $duplicate->member_id;
 
@@ -383,6 +393,8 @@ class payment_controller extends Base_Controller {
         foreach ($subscriber_details_fields as $field) {
             $params[$field] = $this->EE->input->post($field);
         }
+        
+        //$params['status'] = 'active';
 
         $this->EE->subscribers_model->update_tna_subscriber_details($member_id, $params);
         $this->EE->subscribers_model->set_rebill_details($member_id, $this->rebill_details);
@@ -406,6 +418,10 @@ class payment_controller extends Base_Controller {
     }
 
     public function destroy() {
+        if ($this->logged_in) {
+             $this->delete_subscriber($this->member_id);    
+        }
+       
         
     }
 

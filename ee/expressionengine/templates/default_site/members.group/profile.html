@@ -6,15 +6,25 @@
 
     <div class="row">
         <div class="col-md-9 col-lg-8">
-            <div class="news_channel_container lead">
+            <div class="news_channel_container">
                 {if logged_out}
                     <h2 style="color:red;" class="channel_title">No Access</h2>
                     <p class="lead">Sorry, you can't view member profile data because you are not logged in.</p>
                 {if:else}
                     {!-- <h3 class="recent_shows">Member Profile</h3> --}
+                    
+                    
+                    
+                    {if "{exp:tna_commerce:info action='is_subscriber'}"}
+                        {embed="members/cancel_subscription_snippet"}
+                        
+                    {/if}
+                    
                     {if member_id == segment_3}
                         <p><a class="btn btn-success btn-block" href="{path=members/profile-edit}">Edit Your Profile</a></p>
                     {/if}
+                    
+                    
 
                     {exp:user:stats}
                         <div class="profile_section">

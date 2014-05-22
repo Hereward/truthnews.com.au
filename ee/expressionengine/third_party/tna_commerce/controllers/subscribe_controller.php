@@ -23,6 +23,9 @@ class subscribe_controller extends Base_Controller {
 
 
     public function index() {
+        
+        //print_r($groups->result_array());
+        //die();
         //$email_result = $this->EE->tna_commerce_lib->email_test_2();
         //$msg = ($email_result)?"email_test: success":"email_test: fail";
         //dev_log::write($email_result);

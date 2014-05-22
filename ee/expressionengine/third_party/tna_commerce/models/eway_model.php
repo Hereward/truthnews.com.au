@@ -224,6 +224,16 @@ class Eway_model extends Base_model {
         $this->client->setHeaders($headers);
         return true;
     }
+    
+    public function delete_customer($id) {
+        $requestbody = array(
+            'man:RebillCustomerID' => $id
+        );
+        $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/DeleteRebillCustomer';
+ 
+        $result = $this->client->call('man:DeleteRebillCustomer', $requestbody, '', $soapaction);   
+        $this->eway_error = $this->get_eway_rebill_error($result);
+    }
 
     public function create_customer() {
         $this->eway_error = '';
@@ -325,14 +335,16 @@ class Eway_model extends Base_model {
     }
 
     function get_eway_rebill_error($result) {
-        $result_str = print_r($result,true);
-        dev_log::write("eway_model:get_eway_rebill_error: result_str = $result_str");
+        //$result_str = print_r($result,true);
+        //dev_log::write("eway_model:get_eway_rebill_error: result_str = $result_str");
         
         $output = '';
         if ($this->client->fault) {
             $output = 'There is a problem with the network. Please try again in a few minutes.';
         } else {
             $output = $result['ErrorDetails'];
+            dev_log::write("Rebill Error = {$result['ErrorDetails']}");
+            
         }
         return $output;
     }
