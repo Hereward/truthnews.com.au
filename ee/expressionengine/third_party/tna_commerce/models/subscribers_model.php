@@ -323,7 +323,7 @@ class Subscribers_model extends Base_model {
         $now = date("Y-m-d H:i:s");
 
         $data = array(
-            
+            'member_id' => $subscriber->member_id,
             'first_name' => $subscriber->first_name,
             'last_name' => $subscriber->last_name,
             'email' => $subscriber->email,
