@@ -188,6 +188,7 @@ class Subscribers_model extends Base_model {
     }
     
     public function nuke_subscriber($member_id='') { 
+        dev_log::write("nuke subscriber: member_id = $member_id");
         $this->EE->member_model->delete_member($member_id);
         $this->remove_prefix();
         $this->EE->db->delete('tna_subscribers', array('member_id' => $member_id));
@@ -210,8 +211,13 @@ class Subscribers_model extends Base_model {
         $member_data = array(
             'group_id' => $target_group_id
         );
+        $this->restore_prefix();
         
         $this->EE->member_model->update_member($member_id, $member_data);
+        
+        
+        
+        dev_log::write("delete_subscriber: update_member > $member_id | $target_group_id");
         
         /*
         
@@ -228,7 +234,7 @@ class Subscribers_model extends Base_model {
          * 
          * 
          */
-        $this->restore_prefix();
+        
         return $output;
         
     }
@@ -305,7 +311,35 @@ class Subscribers_model extends Base_model {
         $this->restore_prefix();
         return $output;
      }
-    
+     
+     
+    public function create_cancelled_subscriber($member_id) {
+        $subscriber = $this->get_subscriber($member_id);
+        //$output = true;
+        //$tshirt_size = $this->EE->input->post('tshirt_size');
+
+        //die("FUCKING T_SHIRT: $tshirt_size");
+        $this->remove_prefix();
+        $now = date("Y-m-d H:i:s");
+
+        $data = array(
+            
+            'first_name' => $subscriber->first_name,
+            'last_name' => $subscriber->last_name,
+            'email' => $subscriber->email,
+            'company' => $subscriber->company,
+            'comments' => $this->EE->input->post('comments'),
+            'created' => $now,
+            'modified' => $now
+        );
+
+        $this->EE->db->insert('tna_subscriber_cancellations', $data);
+
+        if ($this->get_db_error()) {
+            $this->restore_prefix();
+            return false;
+        }
+    }
 
     public function create_tna_subscriber($params) {
         $output = true;
@@ -330,16 +364,7 @@ class Subscribers_model extends Base_model {
         if ($this->get_db_error()) {
                 $this->restore_prefix();
                 return false;
-        }
-        
-        //$query = $this->db->query('SELECT name, title, email FROM my_table');
-        
-        //dev_log::write("INSERT tna_subscribers = ".$this->EE->db->last_query());
-        
-        //die("FUCK");
-
-        if ($this->get_db_error()) {
-            $output = false;
+      
         } else {
             $data = array(
                 'member_id' => $params['member_id'],

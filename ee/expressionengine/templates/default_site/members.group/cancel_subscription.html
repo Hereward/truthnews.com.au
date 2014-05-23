@@ -1,0 +1,26 @@
+{embed="framework_2/doc_head" url="{site_url}members" title="Cancel Subscription" description="Cancel subscription"}
+{embed="framework_2/navigation" section="home"}
+
+<div class="container main_box">
+    {embed="framework_2/header"}
+
+    <div class="row">
+        <div class="col-md-9 col-lg-8">
+            <div class="news_channel_container">
+                {if logged_out}
+                    <h2 style="color:red;" class="channel_title">No Access</h2>
+                    <p class="lead">Sorry, you can't cancel your subscription because you are not logged in.</p>
+                {if:else}
+                    <h3 class="recent_shows">Cancel Subscription</h3>
+                    {exp:tna_commerce:subscription_payment action="destroy"}
+                {/if}
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-4">{embed="framework_2/right_col"}</div>
+    </div> <!-- /row -->
+
+    {embed="framework_2/footer"}
+
+</div> <!-- /container -->
+
+{embed ="framework_2/doc_foot"}

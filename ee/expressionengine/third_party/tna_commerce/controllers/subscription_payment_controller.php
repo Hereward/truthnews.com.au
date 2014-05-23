@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class payment_controller extends Base_Controller {
+class subscription_payment_controller extends Base_Controller {
 
     protected $EE;
     public $subscribe_stage;
@@ -192,8 +192,9 @@ class payment_controller extends Base_Controller {
          //dev_log::write("delete_subscriber: 2");
         $this->EE->eway_model->delete_customer($customer->customer_id, $customer->rebill_id);
          //dev_log::write("delete_subscriber: 3");
-        $this->EE->subscribers_model->delete_subscriber($member_id,$this->member_group_id);
         $this->EE->subscribers_model->create_cancelled_subscriber($member_id);
+        $this->EE->subscribers_model->delete_subscriber($member_id,$this->member_group_id);
+        
         // dev_log::write("delete_subscriber: 4");
         if ($this->EE->eway_model->eway_error) {
             $output = false;

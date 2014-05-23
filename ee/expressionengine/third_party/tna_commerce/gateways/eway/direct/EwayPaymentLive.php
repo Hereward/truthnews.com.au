@@ -70,7 +70,8 @@ class EwayPaymentLive {
             return $obj;
             
         } else
-            trigger_error("Error in XML response from eWAY: [$xmlResponse]", E_USER_ERROR);
+             dev_log::write("Error in XML response from eWAY: [$xmlResponse]");
+            //trigger_error("Error in XML response from eWAY: [$xmlResponse]", E_USER_ERROR);
             //dev_log::write("Error in XML response from eWAY: [$xmlResponse]");
             //die("Error in XML response from eWAY: ");
             return false;

@@ -35,7 +35,7 @@ class Tna_commerce {
         return $this->load(__FUNCTION__ . '_controller', $args, $action);
     }
 
-    public function payment($args = '') {
+    public function subscription_payment($args = '') {
         $action = $this->EE->TMPL->fetch_param('action');
         // if (!$action) {$action = '';}
         return $this->load(__FUNCTION__ . '_controller', $args, $action);

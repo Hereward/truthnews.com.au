@@ -153,7 +153,8 @@ class Eway_model extends Base_model {
         
          //dev_log::write("process_direct_payment:142");
         
-        $ewayTrxnStatus = $response_obj->ewayTrxnStatus;
+        
+        $ewayTrxnStatus = (is_object($response_obj))?$response_obj->ewayTrxnStatus:'false';
 
         if (strtolower($ewayTrxnStatus) == "false") {
             $this->eway_error .= $response_obj->ewayTrxnError;
@@ -225,14 +226,34 @@ class Eway_model extends Base_model {
         return true;
     }
     
-    public function delete_customer($id) {
+    public function delete_customer($id, $RebillID) {
         $requestbody = array(
-            'man:RebillCustomerID' => $id
+            'man:RebillCustomerID' => $id,
+            'man:RebillID' => $RebillID
         );
-        $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/DeleteRebillCustomer';
- 
-        $result = $this->client->call('man:DeleteRebillCustomer', $requestbody, '', $soapaction);   
-        $this->eway_error = $this->get_eway_rebill_error($result);
+        $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/DeleteRebillEvent';
+        $result = $this->client->call('man:DeleteRebillEvent', $requestbody, '', $soapaction);
+        
+        //dev_log::write("delete_customer: 1");
+
+        $error = $this->get_eway_rebill_error($result);
+
+        if (!$error) {
+            $requestbody = array(
+                'man:RebillCustomerID' => $id
+            );
+            $soapaction = 'http://www.eway.com.au/gateway/rebill/manageRebill/DeleteRebillCustomer';
+
+            
+
+            $result = $this->client->call('man:DeleteRebillCustomer', $requestbody, '', $soapaction);
+            //dev_log::write("delete_customer: 2");
+            $this->eway_error = $this->get_eway_rebill_error($result);
+            //dev_log::write("delete_customer: 3");
+            return $result;
+        } else {
+            return false;
+        }
     }
 
     public function create_customer() {
