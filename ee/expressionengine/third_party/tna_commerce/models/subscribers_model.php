@@ -199,7 +199,7 @@ class Subscribers_model extends Base_model {
         $this->restore_prefix();
     }
     
-    public function delete_subscriber($member_id='',$target_group_id='') { 
+    public function delete_subscriber($member_id='') { 
         $output = true;
         $this->remove_prefix();
         
@@ -207,33 +207,19 @@ class Subscribers_model extends Base_model {
         $this->EE->db->delete('tna_subscriber_details', array('member_id' => $member_id));
         $this->EE->db->delete('tna_eway_customers', array('member_id' => $member_id));
         $this->EE->db->delete('tna_subscriber_tshirts', array('member_id' => $member_id));
-        
+        /*
         $member_data = array(
             'group_id' => $target_group_id
         );
+         *
+         */
+        
         $this->restore_prefix();
         
-        $this->EE->member_model->update_member($member_id, $member_data);
+       // $this->EE->member_model->update_member($member_id, $member_data);
         
-        
-        
-        dev_log::write("delete_subscriber: update_member > $member_id | $target_group_id");
-        
-        /*
-        
-        $params = array(
-            'status' => 'deleted',
-        );
+        dev_log::write("delete_subscriber");
 
-        $this->EE->db->where('member_id', $member_id);
-        $this->EE->db->update('tna_subscribers', $params);
-
-        if ($this->get_db_error()) {
-            $output = false; 
-        }  
-         * 
-         * 
-         */
         
         return $output;
         
@@ -269,6 +255,10 @@ class Subscribers_model extends Base_model {
     public function update_tna_subscriber_details($member_id,$params){
         $output = true;
         $this->remove_prefix();
+        
+        $params_str = print_r($params,true);
+        
+        dev_log::write("update_tna_subscriber_details: params_str = $params_str");
 
         $this->EE->db->where('member_id', $member_id);
         $this->EE->db->update('tna_subscriber_details', $params);
@@ -278,6 +268,19 @@ class Subscribers_model extends Base_model {
         }  
          $this->restore_prefix();
          return $output;
+        
+    }
+    
+    
+    public function update_subscriber_group($member_id='',$target_group_id='') {
+        
+        $member_data = array(
+            'group_id' => $target_group_id
+        );
+
+        $this->EE->member_model->update_member($member_id, $member_data);
+
+        dev_log::write("update_subscriber_group: > $member_id | $target_group_id");
         
     }
     

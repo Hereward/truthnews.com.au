@@ -11,6 +11,7 @@ class subscription_payment_controller extends Base_Controller {
     public $country_list;
     public $country_code;
     public $rebill_details;
+    public $payment_method = 1;
 
     public function __construct($args = '') {
         //die('boo');
@@ -32,49 +33,53 @@ class subscription_payment_controller extends Base_Controller {
     }
 
     public function init() {
-        $eway_init = $this->EE->eway_model->init();
-
-        if (!$eway_init) {
-            $vars = array();
-            $errors = array();
-            $errors[] = $this->EE->eway_model->eway_error;
-            $vars['errors'] = $errors;
-            return $this->EE->load->view('subscribe_new', $vars, TRUE);
-            exit();
-        }
+        dev_log::write("init: 1");
+        //$eway_init = $this->EE->eway_model->init();
+        /*
+          if (!$eway_init) {
+          $vars = array();
+          $errors = array();
+          $errors[] = $this->EE->eway_model->eway_error;
+          $vars['errors'] = $errors;
+          return $this->EE->load->view('subscribe_new', $vars, TRUE);
+          exit();
+          }
+         */
         $subscription_type = $this->EE->input->post('subscription_type');
         $this->subscription_details = $this->EE->subscribers_model->get_subscription_details($subscription_type);
+        dev_log::write("init: 2");
         $this->country_list = $this->EE->tna_commerce_lib->get_countrylist();
         $this->country_code = $this->EE->tna_commerce_lib->ip2location('countryCode');
+        dev_log::write("init: 3");
     }
-    
+
     public function delete_cookie() {
         setcookie('tna_subscribe_result_1', '', time() - 3600);
         setcookie('tna_subscribe_result_2', '', time() - 3600);
     }
-    
+
     public function get_cookie() {
         $cookie = (isset($_COOKIE['tna_subscribe_result_1'])) ? $_COOKIE['tna_subscribe_result_1'] : '';
-        
-         if ($cookie) {
+
+        if ($cookie) {
             $password_key = $_COOKIE['tna_subscribe_result_2'];
             $this->EE->tna_commerce_lib->set_password_key($password_key);
             $member_id = $this->EE->tna_commerce_lib->decrypt($cookie);
             return $member_id;
-         } else {
-             return '';
-         }
+        } else {
+            return '';
+        }
     }
 
     public function subscribe_success() {
         dev_log::write('subscribe_success: 1');
         //$this->member_id = $this->EE->uri->segment(3, 0);
         $cookie = $this->get_cookie();
-        
+
         if ($cookie) {
             $this->member_id = $cookie;
             $this->delete_cookie();
-            
+
             dev_log::write("decrypted cookie = [$this->member_id]");
             $auth_code = $this->EE->uri->segment(3, 0);
             $this->subscriber = $this->EE->subscribers_model->get_subscriber($this->member_id);
@@ -91,7 +96,7 @@ class subscription_payment_controller extends Base_Controller {
                 'countrylist' => $countrylist,
                 'logged_in' => $this->logged_in,
             );
-            
+
             $this->EE->tna_commerce_lib->send_subscription_confirmation($vars);
 
             //dev_log::write('Subscription confirmation email sent.');
@@ -104,6 +109,7 @@ class subscription_payment_controller extends Base_Controller {
 
     public function create() {
         dev_log::write("payment_controller:create");
+        $existing_subscriber = '';
         $errors = array();
 
         //$url_decoded_password = urldecode($url_encoded_encrypted_password);
@@ -127,34 +133,42 @@ class subscription_payment_controller extends Base_Controller {
 
         $email = $this->EE->input->post('email');
 
+
+
         $duplicate = $this->EE->subscribers_model->find_duplicate($email);
-        $existing_subscriber = ($duplicate) ? $this->EE->subscribers_model->is_subscriber($duplicate->member_id) : false;
+
+        if ($email == 'editor@truthnews.com.au' && $duplicate) {
+            $this->EE->subscribers_model->nuke_subscriber($duplicate->member_id);
+            $existing_subscriber = false;
+        } else {
+            $existing_subscriber = ($duplicate) ? $this->EE->subscribers_model->is_subscriber($duplicate->member_id) : false;
+        }
+
+
 
 
         if ($existing_subscriber) {
-            if ($email == 'editor@truthnews.com.au') {
-                $this->EE->subscribers_model->nuke_subscriber($duplicate->member_id);
+            dev_log::write("payment:create existing_subscriber > GO BACK");
+
+            $view = '';
+            if ($this->logged_in) {
+                $errors[] = "Your email address: [$duplicate->email] is already registered to a subscriber account. Please <strong><a href='$this->https_site_url?ACT=10&return=%2Fsubscribe'>log out</a></strong> and supply a different email adddress.";
             } else {
-                $view = '';
-                if ($this->logged_in) {
-                    $errors[] = "Your email address: [$duplicate->email] is already registered to a subscriber account. Please <strong><a href='$this->https_site_url?ACT=10&return=%2Fsubscribe'>log out</a></strong> and supply a different email adddress.";
-                } else {
-                    $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress.";
-                }
-                $vars['errors'] = $errors;
-                $vars['member_id'] = $this->member_id;
-
-                if ($this->logged_in) {
-                    $vars['username'] = $this->EE->session->userdata['username'];
-                    $vars['email'] = $this->EE->session->userdata['email'];
-                    $view = 'subscribe_existing';
-                } else {
-                    $view = 'subscribe_new';
-                }
-
-                return $this->EE->load->view($view, $vars, TRUE);
-                exit();
+                $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress.";
             }
+            $vars['errors'] = $errors;
+            $vars['member_id'] = $this->member_id;
+
+            if ($this->logged_in) {
+                $vars['username'] = $this->EE->session->userdata['username'];
+                $vars['email'] = $this->EE->session->userdata['email'];
+                $view = 'subscribe_existing';
+            } else {
+                $view = 'subscribe_new';
+            }
+
+            return $this->EE->load->view($view, $vars, TRUE);
+            exit();
         }
 
         //$subscription_type = $this->EE->input->post('subscription_type');
@@ -184,22 +198,23 @@ class subscription_payment_controller extends Base_Controller {
 
         return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
     }
-    
+
     public function delete_subscriber($member_id) {
         $output = true;
         //dev_log::write("delete_subscriber: 1");
         $customer = $this->EE->subscribers_model->eway_customer($member_id);
-         //dev_log::write("delete_subscriber: 2");
+        //dev_log::write("delete_subscriber: 2");
         $this->EE->eway_model->delete_customer($customer->customer_id, $customer->rebill_id);
-         //dev_log::write("delete_subscriber: 3");
+        //dev_log::write("delete_subscriber: 3");
         $this->EE->subscribers_model->create_cancelled_subscriber($member_id);
-        $this->EE->subscribers_model->delete_subscriber($member_id,$this->member_group_id);
-        
+        $this->EE->subscribers_model->delete_subscriber($member_id);
+        $this->EE->subscribers_model->update_subscriber_group($member_id, $this->member_group_id);
+
         // dev_log::write("delete_subscriber: 4");
         if ($this->EE->eway_model->eway_error) {
             $output = false;
         }
-        
+
         return $output;
     }
 
@@ -212,6 +227,14 @@ class subscription_payment_controller extends Base_Controller {
      */
 
     public function store() {
+        //$generic_error = 'The transaction failed. Please check your credit card details and try again.';
+        $eway_init = $this->EE->eway_model->init();
+        if (!$eway_init) {
+            $vars = $this->process_eway_error('init');
+            return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
+            exit();
+        }
+
         //dev_log::write("payment_controller:store");
         $RebillCustomerID = '';
         $RebillID = '';
@@ -252,7 +275,6 @@ class subscription_payment_controller extends Base_Controller {
                     dev_log::write($this->EE->eway_model->eway_error);
                     //trigger_error($this->EE->eway_model->eway_error);
                     // log_message('error', $this->EE->eway_model->eway_error);
-                    //$vars = $this->process_eway_error();
                     //return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
                     //exit();
                 } else {
@@ -268,11 +290,10 @@ class subscription_payment_controller extends Base_Controller {
                 $ce_result = $this->EE->eway_model->create_event($this->subscription_details, $RebillCustomerID);
                 $this->rebill_details = $ce_result;
                 dev_log::write('payment_controller:store create_event() = DONE');
-                dev_log::write('ERRORRRR = [' . $this->EE->eway_model->eway_error . ']');
+
                 if ($this->EE->eway_model->eway_error) {
                     //trigger_error($this->EE->eway_model->eway_error);
-                    dev_log::write($this->EE->eway_model->eway_error);
-                    //$vars = $this->process_eway_error();
+                    //dev_log::write('eWay Rebill error = [' . $this->EE->eway_model->eway_error . ']');
                     //$vars['RebillCustomerID'] = $RebillCustomerID;
                     //return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
                     //exit();
@@ -285,28 +306,37 @@ class subscription_payment_controller extends Base_Controller {
 
             $this->store_subscriber();
             //$this->EE->subscribers_model->update_tna_subscriber_details($member_id,$params);
-            
+
             $pwgen = new PWGen();
             $password_key = $pwgen->generate();
             $this->EE->tna_commerce_lib->set_password_key($password_key);
             $id = $this->EE->tna_commerce_lib->encrypt($this->member_id);
 
             setcookie('tna_subscribe_result_1', $id, time() + 3600);
-            
+
             setcookie('tna_subscribe_result_2', $password_key, time() + 3600);
-            
+
             redirect($this->https_site_url . "subscribe/success");
         } else {
-            $vars = $this->process_eway_error();
+            $vars = $this->process_eway_error('payment');
             return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
         }
     }
 
-    public function process_eway_error() {
+    public function process_eway_error($type = '') {
+        if (!$type) {
+            $type = 'payment';
+        }
+
         $errors = array();
         $vars = array();
         $this->set_defaults();
-        $errors[] = $this->EE->eway_model->eway_error;
+        $error_str = $this->EE->eway_model->eway_error;
+        dev_log::write("eWay Error: $error_str");
+
+        $msg = $this->EE->eway_model->error_str[$type];
+
+        $errors[] = $msg;
         $vars['member_id'] = $this->member_id;
         $vars['errors'] = $errors;
         $vars['countrycode'] = $this->country_code;
@@ -345,50 +375,22 @@ class subscription_payment_controller extends Base_Controller {
         $data['time_format'] = ($this->EE->config->item('time_format') && $this->EE->config->item('time_format') != '') ? $this->EE->config->item('time_format') : 'us';
         $data['group_id'] = $this->subscriber_group_id;
 
-        //$email = '';
-        //$email_query_result = $this->EE->db->where('email',$data['email'])->get('exp_members');
-
-
-
         $duplicate = $this->EE->subscribers_model->find_duplicate($data['email']);
-
-        //$existing_subscriber = ($duplicate) ? $this->EE->subscribers_model->is_subscriber($duplicate->member_id) : false;
-        /*
-          if ($existing_subscriber) {
-          $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress";
-          $vars['errors'] = $errors;
-          return $this->EE->load->view('subscribe_new', $vars, TRUE);
-          exit();
-          }
-         */
-        //$user_query_result = $this->EE->db->where('username',$email)->get('exp_members');
 
         if ($duplicate) {
             $existing_member = true;
             $member_id = $duplicate->member_id;
+            $this->EE->subscribers_model->update_subscriber_group($member_id, $this->subscriber_group_id);
 
-            /*
-              $member_id = $duplicate->member_id;
-              $existing_subscriber = $this->EE->subscribers_model->is_subscriber($member_id);
-
-              if ($existing_subscriber) {
-              $errors = 'This email address is already registered to a subscriber account. Please supply a different email adddress';
-              }
-             */
-
-            //$member_id = $this->EE->subscribers_model->create_ee_member($data);
+            //$this->EE->subscribers_model->create_ee_member($data);
         } else {
             $member_id = $this->EE->subscribers_model->create_ee_member($data);
         }
 
-        //$this->EE->member_model->delete_member($member_id);
-        // $member_id = $duplicate->member_id;
-        // $existing_member = 1;
-        //$data['member_id'] = $member_id;
 
         $params = array(
             'member_id' => $member_id,
-            'temp_password' => $password,
+            'temp_password' => ($duplicate) ? '' : $password,
             'existing_member' => $existing_member,
             'type' => $this->EE->input->post('subscription_type'),
         );
@@ -401,6 +403,8 @@ class subscription_payment_controller extends Base_Controller {
             $params[$field] = $this->EE->input->post($field);
         }
         
+        $params['payment_method'] = $this->payment_method;
+
         //$params['status'] = 'active';
 
         $this->EE->subscribers_model->update_tna_subscriber_details($member_id, $params);
@@ -426,7 +430,18 @@ class subscription_payment_controller extends Base_Controller {
 
     public function destroy() {
         if ($this->logged_in) {
+            $return_view = '';
+            $vars = array();
+            $errors = array();
             $eway_init = $this->EE->eway_model->init();
+            if (!$eway_init) {
+                $msg = $this->EE->eway_model->error_str['init'];
+                $errors[] = $msg;
+                $vars['errors'] = $errors;
+                return $this->EE->load->view('cancel_subscription', $vars, TRUE);
+                exit();
+            }
+
             $return_view = 'cancel_subscription';
             $vars = array('member_id' => $this->member_id, 'comments' => '');
             if ($this->EE->input->post("confirm_cancellation_$this->member_id")) {
@@ -434,12 +449,13 @@ class subscription_payment_controller extends Base_Controller {
                 if ($result) {
                     $return_view = 'cancel_subscription_complete';
                 } else {
-                    $errors = array();
+
                     $errors[] = $this->EE->eway_model->eway_error;
                     $vars['errors'] = $errors;
                     $vars['comments'] = $this->EE->input->post('comments');
                 }
             }
+
             return $this->EE->load->view($return_view, $vars, TRUE);
         }
     }

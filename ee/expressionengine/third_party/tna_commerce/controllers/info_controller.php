@@ -46,11 +46,21 @@ class info_controller {
         }
         $this->EE->load->model('subscribers_model');
         $this->subscriber = $this->EE->subscribers_model->get_subscriber($this->member_id);
-        $tshirt_status = $this->subscriber->tshirt_status;
-        $msg = "Your subscription is {$this->subscriber->type}.";
         
-        if ($tshirt_status) {
-            $msg .= " <br>Your t-shirt status is: $tshirt_status.";
+        //print_r($this->subscriber);
+        //die();
+        
+        $date_created = $this->subscriber->created;
+        
+        $start_date = date("F j, Y",strtotime($date_created));
+        
+        $msg = "You have been a subscriber since $start_date.";
+        
+        //$tshirt_status = $this->subscriber->tshirt_status;
+        $msg .= "<br>Your subscription is {$this->subscriber->type}.";
+        
+        if ($this->subscriber->tshirt_status) {
+            $msg .= " <br>Your t-shirt status is: {$this->subscriber->tshirt_status}.";
         }
         
         return $msg;

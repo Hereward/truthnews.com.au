@@ -16,10 +16,9 @@ class Eway_model extends Base_model {
     public $eway_error;
     public $eway_payment_status = false;
     public $eway_auth_code = '';
+    public $error_str = array(); 
+    public $test_credit_card = '4444333322221111';
 
-    /*
-      protected $EE;
-     */
 
     public function __construct() {
         parent::__construct();
@@ -30,15 +29,12 @@ class Eway_model extends Base_model {
 
         require_once("$this->eway_path/recurring/nusoap.php");
         require_once("$this->eway_path/direct/EwayPaymentLive.php");
+        
+        $this->error_str = array(
+            'payment' => 'The transaction failed. Please check your credit card details and try again.',
+            'init' => 'There was a problem contacting the payment gateway. Please try again in a few minutes.'
+        );
 
-        //$this->load_client();
-
-        //$this->EE =& get_instance();
-        //die('whizzzzz');
-        //$this->orig = $this->my_var;
-        //set a global object
-        //$this->EE->tna_commerce = $this;
-        // die("BOO!");
     }
 
     public function config_vars() {
@@ -47,11 +43,29 @@ class Eway_model extends Base_model {
 
     public function init() {
         $result = $this->load_recurring_client();
+        
         if (!$result) {
+            dev_log::write("eWay recurring_client init failed");
             return false;
+            
+        } else {
+            //$result_str = print_r($result,true);
+            dev_log::write("eWay recurring_client init OK");
         }
         
         $result = $this->load_direct_client();
+        
+        if (!$result) {
+            //return false;
+            dev_log::write("eWay direct init failed");
+        } else {
+            //$result_str = print_r($result,true);
+            dev_log::write("eWay direct init OK");
+        }
+        
+        //$result_str = print_r($result,true);
+        
+        //dev_log::write("eWay direct init = $result_str");
         
         return $result;
         
@@ -212,9 +226,10 @@ class Eway_model extends Base_model {
         $err = $this->client->getError();
         $message = '';
         if ($err) {
-            $message .= '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            $message .= '<h2>Debug</h2><pre>' . htmlspecialchars($this->client->getDebug(), ENT_QUOTES) . '</pre>';
+            $message .= 'eWay constructor error = '  . $err;
+            //$message .= '<h2>Debug</h2><pre>' . htmlspecialchars($this->client->getDebug(), ENT_QUOTES) . '</pre>';
             $this->eway_error = $message;
+            dev_log::write($this->eway_error);
             return false;
         }
 
@@ -358,19 +373,18 @@ class Eway_model extends Base_model {
     function get_eway_rebill_error($result) {
         //$result_str = print_r($result,true);
         //dev_log::write("eway_model:get_eway_rebill_error: result_str = $result_str");
-        
+
         $output = '';
         if ($this->client->fault) {
             $output = 'There is a problem with the network. Please try again in a few minutes.';
         } else {
             $output = $result['ErrorDetails'];
-            dev_log::write("Rebill Error = {$result['ErrorDetails']}");
-            
+        }
+        if ($output) {
+            dev_log::write("eWay Rebill error = $output");
         }
         return $output;
     }
-
-
 
     /*
      * 'man:customerTitle' => $_POST['customerTitle'],

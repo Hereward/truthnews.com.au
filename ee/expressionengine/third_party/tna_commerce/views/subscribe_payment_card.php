@@ -91,7 +91,7 @@
 
     <div class="form-group">
         <label>CVV Code <a href="http://www.cvvnumber.com/cvv.html" target="_blank" style="font-size:11px">What is my CVV code?</a></label>
-        <input class="form-control" type="text" name="cc_cvn" value="<?= $cc_cvn ?>" />
+        <input class="form-control" type="text" id="cc_cvn" name="cc_cvn" value="<?= $cc_cvn ?>" />
     </div>
 
 
@@ -230,6 +230,10 @@
                 cc_number: {
                     required: true,
                     creditcard: true
+                },
+                cc_cvn: {
+                    required: true,
+                    digits: true
                 }
             },
             messages: {
