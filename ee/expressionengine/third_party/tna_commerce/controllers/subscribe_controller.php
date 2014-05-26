@@ -86,6 +86,7 @@ class subscribe_controller extends Base_Controller {
     public function create_existing() {
         $errors = array();
         //$this->EE->session->userdata->username;
+        $this->set_defaults();
         $vars = array(
             'errors'=>$errors,
             'username'=>$this->EE->session->userdata['username'],

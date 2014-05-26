@@ -49,8 +49,9 @@ class subscription_payment_controller extends Base_Controller {
         $this->subscription_details = $this->EE->subscribers_model->get_subscription_details($subscription_type);
         dev_log::write("init: 2");
         $this->country_list = $this->EE->tna_commerce_lib->get_countrylist();
-        $this->country_code = $this->EE->tna_commerce_lib->ip2location('countryCode');
         dev_log::write("init: 3");
+        $this->country_code = $this->EE->tna_commerce_lib->ip2location('countryCode');
+        dev_log::write("init: 4");
     }
 
     public function delete_cookie() {
@@ -144,9 +145,6 @@ class subscription_payment_controller extends Base_Controller {
             $existing_subscriber = ($duplicate) ? $this->EE->subscribers_model->is_subscriber($duplicate->member_id) : false;
         }
 
-
-
-
         if ($existing_subscriber) {
             dev_log::write("payment:create existing_subscriber > GO BACK");
 
@@ -166,6 +164,11 @@ class subscription_payment_controller extends Base_Controller {
             } else {
                 $view = 'subscribe_new';
             }
+            
+            //dev_log::write("load $view");
+            $this->EE->subscribers_model->set_subscription_types();
+            $this->subscribe_stage = 1;
+            $this->set_defaults();
 
             return $this->EE->load->view($view, $vars, TRUE);
             exit();

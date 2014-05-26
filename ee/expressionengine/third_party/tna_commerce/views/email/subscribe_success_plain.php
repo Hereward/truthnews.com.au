@@ -3,14 +3,14 @@ Dear <?=$subscriber->first_name?>,
 Your subscription to Truth News Australia is now active.
 
 <? if ($subscriber->existing_member == 0) { ?>
-Your account details are shown below. A temporary password has been created for you. For security reasons please sign in and change your password as soon as possible, by editing your profile.
+Your account details are shown below. A temporary password has been created for you. For security reasons please log in and change your password as soon as possible, by editing your profile.
 
 User Name: <?=$subscriber->username?> 
 (This is the same as your email address)
 
 Temp Password:<?=$subscriber->temp_password?> 
 
-Sign In: <?=$site_url?>sign-in
+Log In: <?=$site_url?>log-in
 
 Edit Profile: <?=$site_url?>members/profile/<?=$subscriber->member_id?>
 
@@ -26,9 +26,9 @@ Edit Profile: <?=$site_url?>members/profile/<?=$subscriber->member_id?>
 <? } else { ?>
 We found an existing member account (user name: <?=$subscriber->username?> ) attached to your supplied email address, so we have applied the subscription to that account. If this is in error please contact us.
 
-To update your member profile please sign in then edit your profile.
+To update your member profile please log in then edit your profile.
 
-Sign In: <?=$site_url?>sign-in
+Log In: <?=$site_url?>log-in
 Edit Profile: <?=$site_url?>members/profile/<?=$subscriber->member_id?>
 
 If you can't remember your password you can recover it here:
@@ -36,7 +36,7 @@ If you can't remember your password you can recover it here:
 
 <? } ?>
 
-If you wish to cancel your subscription at any time you can do so from your profile, but you'll need to sign in first.
+If you wish to cancel your subscription at any time you can do so from your profile, but you'll need to log in first.
 
 <? if ($subscriber->type == 'yearly') { ?>
 We will be sending your t-shirt to the billing address below. If you want the t-shirt sent somewhere else please contact us.

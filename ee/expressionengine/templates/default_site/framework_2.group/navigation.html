@@ -38,8 +38,8 @@
                                 <li {if "{segment_1}" == "members" && segment_2=="profile"}class="active"{/if}><a href="{site_url}members/profile/{member_id}">My Profile</a></li>
                             {/if}
                             {if logged_out}
-                                <li><a href="{path=sign-in}">Log In</a></li>
-                                <li><a href="{path=sign-in/register}">Register</a></li>
+                                <li><a href="{path=log-in}">Log In</a></li>
+                               {!-- <li><a href="{path=sign-in/register}">Register</a></li> --}
                             {/if}
 
                         </ul>

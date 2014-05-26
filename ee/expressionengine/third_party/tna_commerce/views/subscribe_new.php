@@ -36,7 +36,6 @@
     <div class="form-group">
         <label for="email">Email Address</label>
         <input class="form-control" type="text" id="email" name="email" maxlength="100" value="" />
-        {!-- <p class="help-block">Your email address will be your username when you sign-in.</p> --}
     </div>
 {!--
     <div class="form-group">

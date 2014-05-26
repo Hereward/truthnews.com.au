@@ -1,16 +1,16 @@
 <? if ($subscriber->existing_member == 0) { ?>
     <p class="bold">Your account details are shown below. A temporary password has been created for you. 
-        For security reasons please <a href="<?=$site_url?>sign-in">sign in</a> and change your password as soon as possible, by editing your <a href="<?=$site_url?>members/profile/<?=$subscriber->member_id?>">profile</a>.</p>
+        For security reasons please <a href="<?=$site_url?>log-in">log in</a> and change your password as soon as possible, by editing your <a href="<?=$site_url?>members/profile/<?=$subscriber->member_id?>">profile</a>.</p>
     
     <p><strong>User Name:</strong> <?=$subscriber->username?>
         
     <p><strong>Temp Password:</strong> <?=$subscriber->temp_password?>
         
-    <p>Sign In: <a href="<?=$site_url?>sign-in"><?=$site_url?>sign-in</a></p>
+    <p>Log In: <a href="<?=$site_url?>log-in"><?=$site_url?>log-in</a></p>
     
 <? } elseif ($logged_in == true) { ?>
 
-    <p class="bold">We have applied your subscription to the currently signed in user, <?=$subscriber->username?>. 
+    <p class="bold">We have applied your subscription to the currently logged in user, <?=$subscriber->username?>. 
     If this is in error please <a href="<?=$site_url?>contact">contact</a> us. </p>
 
     <p>To update your member profile please edit your <a href="<?=$site_url?>members/profile/<?=$subscriber->member_id?>">profile</a>.</p>
@@ -21,14 +21,14 @@
         attached to your supplied email address, so we have applied the subscription to that account. 
         If this is in error please contact us.</p>
 
-    <p>To update your member profile please <a href="<?=$site_url?>sign-in">sign in</a>, 
+    <p>To update your member profile please <a href="<?=$site_url?>log-in">log in</a>, 
         then edit your <a href="<?=$site_url?>members/profile/<?=$subscriber->member_id?>">profile</a>.</p>
 
     <p>If you can't remember your password you can recover it <a href="<?=$site_url?>member/forgot_password">here</a>.</p>
 
 <? } ?>
 
-<p>If you wish to cancel your subscription at any time you can do so from your <a href="<?=$site_url?>members/profile/<?=$subscriber->member_id?>">profile</a> page, but you&quot;ll need to <a href="<?=$site_url?>sign-in">sign in</a> first.</p>
+<p>If you wish to cancel your subscription at any time you can do so from your <a href="<?=$site_url?>members/profile/<?=$subscriber->member_id?>">profile</a> page, but you&quot;ll need to <a href="<?=$site_url?>log-in">log in</a> first.</p>
 
 <? if ($subscriber->type == 'yearly') { ?>
     <hr/>
