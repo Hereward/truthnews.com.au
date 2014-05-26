@@ -38,7 +38,12 @@
     <address>
         <strong><?=$subscriber->first_name?> <?=$subscriber->last_name?></strong> <br>
         <? if ($subscriber->company) {echo $subscriber->company.'<br>';}?>
-        <?=$subscriber->address?><? if (!empty(trim($subscriber->address_2))) {echo '<br>'.$subscriber->address_2;}?><br>
+        <?=$subscriber->address?>
+        <? 
+           $trimmed_address = trim($subscriber->address_2);
+           if (!empty($trimmed_address)) {echo '<br>'.$subscriber->address_2;}
+        ?>
+        <br>
         <?=$subscriber->suburb?><br>
         <?=$subscriber->state?> <?=$subscriber->postal_code?><br>
         <?=$countrylist[$subscriber->country]?><br>
