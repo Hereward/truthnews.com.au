@@ -45,7 +45,11 @@ We will be sending your t-shirt to the billing address below. If you want the t-
 
 <? if ($subscriber->company) {echo $subscriber->company;}?>
 
-<?=$subscriber->address?> <? if (!empty(trim($subscriber->address_2))) {echo $subscriber->address_2;}?>
+<?=$subscriber->address?> 
+<? 
+$trimmed_address = trim($subscriber->address_2);
+if (!empty($trimmed_address)) {echo $subscriber->address_2;}
+?>
 
 <?=$subscriber->suburb?>
 
