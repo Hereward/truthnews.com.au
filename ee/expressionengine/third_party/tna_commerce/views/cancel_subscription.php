@@ -1,4 +1,5 @@
-<? // $this->view('errors'); ?>
+<? $this->view('errors'); ?>
+
 <p>We're sorry to see you go! Please leave any comments or feedback below.</p>
 
 <form id="cancel_subscription" name="cancel_subscription" action="<?= $https_site_url ?>
