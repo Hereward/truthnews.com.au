@@ -1,4 +1,4 @@
-<p>Bananas sure taste good!</p>
+<p>Bananas sure taste good! Oooo yeah. </p>
 
 {!--
 <? $this->view('errors'); ?>
