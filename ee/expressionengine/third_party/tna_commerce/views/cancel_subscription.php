@@ -2,8 +2,7 @@
 
 <p>We're sorry to see you go! Please leave any comments or feedback below.</p>
 
-<form id="cancel_subscription" name="cancel_subscription" action="<?= $https_site_url ?>
-    members/cancel_subscription" method="post">
+<form id="cancel_subscription" name="cancel_subscription" action="<?= $https_site_url ?>members/cancel_subscription" method="post">
     <input type="hidden" name="confirm_cancellation_<?=$member_id?>" value="1" />
     <input type="hidden" name="member_id" value="<?= $member_id ?>" />
 
