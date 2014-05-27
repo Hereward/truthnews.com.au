@@ -12,7 +12,7 @@
                     <p class="lead">Sorry, you can't cancel your subscription because you are not logged in.</p>
                 {if:else}
                     <h3 class="recent_shows">Cancel Subscription</h3>
-                    {exp:tna_commerce:subscription_payment action="destroy"}
+                    {embed="members/cancel_subscription_confirmation_snippet"} 
                 {/if}
             </div>
         </div>
