@@ -7,10 +7,9 @@
         <input type="email" class="form-control" name="from" id="from" placeholder="Enter email" value="{member_email}">
     </div>
 
-    <div class="form-group">
-        <label for="from">Subject</label>
-        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subscriber Enquiry" value="Subscriber Enquiry - Member ID: {member_id}">
-    </div>
+    
+    <input type="hidden" name="subject" id="subject" value="Subscriber Enquiry - Member ID: {member_id}">
+    
 
     <div class="form-group">
         <label for="from">Message</label>
