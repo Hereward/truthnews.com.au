@@ -15,7 +15,9 @@
                     <ul>
                       <li><a href="{path='members/profile/{member_id}'}">View/Edit your profile</a></li>
                       <li><a href="{path='members'}">View the Memberlist</a></li>
+                      {if "{exp:tna_subscriber}"}<li><a href="{path='subscribers_only'}">Subscribers Only Area</a></li>{/if}
                       <li><a href="{path='logout'}">Log Out</a></li>
+                      
                     </ul>
                 {/if}
 

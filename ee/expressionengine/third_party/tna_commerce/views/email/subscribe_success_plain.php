@@ -58,6 +58,9 @@ if (!empty($trimmed_address)) {echo $subscriber->address_2;}
 <?=$countrylist[$subscriber->country]?>
 <? } ?>
 
+Finally, please check out our "Subscribers Only" page which contains a variety of resources which you may find useful:
+<?=$site_url?>subscribers_only
+
 Thanks for supporting truth in media. Your money will not be wasted!
 
 Best regards,

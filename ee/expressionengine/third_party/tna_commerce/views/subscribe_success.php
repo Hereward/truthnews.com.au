@@ -52,6 +52,9 @@
     <hr/>
 <? } ?>
 
+<p>Finally, please check out our <a href="<?=$site_url?>subscribers_only">"Subscribers Only"</a> page which contains a variety of 
+   resources which you may find useful.</p>
+
 <p>Thanks for supporting truth in media. Your money will not be wasted!</p>
 
 <p>Best regards,</p>

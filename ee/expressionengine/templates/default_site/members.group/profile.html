@@ -12,12 +12,9 @@
                     <p class="lead">Sorry, you can't view member profile data because you are not logged in.</p>
                 {if:else}
                     {!-- <h3 class="recent_shows">Member Profile</h3> --}
-                    
-                    
-                    
-                    {if "{exp:tna_commerce:info action='is_subscriber'}"}
-                        {embed="members/cancel_subscription_snippet"}
-                        
+
+                    {if "{exp:tna_subscriber}"}
+                        {embed="members/cancel_subscription_snippet"}         
                     {/if}
                     
                     {if member_id == segment_3}

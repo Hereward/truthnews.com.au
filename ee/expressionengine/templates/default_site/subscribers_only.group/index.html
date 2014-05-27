@@ -1,0 +1,34 @@
+{embed="framework_2/doc_head" url="{site_url}members" title="Truth News Australia Members Area" description="Sign in or create a new account."}
+{embed="framework_2/navigation" section="home"}
+
+<div class="container main_box">
+    {embed="framework_2/header"}
+
+    <div class="row">
+        <div class="col-md-9 col-lg-8">
+            <div class="news_channel_container">
+                {if logged_out}
+                    <h2 style="color:red;" class="channel_title">No Access</h2>
+                    <p class="lead">Sorry, you can't view member profile data because you are not logged in.</p>
+                {if:else}
+                    <h3 class="recent_shows">Subscribers Only Area</h3>                     
+                    <p>Welcome to our new subscribers only area! This section of the website is currently under development 
+                       and we intend to add new features over time, so please check back here often.
+                    </p>
+                    
+                    <p>As a subscriber you are a valued member of our news team. If you have suggestions for the show please
+                        use the form below to advise us. We will give your suggestions our full attention and get back to you as soon
+                        as possible.
+                    </p>
+                    {embed="subscribers_only/subscribers_only_contact_form"}
+                {/if}
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-4">{embed="subscribers_only/right_col_subscribers_only"}</div>
+    </div> <!-- /row -->
+
+    {embed="framework_2/footer"}
+
+</div> <!-- /container -->
+
+{embed ="framework_2/doc_foot"}
