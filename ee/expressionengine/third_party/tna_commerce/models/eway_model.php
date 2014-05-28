@@ -171,8 +171,8 @@ class Eway_model extends Base_model {
         $ewayTrxnStatus = (is_object($response_obj))?$response_obj->ewayTrxnStatus:'false';
 
         if (strtolower($ewayTrxnStatus) == "false") {
-            $this->eway_error .= $response_obj->ewayTrxnError;
-            dev_log::write($this->EE->eway_model->eway_error);
+            $this->eway_error = "No response from payment gateway."; //$response_obj->ewayTrxnError;
+            dev_log::write("ewayTrxnStatus = false | ".$this->EE->eway_model->eway_error);
             //trigger_error("The credit card transaction failed: $this->eway_error");
             
             //var_dump($ewayResponseFields);
