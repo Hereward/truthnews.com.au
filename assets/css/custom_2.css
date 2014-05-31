@@ -10,6 +10,10 @@ p.bold {
     display:none;
 }
 
+div#eWAYBlock {
+    margin-bottom:20px;
+}
+
 #wrapper_small {
     width: 320px;
     height: 40px;
