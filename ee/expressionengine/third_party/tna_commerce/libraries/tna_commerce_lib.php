@@ -94,7 +94,7 @@ class Tna_commerce_lib {
         $visitor_name = "Dumb Stuff";
         $message = "You are an idiot.";
         //set the recipient email address, where to send emails to
-        $to_email = 'hereward@planetonline.com.au';
+        $to_email = 'editor@truthnews.com.au';
         //set the sender email address
         $your_email = 'editor@truthnews.com.au';
         //use your email address as the sender
