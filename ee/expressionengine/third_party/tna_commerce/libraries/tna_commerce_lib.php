@@ -130,11 +130,11 @@ class Tna_commerce_lib {
 
 
 
-        $mail->From = 'hereward@planetonline.com.au'; //truth.news.australia@gmail.com hereward@planetonline.com.au
+        $mail->From = 'admin@truthnews.com.au'; //truth.news.australia@gmail.com hereward@planetonline.com.au
         $mail->FromName = 'Adolf Hitler';
         $mail->addAddress('editor@truthnews.com.au', 'Truth News Editor');     // Add a recipient
         //$mail->addAddress('ellen@example.com');               // Name is optional
-        $mail->addReplyTo('hereward@planetonline.com.au', 'Adolf Hitler');
+        $mail->addReplyTo('admin@truthnews.com.au', 'Adolf Hitler');
         //$mail->addCC('cc@example.com');
         //$mail->addBCC('bcc@example.com');
 
@@ -143,7 +143,7 @@ class Tna_commerce_lib {
         //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
         $mail->isHTML(true);                                  // Set email format to HTML
 
-        $mail->Subject = 'Achtung my Aryan Volk!';
+        $mail->Subject = 'New test Message';
         $mail->Body = 'We will annex the Sudentenland (HTML)!';
         $mail->AltBody = 'We will annex the Sudentenland (plain text for non-HTML mail clients)!';
 
