@@ -110,6 +110,50 @@ class Tna_commerce_lib {
         //send the email
         mail($to_email, $subject, $emailMessage, $header);
     }
+    
+    function email_test_4() {
+        $mail = new PHPMailer;
+        
+        
+        $mail->isSMTP();                                      
+        $mail->Host = 'mail.truthnews.com.au';  
+        //$mail->Host = "localhost"; 
+        $mail->SMTPAuth = true;                               
+        $mail->Username = 'admin@truthnews.com.au';                 
+        $mail->Password = 'pullit911';                           
+        //$mail->SMTPSecure = 'tls';
+         
+         
+        
+        $mail->From = 'hereward@planetonline.com.au'; //truth.news.australia@gmail.com hereward@planetonline.com.au
+        $mail->FromName = 'Adolf Hitler';
+        $mail->addAddress('editor@truthnews.com.au', 'Truth News Editor');     // Add a recipient
+        //$mail->addAddress('ellen@example.com');               // Name is optional
+        $mail->addReplyTo('hereward@planetonline.com.au', 'Adolf Hitler');
+        //$mail->addCC('cc@example.com');
+        //$mail->addBCC('bcc@example.com');
+
+        $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+        //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = 'Achtung my Aryan Volk!';
+        $mail->Body = 'We will annex the Sudentenland (HTML)!';
+        $mail->AltBody = 'We will annex the Sudentenland (plain text for non-HTML mail clients)!';
+
+        $msg = '';
+        if (!$mail->send()) {
+            $msg = 'PHPMailer test message 4 could not be sent. ';
+            $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            $msg = 'Yay! PHPMailer test message 4 has been sent';
+        }
+        
+        dev_log::write($msg);
+
+        return $msg;
+    }
 
     public function send_email_notification($params = array()) {
         $plain_path = $params['plain_path']; //'email/cc_confirmation_plain';

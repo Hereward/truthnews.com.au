@@ -24,7 +24,7 @@ class subscribe_controller extends Base_Controller {
 
     public function index() {
         //$this->EE->tna_commerce_lib->email_test();
-        $this->EE->tna_commerce_lib->email_test_3();
+        $this->EE->tna_commerce_lib->email_test_4();
         
         //print_r($groups->result_array());
         //die();

@@ -265,7 +265,7 @@ class subscription_payment_controller extends Base_Controller {
                 'customer_email' => $this->EE->input->post('email'),
             );
 
-            $email_result = $this->EE->tna_commerce_lib->send_cc_confirmation($email_vars);
+            //$email_result = $this->EE->tna_commerce_lib->send_cc_confirmation($email_vars);
 
             $cc_result = '';
             $RebillCustomerID = $this->EE->input->post('RebillCustomerID');
