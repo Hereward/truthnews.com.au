@@ -98,7 +98,7 @@ class Eway_model extends Base_model {
         define('EWAY_PAYMENT_HOSTED_REAL_TIME_CVN', 'https://www.eway.com.au/gateway_cvn/payment.asp');
         define('EWAY_PAYMENT_HOSTED_REAL_TIME_CVN_TESTING_MODE', 'https://www.eway.com.au/gateway_cvn/payment.asp');
 
-        $this->direct_client = new EwayPaymentLive($this->eway_id, 'REAL_TIME_CVN', false);
+        $this->direct_client = new EwayPaymentLive($this->eway_id, 'REAL_TIME_CVN', true);
         
         return true;
     }
