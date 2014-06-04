@@ -164,6 +164,13 @@ class Tna_commerce_lib {
         $html = $this->EE->load->view($html_path, $params, TRUE);
 
         $mail = new PHPMailer;
+        
+        $mail->isSMTP();                                      
+        $mail->Host = 'mail.truthnews.com.au';  
+        //$mail->Host = "localhost"; 
+        $mail->SMTPAuth = true;                               
+        $mail->Username = 'admin@truthnews.com.au';                 
+        $mail->Password = 'pullit911';          
 
         $mail->From = $this->admin_email; //truth.news.australia@gmail.com hereward@planetonline.com.au
         $mail->FromName = 'Truth News Australia';
