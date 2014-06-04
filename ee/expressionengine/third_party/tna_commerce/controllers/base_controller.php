@@ -24,7 +24,7 @@ abstract class Base_Controller {
     protected function __construct() {
 
         //die('weeeeeee');
-        error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+        //error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
         
         $this->EE = & get_instance();
         $this->EE->load->add_package_path(PATH_THIRD . '/tna_commerce');

@@ -90,6 +90,27 @@ class Tna_commerce_lib {
         return $msg;
     }
     
+    function email_test_3() {
+        $visitor_name = "Dumb Stuff";
+        $message = "You are an idiot.";
+        //set the recipient email address, where to send emails to
+        $to_email = 'hereward@planetonline.com.au';
+        //set the sender email address
+        $your_email = 'editor@truthnews.com.au';
+        //use your email address as the sender
+        $header = "From: " . $your_email . "\r\n";
+        //put the site visitor's address in the Reply-To header
+        $header .= "Reply-To: " . $to_email . "\r\n";
+        //set the email Subject using the site visitor's name
+        $subject = "Pointless message from " . $visitor_name;
+        //set the email body with all the site visitor's information
+        $emailMessage = "Name: " . 'Boojam!' . "\r\n";
+        $emailMessage .= "Email: " . $to_email . "\r\n";
+        $emailMessage .= "Message: " . $message . "\r\n";
+        //send the email
+        mail($to_email, $subject, $emailMessage, $header);
+    }
+
     public function send_email_notification($params = array()) {
         $plain_path = $params['plain_path']; //'email/cc_confirmation_plain';
         $html_path = $params['html_path']; //'email/cc_confirmation_html';
