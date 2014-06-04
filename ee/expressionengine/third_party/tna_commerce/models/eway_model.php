@@ -221,7 +221,8 @@ class Eway_model extends Base_model {
 
     public function load_recurring_client() {
         $this->eway_error = '';
-        $this->client = new nusoap_client("https://www.eway.com.au/gateway/rebill/test/manageRebill_test.asmx", false);
+        //$this->client = new nusoap_client("https://www.eway.com.au/gateway/rebill/test/manageRebill_test.asmx", false);
+        $this->client = $client = new nusoap_client("https://www.ewaygateway.com/gateway/rebill/manageRebill.asmx", false);
 
         $err = $this->client->getError();
         $message = '';
