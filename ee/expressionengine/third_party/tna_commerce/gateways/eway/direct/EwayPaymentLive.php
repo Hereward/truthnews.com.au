@@ -12,7 +12,7 @@ class EwayPaymentLive {
     //Class Constructor
     function EwayPaymentLive($customerID = EWAY_DEFAULT_CUSTOMER_ID, $method = EWAY_DEFAULT_PAYMENT_METHOD, $liveGateway = EWAY_DEFAULT_LIVE_GATEWAY) {
         $this->myCustomerID = $customerID;
-        //dev_log::write("EwayPaymentLive: [$method]");
+        dev_log::write("EwayPaymentLive method: [$method]");
         switch ($method) {
 
             case 'REAL_TIME';
