@@ -6,6 +6,8 @@ if (!defined('BASEPATH'))
 class Tna_commerce_lib {
 
     public $default_site_path;
+    public $tna_server_environment;
+    public $admin_email;
     protected $password_key;
 
     /**
@@ -18,6 +20,7 @@ class Tna_commerce_lib {
         $this->default_site_path = $this->EE->config->item('default_site_path');
         require_once("$this->default_site_path/includes/phpmailer/PHPMailerAutoload.php");
         $this->admin_email = $this->EE->config->item('admin_email');
+        $this->tna_server_environment = $this->EE->config->item('tna_server_environment');
         $this->password_key = "bazooka";
 
         //set a global object
@@ -113,18 +116,20 @@ class Tna_commerce_lib {
     
     function email_test_4() {
         $mail = new PHPMailer;
-        
-        
-        $mail->isSMTP();                                      
-        $mail->Host = 'mail.truthnews.com.au';  
-        //$mail->Host = "localhost"; 
-        $mail->SMTPAuth = true;                               
-        $mail->Username = 'admin@truthnews.com.au';                 
-        $mail->Password = 'pullit911';                           
-        //$mail->SMTPSecure = 'tls';
-         
-         
-        
+
+        if ($this->tna_server_environment == 'hosted') {
+            $mail->isSMTP();
+            $mail->Host = 'mail.truthnews.com.au';
+            //$mail->Host = "localhost"; 
+            $mail->SMTPAuth = true;
+            $mail->Username = 'admin@truthnews.com.au';
+            $mail->Password = 'pullit911';
+            //$mail->SMTPSecure = 'tls';
+        }
+
+
+
+
         $mail->From = 'hereward@planetonline.com.au'; //truth.news.australia@gmail.com hereward@planetonline.com.au
         $mail->FromName = 'Adolf Hitler';
         $mail->addAddress('editor@truthnews.com.au', 'Truth News Editor');     // Add a recipient
@@ -165,12 +170,15 @@ class Tna_commerce_lib {
 
         $mail = new PHPMailer;
         
-        $mail->isSMTP();                                      
-        $mail->Host = 'mail.truthnews.com.au';  
-        //$mail->Host = "localhost"; 
-        $mail->SMTPAuth = true;                               
-        $mail->Username = 'admin@truthnews.com.au';                 
-        $mail->Password = 'pullit911';          
+        if ($this->tna_server_environment == 'hosted') {
+            $mail->isSMTP();
+            $mail->Host = 'mail.truthnews.com.au';
+            //$mail->Host = "localhost"; 
+            $mail->SMTPAuth = true;
+            $mail->Username = 'admin@truthnews.com.au';
+            $mail->Password = 'pullit911';
+            //$mail->SMTPSecure = 'tls';
+        }
 
         $mail->From = $this->admin_email; //truth.news.australia@gmail.com hereward@planetonline.com.au
         $mail->FromName = 'Truth News Australia';
