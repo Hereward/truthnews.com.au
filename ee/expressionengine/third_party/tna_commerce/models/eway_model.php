@@ -77,7 +77,7 @@ class Eway_model extends Base_model {
         
         define('EWAY_DEFAULT_CUSTOMER_ID', $this->eway_id);
         define('EWAY_DEFAULT_PAYMENT_METHOD', 'REAL_TIME'); // possible values are: REAL_TIME, REAL_TIME_CVN, GEO_IP_ANTI_FRAUD
-        define('EWAY_DEFAULT_LIVE_GATEWAY', false); //<false> sets to testing mode, <true> to live mode
+        define('EWAY_DEFAULT_LIVE_GATEWAY', true); //<false> sets to testing mode, <true> to live mode
      
         
         //define script constants
