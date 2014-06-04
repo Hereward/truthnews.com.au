@@ -79,11 +79,13 @@ class Tna_commerce_lib {
 
         $msg = '';
         if (!$mail->send()) {
-            $msg = 'Message could not be sent. ';
+            $msg = 'PHPMailer test message could not be sent. ';
             $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
-            $msg = 'Message has been sent';
+            $msg = 'PHPMailer test message has been sent';
         }
+        
+        dev_log::write($msg);
 
         return $msg;
     }
