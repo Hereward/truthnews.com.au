@@ -1,9 +1,22 @@
+p.bold {
+    font-weight:bold;
+}
+
 #subscribe_banner_css_3 {
     display:none;
 }
 
 #subscribe_banner_legacy {
     display:none;
+}
+
+div#eWAYBlock {
+    margin-bottom:20px;
+}
+
+div.right_col_subscribe {
+    text-align: center;
+    margin-bottom:20px;
 }
 
 #wrapper_small {
@@ -286,7 +299,7 @@ form.subscribe_form {
 }
 
 div.top_banner {
-    margin:13px 0px 0px 0px;
+    margin:24px 0px 0px 0px;
     text-align:left;
     padding:0;
 
@@ -488,6 +501,10 @@ div.rss_subscribe {
     margin:0px 0px 20px 0px;
 }
 
+div.t_shirt_subscribe {
+    margin:0px 0px 20px 0px;
+}
+
 /*
 
 div.twitter_top_feed .twtr-timeline {
@@ -542,8 +559,14 @@ p, .article, .article p {
 
 h1.header {
     text-align:center;
-    margin-top:0;
+
     /* display:inline; */
+}
+
+.wide_logo {
+
+    text-align:center !important;
+
 }
 
 
