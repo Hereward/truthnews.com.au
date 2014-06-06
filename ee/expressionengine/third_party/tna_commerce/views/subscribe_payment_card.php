@@ -15,7 +15,7 @@
        ?>
        Initial Charge: AUD $<?=$subscription_details->aud_price?><br>
        <? if($subscription_type == 'yearly') {
-          echo "(<em>Note: for destinations outside Australia, AUD $5.00 postage &amp; handling fee will apply.</em>)<br>"; 
+          echo "(<em>Note: for destinations outside Australia, additional AUD $5.00 postage &amp; handling fee will apply.</em>)<br>"; 
        }
        ?>
        <strong><?=$subscription_details->description?></strong><br>
