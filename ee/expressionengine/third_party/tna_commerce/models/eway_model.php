@@ -128,21 +128,40 @@ class Eway_model extends Base_model {
         
         $txtAmount = $subscription_details->aud_price * 100;
         
+        $postage_raw = $this->EE->input->post('postage_cost');
+        
+        $postage = $postage_raw*100;
+        
+        $final_amount = $txtAmount+$postage;
+        
+        
+        
         //$txtAmount = '6.50';
+        //dev_log::write("process_direct_payment: Base price = [$txtAmount]");
+        //dev_log::write("process_direct_payment: Postage = [$postage]");
+        //dev_log::write("process_direct_payment: Final Amount = [$final_amount]");
+        
+        $invoice_description = "TNRA Subscription. Base Price: $" . $txtAmount . " | Postage: $" . $postage_raw;
+        
+        dev_log::write("process_direct_payment: invoice_description = [$invoice_description] FINAL AMOUNT = [$final_amount]");
+        
+        //$this->eway_error = "Error: An invalid response was recieved from the payment gateway.";
+        //return false;
+        
+        //die("FORCED TERMINATION");
         
         
-        dev_log::write("txtAmount = [$txtAmount]");
 
         // Set the payment details
         //$eway = new EwayPaymentLive($eWAY_CustomerID, $eWAY_PaymentMethod, $eWAY_UseLive);
 
-        $this->direct_client->setTransactionData("TotalAmount", $txtAmount); //mandatory field
+        $this->direct_client->setTransactionData("TotalAmount", $final_amount); //mandatory field
         $this->direct_client->setTransactionData("CustomerFirstName", $this->EE->input->post('first_name'));
         $this->direct_client->setTransactionData("CustomerLastName", $this->EE->input->post('last_name'));
         $this->direct_client->setTransactionData("CustomerEmail", $this->EE->input->post('email'));
         $this->direct_client->setTransactionData("CustomerAddress", $this->EE->input->post('address') . ' ' . $this->EE->input->post('address_2'));
         $this->direct_client->setTransactionData("CustomerPostcode", $this->EE->input->post('postal_code'));
-        $this->direct_client->setTransactionData("CustomerInvoiceDescription", '');
+        $this->direct_client->setTransactionData("CustomerInvoiceDescription", $invoice_description);
         $this->direct_client->setTransactionData("CustomerInvoiceRef", '');
         $this->direct_client->setTransactionData("CardHoldersName", $this->EE->input->post('first_name') . ' ' . $this->EE->input->post('last_name')); //mandatory field
         $this->direct_client->setTransactionData("CardNumber", $this->EE->input->post('cc_number')); //mandatory field

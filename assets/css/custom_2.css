@@ -26,6 +26,15 @@ div.right_col_subscribe {
     overflow: hidden;
 }
 
+.postage_cost_label {
+    color:red;
+    font-weight:bold;
+}
+
+#postage_settings {
+    display:none;
+}
+
 /*
 #scaled-frame_small {
     width: 728px;

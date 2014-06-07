@@ -18,6 +18,7 @@ class subscribe_controller extends Base_Controller {
     
     public function init() {
       $this->EE->subscribers_model->set_subscription_types();
+      $this->country_code = 'AU'; //$this->EE->tna_commerce_lib->ip2location('countryCode');
 
     }
 
@@ -80,20 +81,31 @@ class subscribe_controller extends Base_Controller {
 
         $errors = array();
         $this->set_defaults();
-        $vars = array('site_url'=>$this->site_url, 'errors'=>$errors);
+        
+        $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
+        $vars = array(
+            'site_url'=>$this->site_url, 
+            'errors'=>$errors, 
+            'countrylist' => $countrylist,
+            'countrycode' => $this->country_code
+        );
+        
         return $this->EE->load->view('subscribe_new', $vars, TRUE);
 
     }
 
     public function create_existing() {
         $errors = array();
+        $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
         //$this->EE->session->userdata->username;
         $this->set_defaults();
         $vars = array(
             'errors'=>$errors,
             'username'=>$this->EE->session->userdata['username'],
             'email'=>$this->EE->session->userdata['email'],
-            'member_id'=>$this->member_id
+            'member_id'=>$this->member_id,
+            'countrylist' => $countrylist,
+            'countrycode' => $this->country_code 
         );
         
         return $this->EE->load->view('subscribe_existing', $vars, TRUE);

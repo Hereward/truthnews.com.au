@@ -50,7 +50,7 @@ class subscription_payment_controller extends Base_Controller {
         dev_log::write("init: 2");
         $this->country_list = $this->EE->tna_commerce_lib->get_countrylist();
         dev_log::write("init: 3");
-        $this->country_code = $this->EE->tna_commerce_lib->ip2location('countryCode');
+        $this->country_code = 'AU'; //$this->EE->tna_commerce_lib->ip2location('countryCode');
         dev_log::write("init: 4");
     }
 
@@ -165,6 +165,10 @@ class subscription_payment_controller extends Base_Controller {
                 $view = 'subscribe_new';
             }
             
+            $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
+            $vars['countrylist'] = $countrylist;
+            $vars['countrycode']  = $this->country_code;
+            
             //dev_log::write("load $view");
             $this->EE->subscribers_model->set_subscription_types();
             $this->subscribe_stage = 1;
@@ -201,6 +205,7 @@ class subscription_payment_controller extends Base_Controller {
 
         return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
     }
+    
 
     public function delete_subscriber($member_id) {
         $output = true;
@@ -322,6 +327,7 @@ class subscription_payment_controller extends Base_Controller {
             redirect($this->https_site_url . "subscribe/success");
         } else {
             $vars = $this->process_eway_error('payment');
+            $vars['subscription_details'] = $this->subscription_details;
             return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
         }
     }

@@ -13,12 +13,17 @@
           echo "T-shirt Size: $tshirt_size <br>";
        }
        ?>
-       Initial Charge: AUD $<?=$subscription_details->aud_price?><br>
-       <? if($subscription_type == 'yearly') {
-          echo "(<em>Note: for destinations outside Australia, additional AUD $5.00 postage &amp; handling fee will apply.</em>)<br>"; 
-       }
-       ?>
-       <strong><?=$subscription_details->description?></strong><br>
+       <div class="text-right" style="max-width:180px; margin-bottom:10px;">
+           Subscription : AUD $<?=$subscription_details->aud_price?><br>
+           <? if($subscription_type == 'yearly') { ?>
+           Postage: AUD $<span id='postage_cost_label'></span> <br>
+              
+           <?}?>
+
+           <strong>Total Cost: AUD $<span id='total_cost_label'></span></strong><br>
+       </div>
+       
+       <?=$subscription_details->description?><br>
     </div>
     
    <div class="panel-footer"><a id="go_back" href="#"> &laquo; Go Back / Change Details</a></div>
@@ -34,6 +39,8 @@
 </div>
 --}
 
+
+
 <form id="cc_form" name="cc_form" method="post">
 
     <input type="hidden" name="member_id" value="<?= $member_id ?>" />
@@ -41,6 +48,12 @@
     <input type="hidden" name="subscription_type" value="<?= $subscription_type ?>" />
     <input type="hidden" name="tshirt_size" value="<?= $tshirt_size ?>" />
     <input type="hidden" name="RebillCustomerID" value="<?= $RebillCustomerID ?>" />
+    <input type="hidden" id="postage_cost" name="postage_cost" value="<?= $postage_cost ?>" />
+    <input type="hidden" id="aud_price" name="aud_price" value="<?= $subscription_details->aud_price ?>" />
+    
+    <input type="hidden" id="total_cost" name="total_cost" value="<?= $total_cost ?>" />
+    <input type="hidden" id="include_extras" name="include_extras" value="<?= $include_extras?>" />
+    
 
 
 
@@ -181,7 +194,63 @@
 
 
 <script>
+    
+    function set_initial_values() {
+        var include_extras = '<?= $include_extras ?>';
+                //$('#include_extras').is(':checked');
+        if (include_extras) {
+            selected = $("#country").val();  
+
+            if (selected == 'AU') {
+                $("#postage_cost_label").text('7.20');
+                $("#postage_cost").val('7.20');
+            } else {
+                $("#postage_cost_label").text('20.00');
+                $("#postage_cost").val('20.00');
+            }
+            
+        } else {
+            $("#postage_cost_label").text('0');
+            $("#postage_cost").val('0');
+        }
+        
+        
+    }
+    function calculate_totals() {
+        
+        postage = parseFloat($("#postage_cost").val());
+        //postage = postage.toFixed(2);
+        sub = parseFloat($("#aud_price").val());
+        //sub = sub.toFixed(2);
+        total = postage+sub;
+        total = total.toFixed(2);
+        $("#total_cost_label").text(total);
+        $("#total_cost").val(total);
+        
+        //$("#total_cost").val(total);
+        //alert("TOTAL = " + total);  
+    }
+    
     $().ready(function() {
+        
+        $("#country").change(function() {
+            
+            set_initial_values();
+            calculate_totals();
+            /*
+            selected = $("#country").val();
+
+
+            if (selected == 'AU') {
+                $("#postage_cost_label").text('AUD $7.20');
+                $("#postage_cost").val('7.20');
+            } else {
+                $("#postage_cost_label").text('AUD $20.00');
+                $("#postage_cost").val('20.00');
+            }
+        */
+        });
+        
         //alert("boooo");
         // $('#test').validate( {invalidHandler: $.watermark.showAll} );
 
@@ -268,4 +337,11 @@
 
 
 </script>
+
+<? if (count($errors) == 0) {  ?>
+    <script>
+        set_initial_values();
+        calculate_totals();
+    </script>
+<? } ?>
 

@@ -116,6 +116,21 @@ abstract class Base_Controller {
         if (isset($defaults[$name])) {
             $val = $defaults[$name];
         }
+        
+       /*
+        if ($name == 'total_cost') {
+            print_r($_POST);
+            die("TOTAL COST = ".$this->EE->input->post($name) . '  ' . "include_extras = ".$this->EE->input->post('include_extras'));
+            
+        }
+        * 
+        */
+        
+        
+        
+        
+        
+        
 /*
         if (isset($_POST[$name])) {
             $val = $_POST[$name];
@@ -162,7 +177,11 @@ abstract class Base_Controller {
                 'state',
                 'country',
                 'postal_code',
-                'state'
+                'state',
+                'postage_cost',
+                'include_extras',
+                'total_cost',
+                'aud_price'
             );
              
              $form_defaults = array();
