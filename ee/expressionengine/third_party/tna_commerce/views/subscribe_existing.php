@@ -1,5 +1,6 @@
 <? $this->view('errors'); ?>
 
+
 <form action="<?= $https_site_url ?>subscribe/payment" method="post">
     <input type="hidden" name="create_existing_member" value="1" />
     <input type="hidden" name="member_id" value="<?=$member_id?>" />
@@ -14,24 +15,6 @@
         </select>
     </div>
     
-    <? $this->view('t_shirt_choices'); ?>
-    
-    {!--
-    
-     <div id="tshirt_group" class="form-group">
-        <label>T-Shirt Size</label>
-         <p class="help-block">With this subscription you are entitled to a free TNRA t-shirt!</p> 
-
-        <select class="form-control" name="tshirt_size" id="tshirt_size">
-            <option value="XS">Extra Small</option>
-            <option value="S">Small</option>
-            <option value="M">Medium</option>
-            <option selected value="L">Large</option>
-            <option value="XL">Extra Large</option> 
-        </select>
-
-    </div>
-    --}
 
     <div class="alert alert-success"><strong>Note:</strong> You are currently logged in as <strong><?=$username?></strong>,
         with the following email address: <strong><?=$email?></strong>. Your subscription will be applied to this account. 
@@ -39,6 +22,8 @@
         <br/>
 
     </div>
+    
+     <? $this->view('t_shirt_choices'); ?>
 
 
 

@@ -118,16 +118,13 @@ abstract class Base_Controller {
         }
         
        /*
-        if ($name == 'total_cost') {
+        if ($name == 'country') {
             print_r($_POST);
-            die("TOTAL COST = ".$this->EE->input->post($name) . '  ' . "include_extras = ".$this->EE->input->post('include_extras'));
+            die();
+            //die("TOTAL COST = ".$this->EE->input->post($name) . '  ' . "include_extras = ".$this->EE->input->post('include_extras'));
             
         }
-        * 
         */
-        
-        
-        
         
         
         
@@ -146,11 +143,18 @@ abstract class Base_Controller {
     function set_defaults() {
         
         if ($this->subscribe_stage == 1) {
+            $country = 'AU';
+            
+            if ($this->EE->input->post('country')) {
+                $country = $this->EE->input->post('country');
+                
+            }
 
             $form_defaults = array(
                 'email' => $this->get_option('email'),
                 'yearly_amount' => $this->EE->subscribers_model->subscription_types['yearly']->aud_price,
                 'monthly_amount' => $this->EE->subscribers_model->subscription_types['monthly']->aud_price,
+                'country' => $country
             );
         } elseif ($this->subscribe_stage == 2) {
             
@@ -189,6 +193,10 @@ abstract class Base_Controller {
              foreach ($form_default_fields as $field) {
                  $form_defaults[$field] = $this->get_option($field);
              }
+             
+            
+             
+             
 
         }
 

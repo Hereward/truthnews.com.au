@@ -1,7 +1,3 @@
-{!--
-<legend>T-Shirt & DVD</legend>
---}
-
 <input type="hidden" id="postage_cost" name="postage_cost" value="7.20" />
 
 
@@ -10,6 +6,9 @@
 <p class="bold">As a yearly subscriber you are entitled to receive our t-shirt and DVD. 
  We will only charge you for the postage fees as determined by Australia Post.
 </p>
+
+
+
 
 <div class="checkbox">
     
@@ -26,14 +25,15 @@
                     <select class="form-control" name="country" id="country">
                         <?
                         $selected_country = ($countrycode)?$countrycode:'';
-                        $selected_country = ($country)?$country:$selected_country;
-
+                        //$selected_country = ($country)?$country:$selected_country;
+                        
                         foreach ($countrylist as $key => $value) {
-                        $selected = ($key==$selected_country)?'selected':'';
-                        echo "<option $selected value='$key' label='$value'>$value</option>";
+                            $selected = ($key==$selected_country)?'selected':'';
+                             echo "<option $selected value='$key' label='$value'>$value</option>";
                         }
-
+                        
                         ?>
+     
 
                     </select>
             </div>

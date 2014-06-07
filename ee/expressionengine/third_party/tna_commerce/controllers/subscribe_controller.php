@@ -90,22 +90,25 @@ class subscribe_controller extends Base_Controller {
             'countrycode' => $this->country_code
         );
         
+        //var_dump()
+        
         return $this->EE->load->view('subscribe_new', $vars, TRUE);
 
     }
 
     public function create_existing() {
         $errors = array();
+        $this->set_defaults();
         $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
         //$this->EE->session->userdata->username;
-        $this->set_defaults();
+        
         $vars = array(
+            'countrylist' => $countrylist,
+            'countrycode' => $this->country_code,
             'errors'=>$errors,
             'username'=>$this->EE->session->userdata['username'],
             'email'=>$this->EE->session->userdata['email'],
             'member_id'=>$this->member_id,
-            'countrylist' => $countrylist,
-            'countrycode' => $this->country_code 
         );
         
         return $this->EE->load->view('subscribe_existing', $vars, TRUE);
