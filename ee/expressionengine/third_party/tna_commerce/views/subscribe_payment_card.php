@@ -13,10 +13,10 @@
           echo "T-shirt Size: $tshirt_size <br>";
        }
        ?>
-       <div class="text-right" style="max-width:180px; margin-bottom:10px;">
+       <div class="text-right" style="max-width:200px; margin-bottom:10px;">
            Subscription : AUD $<?=$subscription_details->aud_price?><br>
            <? if($subscription_type == 'yearly') { ?>
-           Postage: AUD $<span id='postage_cost_label'></span> <br>
+           Postage: AUD $<span id='postage_cost_label'></span><br>
               
            <?}?>
 
@@ -210,7 +210,7 @@
             }
             
         } else {
-            $("#postage_cost_label").text('0');
+            $("#postage_cost_label").html('0 (we won&#39;t send you anything by mail)');
             $("#postage_cost").val('0');
         }
         
