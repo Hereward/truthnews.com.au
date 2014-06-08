@@ -13,8 +13,11 @@
     <dd>You are free to cancel your subscription at any time at which point recurring charges will cease.</dd>
 
     <dt>TNRA T-shirt</dt>
-    <dd> When you purchase a 12 month subscription you are entitled to a FREE TNRA T-shirt for which you will be able to choose your size from the range XS, S, M, L,
-        XL. In the event that we are out of stock for a given size we will get the t-shirt to you as soon as possible and will keep you updated on the progress of your order.</dd>
+    <dd>When you purchase a 12 month subscription you are entitled to a TNRA T-shirt &amp; DVD for the cost of postage. 
+        If you don't want to pay for postage you can arrange to pick up the t-shirt &amp; DVD in Sydney. 
+        You will be able to choose your size from the range XS, S, M, L,
+        XL. In the event that we are out of stock for a given size we will get the t-shirt to you as soon as possible 
+        and will keep you updated on the progress of your order.</dd>
 
     <dt>Privacy</dt>
     <dd>We will not share or sell your personal information for any reason.</dd>
