@@ -60,6 +60,11 @@
         //alert('hello');
         $("#postage_settings").show();
     }
+    
+    stype = $("#subscription_type").val();
+    if (stype == 'monthly') {
+        $('#tshirt_group').hide();
+    }
 </script>
 
 
