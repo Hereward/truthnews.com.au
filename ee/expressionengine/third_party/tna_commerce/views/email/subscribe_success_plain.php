@@ -39,7 +39,8 @@ If you can't remember your password you can recover it here:
 If you wish to cancel your subscription at any time you can do so from your profile, but you'll need to log in first.
 
 <? if ($subscriber->type == 'yearly') { ?>
-We will be sending your t-shirt to the billing address below. If you want the t-shirt sent somewhere else please contact us.
+If you ordered the DVD and t-shirt these will be mailed to you at the address below. If you want them sent somewhere else 
+or you would like to pick them up yourself please contact us.
 
 <?=$subscriber->first_name?> <?=$subscriber->last_name?>
 
