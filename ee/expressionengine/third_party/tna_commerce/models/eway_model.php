@@ -141,7 +141,7 @@ class Eway_model extends Base_model {
         //dev_log::write("process_direct_payment: Postage = [$postage]");
         //dev_log::write("process_direct_payment: Final Amount = [$final_amount]");
         
-        $invoice_description = "TNRA Subscription. Base Price: $" . $txtAmount . " | Postage: $" . $postage_raw;
+        $invoice_description = "TNRA Subscription. Base Price: $" . $subscription_details->aud_price . " | Postage: $" . $postage_raw;
         
         dev_log::write("process_direct_payment: invoice_description = [$invoice_description] FINAL AMOUNT = [$final_amount]");
         
