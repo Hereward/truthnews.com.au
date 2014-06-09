@@ -81,6 +81,21 @@ class Subscribers_model extends Base_model {
         return $result->row();
     }
     
+    public function get_postage_costs() {
+        $data = array();
+        $this->remove_prefix();
+        $result = $this->db->get_where('tna_postage_costs', array('name' => 'standard_domestic'));
+        $row = $result->row();
+        $data['standard_domestic'] = $row->aud_price;
+        
+        $result = $this->db->get_where('tna_postage_costs', array('name' => 'standard_international'));
+        $row = $result->row();
+        $data['standard_international'] = $row->aud_price;
+        
+        $this->restore_prefix();
+        return $data;
+    }
+    
      public function set_subscription_types() {
         $this->remove_prefix();
         $m_result = $this->db->get_where('tna_subscription_types', array('name' => 'monthly'));
@@ -358,6 +373,7 @@ class Subscribers_model extends Base_model {
             'status' => 'active',
             'existing_member' => $params['existing_member'],
             'type' => $params['type'],
+            'include_extras' => $params['include_extras'],
             'created' => $now,
             'modified' => $now
         );

@@ -18,14 +18,23 @@ class Eway_model extends Base_model {
     public $eway_auth_code = '';
     public $error_str = array(); 
     public $test_credit_card = '4444333322221111';
+    public $gateway_mode;
 
 
     public function __construct() {
         parent::__construct();
-
-        $this->eway_id = $this->EE->config->item('eway_id');
-        $this->eway_name = $this->EE->config->item('eway_name');
-        $this->eway_password = $this->EE->config->item('eway_password');
+        
+        $this->gateway_mode = $this->EE->config->item('gateway_mode');
+        
+        if ($this->gateway_mode == 'live') {
+            $this->eway_id = $this->EE->config->item('eway_id');
+            $this->eway_name = $this->EE->config->item('eway_name');
+            $this->eway_password = $this->EE->config->item('eway_password');
+        } else {
+            $this->eway_id = $this->EE->config->item('eway_id_sandbox');
+            $this->eway_name = $this->EE->config->item('eway_name_sandbox');
+            $this->eway_password = $this->EE->config->item('eway_password_sandbox');  
+        }
 
         require_once("$this->eway_path/recurring/nusoap.php");
         require_once("$this->eway_path/direct/EwayPaymentLive.php");
@@ -34,6 +43,8 @@ class Eway_model extends Base_model {
             'payment' => 'The transaction failed. Please check your credit card details and try again.',
             'init' => 'There was a problem contacting the payment gateway. Please try again in a few minutes.'
         );
+        
+        dev_log::write("Gateway Mode = [$this->gateway_mode]");
 
     }
 
@@ -74,10 +85,11 @@ class Eway_model extends Base_model {
 
     public function load_direct_client() {
 
+        $live_gateway_boolean = ($this->gateway_mode == 'live')?true:false;
         
         define('EWAY_DEFAULT_CUSTOMER_ID', $this->eway_id);
         define('EWAY_DEFAULT_PAYMENT_METHOD', 'REAL_TIME'); // possible values are: REAL_TIME, REAL_TIME_CVN, GEO_IP_ANTI_FRAUD
-        define('EWAY_DEFAULT_LIVE_GATEWAY', true); //<false> sets to testing mode, <true> to live mode
+        define('EWAY_DEFAULT_LIVE_GATEWAY', $live_gateway_boolean); //<false> sets to testing mode, <true> to live mode
      
         
         //define script constants
@@ -98,7 +110,7 @@ class Eway_model extends Base_model {
         define('EWAY_PAYMENT_HOSTED_REAL_TIME_CVN', 'https://www.eway.com.au/gateway_cvn/payment.asp');
         define('EWAY_PAYMENT_HOSTED_REAL_TIME_CVN_TESTING_MODE', 'https://www.eway.com.au/gateway_cvn/payment.asp');
 
-        $this->direct_client = new EwayPaymentLive($this->eway_id, 'REAL_TIME_CVN', true);
+        $this->direct_client = new EwayPaymentLive($this->eway_id, 'REAL_TIME_CVN', $live_gateway_boolean);
         
         return true;
     }
@@ -240,8 +252,13 @@ class Eway_model extends Base_model {
 
     public function load_recurring_client() {
         $this->eway_error = '';
-        //$this->client = new nusoap_client("https://www.eway.com.au/gateway/rebill/test/manageRebill_test.asmx", false);
-        $this->client = $client = new nusoap_client("https://www.ewaygateway.com/gateway/rebill/manageRebill.asmx", false);
+        
+        if ($this->gateway_mode == 'live') {
+            $this->client = $client = new nusoap_client("https://www.ewaygateway.com/gateway/rebill/manageRebill.asmx", false);
+        } else {
+            $this->client = new nusoap_client("https://www.eway.com.au/gateway/rebill/test/manageRebill_test.asmx", false);
+        }
+        //$this->client = $client = new nusoap_client("https://www.ewaygateway.com/gateway/rebill/manageRebill.asmx", false);
 
         $err = $this->client->getError();
         $message = '';

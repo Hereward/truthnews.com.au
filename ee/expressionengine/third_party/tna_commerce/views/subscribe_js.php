@@ -18,11 +18,11 @@
 
 
             if (selected == 'AU') {
-                $("#postage_cost_label").text('AUD $7.20');
-                $("#postage_cost").val('7.20');
+                $("#postage_cost_label").text('AUD $<?=$standard_domestic?>');
+                $("#postage_cost").val('<?=$standard_domestic?>');
             } else {
-                $("#postage_cost_label").text('AUD $20.00');
-                $("#postage_cost").val('20.00');
+                $("#postage_cost_label").text('AUD $<?=$standard_international?>');
+                $("#postage_cost").val('<?=$standard_international?>');
             }
         });
 
@@ -38,11 +38,11 @@
 
 
                 if (selected == 'AU') {
-                    $("#postage_cost_label").text('AUD $7.20');
-                    $("#postage_cost").val('7.20');
+                    $("#postage_cost_label").text('AUD $<?=$standard_domestic?>');
+                    $("#postage_cost").val('<?=$standard_domestic?>');
                 } else {
-                    $("#postage_cost_label").text('AUD $20.00');
-                    $("#postage_cost").val('20.00');
+                    $("#postage_cost_label").text('AUD $<?=$standard_international?>');
+                    $("#postage_cost").val('<?=$standard_international?>');
                 }
 
             }

@@ -161,10 +161,13 @@ class Tna_commerce_lib {
     }
 
     public function send_email_notification($params = array()) {
+        dev_log::write('send_email_notification');
         $plain_path = $params['plain_path']; //'email/cc_confirmation_plain';
         $html_path = $params['html_path']; //'email/cc_confirmation_html';
         //$customer_subject = 'Credit Card Payment received!'
         //$admin_subject = "Credit Card Payment [{$vars['cc_email']}]";
+        //var_dump($params);
+        //die();
         $plain = $this->EE->load->view($plain_path, $params, TRUE);
         $html = $this->EE->load->view($html_path, $params, TRUE);
 
@@ -202,6 +205,7 @@ class Tna_commerce_lib {
             $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
             $msg = "{$params['tag']} message to {$params['customer_email']} was sent.";
+            //dev_log::write('send_email_notification: EMAIL SENT');
         }
 
         dev_log::write($msg);
@@ -211,11 +215,14 @@ class Tna_commerce_lib {
     
     
      public function send_subscription_confirmation($params = array()) {
+        //dev_log::write('send_subscription_confirmation');
         $params['plain_path'] = 'email/subscribe_success_plain';
         $params['html_path'] = 'email/subscribe_success_html';
-        $params['subject'] = 'Your Truth News Australia Subscription';
+        $params['subject'] = "Your Truth News Australia Subscription ({$params['subscriber']->first_name} {$params['subscriber']->last_name})";
         $params['customer_email'] =  $params['subscriber']->email;
         $params['tag'] = 'subscription confirmation';
+        
+        
         
         return $this->send_email_notification($params);
         

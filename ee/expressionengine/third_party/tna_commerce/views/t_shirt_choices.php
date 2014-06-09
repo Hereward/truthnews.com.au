@@ -8,8 +8,6 @@
 </p>
 
 
-
-
 <div class="checkbox">
     
   <label>

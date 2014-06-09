@@ -47,6 +47,8 @@ class subscription_payment_controller extends Base_Controller {
          */
         $subscription_type = $this->EE->input->post('subscription_type');
         $this->subscription_details = $this->EE->subscribers_model->get_subscription_details($subscription_type);
+        
+       
         dev_log::write("init: 2");
         $this->country_list = $this->EE->tna_commerce_lib->get_countrylist();
         dev_log::write("init: 3");
@@ -96,6 +98,7 @@ class subscription_payment_controller extends Base_Controller {
                 'subscriber' => $this->subscriber,
                 'countrylist' => $countrylist,
                 'logged_in' => $this->logged_in,
+                'gateway_mode' => $this->EE->config->item('gateway_mode'),
             );
 
             $this->EE->tna_commerce_lib->send_subscription_confirmation($vars);
@@ -402,6 +405,7 @@ class subscription_payment_controller extends Base_Controller {
             'temp_password' => ($duplicate) ? '' : $password,
             'existing_member' => $existing_member,
             'type' => $this->EE->input->post('subscription_type'),
+            'include_extras' => $this->EE->input->post('include_extras'),
         );
         $this->EE->subscribers_model->create_tna_subscriber($params);
 

@@ -24,6 +24,7 @@
        </div>
        
        <?=$subscription_details->description?><br>
+
     </div>
     
    <div class="panel-footer"><a id="go_back" href="#"> &laquo; Go Back / Change Details</a></div>
@@ -202,11 +203,11 @@
             selected = $("#country").val();  
 
             if (selected == 'AU') {
-                $("#postage_cost_label").text('7.20');
-                $("#postage_cost").val('7.20');
+                $("#postage_cost_label").text('<?=$standard_domestic?>');
+                $("#postage_cost").val('<?=$standard_domestic?>');
             } else {
-                $("#postage_cost_label").text('20.00');
-                $("#postage_cost").val('20.00');
+                $("#postage_cost_label").text('<?=$standard_international?>');
+                $("#postage_cost").val('<?=$standard_international?>');
             }
             
         } else {

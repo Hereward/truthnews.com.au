@@ -20,6 +20,7 @@ abstract class Base_Controller {
     protected $subscribe_stage;
     protected $uri_string;
     protected $member_groups;
+    protected $postage_costs;
 
     protected function __construct() {
 
@@ -46,6 +47,7 @@ abstract class Base_Controller {
         $this->https_site_url = $this->EE->config->item('https_site_url');
         
         
+        
         $globals = array(
             'site_url' => $this->site_url,
             'https_site_url' => $this->https_site_url,
@@ -64,6 +66,12 @@ abstract class Base_Controller {
         
         $this->subscriber_group_id = $this->member_groups['subscribers'];
         $this->member_group_id = $this->member_groups['members'];
+        
+        $this->postage_costs = $this->EE->subscribers_model->get_postage_costs();
+        
+        $this->EE->load->vars($this->postage_costs);
+        
+        
         
         //$msg = "Is Subscriber? ".$this->is_subscriber();
         //die($msg);

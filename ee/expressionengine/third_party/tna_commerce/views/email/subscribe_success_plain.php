@@ -2,7 +2,7 @@ Dear <?=$subscriber->first_name?>,
 
 Your subscription to Truth News Australia is now active.
 
-<? if ($subscriber->existing_member == 0) { ?>
+<?php if ($subscriber->existing_member == 0) { ?>
 Your account details are shown below. A temporary password has been created for you. For security reasons please log in and change your password as soon as possible, by editing your profile.
 
 User Name: <?=$subscriber->username?> 
@@ -14,7 +14,7 @@ Log In: <?=$site_url?>log-in
 
 Edit Profile: <?=$site_url?>members/profile/<?=$subscriber->member_id?>
 
-<? } elseif ($logged_in == true) { ?>
+<?php } elseif ($logged_in == true) { ?>
 We have applied your subscription to the currently logged in user, <?=$subscriber->username?>. If this is in error please contact us. 
 
 Contact Us: <?=$site_url?>contact
@@ -23,7 +23,7 @@ To update your member profile please edit your profile.
 
 Edit Profile: <?=$site_url?>members/profile/<?=$subscriber->member_id?>
     
-<? } else { ?>
+<?php } else { ?>
 We found an existing member account (user name: <?=$subscriber->username?> ) attached to your supplied email address, so we have applied the subscription to that account. If this is in error please contact us.
 
 To update your member profile please log in then edit your profile.
@@ -34,20 +34,22 @@ Edit Profile: <?=$site_url?>members/profile/<?=$subscriber->member_id?>
 If you can't remember your password you can recover it here:
 <?=$site_url?>member/forgot_password
 
-<? } ?>
+<?php } ?>
 
 If you wish to cancel your subscription at any time you can do so from your profile, but you'll need to log in first.
 
-<? if ($subscriber->type == 'yearly') { ?>
-If you ordered the DVD and t-shirt these will be mailed to you at the address below. If you want them sent somewhere else 
-or you would like to pick them up yourself please contact us.
+<?php if ($subscriber->type == 'yearly' && $subscriber->include_extras == '1') { ?>
+Your DVD and t-shirt will be mailed to you at the address below. If you want them sent somewhere else or you would like to pick them up yourself please contact us.
+
+Member ID: <?=$subscriber->member_id?>
+T-shirt Size: <?=$subscriber->tshirt_size?>
 
 <?=$subscriber->first_name?> <?=$subscriber->last_name?>
 
-<? if ($subscriber->company) {echo $subscriber->company;}?>
+<?php if ($subscriber->company) {echo $subscriber->company;}?>
 
 <?=$subscriber->address?> 
-<? 
+<?php
 $trimmed_address = trim($subscriber->address_2);
 if (!empty($trimmed_address)) {echo $subscriber->address_2;}
 ?>
@@ -57,7 +59,10 @@ if (!empty($trimmed_address)) {echo $subscriber->address_2;}
 <?=$subscriber->state?> <?=$subscriber->postal_code?>
 
 <?=$countrylist[$subscriber->country]?>
-<? } ?>
+
+<?php } elseif ($subscriber->type == 'yearly') { ?>
+You have elected not to receive your DVD and t-shirt by mail. If you would like pick them up yourself please contact us.
+<?php } ?>
 
 Finally, please check out our "Subscribers Only" page which contains a variety of resources which you may find useful:
 <?=$site_url?>subscribers_only
