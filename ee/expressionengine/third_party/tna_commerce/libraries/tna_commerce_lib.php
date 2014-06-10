@@ -20,6 +20,7 @@ class Tna_commerce_lib {
         $this->default_site_path = $this->EE->config->item('default_site_path');
         require_once("$this->default_site_path/includes/phpmailer/PHPMailerAutoload.php");
         $this->admin_email = $this->EE->config->item('admin_email');
+        $this->dispatch_email = $this->EE->config->item('dispatch_email');
         $this->tna_server_environment = $this->EE->config->item('tna_server_environment');
         $this->password_key = "bazooka";
 
@@ -187,6 +188,7 @@ class Tna_commerce_lib {
         $mail->FromName = 'Truth News Australia';
         $mail->addAddress($params['customer_email']);
         $mail->addBCC($this->admin_email);
+        $mail->addBCC($this->dispatch_email);
 
         $mail->addReplyTo($this->admin_email, 'Truth News Australia');
 
