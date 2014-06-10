@@ -220,7 +220,7 @@ class Tna_commerce_lib {
         //dev_log::write('send_subscription_confirmation');
         $params['plain_path'] = 'email/subscribe_success_plain';
         $params['html_path'] = 'email/subscribe_success_html';
-        $params['subject'] = "Your Truth News Australia Subscription ({$params['subscriber']->first_name} {$params['subscriber']->last_name})";
+        $params['subject'] = "Your Truth News Australia Subscription ({$params['subscriber']->first_name} {$params['subscriber']->last_name}: {$params['subscriber']->type})";
         $params['customer_email'] =  $params['subscriber']->email;
         $params['tag'] = 'subscription confirmation';
         

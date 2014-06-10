@@ -5,6 +5,8 @@ Your subscription to Truth News Australia is now active.
 <?php if ($subscriber->existing_member == 0) { ?>
 Your account details are shown below. A temporary password has been created for you. For security reasons please log in and change your password as soon as possible, by editing your profile.
 
+Subscription Type: <?=$subscriber->type?> 
+
 User Name: <?=$subscriber->username?> 
 (This is the same as your email address)
 

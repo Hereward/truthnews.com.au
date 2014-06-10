@@ -6,6 +6,8 @@
         For security reasons please <a href="<?=$site_url?>log-in">log in</a> and change your password as soon as possible, by editing your <a href="<?=$site_url?>members/profile/<?=$subscriber->member_id?>">profile</a>.
     </p>
     
+    <p><strong>Subscription Type:</strong> <?=$subscriber->type?></p>
+    
     <p><strong>User Name:</strong> <?=$subscriber->username?></p>
         
     <p><strong>Temp Password:</strong> <?=$subscriber->temp_password?></p>
