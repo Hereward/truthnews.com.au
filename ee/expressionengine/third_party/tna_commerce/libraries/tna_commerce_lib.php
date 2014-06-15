@@ -9,6 +9,7 @@ class Tna_commerce_lib {
     public $tna_server_environment;
     public $admin_email;
     protected $password_key;
+    protected $gateway_mode;
 
     /**
      * constructor
@@ -22,6 +23,7 @@ class Tna_commerce_lib {
         $this->admin_email = $this->EE->config->item('admin_email');
         $this->dispatch_email = $this->EE->config->item('dispatch_email');
         $this->tna_server_environment = $this->EE->config->item('tna_server_environment');
+        $this->gateway_mode = $this->EE->config->item('gateway_mode');
         $this->password_key = "bazooka";
 
         //set a global object
@@ -187,9 +189,12 @@ class Tna_commerce_lib {
         $mail->From = $this->admin_email; //truth.news.australia@gmail.com hereward@planetonline.com.au
         $mail->FromName = 'Truth News Australia';
         $mail->addAddress($params['customer_email']);
+        
         $mail->addBCC($this->admin_email);
-        $mail->addBCC($this->dispatch_email);
-
+        if ($this->gateway_mode == 'live') {
+            $mail->addBCC($this->dispatch_email);
+        }
+        
         $mail->addReplyTo($this->admin_email, 'Truth News Australia');
 
         $mail->WordWrap = 70;                                 // Set word wrap to 50 characters
