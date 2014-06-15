@@ -16,7 +16,7 @@
        <div class="text-right" style="max-width:200px; margin-bottom:10px;">
            Subscription : AUD $<?=$subscription_details->aud_price?><br>
            <? if($subscription_type == 'yearly') { ?>
-           Postage: AUD $<span id='postage_cost_label'></span><br>
+           Postage: <span id='postage_cost_label'></span><br>
               
            <?}?>
 
@@ -205,26 +205,14 @@
             selected = $("#country").val();  
             
             update_country(selected);
-            /*
-            if (selected == 'AU') {
-                $("#postage_cost_label").text('<?=$standard_domestic?>');
-                $("#postage_cost").val('<?=$standard_domestic?>');
-            } else if (selected == 'US') {
-                $("#postage_cost_label").text('AUD $<?=$standard_us?>');
-                $("#postage_cost").val('<?=$standard_us?>');
-            } else {
-                $("#postage_cost_label").text('<?=$standard_international?>');
-                $("#postage_cost").val('<?=$standard_international?>');
-            }
-            */
             
         } else {
             $("#postage_cost_label").html('0 (we won&#39;t send you anything by mail)');
             $("#postage_cost").val('0');
         }
-        
-        
+   
     }
+    
     function calculate_totals() {
         
         postage = parseFloat($("#postage_cost").val());
@@ -246,30 +234,9 @@
             
             set_initial_values();
             calculate_totals();
-            /*
-            selected = $("#country").val();
 
-
-            if (selected == 'AU') {
-                $("#postage_cost_label").text('AUD $7.20');
-                $("#postage_cost").val('7.20');
-            } else {
-                $("#postage_cost_label").text('AUD $20.00');
-                $("#postage_cost").val('20.00');
-            }
-        */
         });
         
-        //alert("boooo");
-        // $('#test').validate( {invalidHandler: $.watermark.showAll} );
-
-        /*
-         
-         $('#cc_form').submit(function(){
-         $('input[type=submit]', this).attr('disabled', 'disabled');
-         $("#please_wait").show();
-         });
-         */
 
         $('#go_back').click(function() {
             parent.history.back();

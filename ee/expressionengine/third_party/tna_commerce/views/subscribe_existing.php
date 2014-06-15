@@ -36,4 +36,9 @@
  <? $this->view('subscribe_js'); ?>
  
  <? $this->view('shared_js'); ?>
+ 
+ <script>
+   selected = $("#country").val();
+   update_country(selected);
+ </script>
 

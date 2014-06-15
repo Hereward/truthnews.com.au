@@ -1,4 +1,4 @@
-<input type="hidden" id="postage_cost" name="postage_cost" value="7.20" />
+<input type="hidden" id="postage_cost" name="postage_cost" value="<?= $standard_domestic ?>" />
 
 
 <div id="tshirt_group" class="form-group">
@@ -17,7 +17,7 @@
 </div>
 
     <div id='postage_settings'>
-             <p>Postage &amp; Handling: <span class='postage_cost_label' id='postage_cost_label'>AUD $7.20</span></p>
+             <p>Postage &amp; Handling: <span class='postage_cost_label' id='postage_cost_label'>AUD $<?= $standard_domestic ?></span></p>
             <div class="form-group">
                     <label for="country">Destination Country for Postage</label>
                     <select class="form-control" name="country" id="country">
