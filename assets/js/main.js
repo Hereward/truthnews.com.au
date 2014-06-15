@@ -123,3 +123,4 @@ function get_google_stuff() {
     $.getScript('/assets/js/analytics.js');
     $.getScript('http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
 }
+

@@ -34,4 +34,6 @@
 
 
  <? $this->view('subscribe_js'); ?>
+ 
+ <? $this->view('shared_js'); ?>
 

@@ -194,6 +194,8 @@
 
 
 
+
+
 <script>
     
     function set_initial_values() {
@@ -201,14 +203,20 @@
                 //$('#include_extras').is(':checked');
         if (include_extras) {
             selected = $("#country").val();  
-
+            
+            update_country(selected);
+            /*
             if (selected == 'AU') {
                 $("#postage_cost_label").text('<?=$standard_domestic?>');
                 $("#postage_cost").val('<?=$standard_domestic?>');
+            } else if (selected == 'US') {
+                $("#postage_cost_label").text('AUD $<?=$standard_us?>');
+                $("#postage_cost").val('<?=$standard_us?>');
             } else {
                 $("#postage_cost_label").text('<?=$standard_international?>');
                 $("#postage_cost").val('<?=$standard_international?>');
             }
+            */
             
         } else {
             $("#postage_cost_label").html('0 (we won&#39;t send you anything by mail)');
@@ -338,6 +346,8 @@
 
 
 </script>
+
+<? $this->view('shared_js'); ?>
 
 <? if (count($errors) == 0) {  ?>
     <script>

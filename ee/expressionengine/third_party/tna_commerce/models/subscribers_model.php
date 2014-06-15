@@ -84,6 +84,7 @@ class Subscribers_model extends Base_model {
     public function get_postage_costs() {
         $data = array();
         $this->remove_prefix();
+        
         $result = $this->db->get_where('tna_postage_costs', array('name' => 'standard_domestic'));
         $row = $result->row();
         $data['standard_domestic'] = $row->aud_price;
@@ -91,6 +92,10 @@ class Subscribers_model extends Base_model {
         $result = $this->db->get_where('tna_postage_costs', array('name' => 'standard_international'));
         $row = $result->row();
         $data['standard_international'] = $row->aud_price;
+        
+        $result = $this->db->get_where('tna_postage_costs', array('name' => 'standard_us'));
+        $row = $result->row();
+        $data['standard_us'] = $row->aud_price;
         
         $this->restore_prefix();
         return $data;
