@@ -161,6 +161,7 @@ abstract class Base_Controller {
             $form_defaults = array(
                 'email' => $this->get_option('email'),
                 'yearly_amount' => $this->EE->subscribers_model->subscription_types['yearly']->aud_price,
+                'yearly_concession_amount' => $this->EE->subscribers_model->subscription_types['yearly_concession']->aud_price,
                 'monthly_amount' => $this->EE->subscribers_model->subscription_types['monthly']->aud_price,
                 'country' => $country
             );

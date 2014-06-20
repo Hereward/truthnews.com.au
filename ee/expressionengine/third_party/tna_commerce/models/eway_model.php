@@ -153,7 +153,7 @@ class Eway_model extends Base_model {
         //dev_log::write("process_direct_payment: Postage = [$postage]");
         //dev_log::write("process_direct_payment: Final Amount = [$final_amount]");
         
-        $invoice_description = "TNRA Subscription. Base Price: $" . $subscription_details->aud_price . " | Postage: $" . $postage_raw;
+        $invoice_description = "TNRA Subscription ($subscription_details->name). Base Price: $" . $subscription_details->aud_price . " | Postage: $" . $postage_raw;
         
         dev_log::write("process_direct_payment: invoice_description = [$invoice_description] FINAL AMOUNT = [$final_amount]");
         
@@ -359,7 +359,7 @@ class Eway_model extends Base_model {
         $start_offset = "+1 year";
 
         $RebillIntervalType = '';
-        if ($subscription_type == 'yearly') {
+        if ($subscription_type == 'yearly' || $subscription_type == 'yearly_concession') {
             $RebillIntervalType = 4;
         } elseif ($subscription_type == 'monthly') {
             $start_offset = "+1 month";

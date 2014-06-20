@@ -6,14 +6,7 @@
     <input type="hidden" name="member_id" value="<?=$member_id?>" />
     <input type="hidden" name="email" value="<?=$email?>" />
     
-    <div class="form-group">
-        <label>Subscription Type</label>
-        <select class="form-control" name="subscription_type" id="subscription_type">
-            <option value="yearly">Yearly - AUD $<?=$yearly_amount?> per year</option>
-            <option value="monthly">Monthly - AUD $<?=$monthly_amount?> per month</option>
-
-        </select>
-    </div>
+    <? $this->view('subscription_type'); ?>
     
 
     <div class="alert alert-success"><strong>Note:</strong> You are currently logged in as <strong><?=$username?></strong>,

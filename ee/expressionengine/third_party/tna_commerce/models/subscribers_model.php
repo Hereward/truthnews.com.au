@@ -103,12 +103,17 @@ class Subscribers_model extends Base_model {
     
      public function set_subscription_types() {
         $this->remove_prefix();
+        
         $m_result = $this->db->get_where('tna_subscription_types', array('name' => 'monthly'));
         $this->subscription_types['monthly'] = $m_result->row();
+        
         $y_result = $this->db->get_where('tna_subscription_types', array('name' => 'yearly'));
         $this->subscription_types['yearly'] = $y_result->row();
+ 
+        $yc_result = $this->db->get_where('tna_subscription_types', array('name' => 'yearly_concession'));
+        $this->subscription_types['yearly_concession'] = $yc_result->row();
+ 
         $this->restore_prefix();
-        //return $result;
     }
     
     
