@@ -296,7 +296,7 @@ $lang = array(
 "Your account has been activated.",
 
 "your_account_ready" =>
-"Your membership account has been activated and is ready for use.",
+"Your membership account has been activated and is ready for use. Yee Haa",
 
 "thank_you" =>
 "Thank you!",
