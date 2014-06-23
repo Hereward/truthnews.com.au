@@ -268,7 +268,7 @@ if ( ! function_exists('validated_member_notify'))
 return <<<EOF
 {name},
 
-Your membership account has been activated and is ready for use. Go For It!!!
+Your membership account has been activated and is ready for use.
 
 Thank You!
 
