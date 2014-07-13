@@ -1,6 +1,10 @@
 {embed="framework_2/doc_head_ssl" url="{site_url}members" title="Truth News Australia Subscribers Only Area" description="Sign in or create a new account."}
 {embed="framework_2/navigation" section="home"}
 
+ <script src="/assets/third_party/mejs/mediaelement-and-player.min.js"></script>
+
+ 
+
 <div class="container main_box">
     {embed="framework_2/header_subscribe"}
 
@@ -15,6 +19,18 @@
                     <p>Welcome to our new subscribers only area! This section of the website is currently under development 
                        and we intend to add new features over time, so please check back here often.
                     </p>
+                    
+                    <div>{embed=framework_2/mejs_player entry_id="{entry_id}"}</div>
+                    
+                    <p class="bold">Recent Podcasts (Ad Free)</p>
+                    
+                    {exp:channel:entries dynamic="no" limit="10" site="default_site" channel="tna" orderby="date" sort="desc"}
+                        {if "{entry_id}" > 1279}  {!-- 1279 --}
+                            {embed=default_site:framework_2/player_widgets_subscriber media_segments="{media_segments}" entry_id="{entry_id}" media_date="{media_date}" media_source="{media_source}"}
+                        {/if}
+                    {/exp:channel:entries}
+                    
+                    <div>{embed=framework_2/mejs_player entry_id="{entry_id}"}</div>
                     
                     <p>If you would like to share your thoughts with other subscribers your're welcome to post in our
                         <a href="{site_url}forum/viewforum/{exp:config_var var="subscriber_forum_id"}/">Subscribers Forum</a>. This is a private forum accessible 
@@ -36,4 +52,9 @@
 
 </div> <!-- /container -->
 
+<script>
+    $('audio,video').mediaelementplayer({
+        audioWidth: 280
+    });
+</script>
 {embed ="framework_2/doc_foot_ssl"}

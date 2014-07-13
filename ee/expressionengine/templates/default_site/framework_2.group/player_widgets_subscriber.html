@@ -1,0 +1,40 @@
+<div class="row">
+    <?php
+   $broadcast_date = DateTime::createFromFormat('Ymd', "{embed:media_date}");
+   $broadcast_date_str = $broadcast_date->format('F j, Y');
+    $segments = "{embed:media_segments}";
+    $span_width = ($segments>1)?6:12;
+    $media_url = '';
+    for ($segment = 1; $segment <= $segments; $segment++) {
+    $media_id = "mediaspace_{embed:entry_id}";
+    $media_id .= ($segment>1)?"_$segment":'';
+
+    if ($segment>1) {
+       $media_url = "/radio/subscribers/{embed:media_source}_{embed:media_date}_$segment"."_subscriber.mp3";
+    } else {
+       $media_url = "/radio/subscribers/{embed:media_source}_{embed:media_date}"."_subscriber.mp3";
+    }
+    ?>
+
+    <div class="col-lg-<?=$span_width?>">
+
+        <audio style="margin-top:15px;" id="<?=$media_id?>" controls="controls" preload="none">
+            <source src="<?=$media_url?>" type="audio/mpeg" />
+        </audio>
+
+
+        <div style="margin-top:5px; margin-bottom:10px;"><?=$broadcast_date_str?>, part <?=$segment?> of <?=$segments?>.
+            <br/>
+            Download mp3 <span style="font-size:16px;">&raquo;</span>
+            <a href ="<?=$media_url?>">Direct Link</a>
+
+        </div>
+
+    </div>
+
+    <?php
+  }
+?>
+
+
+</div>
