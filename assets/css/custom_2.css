@@ -1,3 +1,13 @@
+.index_carousel .glyphicon-chevron-right {
+    top:43%;
+}
+
+.index_carousel .glyphicon-chevron-left {
+    left:-25%;
+    top:43%;
+    
+}
+
 p.bold {
     font-weight:bold;
 }
@@ -233,6 +243,33 @@ div.latest {
     text-align:left;
     margin: 0px 0px 20px 0;
     padding:8px 10px 5px 18px;
+
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+
+    max-width:728px;
+
+    /* border-bottom: 1px solid #EAE8E8; */
+
+}
+
+div.index_carousel {
+    background-color: #030000; /* #222222;  #1E1C1D; */
+    /*
+    min-width:260px;
+    max-width:300px;
+    margin:0px 5px 0px 0px;
+    float:right;
+
+    height:195px;
+    overflow:hidden;
+    */
+
+    /*max-height:250px; */
+    text-align:left;
+    margin: 0px 0px 20px 0;
+    padding:5px 5px 5px 20px;
 
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;

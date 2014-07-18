@@ -1,0 +1,77 @@
+<div class="index_carousel">
+
+
+    {!-- <h2>Highlights</h2> --}
+    
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="10000">
+              <!-- Indicators -->
+              {!--
+              <ol style="bottom:-15px" class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+              </ol>
+              --}
+              
+
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner">
+                  {exp:channel:entries dynamic="no" site="default_site"  dynamic channel="carousel" limit="12" orderby="date" sort="desc" }
+                         {embed="framework_2/carousel_item" count="{count}" entry_id="{source_id}" image_url="{image}"}
+                  {/exp:channel:entries}
+
+{!--
+                <div class="item active">
+                    <a href="http://www.truthnews.com.au/web/radio/story/paul_gunter_on_nuclear_power_wmds_and_the_fukushima_daiichi_disaster"><img src="/storage/images/framework/carousel/slide_1.png" alt="Slide 1"></a>
+                  
+                  <div class="carousel-caption">
+                    <h3>Slide 1</h3>
+                    <p>Blah blah...</p>
+                  </div>
+                  
+                </div>
+                <div class="item">
+                  <img src="/storage/images/framework/carousel/slide_2.png" alt="Slide 2">
+           
+                </div>
+--}
+                
+              </div>
+
+              <!-- Controls -->
+              {!-- style="top:auto; bottom:-5px" --}
+              
+              <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              </a>
+              <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+              
+            </div>
+      
+
+
+   
+</div>
+
+{!--
+<script>
+    (function($){
+        $(window).load(function(){
+            $("#posts").mCustomScrollbar();
+        });
+    })(jQuery);
+</script>
+--}
+
+{!--
+<script>
+    function tick(){
+        //$('#recent_posts li:first').animate({'opacity':0}, 200, function () { $(this).appendTo($('#recent_posts')).css('opacity', 1); });
+        $('#recent_posts li:first').slideUp( function () { $(this).appendTo($('#recent_posts')).slideDown(); });
+        //$('#recent_posts li:first').slideUp( function () { $(this).appendTo($('#recent_posts')).slideUp(); });
+    }
+    setInterval(function(){ tick () }, 5000);
+</script>
+--}
