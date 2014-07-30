@@ -253,13 +253,13 @@ class Eway_model extends Base_model {
     
     
     
-     public function process_donation($donation_details) {
+     public function process_donation() {
         $this->eway_error = '';
 
-        $final_amount = $donation_details->aud_price;
+        $final_amount = $this->EE->input->post('aud_price');
 
         
-        $invoice_description = "TNRA donation.";
+        $invoice_description = "Truth News Australia donation.";
         
         dev_log::write("process_donation: invoice_description = [$invoice_description] FINAL AMOUNT = [$final_amount]");
         
@@ -268,6 +268,11 @@ class Eway_model extends Base_model {
 
         $this->direct_client->setTransactionData("CustomerInvoiceDescription", $invoice_description);
         $this->direct_client->setTransactionData("CustomerInvoiceRef", '');
+        $this->direct_client->setTransactionData("CustomerFirstName", '');
+        $this->direct_client->setTransactionData("CustomerLastName", '');
+        $this->direct_client->setTransactionData("CustomerEmail", '');
+        $this->direct_client->setTransactionData("CustomerAddress", '');
+        $this->direct_client->setTransactionData("CustomerPostcode", '');
         $this->direct_client->setTransactionData("CardHoldersName", $this->EE->input->post('CardHoldersName')); //mandatory field
         $this->direct_client->setTransactionData("CardNumber", $this->EE->input->post('cc_number')); //mandatory field
         $this->direct_client->setTransactionData("CardExpiryMonth", $this->EE->input->post('cc_expiry_month')); //mandatory field
@@ -291,8 +296,10 @@ class Eway_model extends Base_model {
             return false;
         } else if (strtolower($ewayTrxnStatus) == "true") {
             // payment succesfully sent to gateway
+            
             $this->eway_payment_status = true;
             $this->eway_auth_code = $response_obj->ewayAuthCode;
+            dev_log::write("PAYMENT APPROVED: $this->eway_auth_code");
             return true;
 
         } else {

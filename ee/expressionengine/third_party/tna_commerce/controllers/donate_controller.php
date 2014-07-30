@@ -21,11 +21,15 @@ class donate_controller extends Base_Controller {
 
     public function index() {   
         $this->init();      
-        return $this->create();
+        if ($this->EE->input->post('submit_payment')) {
+            return $this->store();
+        } else {
+            return $this->create();
+        }
     }
 
     public function create() {
-        dev_log::write("subscribe_controller:create");
+        dev_log::write("donate_controller:create");
         $errors = array();
         $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
         $vars = array(
@@ -78,12 +82,16 @@ class donate_controller extends Base_Controller {
             return $this->EE->load->view('donate_card', $vars, TRUE);
             exit();
         }
+        
+       
 
         $errors = array();
   
         $params = array();
+        
+        
 
-        $payment_good = $this->EE->eway_model->process_direct_payment($this->subscription_details);
+        $payment_good = $this->EE->eway_model->process_donation();
 
         $eway_auth_code = '';
 

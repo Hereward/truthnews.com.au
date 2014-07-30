@@ -13,6 +13,8 @@
         <option <?=($aud_price == 5000)?'selected':''?> value="5000">$50.00</option>
         <option <?=($aud_price == 10000)?'selected':''?> value="10000">$100.00</option>
         <option <?=($aud_price == 20000)?'selected':''?> value="20000">$200.00</option>
+        <option <?=($aud_price == 50000)?'selected':''?> value="50000">$500.00</option>
+        <option <?=($aud_price == 100000)?'selected':''?> value="100000">$1000.00</option>
     </select>
 </div>
 
