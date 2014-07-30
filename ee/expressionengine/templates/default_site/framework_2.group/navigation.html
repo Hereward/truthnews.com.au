@@ -53,6 +53,7 @@
                     <li class="dropdown" >
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">More <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                           <li {if "{segment_1}" == "donate"}class="active"{/if}><a href="{path=donate}">Donate</a></li>
                            <li {if "{segment_1}" == "promote"}class="active"{/if}><a href="{path=promote}">Promote</a></li>
                            <li {if "{segment_1}" == "contribute"}class="active"{/if}><a href="{path=contribute}">Contribute</a></li>
 

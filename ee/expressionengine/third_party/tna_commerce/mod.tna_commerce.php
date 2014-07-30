@@ -41,6 +41,12 @@ class Tna_commerce {
         return $this->load(__FUNCTION__ . '_controller', $args, $action);
     }
     
+    public function donate($args = '') {
+        $action = $this->EE->TMPL->fetch_param('action');
+        // if (!$action) {$action = '';}
+        return $this->load(__FUNCTION__ . '_controller', $args, $action);
+    }
+    
     public function info($args = '') {
        
         $action = $this->EE->TMPL->fetch_param('action');

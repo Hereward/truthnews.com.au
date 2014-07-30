@@ -249,6 +249,59 @@ class Eway_model extends Base_model {
             //echo $lblResult;
         }
     }
+    
+    
+    
+    
+     public function process_donation($donation_details) {
+        $this->eway_error = '';
+
+        $final_amount = $donation_details->aud_price;
+
+        
+        $invoice_description = "TNRA donation.";
+        
+        dev_log::write("process_donation: invoice_description = [$invoice_description] FINAL AMOUNT = [$final_amount]");
+        
+
+        $this->direct_client->setTransactionData("TotalAmount", $final_amount); //mandatory field
+
+        $this->direct_client->setTransactionData("CustomerInvoiceDescription", $invoice_description);
+        $this->direct_client->setTransactionData("CustomerInvoiceRef", '');
+        $this->direct_client->setTransactionData("CardHoldersName", $this->EE->input->post('CardHoldersName')); //mandatory field
+        $this->direct_client->setTransactionData("CardNumber", $this->EE->input->post('cc_number')); //mandatory field
+        $this->direct_client->setTransactionData("CardExpiryMonth", $this->EE->input->post('cc_expiry_month')); //mandatory field
+        $this->direct_client->setTransactionData("CardExpiryYear", $this->EE->input->post('cc_expiry_year')); //mandatory field
+        $this->direct_client->setTransactionData("CVN", $this->EE->input->post('cc_cvn')); //mandatory field
+        $this->direct_client->setTransactionData("TrxnNumber", '');
+        $this->direct_client->setTransactionData("Option1", '');
+        $this->direct_client->setTransactionData("Option2", '');
+        $this->direct_client->setTransactionData("Option3", '');
+
+        $this->direct_client->setCurlPreferences(CURLOPT_SSL_VERIFYPEER, 0); // Require for Windows hosting
+
+        $response_obj = $this->direct_client->doPayment();
+
+        $ewayTrxnStatus = (is_object($response_obj))?$response_obj->ewayTrxnStatus:'false';
+
+        if (strtolower($ewayTrxnStatus) == "false") {
+            $this->eway_error = "No response from payment gateway."; //$response_obj->ewayTrxnError;
+            dev_log::write("ewayTrxnStatus = false | ".$this->EE->eway_model->eway_error);
+   
+            return false;
+        } else if (strtolower($ewayTrxnStatus) == "true") {
+            // payment succesfully sent to gateway
+            $this->eway_payment_status = true;
+            $this->eway_auth_code = $response_obj->ewayAuthCode;
+            return true;
+
+        } else {
+            // invalid response recieved from server.
+            $this->eway_error = "Error: An invalid response was recieved from the payment gateway.";
+            return false;
+            //echo $lblResult;
+        }
+    }
 
     public function load_recurring_client() {
         $this->eway_error = '';
