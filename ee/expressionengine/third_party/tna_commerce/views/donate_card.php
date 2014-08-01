@@ -60,6 +60,11 @@
         <label>CVV Code <a href="http://www.cvvnumber.com/cvv.html" target="_blank" style="font-size:11px">What is my CVV code?</a></label>
         <input class="form-control" type="text" id="cc_cvn" name="cc_cvn" value="<?= $cc_cvn ?>" />
     </div>
+    
+    <div class="form-group">
+        <label for="email">Email Address (optional - you will receive a receipt)</label>
+        <input class="form-control" type="text" id="email" name="email" maxlength="100" value="" />
+    </div>
 
 
 

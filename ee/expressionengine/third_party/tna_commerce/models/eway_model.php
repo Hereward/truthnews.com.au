@@ -257,6 +257,8 @@ class Eway_model extends Base_model {
         $this->eway_error = '';
 
         $final_amount = $this->EE->input->post('aud_price');
+	
+	$email = $this->EE->input->post('email');
 
         
         $invoice_description = "Truth News Australia donation.";
@@ -270,7 +272,7 @@ class Eway_model extends Base_model {
         $this->direct_client->setTransactionData("CustomerInvoiceRef", '');
         $this->direct_client->setTransactionData("CustomerFirstName", '');
         $this->direct_client->setTransactionData("CustomerLastName", '');
-        $this->direct_client->setTransactionData("CustomerEmail", '');
+        $this->direct_client->setTransactionData("CustomerEmail", $email);
         $this->direct_client->setTransactionData("CustomerAddress", '');
         $this->direct_client->setTransactionData("CustomerPostcode", '');
         $this->direct_client->setTransactionData("CardHoldersName", $this->EE->input->post('CardHoldersName')); //mandatory field
@@ -299,7 +301,7 @@ class Eway_model extends Base_model {
             
             $this->eway_payment_status = true;
             $this->eway_auth_code = $response_obj->ewayAuthCode;
-            dev_log::write("PAYMENT APPROVED: $this->eway_auth_code");
+            dev_log::write("PAYMENT APPROVED | email: [$email] $this->eway_auth_code");
             return true;
 
         } else {
