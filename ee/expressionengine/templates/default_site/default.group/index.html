@@ -40,6 +40,8 @@
             {if "{exp:tna_utils:is_platform type='computer'}" == 1 || "{exp:tna_utils:is_platform type='tablet'}" == 1}
                 <div class="top_banner_large">{embed=ad_zones/responsive_adsense}</div>
             {/if}
+            
+            
 
 
 
@@ -60,5 +62,17 @@
     {embed="framework_2/footer"}
 
 </div> <!-- /container -->
+
+
+{!--
+ <script>
+        $(document).ready(function() {
+            display_subscribe_lightbox();
+        });
+    </script>
+--}
+
+{embed="default/subscribe_lightbox"}                 
+
 
 {embed ="framework_2/doc_foot"}
