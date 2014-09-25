@@ -1,7 +1,7 @@
 {if "{embed:url}"}
 <div class='mejs_raw_player'>
     {!-- {if embed:label}<h4>{embed:label}</h4>{/if} --}
-    <audio style="margin-top:15px;" id="{embed:player_id}" controls="controls" preload="none">
+    <audio class="mejs-player" style="width:280px; margin-top:15px;" id="{embed:player_id}" data-mejsoptions='{"audioWidth:": 280}' controls="controls" preload="none">
         <source src="{embed:url}" type="audio/mpeg" />
     </audio>
 </div>
