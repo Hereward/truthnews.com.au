@@ -20,16 +20,30 @@ class donate_controller extends Base_Controller {
 
 
     public function index() {   
-        $this->init();      
-        if ($this->EE->input->post('submit_payment')) {
+        $this->init();    
+        if ($this->EE->input->post('submit_email')) {
+            return $this->create();
+        } elseif ($this->EE->input->post('submit_payment')) {
             return $this->store();
         } else {
-            return $this->create();
+            return $this->donate_landing();
         }
     }
+    
+    public function donate_landing() {
+        dev_log::write("donate_controller:donate_landing");
+        $vars = array();
+        return $this->EE->load->view('donate_landing', $vars, TRUE);
+    }
+    
 
     public function create() {
         dev_log::write("donate_controller:create");
+        $email = $this->EE->input->post('email');
+         if (!$email) {
+            redirect($this->https_site_url . "donate");
+            die();
+        }
         $errors = array();
         $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
         $vars = array(
@@ -57,7 +71,8 @@ class donate_controller extends Base_Controller {
             'cc_expiry_month',
             'cc_expiry_year',
             'cc_cvn',
-            'aud_price'
+            'aud_price',
+            'email'
         );
 
         $form_defaults = array();
@@ -74,8 +89,34 @@ class donate_controller extends Base_Controller {
     }
 
 
+    public function submit_email() {
+        
+    }
+    
     public function store() {
        //$generic_error = 'The transaction failed. Please check your credit card details and try again.';
+        dev_log::write("donate_controller:store");
+        $eway_auth_code = '';
+        
+        $email = $this->EE->input->post('email');
+        
+        if (!$email) {
+            redirect($this->https_site_url . "donate");
+            die();
+        }
+        
+        $block = $this->EE->transactions_model->throttle_check();
+        
+        if ($block) {
+             $vars = array(
+                'email' => $this->EE->input->post('email'),
+                'cc_name' => $this->EE->input->post('CardHoldersName')
+            );
+            $this->EE->tna_commerce_lib->send_fraud_warning($vars);
+            redirect($this->https_site_url . "subscribe/fraud_warning");
+            die();
+        }
+        
         $eway_init = $this->EE->eway_model->init();
         if (!$eway_init) {
             $vars = $this->process_eway_error('init');
@@ -83,20 +124,30 @@ class donate_controller extends Base_Controller {
             exit();
         }
         
-       
-
         $errors = array();
-  
         $params = array();
         
-        
-
         $payment_good = $this->EE->eway_model->process_donation();
-
-        $eway_auth_code = '';
-
+        
         if ($payment_good) {
             $eway_auth_code = $this->EE->eway_model->eway_auth_code;
+        }
+
+        //dev_log::write("payment_controller: [$payment_good]");
+        $ip_address = $this->EE->tna_commerce_lib->get_client_ip();
+        
+        $t_params = array(
+            'success' => ($payment_good)?1:0,
+            'eway_auth_code' => $eway_auth_code,
+            'ip_address' => $ip_address,
+            'email' => $email
+        );
+        
+        $this->EE->transactions_model->create_transaction_data($t_params);
+
+       
+        if ($payment_good) {
+            //$eway_auth_code = $this->EE->eway_model->eway_auth_code;
 
             redirect($this->https_site_url . "donate/success");
         } else {

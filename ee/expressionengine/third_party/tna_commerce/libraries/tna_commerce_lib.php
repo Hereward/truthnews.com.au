@@ -29,23 +29,23 @@ class Tna_commerce_lib {
         //set a global object
         //$this->EE->tna_commerce = $this;
     }
-    
-    function debug_string_backtrace() { 
-        ob_start(); 
-        debug_print_backtrace(0,3); 
-        $trace = ob_get_contents(); 
-        ob_end_clean(); 
+
+    function debug_string_backtrace() {
+        ob_start();
+        debug_print_backtrace(0, 3);
+        $trace = ob_get_contents();
+        ob_end_clean();
 
         // Remove first item from backtrace as it's this function which 
         // is redundant. 
-        $trace = preg_replace ('/^#0\s+' . __FUNCTION__ . "[^\n]*\n/", '', $trace, 1); 
+        $trace = preg_replace('/^#0\s+' . __FUNCTION__ . "[^\n]*\n/", '', $trace, 1);
 
         // Renumber backtrace items. 
-        $trace = preg_replace ('/^#(\d+)/me', '\'#\' . ($1 - 1)', $trace); 
+        $trace = preg_replace('/^#(\d+)/me', '\'#\' . ($1 - 1)', $trace);
 
-        return $trace; 
-    } 
-    
+        return $trace;
+    }
+
     public function set_password_key($password_key) {
         $this->password_key = $password_key;
     }
@@ -90,12 +90,12 @@ class Tna_commerce_lib {
         } else {
             $msg = 'PHPMailer test message has been sent';
         }
-        
+
         dev_log::write($msg);
 
         return $msg;
     }
-    
+
     function email_test_3() {
         $visitor_name = "Dumb Stuff";
         $message = "You are an idiot.";
@@ -116,7 +116,7 @@ class Tna_commerce_lib {
         //send the email
         mail($to_email, $subject, $emailMessage, $header);
     }
-    
+
     function email_test_4() {
         $mail = new PHPMailer;
 
@@ -157,7 +157,7 @@ class Tna_commerce_lib {
         } else {
             $msg = 'Yay! PHPMailer test message 4 has been sent';
         }
-        
+
         dev_log::write($msg);
 
         return $msg;
@@ -175,7 +175,7 @@ class Tna_commerce_lib {
         $html = $this->EE->load->view($html_path, $params, TRUE);
 
         $mail = new PHPMailer;
-        
+
         if ($this->tna_server_environment == 'hosted') {
             $mail->isSMTP();
             $mail->Host = 'mail.truthnews.com.au';
@@ -189,12 +189,12 @@ class Tna_commerce_lib {
         $mail->From = $this->admin_email; //truth.news.australia@gmail.com hereward@planetonline.com.au
         $mail->FromName = 'Truth News Australia';
         $mail->addAddress($params['customer_email']);
-        
+
         $mail->addBCC($this->admin_email);
         if ($this->gateway_mode == 'live') {
             $mail->addBCC($this->dispatch_email);
         }
-        
+
         $mail->addReplyTo($this->admin_email, 'Truth News Australia');
 
         $mail->WordWrap = 70;                                 // Set word wrap to 50 characters
@@ -220,69 +220,78 @@ class Tna_commerce_lib {
         return $msg;
     }
     
-    
-     public function send_subscription_confirmation($params = array()) {
+    public function send_fraud_warning($params = array()) {
+        $params['plain_path'] = 'email/fraud_warning_plain';
+        $params['html_path'] = 'email/fraud_warning_html';
+        $params['subject'] = "Suspected Fraud - Warning ({$params['cc_name']})";
+        $params['customer_email'] = $params['email'];
+        $params['tag'] = 'Fraud Warning';
+
+        return $this->send_email_notification($params);
+        
+    }
+
+    public function send_subscription_confirmation($params = array()) {
         //dev_log::write('send_subscription_confirmation');
         $params['plain_path'] = 'email/subscribe_success_plain';
         $params['html_path'] = 'email/subscribe_success_html';
         $params['subject'] = "Your Truth News Australia Subscription ({$params['subscriber']->first_name} {$params['subscriber']->last_name}: {$params['subscriber']->type})";
-        $params['customer_email'] =  $params['subscriber']->email;
+        $params['customer_email'] = $params['subscriber']->email;
         $params['tag'] = 'subscription confirmation';
-        
-        
-        
+
+
+
         return $this->send_email_notification($params);
-        
+
         //These details have also been sent to your email address: $subscriber->email
-     }
-    
+    }
 
     public function send_cc_confirmation($params = array()) {
-        
+
         $params['plain_path'] = 'email/cc_confirmation_plain';
         $params['html_path'] = 'email/cc_confirmation_html';
         $params['subject'] = 'Credit Card payment received';
         $params['tag'] = 'payment confirmation';
-        
+
         return $this->send_email_notification($params);
-        
+
         /*
-        $plain_path = 'email/cc_confirmation_plain';
-        $html_path = 'email/cc_confirmation_html';
-        //$customer_subject = 'Credit Card Payment received!'
-        //$admin_subject = "Credit Card Payment [{$vars['cc_email']}]";
-        $plain = $this->EE->load->view($plain_path, $vars, TRUE);
-        $html = $this->EE->load->view($html_path, $vars, TRUE);
+          $plain_path = 'email/cc_confirmation_plain';
+          $html_path = 'email/cc_confirmation_html';
+          //$customer_subject = 'Credit Card Payment received!'
+          //$admin_subject = "Credit Card Payment [{$vars['cc_email']}]";
+          $plain = $this->EE->load->view($plain_path, $vars, TRUE);
+          $html = $this->EE->load->view($html_path, $vars, TRUE);
 
-        $mail = new PHPMailer;
+          $mail = new PHPMailer;
 
-        $mail->From = $this->admin_email; //truth.news.australia@gmail.com hereward@planetonline.com.au
-        $mail->FromName = 'Truth News Australia';
-        $mail->addAddress($vars['cc_email']);
-        $mail->addCC($this->admin_email);
+          $mail->From = $this->admin_email; //truth.news.australia@gmail.com hereward@planetonline.com.au
+          $mail->FromName = 'Truth News Australia';
+          $mail->addAddress($vars['cc_email']);
+          $mail->addCC($this->admin_email);
 
-        $mail->addReplyTo($this->admin_email, 'Truth News Australia');
+          $mail->addReplyTo($this->admin_email, 'Truth News Australia');
 
-        $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-        //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-        $mail->isHTML(true);                                  // Set email format to HTML
+          $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+          //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+          //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+          $mail->isHTML(true);                                  // Set email format to HTML
 
-        $mail->Subject = 'Credit Card payment received';
-        $mail->Body = $html;
-        $mail->AltBody = $plain;
+          $mail->Subject = 'Credit Card payment received';
+          $mail->Body = $html;
+          $mail->AltBody = $plain;
 
-        $msg = '';
-        if (!$mail->send()) {
-            $msg = "Message to {$vars['cc_email']} was not sent.";
-            $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
-        } else {
-            $msg = "Message to {$vars['cc_email']} was sent.";
-        }
+          $msg = '';
+          if (!$mail->send()) {
+          $msg = "Message to {$vars['cc_email']} was not sent.";
+          $msg .= 'Mailer Error: ' . $mail->ErrorInfo;
+          } else {
+          $msg = "Message to {$vars['cc_email']} was sent.";
+          }
 
-        dev_log::write($msg);
+          dev_log::write($msg);
 
-        return $msg;
+          return $msg;
          * 
          */
     }
@@ -674,6 +683,25 @@ class Tna_commerce_lib {
                 return FALSE;
             }
         }
+    }
+
+    function get_client_ip() {
+        $ipaddress = '';
+        if (getenv('HTTP_CLIENT_IP'))
+            $ipaddress = getenv('HTTP_CLIENT_IP');
+        else if (getenv('HTTP_X_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+        else if (getenv('HTTP_X_FORWARDED'))
+            $ipaddress = getenv('HTTP_X_FORWARDED');
+        else if (getenv('HTTP_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+        else if (getenv('HTTP_FORWARDED'))
+            $ipaddress = getenv('HTTP_FORWARDED');
+        else if (getenv('REMOTE_ADDR'))
+            $ipaddress = getenv('REMOTE_ADDR');
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
     }
 
     /*

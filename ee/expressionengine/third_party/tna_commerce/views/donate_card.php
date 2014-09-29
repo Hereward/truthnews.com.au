@@ -4,6 +4,8 @@
 
 <form id="cc_form" name="cc_form" method="post">
     
+    <input type="hidden" name="email" value="<?= $email ?>" />
+    
     <div class="form-group">
     <label>Donation Amount (AUD)</label>
     <select class="form-control" name="aud_price" id="subscription_type">
@@ -61,10 +63,7 @@
         <input class="form-control" type="text" id="cc_cvn" name="cc_cvn" value="<?= $cc_cvn ?>" />
     </div>
     
-    <div class="form-group">
-        <label for="email">Email Address (optional - you will receive a receipt)</label>
-        <input class="form-control" type="text" id="email" name="email" maxlength="100" value="" />
-    </div>
+
 
 
 

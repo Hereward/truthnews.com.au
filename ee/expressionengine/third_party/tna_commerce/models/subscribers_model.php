@@ -9,8 +9,6 @@ class Subscribers_model extends Base_model {
 	public $orig = '[EMPTY GiGi]';
         public $default_db_prefix;
         public $subscription_types = array();
-        
-
 
 	/*
 	 protected $EE;
@@ -368,6 +366,8 @@ class Subscribers_model extends Base_model {
             return false;
         }
     }
+    
+    
 
     public function create_tna_subscriber($params) {
         $output = true;

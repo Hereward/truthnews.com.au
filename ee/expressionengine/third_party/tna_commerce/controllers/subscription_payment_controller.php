@@ -239,6 +239,7 @@ class subscription_payment_controller extends Base_Controller {
 
     public function store() {
         //$generic_error = 'The transaction failed. Please check your credit card details and try again.';
+        $eway_auth_code = '';
         $eway_init = $this->EE->eway_model->init();
         if (!$eway_init) {
             $vars = $this->process_eway_error('init');
@@ -256,14 +257,43 @@ class subscription_payment_controller extends Base_Controller {
 
         $sd = print_r($this->subscription_details, true);
         dev_log::write("sd = $sd");
+        
+        $block = $this->EE->transactions_model->throttle_check();
+        
+        if ($block) {
+             $vars = array(
+                'email' => $this->EE->input->post('email'),
+                'cc_name' => $this->EE->input->post('first_name') . ' ' . $this->EE->input->post('last_name')
+            );
+            $this->EE->tna_commerce_lib->send_fraud_warning($vars);
+            redirect($this->https_site_url . "subscribe/fraud_warning");
+            die();
+        }
+        
         $payment_good = $this->EE->eway_model->process_direct_payment($this->subscription_details);
-
-        $eway_auth_code = '';
-
-        //dev_log::write("payment_controller: [$payment_good]");
-
+        
         if ($payment_good) {
             $eway_auth_code = $this->EE->eway_model->eway_auth_code;
+        }
+
+        //$eway_auth_code = '';
+
+        //dev_log::write("payment_controller: [$payment_good]");
+        $ip_address = $this->EE->tna_commerce_lib->get_client_ip();
+        
+        $t_params = array(
+            'success' => ($payment_good)?1:0,
+            'eway_auth_code' => $eway_auth_code,
+            'ip_address' => $ip_address,
+            'email' => $this->EE->input->post('email')
+        );
+        
+        $this->EE->transactions_model->create_transaction_data($t_params);
+        
+        
+
+        if ($payment_good) {
+            //$eway_auth_code = $this->EE->eway_model->eway_auth_code;
             //send_cc_confirmation
             $email_vars = array(
                 'cc_auth' => $eway_auth_code,

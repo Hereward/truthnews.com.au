@@ -62,6 +62,7 @@ abstract class Base_Controller {
         $this->EE->load->library('table');
         
         $this->EE->load->model('subscribers_model');
+        $this->EE->load->model('transactions_model');
         $this->member_groups = $this->get_member_groups();
         
         $this->subscriber_group_id = $this->member_groups['subscribers'];
@@ -111,36 +112,10 @@ abstract class Base_Controller {
         $val = '';
         $defaults = array();
         
-        /*
-        if ($this->subscriber) {
-            $defaults = array(
-                'first_name' => $this->subscriber->first_name,
-                'last_name' => $this->subscriber->last_name,
-                'screen_name' => "",
-            );
-        }
-         
-        */
         if (isset($defaults[$name])) {
             $val = $defaults[$name];
         }
-        
-       /*
-        if ($name == 'country') {
-            print_r($_POST);
-            die();
-            //die("TOTAL COST = ".$this->EE->input->post($name) . '  ' . "include_extras = ".$this->EE->input->post('include_extras'));
-            
-        }
-        */
-        
-        
-        
-/*
-        if (isset($_POST[$name])) {
-            $val = $_POST[$name];
-        }
-*/
+
         if ($this->EE->input->post($name)) {
             $val = $this->EE->input->post($name);
         }
