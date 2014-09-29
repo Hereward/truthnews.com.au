@@ -5,7 +5,7 @@
 
 class Transactions_model extends Base_model {
 
-        public $throttle_limit = 2;
+        public $throttle_limit = 6;
         public $throttle_window = '-24 hours';
         public $default_db_prefix;
 
