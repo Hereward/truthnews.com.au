@@ -6,4 +6,17 @@ slideshowpro/albums/
 slideshowpro/xml_cache/*
 slideshowpro/config/conf.php
 slideshowpro/api/classes/cache/*
+ee/expressionengine/cache/
+logs/
+mail/
+radio/
+eWay/
+git-deploy/
+.htaccess
+ee/expressionengine/config/config.php
+ee/expressionengine/config/database.php
+storage/images/_thumbs/
+storage/images/cms/
+storage/images/framework/carousel/
+storage/images/video_images/
 robots.txt
