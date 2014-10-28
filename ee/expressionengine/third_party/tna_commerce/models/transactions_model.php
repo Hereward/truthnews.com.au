@@ -5,7 +5,7 @@
 
 class Transactions_model extends Base_model {
 
-        public $throttle_limit = 20;
+        public $throttle_limit = 6;
         public $throttle_window = '-24 hours';
         public $default_db_prefix;
 
@@ -52,9 +52,9 @@ class Transactions_model extends Base_model {
         $cutoff = strtotime($this->throttle_window);
         $now = date("Y-m-d H:i:s");
         $effective_cut_off = date("Y-m-d H:i:s",$cutoff);
-        $result = $this->EE->db->where('created >',$cutoff)->get('tna_eway_transactions');
+        $result = $this->EE->db->where('created >',$effective_cut_off)->get('tna_eway_transactions');
         $num_rows = $result->num_rows();
-        dev_log::write("throttle_check: window=[$this->throttle_window] limit=[$this->throttle_limit] "
+        dev_log::write("cutoff=[$cutoff] throttle_check: window=[$this->throttle_window] limit=[$this->throttle_limit] "
                 . "effective_cut_off=[$effective_cut_off] now=[$now] num_rows=[$num_rows]");
         $this->restore_prefix();
         if ($num_rows > $this->throttle_limit) {
