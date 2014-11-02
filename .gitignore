@@ -21,3 +21,4 @@ storage/images/framework/carousel/
 storage/images/video_images/
 robots.txt
 /includes/mailchimp-api-php/nbproject/private/
+includes/mailchimp/
