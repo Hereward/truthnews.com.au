@@ -21,6 +21,7 @@ abstract class Base_Controller {
     protected $uri_string;
     protected $member_groups;
     protected $postage_costs;
+    protected $gift = 0;
 
     protected function __construct() {
 
@@ -177,15 +178,36 @@ abstract class Base_Controller {
              foreach ($form_default_fields as $field) {
                  $form_defaults[$field] = $this->get_option($field);
              }
-             
-            
-             
-             
-
         }
 
 
         $this->EE->load->vars($form_defaults);
+        
+        if ($this->gift) {
+            
+            $form_default_fields = array(
+                'r_tshirt_size',
+                'r_email',
+                'r_first_name',
+                'r_last_name',
+                'r_address',
+                'r_address_2',
+                'r_suburb',
+                'r_state',
+                'r_country',
+                'r_postal_code',
+                'r_state',
+            );
+             
+             $form_defaults = array();
+             
+             foreach ($form_default_fields as $field) {
+                 $form_defaults[$field] = $this->get_option($field);
+             }
+             
+             $this->EE->load->vars($form_defaults);
+       
+        }
         
     }
 

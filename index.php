@@ -66,7 +66,7 @@
  * Enable it only if you have a good reason to.
  * 
  */
-	$debug = 0; 
+	$debug = 1; 
 
 /*
  * --------------------------------------------------------------------

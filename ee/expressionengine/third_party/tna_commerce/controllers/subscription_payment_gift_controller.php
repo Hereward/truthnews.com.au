@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class subscription_payment_controller extends Base_Controller {
+class subscription_payment_gift_controller extends Base_Controller {
 
     protected $EE;
     public $subscribe_stage;
@@ -22,35 +22,26 @@ class subscription_payment_controller extends Base_Controller {
         //$this->member_id = $this->EE->session->userdata('member_id');
     }
 
-    public function index() {
-        $this->init();
 
+    
+    public function index() {
+      
+        $this->init();
+        
         if ($this->EE->input->post('submit_payment')) {
             return $this->store();
         } else {
             return $this->create();
         }
     }
-    
-
 
     public function init() {
         dev_log::write("init: 1");
-        //$eway_init = $this->EE->eway_model->init();
-        /*
-          if (!$eway_init) {
-          $vars = array();
-          $errors = array();
-          $errors[] = $this->EE->eway_model->eway_error;
-          $vars['errors'] = $errors;
-          return $this->EE->load->view('subscribe_new', $vars, TRUE);
-          exit();
-          }
-         */
+
+        $this->gift = 1;
         $subscription_type = $this->EE->input->post('subscription_type');
         $this->subscription_details = $this->EE->subscribers_model->get_subscription_details($subscription_type);
-        
-       
+
         dev_log::write("init: 2");
         $this->country_list = $this->EE->tna_commerce_lib->get_countrylist();
         dev_log::write("init: 3");
@@ -113,22 +104,20 @@ class subscription_payment_controller extends Base_Controller {
         }
     }
 
-    public function create() {
-        dev_log::write("payment_controller:create");
+   
+    
+     public function create() {
+        dev_log::write("payment_gift_controller:create");
         $existing_subscriber = '';
         $errors = array();
 
         $vars = array();
         $this->subscribe_stage = 2;
 
-        if (!$this->logged_in) {
-            //$this->member_id = $this->EE->uri->segment(3, 0);
-            $this->member_id = $this->EE->input->post('member_id');
-            $this->subscription_in_progress = true;
-        }
+        $this->member_id = $this->EE->input->post('member_id');
+        $this->subscription_in_progress = true;
 
-
-        $email = $this->EE->input->post('email');
+        $email = $this->EE->input->post('r_email');
 
         $duplicate = $this->EE->subscribers_model->find_duplicate($email);
 
@@ -142,22 +131,12 @@ class subscription_payment_controller extends Base_Controller {
         if ($existing_subscriber) {
             dev_log::write("payment:create existing_subscriber > GO BACK");
 
-            $view = '';
-            if ($this->logged_in) {
-                $errors[] = "Your email address: [$duplicate->email] is already registered to a subscriber account. Please <strong><a href='$this->https_site_url?ACT=10&return=%2Fsubscribe'>log out</a></strong> and supply a different email adddress.";
-            } else {
-                $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress.";
-            }
+            $errors[] = "The email address: [$duplicate->email] is already registered to a subscriber account. Please supply a different email adddress.";
+
             $vars['errors'] = $errors;
             $vars['member_id'] = $this->member_id;
 
-            if ($this->logged_in) {
-                $vars['username'] = $this->EE->session->userdata['username'];
-                $vars['email'] = $this->EE->session->userdata['email'];
-                $view = 'subscribe_existing';
-            } else {
-                $view = 'subscribe_new';
-            }
+            $view = 'subscribe_gift';
             
             $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
             $vars['countrylist'] = $countrylist;
@@ -181,10 +160,8 @@ class subscription_payment_controller extends Base_Controller {
         $vars['subscription_details'] = $this->subscription_details;
         $vars['errors'] = $errors;
 
-        return $this->EE->load->view('subscribe_payment_card', $vars, TRUE);
+        return $this->EE->load->view('subscribe_payment_card_gift', $vars, TRUE);
     }
-    
-     
     
 
     public function delete_subscriber($member_id) {

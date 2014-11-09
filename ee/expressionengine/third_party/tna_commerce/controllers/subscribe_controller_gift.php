@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class subscribe_controller extends Base_Controller {
+class subscribe_controller_gift extends Base_Controller {
 
     protected $EE;
 
@@ -19,21 +19,20 @@ class subscribe_controller extends Base_Controller {
 
     }
 
+
+
     public function index() {
+        $this->gift == 1;
         $this->init();
         $this->subscribe_stage = 1;
+
+         return $this->create_gift();
         
-        if ($this->logged_in) {
-            return $this->create_existing();
-        } else {
-            return $this->create();
-        }
     }
     
-
-    public function create() {
+    public function create_gift() {
      
-        dev_log::write("subscribe_controller:create");
+        dev_log::write("subscribe_controller:create_gift");
 
         $errors = array();
         $this->set_defaults();
@@ -48,32 +47,10 @@ class subscribe_controller extends Base_Controller {
         
         return $this->EE->load->view('subscribe_new', $vars, TRUE);
     }
-    
-    
 
-    public function create_existing() {
-        $errors = array();
-        $this->set_defaults();
-        $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
-        //$this->EE->session->userdata->username;
-        
-        $vars = array(
-            'countrylist' => $countrylist,
-            'countrycode' => $this->country_code,
-            'errors'=>$errors,
-            'username'=>$this->EE->session->userdata['username'],
-            'email'=>$this->EE->session->userdata['email'],
-            'member_id'=>$this->member_id,
-        );
-        
-        return $this->EE->load->view('subscribe_existing', $vars, TRUE);
-
-    }
-    
 
 
     public function store() {
-        /*
         $errors = array();
         $member_id = '';
         $existing_member = 0;
@@ -126,11 +103,7 @@ class subscribe_controller extends Base_Controller {
 
         $this->EE->subscribers_model->create_tna_subscriber($params);
         redirect($this->https_site_url."subscribe/payment/$member_id");
-         * 
-         */
     }
- 
-
 
     public function show() {
 

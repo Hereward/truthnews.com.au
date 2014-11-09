@@ -34,8 +34,20 @@ class Tna_commerce {
         // if (!$action) {$action = '';}
         return $this->load(__FUNCTION__ . '_controller', $args, $action);
     }
+    
+    public function subscribe_gift($args = '') {
+        $action = $this->EE->TMPL->fetch_param('action');
+        // if (!$action) {$action = '';}
+        return $this->load(__FUNCTION__ . '_controller', $args, $action);
+    }
 
     public function subscription_payment($args = '') {
+        $action = $this->EE->TMPL->fetch_param('action');
+        // if (!$action) {$action = '';}
+        return $this->load(__FUNCTION__ . '_controller', $args, $action);
+    }
+    
+    public function subscription_payment_gift($args = '') {
         $action = $this->EE->TMPL->fetch_param('action');
         // if (!$action) {$action = '';}
         return $this->load(__FUNCTION__ . '_controller', $args, $action);
