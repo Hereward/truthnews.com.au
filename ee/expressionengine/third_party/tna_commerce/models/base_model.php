@@ -10,6 +10,7 @@ class Base_model extends CI_Model {
     public $country_list;
     public $db_error = '';
     public $subscriber_details_fields;
+    public $subscriber_details_gift_fields;
     public $sql_string;
     //public $base_url;
 
@@ -23,6 +24,8 @@ class Base_model extends CI_Model {
         $this->EE->load->model('member_model');
         
         $this->set_details_fields_template();
+        
+        $this->set_details_fields_gift_template();
 
         //$this->ppo_db = $this->EE->load->database('ppo', TRUE);
         //$this->base_url = $this->EE->config->config['base_url'];
@@ -46,8 +49,28 @@ class Base_model extends CI_Model {
         );
     }
     
+    public function set_details_fields_gift_template() {
+
+        $this->subscriber_details_gift_fields = array(
+            'r_first_name',
+            'r_last_name',
+            'r_company',
+            'r_address',
+            'r_address_2',
+            'r_suburb',
+            'r_state',
+            'r_postal_code',
+            'r_country',
+            'payment_method',
+        );
+    }
+    
     public function get_details_fields() {
         return $this->subscriber_details_fields;
+    }
+    
+    public function get_details_gift_fields() {
+        return $this->subscriber_details_gift_fields;
     }
     
     

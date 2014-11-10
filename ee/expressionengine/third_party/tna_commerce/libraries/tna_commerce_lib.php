@@ -245,6 +245,21 @@ class Tna_commerce_lib {
 
         //These details have also been sent to your email address: $subscriber->email
     }
+    
+    public function send_gift_subscription_confirmation($params = array()) {
+        //dev_log::write('send_subscription_confirmation');
+        $params['plain_path'] = 'email/subscribe_gift_success_plain';
+        $params['html_path'] = 'email/subscribe_gift_success_html';
+        $params['subject'] = "You have received a Truth News Australia GIFT SUBSCRIPTION! ({$params['subscriber']->first_name} {$params['subscriber']->last_name}: {$params['subscriber']->type})";
+        $params['customer_email'] = $params['subscriber']->email;
+        $params['tag'] = 'subscription confirmation';
+
+
+
+        return $this->send_email_notification($params);
+
+        //These details have also been sent to your email address: $subscriber->email
+    }
 
     public function send_cc_confirmation($params = array()) {
 
