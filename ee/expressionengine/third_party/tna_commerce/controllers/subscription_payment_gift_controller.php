@@ -121,6 +121,7 @@ class subscription_payment_gift_controller extends Base_Controller {
         $duplicate = $this->EE->subscribers_model->find_duplicate($email);
 
         if ($email == 'editor@truthnews.com.au' && $duplicate) {
+            dev_log::write("NUKING $email");
             $this->EE->subscribers_model->nuke_subscriber($duplicate->member_id);
             $existing_subscriber = false;
         } else {
@@ -242,6 +243,8 @@ class subscription_payment_gift_controller extends Base_Controller {
         if ($payment_good) {
             //$eway_auth_code = $this->EE->eway_model->eway_auth_code;
             //send_cc_confirmation
+            
+            /*
             $email_vars = array(
                 'cc_auth' => $eway_auth_code,
                 'cc_date' => date("j F, Y, g:i a"),
@@ -249,6 +252,8 @@ class subscription_payment_gift_controller extends Base_Controller {
                 'cc_amount' => $this->subscription_details->aud_price,
                 'customer_email' => $this->EE->input->post('email'),
             );
+             * 
+             */
 
             $cc_result = '';
             $this->store_subscriber();
@@ -263,7 +268,7 @@ class subscription_payment_gift_controller extends Base_Controller {
 
             setcookie('tna_subscribe_result_2', $password_key, time() + 3600);
 
-            redirect($this->https_site_url . "subscribe/success");
+            redirect($this->https_site_url . "subscribe/gift_success");
         } else {
             $vars = $this->process_eway_error('payment');
             $vars['subscription_details'] = $this->subscription_details;
@@ -293,6 +298,7 @@ class subscription_payment_gift_controller extends Base_Controller {
     }
 
     public function store_subscriber() {
+        dev_log::write("store_subscriber");
         $errors = array();
         $member_id = '';
         $existing_member = false;
@@ -324,11 +330,14 @@ class subscription_payment_gift_controller extends Base_Controller {
         $data['group_id'] = $this->subscriber_group_id;
 
         $duplicate = $this->EE->subscribers_model->find_duplicate($data['email']);
+        
+         dev_log::write("Registering this email address: [{$data['email']}]");
 
         if ($duplicate) {
             $existing_member = true;
             $member_id = $duplicate->member_id;
             $this->EE->subscribers_model->update_subscriber_group($member_id, $this->subscriber_group_id);
+            dev_log::write("FOUND DUPLICATE: [$member_id]");
 
             //$this->EE->subscribers_model->create_ee_member($data);
         } else {
@@ -342,14 +351,18 @@ class subscription_payment_gift_controller extends Base_Controller {
             'existing_member' => $existing_member,
             'type' => $this->EE->input->post('subscription_type'),
             'include_extras' => $this->EE->input->post('include_extras'),
+            'tshirt_size' => $this->EE->input->post('r_tshirt_size')
         );
+        
         $this->EE->subscribers_model->create_tna_subscriber($params);
 
-        $subscriber_details_fields = $this->EE->subscribers_model->get_details_gift_fields();
+        //$subscriber_gift_details_fields = $this->EE->subscribers_model->get_details_gift_fields();
+        $subscriber_details_fields = $this->EE->subscribers_model->get_details_fields();
 
         $params = array();
+        
         foreach ($subscriber_details_fields as $field) {
-            $params[$field] = $this->EE->input->post($field);
+            $params[$field] = $this->EE->input->post("r_$field");
         }
         
         $params['payment_method'] = $this->payment_method;

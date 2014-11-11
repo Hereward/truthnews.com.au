@@ -413,6 +413,7 @@ class subscription_payment_controller extends Base_Controller {
             'existing_member' => $existing_member,
             'type' => $this->EE->input->post('subscription_type'),
             'include_extras' => $this->EE->input->post('include_extras'),
+            'tshirt_size' => $this->EE->input->post('tshirt_size')
         );
         $this->EE->subscribers_model->create_tna_subscriber($params);
 

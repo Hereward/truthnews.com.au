@@ -371,7 +371,8 @@ class Subscribers_model extends Base_model {
 
     public function create_tna_subscriber($params) {
         $output = true;
-        $tshirt_size = $this->EE->input->post('tshirt_size');
+        $tshirt_size = $params['tshirt_size'];
+        //$this->EE->input->post('tshirt_size');
 
         //die("FUCKING T_SHIRT: $tshirt_size");
         $this->remove_prefix();

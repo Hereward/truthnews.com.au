@@ -22,7 +22,6 @@
            <strong>Total Cost: AUD $<span id='total_cost_label'></span></strong><br>
        </div>
        
-       <?=$subscription_details->description?><br>
 
     </div>
     
@@ -60,6 +59,11 @@
     
 
     <legend>Card Holder Details</legend>
+    
+        <div class="form-group">
+        <label for="email">Email Address</label>
+        <input class="form-control" type="text" id="email" name="email" maxlength="100" value="<?= $email ?>" />
+    </div>
     
     <div class="form-group">
         <label for="first_name">First Name (as it appears on card)</label>
@@ -234,6 +238,10 @@
             },
             
             rules: {
+                email: {
+                    required: true,
+                    email: true
+                },
                 first_name: {
                     required: true,
                     minlength: 2,
@@ -270,6 +278,7 @@
                 }
             },
             messages: {
+                email:"Please enter a valid email address",
                 first_name: {
                     required: "Please enter a first name",
                     minlength: "Your first name must consist of at least 2 characters"

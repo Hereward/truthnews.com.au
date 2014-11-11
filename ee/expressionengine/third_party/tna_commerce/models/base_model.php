@@ -12,6 +12,7 @@ class Base_model extends CI_Model {
     public $subscriber_details_fields;
     public $subscriber_details_gift_fields;
     public $sql_string;
+    
     //public $base_url;
 
     public function __construct()
@@ -26,6 +27,8 @@ class Base_model extends CI_Model {
         $this->set_details_fields_template();
         
         $this->set_details_fields_gift_template();
+        
+       
 
         //$this->ppo_db = $this->EE->load->database('ppo', TRUE);
         //$this->base_url = $this->EE->config->config['base_url'];

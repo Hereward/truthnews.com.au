@@ -22,6 +22,7 @@ abstract class Base_Controller {
     protected $member_groups;
     protected $postage_costs;
     protected $gift = 0;
+  
 
     protected function __construct() {
 
@@ -46,8 +47,7 @@ abstract class Base_Controller {
         $this->site_url = $this->EE->config->item('site_url');
         $this->uri_string = $this->EE->uri->uri_string();
         $this->https_site_url = $this->EE->config->item('https_site_url');
-        
-        
+      
         
         $globals = array(
             'site_url' => $this->site_url,

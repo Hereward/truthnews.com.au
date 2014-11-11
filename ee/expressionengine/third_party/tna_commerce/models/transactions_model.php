@@ -8,13 +8,27 @@ class Transactions_model extends Base_model {
         public $throttle_limit = 6;
         public $throttle_window = '-24 hours';
         public $default_db_prefix;
+        public $security = 'on';
 
 	public function __construct()
 	{
         parent::__construct();
 
         $this->default_db_prefix = $this->db->dbprefix;
+        $sec_config = $this->EE->config->item('security');
+        if ($sec_config == 'off') {
+            $this->security = $sec_config;
+        }
+        dev_log::write("transactions_model: security=[$this->security]");
 
+    }
+    
+    public function armed() {
+        if ($this->security == 'off') {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     public function restore_prefix() {
@@ -48,23 +62,28 @@ class Transactions_model extends Base_model {
     }
     
     public function throttle_check() {
-        $this->remove_prefix();
-        $cutoff = strtotime($this->throttle_window);
-        $now = date("Y-m-d H:i:s");
-        $effective_cut_off = date("Y-m-d H:i:s",$cutoff);
-        $result = $this->EE->db->where('created >',$effective_cut_off)->get('tna_eway_transactions');
-        $num_rows = $result->num_rows();
-        dev_log::write("cutoff=[$cutoff] throttle_check: window=[$this->throttle_window] limit=[$this->throttle_limit] "
-                . "effective_cut_off=[$effective_cut_off] now=[$now] num_rows=[$num_rows]");
-        $this->restore_prefix();
-        if ($num_rows > $this->throttle_limit) {
-            return 1;
-        }  else {
+        $armed = $this->armed();
+        dev_log::write("transactions_model:throttle_check: ARMED=[$armed]");
+
+        if ($armed) {
+            $this->remove_prefix();
+            $cutoff = strtotime($this->throttle_window);
+            $now = date("Y-m-d H:i:s");
+            $effective_cut_off = date("Y-m-d H:i:s", $cutoff);
+            $result = $this->EE->db->where('created >', $effective_cut_off)->get('tna_eway_transactions');
+            $num_rows = $result->num_rows();
+            dev_log::write("cutoff=[$cutoff] throttle_check: window=[$this->throttle_window] limit=[$this->throttle_limit] "
+                    . "effective_cut_off=[$effective_cut_off] now=[$now] num_rows=[$num_rows]");
+            $this->restore_prefix();
+            if ($num_rows > $this->throttle_limit) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
             return 0;
         }
     }
-
-   
 
 }
 // End Class
