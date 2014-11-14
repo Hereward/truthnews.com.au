@@ -365,6 +365,30 @@ class Subscribers_model extends Base_model {
             $this->restore_prefix();
             return false;
         }
+        
+        $this->restore_prefix();
+    }
+    
+    public function create_subscriber_gift($params) {
+        $this->remove_prefix();
+        $now = date("Y-m-d H:i:s");
+
+        $data = array(
+            'r_member_id' => $params['member_id'],
+            'first_name' => $params['first_name'],
+            'last_name' => $params['last_name'],
+            'email' => $params['email'],
+            'created' => $now
+        );
+
+        $this->EE->db->insert('tna_subscriber_gifts', $data);
+
+        if ($this->get_db_error()) {
+            $this->restore_prefix();
+            return false;
+        }
+        
+        $this->restore_prefix();
     }
     
     

@@ -355,6 +355,16 @@ class subscription_payment_gift_controller extends Base_Controller {
         );
         
         $this->EE->subscribers_model->create_tna_subscriber($params);
+        
+        $params = array(
+            'member_id' => $member_id,
+            'first_name' => $this->EE->input->post('first_name'),
+            'last_name' => $this->EE->input->post('last_name'),
+            'email' => $this->EE->input->post('email'),
+            'secret_gift' => $this->EE->input->post('secret_gift')
+        );
+        
+        $this->EE->subscribers_model->create_subscriber_gift($params);
 
         //$subscriber_gift_details_fields = $this->EE->subscribers_model->get_details_gift_fields();
         $subscriber_details_fields = $this->EE->subscribers_model->get_details_fields();
