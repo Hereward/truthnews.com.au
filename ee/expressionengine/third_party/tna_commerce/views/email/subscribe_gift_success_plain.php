@@ -1,6 +1,11 @@
 Dear <?=$subscriber->first_name?>,
 
-You have received a gift subscription to Truth News Australia!
+You have received a gift subscription to Truth News Australia! (http://www.truthnews.com.au/) You'll soon be receiving our t-shirt and DVD in the mail, and your subscriber account gives you access to all our podcasts for one year.
+
+<?php if (!$subscriber_gift_details->secret_gift)  { ?>
+This gift was sent to you by <?=$subscriber_gift_details->first_name?> <?=$subscriber_gift_details->last_name?>, email: <?=$subscriber_gift_details->email?>.
+<?php } else { ?>The giver of this gift wishes to remain anonymous.<?php } ?>
+
 
 <?php if ($subscriber->existing_member == 0) { ?>
 Your account details are shown below. A temporary password has been created for you. For security reasons please log in and change your password as soon as possible, by editing your profile.

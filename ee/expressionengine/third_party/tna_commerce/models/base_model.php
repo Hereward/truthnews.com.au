@@ -65,6 +65,7 @@ class Base_model extends CI_Model {
             'r_postal_code',
             'r_country',
             'payment_method',
+            'secret_gift',
         );
     }
     

@@ -164,7 +164,7 @@ class Tna_commerce_lib {
     }
 
     public function send_email_notification($params = array()) {
-        dev_log::write('send_email_notification');
+        dev_log::write("Send_email_notification to: {$params['customer_email']}");
         $plain_path = $params['plain_path']; //'email/cc_confirmation_plain';
         $html_path = $params['html_path']; //'email/cc_confirmation_html';
         //$customer_subject = 'Credit Card Payment received!'

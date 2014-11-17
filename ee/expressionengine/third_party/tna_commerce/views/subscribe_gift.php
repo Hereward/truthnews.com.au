@@ -3,6 +3,7 @@
 <form id="subscribe_form" name="subscribe_form" action="<?= $https_site_url ?>subscribe/payment_gift" method="post">
     <input type="hidden" name="create_member" value="1" />
     <input type="hidden" name="gift" value="1" />
+    <input type="hidden" name="include_extras" value="1" />
     {!-- <input type="hidden" name="include_extras" id ="include_extras" value="1"> --}
     
     <input type="hidden" name="subscription_type" id="subscription_type" value="yearly">
@@ -13,7 +14,7 @@
     
     <legend>Recipient Details</legend>
        
-  
+  {!--
 <div class="checkbox" style="display:none">
     
   <label>
@@ -21,6 +22,10 @@
       Yes, please send me the t-shirt &amp; DVD !
   </label>
 </div>
+  --}
+    
+    
+
     
     
     <div id='postage_settings'>
@@ -99,6 +104,14 @@
     <div class="form-group">
         <label for="r_postal_code">Postal Code/Zip</label>
         <input class="form-control" type="text" id="r_postal_code" name="r_postal_code" maxlength="100" value="<?= $r_postal_code ?>" />
+    </div>
+    
+    <div class="checkbox">
+    
+      <label>
+            <input name="secret_gift" id ="secret_gift" type="checkbox" value="1">
+            <strong>Hide details from recipient.</strong> By default your recipient will be advised that you have sent them this gift. If this box is checked, your identity will remain hidden.
+      </label>
     </div>
 
 

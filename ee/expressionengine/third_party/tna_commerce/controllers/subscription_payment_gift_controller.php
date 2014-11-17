@@ -68,7 +68,7 @@ class subscription_payment_gift_controller extends Base_Controller {
     }
 
     public function subscribe_success() {
-        dev_log::write('subscribe_success: 1');
+        dev_log::write('GIFT:subscribe_success: 1');
         //$this->member_id = $this->EE->uri->segment(3, 0);
         $cookie = $this->get_cookie();
 
@@ -79,6 +79,9 @@ class subscription_payment_gift_controller extends Base_Controller {
             dev_log::write("decrypted cookie = [$this->member_id]");
             $auth_code = $this->EE->uri->segment(3, 0);
             $this->subscriber = $this->EE->subscribers_model->get_subscriber($this->member_id);
+            
+
+            $subscriber_gift_details = $this->EE->subscribers_model->subscriber_gift_details($this->member_id);
 
             $countrylist = $this->EE->tna_commerce_lib->get_countrylist();
 
@@ -89,6 +92,7 @@ class subscription_payment_gift_controller extends Base_Controller {
 
             $vars = array(
                 'subscriber' => $this->subscriber,
+                'subscriber_gift_details' => $subscriber_gift_details,
                 'countrylist' => $countrylist,
                 'gateway_mode' => $this->EE->config->item('gateway_mode'),
             );

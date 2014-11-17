@@ -56,6 +56,7 @@
     <input type="hidden" id='r_country'  name='r_country' value="<?= $r_country?>" />
     <input type="hidden" id='r_postal_code' name='r_postal_code' value="<?= $r_postal_code?>" />
     <input type="hidden" id='r_state'  name='r_state' value="<?= $r_state?>" />
+    <input type="hidden" id='secret_gift'  name='secret_gift' value="<?= $secret_gift?>" />
     
 
     <legend>Card Holder Details</legend>

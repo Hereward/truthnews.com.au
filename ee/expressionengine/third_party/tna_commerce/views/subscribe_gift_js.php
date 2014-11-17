@@ -7,7 +7,7 @@
     });
     
     $("#postage_settings").show();
-    $('#tshirt_group').show();
+    //$('#tshirt_group').show();
     
 </script>
 

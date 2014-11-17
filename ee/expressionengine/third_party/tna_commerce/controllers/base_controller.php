@@ -197,6 +197,7 @@ abstract class Base_Controller {
                 'r_country',
                 'r_postal_code',
                 'r_state',
+                'secret_gift',
             );
              
              $form_defaults = array();
