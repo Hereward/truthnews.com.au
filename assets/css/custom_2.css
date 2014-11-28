@@ -1,4 +1,11 @@
+.subscribe_iframe {
+    overflow:hidden;
+    border-width: 0px;
+}
 
+.footer_banner {
+    border-width: 0px;
+}
 
 .index_carousel .glyphicon-chevron-right {
     top:43%;
