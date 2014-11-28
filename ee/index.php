@@ -1,4 +1,5 @@
 <?php
+require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
 /**
  * ExpressionEngine - by EllisLab
  *
