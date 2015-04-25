@@ -1,5 +1,5 @@
 <?php
-
+// small meaningless edit
 
 require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
 //dev_log::init('/mnt/ubuntu_shared/GIT/truthnews.com.au/logs/tna_log.txt',1);
