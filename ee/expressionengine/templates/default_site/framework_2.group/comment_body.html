@@ -5,6 +5,31 @@
     <h3>Comments</h3>
     <p>Please review the <a href="{path=terms-of-service}">Terms of Service</a> before reading or responding to comments.</p></p>
 
+    <div id="disqus_thread"></div>
+    <script>
+        /**
+         * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+         * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+         */
+
+         var disqus_config = function () {
+         this.page.url = "{embed:channel_url}/{embed:url_title}"; // Replace PAGE_URL with your page's canonical URL variable
+         this.page.identifier = "{embed:url_title}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+         };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+
+            s.src = '//truthnewsaustralia.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
     {exp:comment:entries site="{embed:site}" dynamic="off" entry_id="{embed:entry_id}" sort="asc" limit="20" paginate="bottom" }
         <div class="comment_entry">
            {comment}
@@ -15,6 +40,8 @@
             <p>Page {current_page} of {total_pages} pages {exp:low_replace find="index.php" replace=""}{pagination_links}{/exp:low_replace}</p>
         {/paginate}
     {/exp:comment:entries}
+
+
 {!--
     {if logged_out}
          <p style="text-align:center; border:2px dashed dimgray; padding:10px; margin:30px 5px 30px 5px; font-weight:bold;">In order to leave a comment you may need to <a href="{site_url}sign-in">register and sign in</a>.</p>
@@ -23,7 +50,9 @@
     {/if}
 --}
 
+    {!--
     {embed="default_site:framework_2/comment_form" site="{embed:site}" entry_id="{embed:entry_id}"}
+    --}
 
 
 </div>

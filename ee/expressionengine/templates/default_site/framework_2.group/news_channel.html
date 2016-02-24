@@ -25,7 +25,13 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
                 {if original_date}(Original: {original_date format="%Y-%m-%d"}){/if}
                 |
                 {if original_source}<a target="_blank" href="{original_source}">Source</a> | {/if}
+
+                {!--
                 <a href="{channel_url}/{url_title}">Permalink</a> | <a href="{channel_url}/{url_title}#comment_body">comments: {comment_total}</a>
+                --}
+
+                <a href="{channel_url}/{url_title}">Permalink</a> | <a href="{channel_url}/{url_title}#disqus_thread"></a>
+
                 {if original_author}<br/>By <span style="font-style:italic; font-weight:bold;">{original_author}</span>{/if}
             </p>
 {!--
@@ -67,7 +73,7 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
 
         {if embed:show_comments}
             {!-- {embed="facebook/fb_comments"} --}
-            {embed="framework_2/comment_body" site="default_site" entry_id="{entry_id}"}
+            {embed="framework_2/comment_body" site="default_site" entry_id="{entry_id}" url_title="{url_title}" channel_url="{channel_url}"}
         {/if}
     </div>
 
