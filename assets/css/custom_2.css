@@ -215,6 +215,10 @@ h3.recent_shows {
     text-align: center;
 }
 
+h3.terms {
+    font-size:18px;
+}
+
 
 
 
@@ -933,6 +937,10 @@ img {
 }
 
 */
+
+#subscribe_lightbox a, #subscribe_lightbox a:link, #subscribe_lightbox a:hover {
+    font-weight:bold;
+}
 
 
 
