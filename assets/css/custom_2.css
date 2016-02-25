@@ -931,6 +931,60 @@ img {
     max-width: 100%;
 }
 
+/* DISQUS */
+
+
+
+#disqus_comments {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    max-width: 298px;
+    overflow: hidden;
+    font-size:12px;
+}
+
+#disqus_comments .disqus_comment {
+    /*
+    background-color: white;
+    border-style: solid;
+    border-width: thin;
+    width: 500px;
+    */
+    margin-bottom: 20px;
+}
+
+#disqus_comments .disqus_comment img {
+    width:50px;
+    float:left;
+    margin:3px 10px 5px 0px;
+
+}
+
+#disqus_comments .disqus_comment p {
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+a.disqus_author, a.disqus_author:link, a.disqus_author:visited {
+    font-weight:bold;
+    /* margin-left:20px; */
+
+}
+
+a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
+    color:#939ea7;
+
+}
+
+
+
+
+.postRef {
+
+    text-align: left;
+}
+
+
 /*
 .row {
     margin-bottom: 10px;

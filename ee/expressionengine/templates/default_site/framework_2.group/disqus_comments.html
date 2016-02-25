@@ -1,0 +1,36 @@
+<div id="disqus_comments">
+
+   
+
+</div>
+
+
+<script>
+
+    $(document).ready(function() {
+
+        $commentDiv = $("#disqus_comments");
+
+        $.get("https://disqus.com/api/3.0/forums/listPosts.json?forum=tnra&limit=10&related=thread&api_key=i7L5mldjKuDiswmhaswrQt8k48fwFHEPlT5Umq8ZD984Zp57ThKjjaO5v34A71nD", function(res, code) {
+            //Good response?
+            if(res.code === 0) {
+                var result = "";
+                for(var i=0, len=res.response.length; i<len; i++) {
+                    var post = res.response[i];
+                    console.dir(post);
+                    var html = "<div class='disqus_comment'>";
+                    html += "<img src='" + post.author.avatar.small.permalink + "'>";
+                    //html += "<a class='disqus_author' href='"+ post.author.profileUrl + "'>" + post.author.name + "</a>";
+                    html += "<p class='disqus_comment_body'><a class='disqus_author' href='"+ post.author.profileUrl + "'>" + post.author.name + "</a>: "+post.raw_message+"</p>";
+                    msg_str = post.thread.title;
+                    html += "<p class='postRef'>Posted at " + post.createdAt + " on <a class='disqus_thread_link' href='"+ post.thread.link + "'>"+msg_str.substring(0, msg_str.length - 19).trim()+"</a></p>";
+                    html += "</div>";
+
+                    result+=html;
+                }
+                $commentDiv.html(result);
+            }
+        });
+    });
+</script>
+
