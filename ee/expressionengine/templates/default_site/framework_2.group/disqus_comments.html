@@ -23,10 +23,11 @@
                     //html += "<a class='disqus_author' href='"+ post.author.profileUrl + "'>" + post.author.name + "</a>";
                     html += "<p class='disqus_comment_body'><a class='disqus_author' href='"+ post.author.profileUrl + "'>" + post.author.name + "</a>: "+post.raw_message+"</p>";
                     msg_str = post.thread.title;
-                    html += "<p class='postRef'>Posted at " + post.createdAt + " on <a class='disqus_thread_link' href='"+ post.thread.link + "'>"+msg_str.substring(0, msg_str.length - 19).trim()+"</a></p>";
+                    html += "<p class='postRef'>Posted at " + post.createdAt + " on <a class='disqus_thread_link' href='"+ post.thread.link + "'>"  + msg_str + "</a></p>";
                     html += "</div>";
 
                     result+=html;
+                    // +msg_str.substring(0, msg_str.length - 19).trim()+
                 }
                 $commentDiv.html(result);
             }
