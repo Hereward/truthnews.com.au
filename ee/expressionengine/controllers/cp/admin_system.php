@@ -4,8 +4,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -31,6 +31,7 @@ class Admin_system extends CP_Controller {
 	{
 		parent::__construct();
 		$this->_restrict_prefs_access();
+		$this->lang->loadfile('homepage');
 	}
 
 	// --------------------------------------------------------------------
@@ -82,6 +83,20 @@ class Admin_system extends CP_Controller {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Software Registration
+	 *
+	 * @access	public
+	 * @return	void
+	 */
+	function software_registration()
+	{
+		$this->_restrict_prefs_access();
+		$this->_config_manager('software_registration', __FUNCTION__);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Config Manager
 	 *
 	 * Used to display the various preference pages
@@ -100,7 +115,7 @@ class Admin_system extends CP_Controller {
 			},
 			textExtraction: function(node) {
 				var c = $(node).children();
-				
+
 				if (c.length) {
 					return c.text();
 				}
@@ -116,12 +131,12 @@ class Admin_system extends CP_Controller {
 		$this->load->library('form_validation');
 		$this->load->model('admin_model');
 
-		$config_pages = array('general_cfg', 'cp_cfg', 'channel_cfg', 
-			'member_cfg', 'output_cfg', 'debug_cfg', 'db_cfg', 'security_cfg', 
-			'throttling_cfg', 'localization_cfg', 'email_cfg', 'cookie_cfg', 
-			'image_cfg', 'captcha_cfg', 'template_cfg', 'censoring_cfg', 
-			'mailinglist_cfg', 'emoticon_cfg', 'tracking_cfg', 'avatar_cfg', 
-			'search_log_cfg', 'recount_prefs'
+		$config_pages = array('general_cfg', 'cp_cfg', 'channel_cfg',
+			'member_cfg', 'output_cfg', 'debug_cfg', 'db_cfg', 'security_cfg',
+			'throttling_cfg', 'localization_cfg', 'email_cfg', 'cookie_cfg',
+			'image_cfg', 'captcha_cfg', 'template_cfg', 'censoring_cfg',
+			'mailinglist_cfg', 'emoticon_cfg', 'tracking_cfg', 'avatar_cfg',
+			'search_log_cfg', 'recount_prefs', 'software_registration'
 		);
 		if ( ! in_array($type, $config_pages))
 		{
@@ -131,13 +146,13 @@ class Admin_system extends CP_Controller {
 		if (count($_POST))
 		{
 			$this->load->helper('html');
-	
+
 			// Grab the field definitions for the settings of this type
-			$field_defs = $this->admin_model->get_config_fields($type);
-	
+			$field_defs = ee()->config->get_config_fields($type);
+
 			// Set validation rules
 			$rules = array();
-	
+
 			foreach($_POST as $key => $val)
 			{
 				$rules[] = array(
@@ -151,15 +166,13 @@ class Admin_system extends CP_Controller {
 			$this->form_validation->set_rules($rules);
 			$validated = $this->form_validation->run();
 
-			$vars = $this->_prep_view_vars($type);
+			$vars = ee()->config->prep_view_vars($type);
 			$vars['form_action'] = 'C=admin_system'.AMP.'M='.$return_loc;
 
 			if ($validated)
 			{
-				$this->_final_post_prep($type);
-				
 				$config_update = $this->config->update_site_prefs($_POST);
-		
+
 				if ( ! empty($config_update))
 				{
 					$this->session->set_flashdata('message_failure', ul($config_update, array('class' => 'bad_path_error_list')));
@@ -174,17 +187,36 @@ class Admin_system extends CP_Controller {
 			else
 			{
 				$vars['cp_messages']['error'] = $this->form_validation->error_string('', '');
-	
+
 				$this->cp->render('admin/config_pages', $vars);
-	
+
 				return;
 			}
 		}
 
 
 		// First view
-		$vars = $this->_prep_view_vars($type);
+		$vars = ee()->config->prep_view_vars($type);
 		$vars['form_action'] = 'C=admin_system'.AMP.'M='.$return_loc;
+
+		$vars['cp_notice'] = FALSE;
+		$vars['info_message_open'] = ($this->input->cookie('home_msg_state') != 'closed');
+
+		// Check to see if there are any items in the developer log
+		ee()->load->model('tools_model');
+		$unviewed_developer_logs = ee()->tools_model->count_unviewed_developer_logs();
+
+		if ($unviewed_developer_logs > 0)
+		{
+			$vars['cp_notice'] = sprintf(
+				lang('developer_logs'),
+				$unviewed_developer_logs,
+				BASE.AMP.'C=tools_logs'.AMP.'M=view_developer_log'
+			);
+
+			ee()->javascript->set_global('importantMessage.state', $vars['info_message_open']);
+		}
+
 
 		$this->cp->render('admin/config_pages', $vars);
 	}
@@ -192,200 +224,43 @@ class Admin_system extends CP_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Prep View Vars
-	 *
-	 * Populates form elements with the initial value, or the submitted
-	 * value in case of a form validation error
+	 * A validation callback for required email configuration strings only
+	 * if SMTP is the selected protocol method
 	 *
 	 * @access	public
-	 * @return	void
-	 */
-	function _prep_view_vars($type)
+	 * @param	string	$str	the string being validated
+	 * @return	boolean	Whether or not the string passed validation
+	 **/
+	public function _smtp_required_field($str)
 	{
-		$f_data = $this->admin_model->get_config_fields($type);
-		$subtext = $this->admin_model->get_config_field_subtext();
-
-		// Blast through the array
-		// If we're dealing with a database configuration we need to pull the data out of the DB
-		// config file. To make thigs simple we will set the DB config items as general config values
-		if ($type == 'db_cfg')
+		if ($this->input->post('mail_protocol') == 'smtp' && trim($str) == '')
 		{
-			require $this->config->database_path;
-
-			if ( ! isset($active_group))
-			{
-				$active_group = 'expressionengine';
-			}
-
-			if (isset($db[$active_group]))
-			{
-				$db[$active_group]['pconnect'] = ($db[$active_group]['pconnect'] === TRUE) ? 'y' : 'n';
-				$db[$active_group]['cache_on'] = ($db[$active_group]['cache_on'] === TRUE) ? 'y' : 'n';
-				$db[$active_group]['db_debug'] = ($db[$active_group]['db_debug'] === TRUE) ? 'y' : 'n';
-
-				$this->config->set_item('pconnect', $db[$active_group]['pconnect']);
-				$this->config->set_item('cache_on', $db[$active_group]['cache_on']);
-				$this->config->set_item('cachedir', $db[$active_group]['cachedir']);
-				$this->config->set_item('db_debug', $db[$active_group]['db_debug']);
-			}
+			$this->form_validation->set_message('_smtp_required_field', lang('empty_stmp_fields'));
+			return FALSE;
 		}
 
-		$this->load->helper('date');
-		$timezones = timezones();
-
-		foreach ($f_data as $name => $options)
-		{
-			$value = $this->config->item($name);
-
-			$sub = '';
-			$details = '';
-			$selected = '';
-
-			if (isset($subtext[$name]))
-			{
-				foreach ($subtext[$name] as $txt)
-				{
-					$sub .= lang($txt);
-				}
-			}
-
-			switch ($options[0])
-			{
-				case 's':
-					// Select fields
-					foreach ($options[1] as $k => $v)
-					{
-						$details[$k] = lang($v);
-
-						if ($this->form_validation->set_select($name, $k, ($k == $value)) != '')
-						{
-							$selected = $k;
-						}
-					}
-
-					break;
-				case 'r':
-					// Radio buttons
-					foreach ($options[1] as $k => $v)
-					{
-						// little cheat for some values popped into a build update
-						if ($value === FALSE)
-						{
-							// MSM override
-							// The key 'multiple_sites_enabled' is listed in admin_model->get_config_fields() as it must be,
-							// but its possible that this install doesn't have it available as a config option. In these cases
-							// the below code will cause neither "yes" or "no" to be preselected, but instead we want 
-							// "enable multiple site manager" in General Configuration to be "no".
-							if ($name == 'multiple_sites_enabled' AND $k == 'n')
-							{
-								$checked = TRUE;
-							}
-							else
-							{
-								$checked = (isset($options['2']) && $k == $options['2']) ? TRUE : FALSE;
-							}
-						}
-						else
-						{
-							$checked = ($k == $value) ? TRUE : FALSE;
-						}
-
-						$details[] = array('name' => $name, 'value' => $k, 'id' => $name.'_'.$k, 'label' => $v, 'checked' => $this->form_validation->set_radio($name, $k, $checked));
-					}
-					break;
-				case 't':
-					// Textareas
-
-					// The "kill_pipes" index instructs us to turn pipes into newlines
-					if (isset($options['1']['kill_pipes']) && $options['1']['kill_pipes'] === TRUE)
-					{
-						$text = str_replace('|', NL, $value);
-					}
-					else
-					{
-						$text = $value;
-					}
-
-					$rows = (isset($options['1']['rows'])) ? $options['1']['rows'] : '20';
-
-					$text = str_replace("\\'", "'", $text);
-
-					$details = array('name' => $name, 'class' => 'module_textarea', 'value' => $this->form_validation->set_value($name, $text), 'rows' => $rows, 'id' => $name);
-					break;
-				case 'f':
-					// Function calls
-					switch ($options['1'])
-					{
-						case 'language_menu'	:
-							$options[0] = 's';
-							$details = $this->admin_model->get_installed_language_packs();
-							$selected = $value;
-							break;
-						case 'fetch_encoding'	:
-							$options[0] = 's';
-							$details = $this->admin_model->get_xml_encodings();
-							$selected = $value;
-							break;
-						case 'site_404'			:
-							$options[0] = 's';
-							$details = $this->admin_model->get_template_list();
-							$selected = $value;
-							break;
-						case 'theme_menu'		:
-							$options[0] = 's';
-							$details = $this->admin_model->get_cp_theme_list();
-							$selected = $value;
-							break;
-						case 'timezone'			:
-							$options[0] = 'c';
-							$details = $this->localize->timezone_menu($value);
-							break;
-					}
-					break;
-				case 'p': // Fall through intended.
-				case 'i':
-					// Input fields
-					$details = array('name' => $name, 'value' => $this->form_validation->set_value($name, $value), 'id' => $name);
-
-					break;
-				
-			}
-
-			$vars['fields'][$name] = array('type' => $options[0], 'value' => $details, 'subtext' => $sub, 'selected' => $selected);
-		}
-
-		$vars['type'] = $type;
-
-		return $vars;	
+		return TRUE;
 	}
-
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Final POST Prep
+	 * Validates format of submitted license number
 	 *
-	 * Any special tweaking before $_POST is inserted
-	 * can happen here
-	 *
-	 * @access	public
-	 * @return	void
-	 */
-	function _final_post_prep($type)
+	 * @return vool
+	 **/
+	public function _valid_license_pattern($license)
 	{
-		if ($type == 'localization_cfg')
-		{
-			$config = $this->member_model->get_localization_default(TRUE);
-			
-			// Do we need to set the localization defaults to match the server?
-			if ($config['member_id'] = '')
-			{
-				array_merge($_POST, array('default_site_timezone' => $this->input->post('server_timezone'), 
-										'default_site_dst' => $this->input->post('daylight_savings')));
-			}
-		}		
-	}
+		$valid_pattern = valid_license_pattern($license);
 
+		if ( ! $valid_pattern)
+		{
+			$this->form_validation->set_message('_valid_license_pattern', lang('invalid_license_number'));
+			return FALSE;
+		}
+
+		return TRUE;
+	}
 
 	// --------------------------------------------------------------------
 
@@ -456,7 +331,7 @@ class Admin_system extends CP_Controller {
 		$this->_restrict_prefs_access();
 		$this->_config_manager('db_cfg', __FUNCTION__);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -483,9 +358,9 @@ class Admin_system extends CP_Controller {
 	{
 		// this page is only linked to from the mailinglist module
 		// change the breadcrumb for better navigation
-		
+
 		$modules = $this->cp->get_installed_modules();
-		
+
 		if (isset($modules['mailinglist']))
 		{
 			$this->lang->loadfile('mailinglist');
@@ -495,7 +370,7 @@ class Admin_system extends CP_Controller {
 			);
 		}
 
-		
+
 		$this->_restrict_prefs_access();
 		$this->_config_manager('mailinglist_cfg', __FUNCTION__);
 	}
@@ -553,7 +428,7 @@ class Admin_system extends CP_Controller {
 	function cookie_settings()
 	{
 		$this->_restrict_prefs_access();
-		
+
 		$this->lang->loadfile('email');
 		$this->_config_manager('cookie_cfg', __FUNCTION__);
 	}
@@ -613,8 +488,8 @@ class Admin_system extends CP_Controller {
 		$this->_restrict_prefs_access();
 		$this->_config_manager('emoticon_cfg', __FUNCTION__);
 	}
-	
-	
+
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -713,7 +588,7 @@ class Admin_system extends CP_Controller {
 			show_error(lang('unauthorized_access'));
 		}
 	}
-	
+
 
 }
 

@@ -4,8 +4,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -479,10 +479,15 @@ class Comment_mcp {
 				$col = 'comment';
 			}
 
+			$col = preg_replace('/[^\w-.]/', '', $col);
+
 			ee()->db->order_by($col, $dir);
 		}
 
-		ee()->db->where("(`exp_comments`.`name` LIKE '%".ee()->db->escape_like_str($this->_keywords)."%' OR `exp_comments`.`email` LIKE '%".ee()->db->escape_like_str($this->_keywords)."%' OR `exp_comments`.`comment` LIKE '%".ee()->db->escape_like_str($this->_keywords)."%')", NULL, TRUE);
+		if ($this->_keywords)
+		{
+			ee()->db->where("(`exp_comments`.`name` LIKE '%".ee()->db->escape_like_str($this->_keywords)."%' OR `exp_comments`.`email` LIKE '%".ee()->db->escape_like_str($this->_keywords)."%' OR `exp_comments`.`comment` LIKE '%".ee()->db->escape_like_str($this->_keywords)."%')", NULL, TRUE);
+		}
 
 		$comment_q = ee()->db->get_where(
 			'comments',

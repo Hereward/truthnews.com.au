@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2016, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -40,7 +40,7 @@ class CI_Loader {
 	protected $_ci_loaded_files		= array();
 	protected $_ci_models			= array();
 	protected $_ci_helpers			= array();
-	protected $_ci_varmap			= array('unit_test' => 'unit', 
+	protected $_ci_varmap			= array('unit_test' => 'unit',
 											'user_agent' => 'agent');
 
 	/**
@@ -55,24 +55,24 @@ class CI_Loader {
 		$this->_ci_helper_paths = array(APPPATH, BASEPATH);
 		$this->_ci_model_paths = array(APPPATH);
 		$this->_ci_view_paths = array(APPPATH.'views/'	=> TRUE);
-		
+
 		log_message('debug', "Loader Class Initialized");
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Set _base_classes variable
 	 *
 	 * This method is called once in CI_Controller.
 	 *
-	 * @param 	array 	
+	 * @param 	array
 	 * @return 	object
 	 */
 	public function set_base_classes()
 	{
 		$this->_base_classes =& is_loaded();
-		
+
 		return $this;
 	}
 
@@ -96,7 +96,7 @@ class CI_Loader {
 		{
 			return $this->_ci_classes[$class];
 		}
-				
+
 		return FALSE;
 	}
 
@@ -503,20 +503,36 @@ class CI_Loader {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Driver
+	 * Driver Loader
 	 *
-	 * Loads a driver library
+	 * Loads a driver library.
 	 *
-	 * @param	string	the name of the class
-	 * @param	mixed	the optional parameters
-	 * @param	string	an optional object name
-	 * @return	void
+	 * @param	string|string[]	$library	Driver name(s)
+	 * @param	array		$params		Optional parameters to pass to the driver
+	 * @param	string		$object_name	An optional object name to assign to
+	 *
+	 * @return	void|object|bool	Object or FALSE on failure if $library is a string
+	 *					and $object_name is set. void otherwise.
 	 */
 	public function driver($library = '', $params = NULL, $object_name = NULL)
 	{
-		if ( ! class_exists('CI_Driver_Library'))
+		if (is_array($library))
 		{
-			// we aren't instantiating an object here, that'll be done by the Library itself
+			foreach ($library as $driver)
+			{
+				$this->driver($driver);
+			}
+			return;
+		}
+
+		if ($library === '')
+		{
+			return FALSE;
+		}
+
+		if ( ! class_exists('CI_Driver_Library', FALSE))
+		{
+			// We aren't instantiating an object here, just making the base class available
 			require BASEPATH.'libraries/Driver.php';
 		}
 
@@ -538,13 +554,13 @@ class CI_Loader {
 	 * Prepends a parent path to the library, model, helper, and config path arrays
 	 *
 	 * @param	string
-	 * @param 	boolean 	
+	 * @param 	boolean
 	 * @return	void
 	 */
 	public function add_package_path($path, $view_cascade=TRUE)
 	{
 		$path = rtrim($path, '/').'/';
-		
+
 		array_unshift($this->_ci_library_paths, $path);
 		array_unshift($this->_ci_model_paths, $path);
 		array_unshift($this->_ci_helper_paths, $path);
@@ -588,11 +604,18 @@ class CI_Loader {
 
 		if ($path == '')
 		{
-			$void = array_shift($this->_ci_library_paths);
 			$void = array_shift($this->_ci_model_paths);
 			$void = array_shift($this->_ci_helper_paths);
-			$void = array_shift($this->_ci_view_paths);
 			$void = array_shift($config->_config_paths);
+			$removed = array_shift($this->_ci_library_paths);
+
+			// view paths only exist once, so we only remove it if all are gone
+			// or it was at the top.
+			if (array_search($removed, $this->_ci_library_paths) === FALSE OR
+				current($this->_ci_view_paths) == $removed + 'views/')
+			{
+				$void = array_shift($this->_ci_view_paths);
+			}
 		}
 		else
 		{
@@ -604,7 +627,7 @@ class CI_Loader {
 					unset($this->{$var}[$key]);
 				}
 			}
-			
+
 			if (isset($this->_ci_view_paths[$path.'views/']))
 			{
 				unset($this->_ci_view_paths[$path.'views/']);
@@ -643,7 +666,7 @@ class CI_Loader {
 		{
 			$$_ci_val = ( ! isset($_ci_data[$_ci_val])) ? FALSE : $_ci_data[$_ci_val];
 		}
-		
+
 		$file_exists = FALSE;
 
 		// Set the path to the requested file
@@ -665,11 +688,11 @@ class CI_Loader {
 					$file_exists = TRUE;
 					break;
 				}
-				
+
 				if ( ! $cascade)
 				{
 					break;
-				}				
+				}
 			}
 		}
 
@@ -981,7 +1004,7 @@ class CI_Loader {
 	 * The config/autoload.php file contains an array that permits sub-systems,
 	 * libraries, and helpers to be loaded automatically.
 	 *
-	 * This function is public, as it's used in the CI_Controller class.  
+	 * This function is public, as it's used in the CI_Controller class.
 	 * However, there is no reason you should ever needs to use it.
 	 *
 	 * @param	array

@@ -4,8 +4,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -137,7 +137,7 @@ class Metaweblog_api {
 
 							'mt.getCategoryList'		=> array('function' => 'Metaweblog_api.getCategoryList'),
 							'mt.get_postCategories'		=> array('function' => 'Metaweblog_api.get_postCategories'),
-							'mt.getPostCategories'		=> array('function' => 'Metaweblog_api.get_postCategories'),							
+							'mt.getPostCategories'		=> array('function' => 'Metaweblog_api.get_postCategories'),
 							'mt.publishPost'			=> array('function' => 'Metaweblog_api.publishPost'),
 							'mt.getRecentPostTitles'	=> array('function' => 'Metaweblog_api.getRecentPostTitles'),
 							'mt.setPostCategories'		=> array('function' => 'Metaweblog_api.setPostCategories'),
@@ -215,7 +215,6 @@ class Metaweblog_api {
 		/** ---------------------------------------*/
 
 		$this->title = $parameters['3']['title'];
-		$ping_urls	 = ( ! isset($parameters['3']['mt_tb_ping_urls'])) ? '' : implode("\n",$parameters['3']['mt_tb_ping_urls']);
 
 		$this->field_data['excerpt']  = ( ! isset($parameters['3']['mt_excerpt'])) ? '' : $parameters['3']['mt_excerpt'];
 		$this->field_data['content']  = ( ! isset($parameters['3']['description'])) ? '' : $parameters['3']['description'];
@@ -262,7 +261,7 @@ class Metaweblog_api {
 		{
 			$entry_date = ee()->localize->now;
 		}
-		
+
 		/** ---------------------------------
 		/**  Build our query string
 		/** --------------------------------*/
@@ -278,8 +277,7 @@ class Metaweblog_api {
 							'month'				=> gmdate('m', $entry_date),
 							'day'				=> gmdate('d', $entry_date),
 							'status'			=> $this->status,
-							'allow_comments'	=> $deft_comments,
-							'ping_servers'		=> array()
+							'allow_comments'	=> $deft_comments
 						  );
 
 		/** ---------------------------------------
@@ -376,7 +374,7 @@ class Metaweblog_api {
 		$entry_data['versioning_enabled'] = 'n';
 
 		$data = array_merge($metadata, $entry_data);
-		
+
 		if (count($this->categories) > 0)
 		{
 			foreach($this->categories as $cat_id => $cat_name)
@@ -399,14 +397,14 @@ class Metaweblog_api {
 		ee()->api->instantiate('channel_fields');
 
 		ee()->api_channel_fields->setup_entry_settings($this->channel_id, $data);
-				
+
 		if ( ! ee()->api_channel_entries->save_entry($data, $this->channel_id))
 		{
 			$errors = ee()->api_channel_entries->get_errors();
 
 			ee()->lang->loadfile('content');
 			$mssg = "\n";
-			
+
 			foreach ($errors as $val)
 			{
 				$mssg .= lang($val)."\n";
@@ -414,7 +412,7 @@ class Metaweblog_api {
 
 			return ee()->xmlrpc->send_error_message('804', lang('new_entry_errors').$mssg);
 		}
-		
+
 		//Return Entry ID of new entry - defaults to string, so nothing fancy
 		$response = ee()->api_channel_entries->entry_id;
 
@@ -500,8 +498,6 @@ class Metaweblog_api {
 		/** ---------------------------------------*/
 
 		$this->title = $parameters['3']['title'];
-
-		$ping_urls		 = ( ! isset($parameters['3']['mt_tb_ping_urls'])) ? '' : implode("\n",$parameters['3']['mt_tb_ping_urls']);
 
 		$this->field_data['excerpt']  = ( ! isset($parameters['3']['mt_excerpt'])) ? '' : $parameters['3']['mt_excerpt'];
 		$this->field_data['content']  = ( ! isset($parameters['3']['description'])) ? '' : $parameters['3']['description'];
@@ -752,7 +748,7 @@ class Metaweblog_api {
 		/** ---------------------------------------*/
 
 		$sql = "SELECT DISTINCT(wt.entry_id), wt.title, wt.url_title, wt.channel_id,
-				wt.author_id, wt.entry_date, wt.allow_comments, 
+				wt.author_id, wt.entry_date, wt.allow_comments,
 				exp_channel_data.*
 				FROM	exp_channel_titles wt, exp_channel_data
 				WHERE wt.entry_id = exp_channel_data.entry_id ";
@@ -816,7 +812,7 @@ class Metaweblog_api {
 		{
 			$convert_breaks = 'none';
 			$link = reduce_double_slashes($this->comment_url.'/'.$query->row('url_title') .'/');
-			
+
 			// Fields:  Textarea and Text Input Only
 
 			$this->field_data = array('excerpt' => '', 'content' => '', 'more' => '', 'keywords' => '');
@@ -826,7 +822,7 @@ class Metaweblog_api {
 				if ($this->parse_type === TRUE)
 	  			{
 	  				$settings['text_format'] = $row['field_ft_'.$this->excerpt_field];
-	  
+
 					$this->field_data['excerpt'] = ee()->typography->parse_type($row['field_id_'.$this->excerpt_field], $settings);
 				}
 				else
@@ -842,7 +838,7 @@ class Metaweblog_api {
 				if ($this->parse_type === TRUE)
 	  			{
 	  				$settings['text_format'] = $row['field_ft_'.$this->content_field];
-	  
+
 					$this->field_data['content'] = ee()->typography->parse_type($row['field_id_'.$this->content_field], $settings);
 				}
 				else
@@ -856,7 +852,7 @@ class Metaweblog_api {
 				if ($this->parse_type === TRUE)
 	  			{
 	  				$settings['text_format'] = $row['field_ft_'.$this->more_field];
-	  
+
 					$this->field_data['more'] = ee()->typography->parse_type($row['field_id_'.$this->more_field], $settings);
 				}
 				else
@@ -870,7 +866,7 @@ class Metaweblog_api {
 				if ($this->parse_type === TRUE)
 	  			{
 	  				$settings['text_format'] = $row['field_ft_'.$this->keywords_field];
-	  
+
 					$this->field_data['keywords'] = ee()->typography->parse_type($row['field_id_'.$this->keywords_field], $settings);
 				}
 				else
@@ -902,7 +898,6 @@ class Metaweblog_api {
 			}
 
 			// Entry Data to XML-RPC form
-			$pings = array();
 			$entry_data = array(array(
 										'userid' =>
 										array($row['author_id'],'string'),
@@ -931,9 +926,7 @@ class Metaweblog_api {
 										'categories' =>
 										array($cat_array,'array'),
 										'mt_allow_comments' =>
-										array(($row['allow_comments'] == 'y') ? 1 : 0,'int'),
-										'mt_tb_ping_urls' =>
-										array($pings,'array')
+										array(($row['allow_comments'] == 'y') ? 1 : 0,'int')
 										),
 									'struct');
 
@@ -1083,7 +1076,7 @@ class Metaweblog_api {
 
 				$cat['categoryId'] = array($row['cat_id'],'string');
 		  		$cat['categoryName'] = array($row['cat_name'],'string');
-		  
+
 		  		array_push($cats, array($cat, 'struct'));
 			}
 		}
@@ -1235,14 +1228,14 @@ class Metaweblog_api {
 	function fetch_member_data($username, $password)
 	{
 		ee()->load->library('auth');
-		
+
 		if (FALSE == ($auth = ee()->auth->authenticate_username($username, $password)))
 		{
 			return FALSE;
 		}
 
 		// load userdata from Auth object, a few fields from the members table, but most from the group
-		
+
 		foreach (array('screen_name', 'member_id', 'email', 'url', 'group_id') as $member_item)
 		{
 			$this->userdata[$member_item] = $auth->member($member_item);
@@ -1339,7 +1332,7 @@ class Metaweblog_api {
 		  		$cat['categoryName']	= array($row['cat_name'],'string');
 		  		$cat['htmlUrl']			= array($link,'string');
 		  		$cat['rssUrl']			= array($link,'string'); // No RSS URL for Categories
-		  
+
 		  		array_push($cats, array($cat, 'struct'));
 			}
 		}
@@ -1389,7 +1382,7 @@ class Metaweblog_api {
 
 				$cat['categoryId']   = array($row['cat_id'],'string');
 		  		$cat['categoryName'] = array($row['cat_name'],'string');
-		  
+
 		  		array_push($cats, array($cat, 'struct'));
 			}
 		}
@@ -1544,7 +1537,7 @@ class Metaweblog_api {
 		{
 			return ee()->xmlrpc->send_error_message('808', ee()->lang->line('invalid_access'));
 		}
-		
+
 		ee()->session->userdata = array_merge(
 			ee()->session->userdata,
 			array(
@@ -1613,10 +1606,12 @@ class Metaweblog_api {
 			}
 		}
 
-		ee()->db->select('server_path, url');
-		$query = ee()->db->get_where('upload_prefs', array('id' => $this->upload_dir));
+		ee()->load->model('file_upload_preferences_model');
 
-		if ($query->num_rows() == 0)
+		$upload_prefs = ee()->file_upload_preferences_model->get_file_upload_preferences(NULL, $this->upload_dir);
+
+
+		if (empty($upload_prefs))
 		{
 			return ee()->xmlrpc->send_error_message('803', ee()->lang->line('invalid_access'));
 		}
@@ -1624,15 +1619,15 @@ class Metaweblog_api {
 		/** -------------------------------------
 		/**  upload the image
 		/** -------------------------------------*/
-		
+
 		ee()->load->library('filemanager');
-		
+
 		// Disable XSS Filtering
 		ee()->filemanager->xss_clean_off();
-		
+
 		// Figure out the FULL file path
 		$file_path = ee()->filemanager->clean_filename(
-			$parameters['3']['name'], 
+			$parameters['3']['name'],
 			$this->upload_dir,
 			array('ignore_dupes' => FALSE)
 		);
@@ -1645,20 +1640,23 @@ class Metaweblog_api {
 			$directory = dirname($file_path);
 			$file_path = realpath(substr($directory, 1)).'/'.$filename;
 		}
-		
-		// Upload the file and check for errors
-		if (file_put_contents($file_path, $parameters['3']['bits']) === FALSE)
+
+		// Upload the file
+		$config = array('upload_path' => dirname($file_path));
+		ee()->load->library('upload', $config);
+
+		if (ee()->upload->raw_upload($filename, $parameters['3']['bits']) === FALSE)
 		{
 			return ee()->xmlrpc->send_error_message(
-				'810', 
+				'810',
 				ee()->lang->line('unable_to_upload')
 			);
 		}
-		
+
 		// Send the file
 		$result = ee()->filemanager->save_file(
-			$file_path, 
-			$this->upload_dir, 
+			$file_path,
+			$this->upload_dir,
 			array(
 				'title'     => $filename,
 				'path'      => dirname($file_path),
@@ -1670,7 +1668,7 @@ class Metaweblog_api {
 		if ($result['status'] === FALSE)
 		{
 			ee()->xmlrpc->send_error_message(
-				'810', 
+				'810',
 				$result['message']
 			);
 		}
@@ -1679,7 +1677,7 @@ class Metaweblog_api {
 		$response = array(
 			array(
 				'url' => array(
-					$query->row('url').$filename,
+					$upload_prefs['url'].$filename,
 					'string'
 				),
 			),
@@ -1746,7 +1744,7 @@ class Metaweblog_api {
 
 		ee()->db->select('channel_id, channel_title, channel_url');
 		ee()->db->where_in('channel_id', $this->userdata['assigned_channels']);
-		
+
 		$query = ee()->db->get('channels');
 
 		if ($query->num_rows() == 0)
@@ -1864,7 +1862,7 @@ class Metaweblog_api {
 	{
 		// Always available
 		$plugins = array('br', 'xhtml');
-		
+
 		// Additional first or third-party plugins
 		ee()->load->library('addons');
 
@@ -1872,12 +1870,12 @@ class Metaweblog_api {
 		{
 			$plugins[] = strtolower($plugin['class']);
 		}
-		
+
 		sort($plugins);
-		
+
 		// Add None as the first option
 		$plugins = array_merge(array('none'), $plugins);
-		
+
 		return $plugins;
 	}
 
@@ -1906,7 +1904,7 @@ class Metaweblog_api {
 		{
 			$field_data = '';
 			$field_fmt = '';
-			
+
 			if ($which == 'edit')
 			{
 				$field_data = ( ! isset( $resrow['field_id_'.$row['field_id']])) ? '' : $resrow['field_id_'.$row['field_id']];
@@ -1918,7 +1916,7 @@ class Metaweblog_api {
 				$field_fmt	= $row['field_fmt'];
 			}
 
-			// Settings that need to be prepped			
+			// Settings that need to be prepped
 			$settings = array(
 				'field_instructions'	=> trim($row['field_instructions']),
 				'field_text_direction'	=> ($row['field_text_direction'] == 'rtl') ? 'rtl' : 'ltr',
@@ -1928,7 +1926,7 @@ class Metaweblog_api {
 			);
 
 			$ft_settings = array();
-			
+
 			if (isset($row['field_settings']) && strlen($row['field_settings']))
 			{
 				$ft_settings = unserialize(base64_decode($row['field_settings']));

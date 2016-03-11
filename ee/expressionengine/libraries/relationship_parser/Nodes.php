@@ -4,13 +4,13 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.6
  * @filesource
  */
- 
+
 // ------------------------------------------------------------------------
 
 /**
@@ -115,6 +115,11 @@ class ParseNode extends EE_TreeNode {
 	public function add_entry_id($parent, $child)
 	{
 		$ids =& $this->data['entry_ids'];
+
+		if (empty($child))
+		{
+			$child = array();
+		}
 
 		if ( ! isset($ids[$parent]))
 		{

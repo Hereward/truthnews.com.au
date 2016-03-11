@@ -4,13 +4,30 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
  */
- 
+
+// ------------------------------------------------------------------------
+
+/**
+ * ExpressionEngine XID Marker Interface
+ *
+ * Implementing this will enforce strict XID checks on all requests to
+ * the class (if secure forms are enabled). Without it, the security model
+ * is a little more lax until third parties have time to adapt.
+ *
+ * @package		ExpressionEngine
+ * @subpackage	Core
+ * @category	Core
+ * @author		EllisLab Dev Team
+ * @link		http://ellislab.com
+ */
+interface Strict_XID {}
+
 // ------------------------------------------------------------------------
 
 /**
@@ -24,52 +41,55 @@
  */
 class EE_Security extends CI_Security {
 
-	private $_xid_ttl = 7200;
-	
-	// Small note, if you feel the urge to add a constructor,
-	// do not call get_instance(). The CI Security library
-	// is sometimes instantiated before the controller is loaded.
-	// i.e. when turning CI's csrf_protection on. Which you shouldn't
-	// do in EE anywho. -pk
-
-	// --------------------------------------------------------------------
+	// Flags for have_valid_xid()
+	const CSRF_STRICT = 1;	// require single-use token for ajax requests
+	const CSRF_EXEMPT = 2;	// opt-out of xid checks
 
 	/**
-	 * Check and Validate Form XID in Post
+	 * Check and Validate Form CSRF tokens
 	 *
-	 * Checks the post data for a form XID and then validates that XID.
-	 * The XID -- regardless of whether or not it checks out as valid
-	 * -- will then be deleted and a new one generated.  If the validation
-	 * check fails, we'll return false and the caller should then show
-	 * an appropriate error.
-	 * 
+	 * Checks any POST and PUT data for a valid csrf tokens. The main
+	 * processing happens in the csrf library which differentiates between
+	 * logged in and logged out users.
+	 *
 	 * @access public
-	 * @return boolean FALSE if there is an invalid XID, TRUE if valid or no XID 
+	 * @return boolean FALSE if there is an invalid XID, TRUE if valid or no XID
 	 */
-	public function have_valid_xid()
+	public function have_valid_xid($flags = self::CSRF_STRICT)
 	{
-		$hash = '';
-		
-		$EE = get_instance();	
-			
-		if ($EE->config->item('secure_forms') == 'y')
+		$is_valid = FALSE;
+
+		// Check the token if we must
+		ee()->load->library('csrf');
+
+		if (($flags & self::CSRF_EXEMPT) || // exempt trumps all
+			(AJAX_REQUEST && REQ != 'CP' && ! ($flags & self::CSRF_STRICT)) || // non-cp ajax only gets checked for strict mode
+			bool_config_item('disable_csrf_protection')) // disabled
 		{
-			if (count($_POST) > 0)
-			{
-				if ( ! isset($_POST['XID'])
-					OR ! $this->secure_forms_check($_POST['XID']))
-				{
-					return FALSE;
-				}
-				
-				unset($_POST['XID']);
-			}
-			
-			$hash = $this->generate_xid();
+			$is_valid = TRUE;
 		}
-		
-		define('XID_SECURE_HASH', $hash);
-		return TRUE;
+		// otherwise, run the check
+		else
+		{
+			$is_valid = ee()->csrf->check();
+		}
+
+		// Retrieve the current token
+		$csrf_token	= ee()->csrf->get_user_token();
+
+		// Set the constant and the legacy constants. Le sigh.
+		define('CSRF_TOKEN', $csrf_token);
+		define('REQUEST_XID', $csrf_token);
+		define('XID_SECURE_HASH', $csrf_token);
+
+		// Send the header and legacy header for ajax requests
+		if (AJAX_REQUEST && ee()->input->server('REQUEST_METHOD') == 'POST')
+		{
+			header('X-CSRF-TOKEN: '.CSRF_TOKEN);
+			header('X-EEXID: '.CSRF_TOKEN);
+		}
+
+		return $is_valid;
 	}
 
 	// --------------------------------------------------------------------
@@ -81,83 +101,53 @@ class EE_Security extends CI_Security {
 	 * @return	bool
 	 */
 	public function secure_forms_check($xid)
-	{	
-		$check = $this->check_xid($xid);
+	{
+		ee()->load->library('logger');
+		ee()->logger->deprecated('2.8');
 
-		if ( ! (REQ == 'CP' &&  AJAX_REQUEST))
-		{
-			$this->delete_xid($xid);
-		}
-
-		return $check;
+		// third party code request handling code should not run before our
+		// check, so if we get here, it's true
+		return TRUE;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
-	 * Check for Valid Security Hash
+	 * Check for a Valid Security Hash
 	 *
-	 * @param 	string
+	 * This method does not mark the hash as used, you probably want
+	 * the secure_forms_check() method instead.
+	 *
+	 * @param	string
 	 * @return	bool
 	 */
-	public function check_xid($xid)
+	public function check_xid($xid = REQUEST_XID)
 	{
-		$EE = get_instance();
-		
-		if ($EE->config->item('secure_forms') != 'y')
-		{
-			return TRUE;
-		}
-		
-		if ( ! $xid)
-		{
-			return FALSE;
-		}
+		ee()->load->library('logger');
+		ee()->logger->deprecated('2.8');
 
-		$total = $EE->db->where(array(
-				'hash' 			=> $xid,
-				'session_id' 	=> $EE->session->userdata('session_id'),
-				'date >' 		=> $EE->localize->now - $this->_xid_ttl
-			))
-			->from('security_hashes')
-			->count_all_results();
-		
-		if ($total === 0)
-		{
-			return FALSE;
-		}
-		
-		return TRUE;		
+		// third party code request handling code should not run before our
+		// check, so if we get here, it's true
+		return TRUE;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Generate Security Hash
 	 *
+	 * @param	int   number of xids to create
+	 * @param	bool  return as array even if $count = 1
 	 * @return String XID generated
 	 */
 	public function generate_xid($count = 1, $array = FALSE)
 	{
-		$EE = get_instance();
+		ee()->load->library('logger');
+		ee()->logger->deprecated('2.8', 'the CSRF_TOKEN constant');
 
-		$hashes = array();
-		$inserts = array();
+		$hashes = array_fill(0, $count, CSRF_TOKEN);
 
-		for ($i = 0; $i < $count; $i++)
-		{
-			$hash = $EE->functions->random('encrypt');
-			$inserts[] = array(
-				'date' 			=> $EE->localize->now,
-				'session_id'	=> $EE->session->userdata('session_id'),
-				'hash' 			=> $hash
-			);
-			$hashes[] = $hash;	
-		}
-		
-		$EE->db->insert_batch('security_hashes', $inserts);
-
-		return (count($hashes) > 1 OR $array) ? $hashes : $hashes[0];
+		return ($count > 1 OR $array) ? $hashes : $hashes[0];
 	}
 
 	// --------------------------------------------------------------------
@@ -168,20 +158,33 @@ class EE_Security extends CI_Security {
 	 * @param 	string
 	 * @return	void
 	 */
-	public function delete_xid($xid)
+	public function delete_xid($xid = REQUEST_XID)
 	{
-		$EE = get_instance();
-		
-		if ($EE->config->item('secure_forms') != 'y' OR $xid === FALSE)
-		{
-			return;
-		}
+		ee()->load->library('logger');
+		ee()->logger->deprecated('2.8');
 
-		$EE->db->where('hash', $xid)
-			->or_where('date <', $EE->localize->now - $this->_xid_ttl)
-			->delete('security_hashes');
-		
-		return;		
+		return;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Restore the XID if it was not used.
+	 *
+	 * This is used when we show an error to the user instead of using
+	 * form validation. In some ways that means it's a stopgap measure,
+	 * but a necessary one since this is the default behavior on the
+	 * frontend.
+	 *
+	 * @param 	string
+	 * @return	void
+	 */
+	public function restore_xid($xid = REQUEST_XID)
+	{
+		ee()->load->library('logger');
+		ee()->logger->deprecated('2.8');
+
+		return;
 	}
 
 	// --------------------------------------------------------------------
@@ -191,11 +194,49 @@ class EE_Security extends CI_Security {
 	 */
 	public function garbage_collect_xids()
 	{
-		$EE = get_instance();
-		$EE->db->where('date <', $EE->localize->now - $this->_xid_ttl)
-			->delete('security_hashes');
+		ee()->load->library('logger');
+		ee()->logger->deprecated('2.8');
+
+		return;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Get CSRF Hash
+	 *
+	 * Compatibility addition so we can show a deprecation error for the
+	 * strange case where a third party is calling CI's csrf handling.
+	 * No one should be affected by this.
+	 *
+	 * @return 	string 	self::_csrf_hash
+	 */
+	public function get_csrf_hash()
+	{
+		ee()->load->library('logger');
+		ee()->logger->deprecated('2.8');
+
+		return CSRF_TOKEN;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Get CSRF Token Name
+	 *
+	 * Compatibility addition so we can show a deprecation error for the
+	 * strange case where a third party is calling CI's csrf handling.
+	 * No one should be affected by this.
+	 *
+	 * @return 	string 	self::csrf_token_name
+	 */
+	public function get_csrf_token_name()
+	{
+		ee()->load->library('logger');
+		ee()->logger->deprecated('2.8');
+
+		return 'csrf_token';
+	}
 }
 // END CLASS
 

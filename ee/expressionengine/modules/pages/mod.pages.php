@@ -4,8 +4,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -34,12 +34,12 @@ class Pages {
 		// Make a local reference to the ExpressionEngine super object
 		$this->EE =& get_instance();
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Output Javascript
-	 * 
+	 *
 	 * Outputs Javascript files, triggered most commonly by an action request,
 	 * but also available as a tag if desired.
 	 *
@@ -54,7 +54,7 @@ class Pages {
 		// Always include the current site
 
 		$site_names = explode('|', $sites);
-		
+
 		if ( ! in_array($current_site, $site_names))
 		{
 			$site_names[] = $current_site;
@@ -80,11 +80,11 @@ class Pages {
 				}
 			}
 		}
-		
+
 		// Update config
 
 		ee()->config->set_item('site_pages', $new_pages);
-		
+
 		return '';
 	}
 }

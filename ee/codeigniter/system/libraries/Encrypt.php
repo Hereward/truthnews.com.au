@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2016, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -335,14 +335,15 @@ class CI_Encrypt {
 	{
 		$data = $this->_remove_cipher_noise($data, $key);
 		$init_size = mcrypt_get_iv_size($this->_get_cipher(), $this->_get_mode());
+		$mb_adjusted_data_length =  (MB_ENABLED) ? mb_strlen($data, 'ascii') : strlen($data);
 
-		if ($init_size > strlen($data))
+		if ($init_size > $mb_adjusted_data_length)
 		{
 			return FALSE;
 		}
 
-		$init_vect = substr($data, 0, $init_size);
-		$data = substr($data, $init_size);
+		$init_vect = (MB_ENABLED) ? mb_substr($data, 0, $init_size, 'ascii') : substr($data, 0, $init_size);
+		$data = (MB_ENABLED) ? mb_substr($data, $init_size, mb_strlen($data, 'ascii'), 'ascii') : substr($data, $init_size);
 		return rtrim(mcrypt_decrypt($this->_get_cipher(), $key, $data, $this->_get_mode(), $init_vect), "\0");
 	}
 
@@ -363,10 +364,11 @@ class CI_Encrypt {
 	function _add_cipher_noise($data, $key)
 	{
 		$keyhash = $this->hash($key);
-		$keylen = strlen($keyhash);
+		$keylen = (MB_ENABLED) ? mb_strlen($keyhash, 'ascii') : strlen($keyhash);
 		$str = '';
+		$len = (MB_ENABLED) ? mb_strlen($data, 'ascii') : strlen($data);
 
-		for ($i = 0, $j = 0, $len = strlen($data); $i < $len; ++$i, ++$j)
+        for ($i = 0, $j = 0, $len; $i < $len; ++$i, ++$j)
 		{
 			if ($j >= $keylen)
 			{
@@ -394,10 +396,11 @@ class CI_Encrypt {
 	function _remove_cipher_noise($data, $key)
 	{
 		$keyhash = $this->hash($key);
-		$keylen = strlen($keyhash);
+		$keylen = (MB_ENABLED) ? mb_strlen($keyhash, 'ascii') : strlen($keyhash);
 		$str = '';
+		$len = (MB_ENABLED) ? mb_strlen($data, 'ascii') : strlen($data);
 
-		for ($i = 0, $j = 0, $len = strlen($data); $i < $len; ++$i, ++$j)
+		for ($i = 0, $j = 0, $len; $i < $len; ++$i, ++$j)
 		{
 			if ($j >= $keylen)
 			{
@@ -537,6 +540,64 @@ class CI_Encrypt {
 		{
 			return sha1($str);
 		}
+	}
+	// --------------------------------------------------------------------
+
+	/**
+	 * Creates a signed hash value using hash_hmac()
+	 *
+	 * @param string $data	 Content to hash
+	 * @param mixed	$key Secret key, defaults to DB username.password if empty
+	 * @param string $algo hashing algorithm, defaults to md5
+	 * @return 	mixed   NULL if there is no data
+	 * 					FALSE if the hashing algorithm is unknown
+	 * 	        		String consisting of the calculated message digest as
+	 *                  lowercase hexits
+	 *
+	 */
+	public function sign($data, $key = NULL, $algo = 'md5')
+	{
+		if (empty($data))
+		{
+			return NULL;
+		}
+
+		$key = (empty($key)) ? ee()->db->username.ee()->db->password : $key;
+
+    	$token = hash_hmac($algo, $data, $key);
+
+    	return $token;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Verify the signed data hash
+	 *
+	 * @param string $data Current content
+	 * @param string $signed_data Hashed content to compare to
+	 * @param mixed	$key Secret key
+	 * @param string $algo hashing algorithm, defaults to md5
+	 * @return 	mixed   NULL if there is no data
+	 * 					FALSE if the signed data is not verified
+	 * 	        		TRUE if the signed data is verified
+	 *
+	 */
+	public function verify_signature($data, $signed_data, $key = NULL, $algo = 'md5')
+	{
+		if (empty($data))
+		{
+			return NULL;
+		}
+
+		 $new_sig = $this->sign($data, $key, $algo);
+
+		if ($new_sig === $signed_data)
+		{
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 
 }

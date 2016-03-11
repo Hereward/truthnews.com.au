@@ -38,6 +38,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  * 
  */
 	$system_path = "";
+    //$system_path = './ee';
 
 /*
  * --------------------------------------------------------------------

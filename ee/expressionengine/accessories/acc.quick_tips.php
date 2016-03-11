@@ -4,8 +4,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -16,7 +16,7 @@
 /**
  * ExpressionEngine Learning Accessory
  *
- * Currently this Accessory is only available in English, thus it doesn't use any 
+ * Currently this Accessory is only available in English, thus it doesn't use any
  * language files.
  *
  * @package		ExpressionEngine
@@ -53,7 +53,7 @@ class Quick_tips_acc {
 	 */
 	function __construct()
 	{
-		
+
 		$this->EE =& get_instance();
 		ee()->load->helper('array');
 	}

@@ -14,6 +14,8 @@
 
     <div class="row">
         <div class="col-md-9 col-lg-8">
+
+            {!--
             <div class="row">
                 <div class="col-lg-7 visible-lg">
                     {embed="framework_2/carousel"}
@@ -24,6 +26,7 @@
                      </div>
                 </div>
             </div>
+            --}
 
 
 
@@ -37,16 +40,18 @@
 
             {/if}
 
+            {!--
             {if "{exp:tna_utils:is_platform type='computer'}" == 1 || "{exp:tna_utils:is_platform type='tablet'}" == 1}
                 <div class="top_banner_large">{embed=ad_zones/responsive_adsense}</div>
             {/if}
+            --}
             
             
 
 
 
             <div class="news_channel_home_page_container">
-              <h3 class="recent_shows">Recent News &amp; Podcasts</h3>
+              {!-- <h3 class="recent_shows">Recent News &amp; Podcasts</h3> --}
 
               {embed="framework_2/news_channel" channel="tna|tna_news|911oz" search="" limit="8"}
             </div>

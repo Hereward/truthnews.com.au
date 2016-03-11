@@ -1,16 +1,13 @@
 <?php
-// small meaningless edit
-
 require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
-//dev_log::init('/mnt/ubuntu_shared/GIT/truthnews.com.au/logs/tna_log.txt',1);
 
 /**
  * ExpressionEngine - by EllisLab
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  */
@@ -26,11 +23,11 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  * Indicate the new name and/or path here. The path can be relative
  * or it can be a full server path.
  *
- * http://ellislab.com/expressionengine/user-guide/installation/best_practices.html
- * 
+ * https://docs.expressionengine.com/v2/installation/best_practices.html
+ *
  */
+	//$system_path = './system';
     $system_path = './ee';
-
 
 
 /*
@@ -39,16 +36,16 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  * --------------------------------------------------------------------
  *
  * Uncomment the following variables if you are using the Multiple
- * Site Manager: http://ellislab.com/expressionengine/user-guide/cp/sites
+ * Site Manager: https://docs.expressionengine.com/v2/cp/sites
  *
  * Set the Short Name of the site this file will display, the URL of
  * this site's admin.php file, and the main URL of the site (without
- * index.php) 
+ * index.php)
  *
  */
- //  $assign_to_config['site_name']  = 'domain2_short_name'; 
- //  $assign_to_config['cp_url'] = 'http://domain2.com/admin.php'; 
- //  $assign_to_config['site_url'] = 'http://domain2.com'; 
+ //  $assign_to_config['site_name']  = 'domain2_short_name';
+ //  $assign_to_config['cp_url'] = 'http://domain2.com/admin.php';
+ //  $assign_to_config['site_url'] = 'http://domain2.com';
 
 
 /*
@@ -57,10 +54,10 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  * --------------------------------------------------------------------
  *
  * PHP and database errors are normally displayed dynamically based
- * on the authorization level of each user accessing your site.  
- * This variable allows the error reporting system to be overridden, 
- * which can be useful for low level debugging during site development, 
- * since errors happening before a user is authenticated will not normally 
+ * on the authorization level of each user accessing your site.
+ * This variable allows the error reporting system to be overridden,
+ * which can be useful for low level debugging during site development,
+ * since errors happening before a user is authenticated will not normally
  * be shown.  Options:
  *
  *	$debug = 0;  Default setting. Errors shown based on authorization level
@@ -69,9 +66,9 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  *
  * NOTE: Enabling this override can have security implications.
  * Enable it only if you have a good reason to.
- * 
+ *
  */
-	$debug = 0; 
+	$debug = 0;
 
 /*
  * --------------------------------------------------------------------
@@ -82,7 +79,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  * config class. This allows you to set custom config items or override
  * any default config values found in the config.php file.  This can
  * be handy as it permits you to share one application between more then
- * one front controller file, with each file containing different 
+ * one front controller file, with each file containing different
  * config values.
  *
  * Un-comment the $assign_to_config array below to use this feature
@@ -146,7 +143,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  * --------------------------------------------------------------------
  *  Now that we know the path, set the main constants
  * --------------------------------------------------------------------
- */	
+ */
 	// The name of THIS file
 	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
@@ -155,13 +152,13 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
 
  	// Path to the system folder
 	define('BASEPATH', str_replace("\\", "/", $system_path.'codeigniter/system/'));
-	
+
 	// Path to the "application" folder
 	define('APPPATH', $system_path.'expressionengine/');
-	
+
 	// Path to the front controller (this file)
 	define('FCPATH', str_replace(SELF, '', __FILE__));
-	
+
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(str_replace("\\", "/", $system_path), '/'), '/'), '/'));
 
@@ -172,16 +169,15 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  * --------------------------------------------------------------------
  *  Set the error reporting level
  * --------------------------------------------------------------------
- */	
+ */
 	if (DEBUG == 1)
 	{
-		error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+		error_reporting(E_ALL);
 		@ini_set('display_errors', 1);
 	}
 	else
 	{
 		error_reporting(0);
-                @ini_set('display_errors', 0);
 	}
 
 /*

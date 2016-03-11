@@ -4,8 +4,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -32,7 +32,7 @@ class Hidden_ft extends EE_Fieldtype {
 	// Parser Flag (preparse pairs?)
 	var $has_array_data = FALSE;
 
-	
+
 	function display_field($data)
 	{
 		ee()->javascript->set_global('publish.hidden_fields', array($this->field_id => $this->field_name));
