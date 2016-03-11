@@ -1,3 +1,7 @@
+.right_col {
+    margin-top:20px;
+}
+
 .subscribe_iframe {
     overflow:hidden;
     border-width: 0px;
@@ -86,11 +90,16 @@ p.paginate span.paginate_links {
 
 }
 
-.header, .internal_banner {
-    /* margin-top:20px; */
+.internal_banner {
     text-align:center;
     margin-left:auto;
     margin-right:auto;
+}
+
+.header {
+    /* margin-top:20px; */
+    text-align:center;
+    padding-bottom:0px;
 }
 
 .latest_show_player_container {
@@ -101,16 +110,7 @@ div.news_channel_home_page_container {
    margin-top:0px;
 }
 
-div.header {
-    /*
 
-    margin-top:15px;
-padding-bottom:5px;
-    */
-    margin-top:5px;
-    margin-bottom:15px;
-    padding-bottom:0px;
-}
 
 
 
@@ -141,7 +141,9 @@ div.recent_comments {
     text-align:left;
     margin-top:0px;
     margin-bottom:20px;
-    max-width: 298px;
+    margin-left:auto;
+    margin-right:auto;
+    max-width:300px;
     overflow:hidden;
     /*width: 290px;*/
 }
@@ -152,6 +154,9 @@ div.recent_comments {
 
 .right_col h3 {
     font-size: 20px;
+    max-width:300px;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 
@@ -344,12 +349,12 @@ div.logos {
 
 div.listen {
     margin:0 0 20px 0;
-    /* text-align:center; */
+    text-align:center;
 }
 
 div.subscribe_now_small {
     margin:0 0 20px 0;
-    /* text-align:center; */
+    text-align:center;
 }
 
 .terms dd {
@@ -358,6 +363,7 @@ div.subscribe_now_small {
 
 form.subscribe_form {
     margin:20px 0 20px 0;
+
 }
 
 div.top_banner {
@@ -476,7 +482,7 @@ div.medrec {
 }
 
 div.facebook {
-    margin:0px 0px 20px 0px;
+    margin:0px auto 20px auto;
 }
 
 
@@ -539,7 +545,8 @@ a.listen_now, a.listen_now:link, a.listen_now:visited {
 }
 
 div.archives {
-    margin:0px 0px 20px 0px;
+    margin:0px auto 20px auto;
+    max-width:300px;
 
 }
 
@@ -547,6 +554,9 @@ div.facebook {
     text-align:left;
     margin-top:0px;
     margin-bottom:20px;
+    margin-right:auto;
+    margin-left:auto;
+    max-width:300px;
 }
 
 div.twitter_top_feed {
@@ -557,10 +567,12 @@ div.twitter_top_feed {
 
 div.twitter_right_col {
     max-width:300px;
+    margin:0px auto;
 }
 
 div.rss_subscribe {
     margin:0px 0px 20px 0px;
+    text-align:center;
 }
 
 div.t_shirt_subscribe {
@@ -619,11 +631,7 @@ p, .article, .article p {
     width:auto;
 }
 
-h1.header {
-    text-align:center;
 
-    /* display:inline; */
-}
 
 .wide_logo {
 
@@ -649,9 +657,7 @@ h2 {
     text-decoration:none;
 }
 
-.news_channel_home_page_container h2 {
-    font-size: 25px;
-}
+
 
 .news_channel_container {
     margin-top:0px;
@@ -665,6 +671,13 @@ h2 {
 
 
 
+
+.latest_show {
+    margin:10px auto;
+    max-width:300px;
+    text-align:left;
+
+}
 
 div.latest_show, div.latest_show_l {
     margin-bottom:10px;
@@ -698,11 +711,15 @@ h3.archives {
     /* font-size:1.7em; */
 }
 
-.channel_title {
-    margin:5px 0px 10px 0px;
+.channel_title_link {
+    margin:10px 0px 10px 0px;
 }
 
-a.channel_title,  a.channel_title:link, a.channel_title:visited {
+.channel_title {
+    margin:10px 0px 10px 0px;
+}
+
+a.channel_title_link,  a.channel_title_link:link, a.channel_title_link:visited {
     border-bottom:1px dotted white;
     border-top:1px dotted white;
     text-decoration:none;
@@ -710,7 +727,7 @@ a.channel_title,  a.channel_title:link, a.channel_title:visited {
     display:block;
 }
 
-a.channel_title:hover  {
+a.channel_title_link:hover  {
     border-bottom:1px solid dimgray;
     border-top:1px solid dimgray;
     text-decoration:none;
@@ -944,6 +961,8 @@ img {
     max-width: 298px;
     overflow: hidden;
     font-size:12px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #disqus_comments .disqus_comment {
@@ -1006,10 +1025,6 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
 @media(min-width: 1200px) { .responsive { width: 728px; height: 90px; } }
 
 @media screen and (max-width: 400px) {
-
-    h1.header {
-        text-align:center;
-    }
 
     p.paginate {
         font-size:18px;
@@ -1085,13 +1100,7 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
         font-size: 16px;
     }
 
-    div.header {
-        margin-bottom:5px;
-        /*
-        margin-bottom:5px;
-        margin-top:5px;
-       */
-    }
+
 
     div.captcha {
         margin:0px 0px 0px -32px;
@@ -1107,18 +1116,6 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
     }
 */
 
-    h1.header {
-        text-align:center;
-    }
-
-
-    div.header {
-        margin-bottom:10px;
-        /*
-        margin-bottom:10px;
-        margin-top:10px;
-        */
-    }
 
     .navbar-inverse ul.dropdown-menu, .navbar-inverse .navbar-form {
         background-color:#333333 !important;
@@ -1155,7 +1152,10 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
 */
 
 
-@media (min-width: 1200px) {
+
+
+
+@media (min-width:1200px)  {
     .main_box {
         /* background-color:white; */
         /*padding-right: 20px;*/
@@ -1181,13 +1181,9 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
 
     }
 
-    div.header {
-        /*
-        margin-bottom:20px;
-        margin-top:20px;
-        */
+    .header {
         border-bottom:1px solid #EAE8E8;
-
+        margin: 5px auto;
     }
 
 
@@ -1207,13 +1203,6 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
     }
 
 
-    .header_logo_constraint {
-        max-width:350px;
-    }
-
-    h1.header {
-        text-align:left;
-    }
 
 }
 
@@ -1334,6 +1323,9 @@ ul.nav_categories {
     list-style-type: none;
     margin:0;
     padding:0;
+    margin-left:auto;
+    margin-right:auto;
+    max-width:300px;
 }
 
 blockquote p {
@@ -1371,4 +1363,73 @@ label.error {
 
 div.profile_section {
     margin-bottom:20px;
+}
+
+
+@media (min-width: 1440px) {
+
+    /*
+    h1.header {
+        margin:20px 0px 20px 0px;
+    }
+    */
+}
+
+
+@media (min-width:1600px) {
+
+    h3.recent_shows {
+        margin-bottom:20px;
+    }
+
+    .right_col {
+        border-left: 1px solid #EAE8E8;
+        padding-left:0px;
+        margin-left: 20px;
+    }
+
+
+    .first_title {
+        font-size: 38px;
+    }
+
+    .latest_show {
+        margin:30px 0px 0px 100px;
+        display:block !important;
+
+    }
+
+}
+
+
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1560px;
+        width: 1560px;
+    }
+
+    #disqus_comments, .recent_comments p {
+        font-size:14px;
+    }
+
+    body {
+        font-size:16px;
+    }
+
+
+    h3.recent_shows {
+        padding:10px;
+        font-size:18px;
+    }
+
+    .main_box {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .latest_show {
+        margin:30px 0px 0px 100px;
+
+    }
+
 }

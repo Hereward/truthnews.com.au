@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2016, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -171,7 +171,7 @@ class CI_Form_validation {
 		}
 
 		$this->_error_messages = array_merge($this->_error_messages, $lang);
-		
+
 		return $this;
 	}
 
@@ -191,7 +191,7 @@ class CI_Form_validation {
 	{
 		$this->_error_prefix = $prefix;
 		$this->_error_suffix = $suffix;
-		
+
 		return $this;
 	}
 
@@ -994,7 +994,7 @@ class CI_Form_validation {
 	 */
 	function valid_email($str)
 	{
-		return ( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? FALSE : TRUE;
+		return (bool) filter_var($str, FILTER_VALIDATE_EMAIL);
 	}
 
 	// --------------------------------------------------------------------
@@ -1083,6 +1083,20 @@ class CI_Form_validation {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Alpha-numeric with underscores, dashes, and spaces
+	 *
+	 * @access	public
+	 * @param	string
+	 * @return	bool
+	 */
+	function alpha_dash_space($str)
+	{
+		return ( ! preg_match("/^([a-z0-9\_\-\s])+$/i", $str)) ? FALSE : TRUE;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Numeric
 	 *
 	 * @access	public
@@ -1121,6 +1135,62 @@ class CI_Form_validation {
 	function integer($str)
 	{
 		return (bool)preg_match( '/^[\-+]?[0-9]+$/', $str);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Greater than
+	 *
+	 * @param	string
+	 * @param	int
+	 * @return	bool
+	 */
+	public function greater_than($str, $min)
+	{
+		return is_numeric($str) ? ($str > $min) : FALSE;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Equal to or Greater than
+	 *
+	 * @param	string
+	 * @param	int
+	 * @return	bool
+	 */
+	public function greater_than_equal_to($str, $min)
+	{
+		return is_numeric($str) ? ($str >= $min) : FALSE;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Less than
+	 *
+	 * @param	string
+	 * @param	int
+	 * @return	bool
+	 */
+	public function less_than($str, $max)
+	{
+		return is_numeric($str) ? ($str < $max) : FALSE;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Equal to or Less than
+	 *
+	 * @param	string
+	 * @param	int
+	 * @return	bool
+	 */
+	public function less_than_equal_to($str, $max)
+	{
+		return is_numeric($str) ? ($str <= $max) : FALSE;
 	}
 
 	// --------------------------------------------------------------------
@@ -1273,7 +1343,7 @@ class CI_Form_validation {
 	 */
 	function encode_php_tags($str)
 	{
-		return str_replace(array('<?php', '<?PHP', '<?', '?>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $str);
+		return str_replace(array('<?php', '<?PHP', '<?', '?>', '<%', '%>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;', '&lt;%', '%&gt;'), $str);
 	}
 
 }

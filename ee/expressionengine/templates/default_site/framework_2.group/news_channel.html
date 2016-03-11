@@ -8,7 +8,7 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
 <div class="article_container">
 
     {if embed:limit > 1}
-       <a id="article_{entry_id}" class="channel_title" href="{channel_url}/{url_title}"><h2 style="display:inline;" class="channel_title">{title}</h2></a>
+       <a id="article_{entry_id}" class="channel_title_link" href="{channel_url}/{url_title}"><h2 class="channel_title{if count == 1} first_title{/if}">{title}</h2></a>
     {if:else}
        <h2 class="channel_title">{title}</h2>
     {/if}

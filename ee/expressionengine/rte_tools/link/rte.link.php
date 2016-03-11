@@ -5,13 +5,13 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.5
  * @filesource
  */
- 
+
 // ------------------------------------------------------------------------
 
 /**
@@ -24,16 +24,16 @@
  * @link		http://ellislab.com
  */
 class Link_rte {
-	
+
 	public $info = array(
 		'name'			=> 'Link',
 		'version'		=> '1.0',
 		'description'	=> 'Triggers the RTE to link the selected text',
 		'cp_only'		=> 'n'
 	);
-	
+
 	private $EE;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -60,10 +60,10 @@ class Link_rte {
 				'add'		=> lang('link'),
 				'dialog'	=> array(
 						'title'				=> lang('link'),
-						'url_field_label'	=> lang('url'),
-						'title_field_label'	=> lang('title'),
-						'rel_field_label'	=> lang('relationship'),
-						'selection_error'	=> lang('selection_error'),
+						'url_field_label'	=> lang('rte_url'),
+						'title_field_label'	=> lang('rte_title'),
+						'rel_field_label'	=> lang('rte_relationship'),
+						'selection_error'	=> lang('rte_selection_error'),
 						'url_required'		=> lang('valid_url_required'),
 						'add_link'			=> lang('add_link'),
 						'update_link'		=> lang('update_link'),
@@ -73,7 +73,7 @@ class Link_rte {
 			)
 		);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -87,7 +87,7 @@ class Link_rte {
 			'ui'	=> array('dialog', 'position')
 		);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -102,7 +102,7 @@ class Link_rte {
 		#rte-link-dialog p {
 			margin:10px 0;
 		}
-		
+
 		#rte-link-dialog label {
 			display: inline-block;
 		}
@@ -145,7 +145,7 @@ class Link_rte {
 		}
 
 <?php	$buffer = ob_get_contents();
-		ob_end_clean(); 
+		ob_end_clean();
 		return $buffer;
 	}
 

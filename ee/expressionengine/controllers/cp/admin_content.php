@@ -4,8 +4,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -25,8 +25,8 @@
 class Admin_content extends CP_Controller {
 
 	var $reserved = array(
-					'random', 'date', 'title', 'url_title', 'edit_date', 
-					'comment_total', 'username', 'screen_name', 
+					'random', 'date', 'title', 'url_title', 'edit_date',
+					'comment_total', 'username', 'screen_name',
 					'most_recent_comment', 'expiration_date');
 
 	// Category arrays
@@ -43,8 +43,10 @@ class Admin_content extends CP_Controller {
 		parent::__construct();
 
 		$this->lang->loadfile('admin');
+		$this->lang->loadfile('admin_content');
+
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content', lang('admin_content'));
-		
+
 		// Note- no access check here to allow the publish page access to categories
 	}
 
@@ -83,12 +85,11 @@ class Admin_content extends CP_Controller {
 	{
 		$this->_restrict_prefs_access();
 
-        $this->cp->set_right_nav(array(
-        	'create_new_channel' => BASE.AMP.'C=admin_content'.AMP.'M=channel_add'
-        ));
+		$this->cp->set_right_nav(array(
+			'create_new_channel' => BASE.AMP.'C=admin_content'.AMP.'M=channel_add'
+		));
 
 		$this->load->library('table');
-		$this->lang->loadfile('admin_content');
 		$this->load->model('channel_model');
 
 		$this->jquery->tablesorter('.mainTable', '{
@@ -116,7 +117,7 @@ class Admin_content extends CP_Controller {
 	function channel_add()
 	{
 		$this->_restrict_prefs_access();
-		
+
 		$this->_channel_validation_rules();
 
 		if ($this->form_validation->run() !== FALSE)
@@ -124,7 +125,6 @@ class Admin_content extends CP_Controller {
 			return $this->channel_update();
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->helper('snippets');
 		$this->load->model('channel_model');
 		$this->load->model('category_model');
@@ -168,7 +168,7 @@ class Admin_content extends CP_Controller {
 		$this->db->select('group_id, group_name');
 		$this->db->where('site_id', $this->config->item('site_id'));
 		$this->db->order_by('group_name');
-		
+
 		$groups = $this->db->get('status_groups');
 
 		if ($groups->num_rows() > 0)
@@ -184,7 +184,7 @@ class Admin_content extends CP_Controller {
 		$this->db->select('group_id, group_name');
 		$this->db->where('site_id', $this->config->item('site_id'));
 		$this->db->order_by('group_name');
-		
+
 		$groups = $this->db->get('field_groups');
 
 		if ($groups->num_rows() > 0)
@@ -235,11 +235,10 @@ class Admin_content extends CP_Controller {
 	function channel_edit()
 	{
 		$this->_restrict_prefs_access();
-		
+
 		// Get modules that are installed
 		$this->cp->get_installed_modules();
 
-		$this->lang->loadfile('admin_content');
 		$this->load->library('table');
 		$this->load->helper('snippets');
 		$this->load->model('channel_model');
@@ -255,8 +254,8 @@ class Admin_content extends CP_Controller {
 		{
 			show_error(lang('not_authorized'));
 		}
-		
-		$this->_channel_validation_rules();
+
+		$this->_channel_validation_rules(TRUE);
 		$this->form_validation->set_old_value('channel_id', $channel_id);
 
 		if ($this->form_validation->run() !== FALSE)
@@ -301,9 +300,9 @@ class Admin_content extends CP_Controller {
 				$vars['deft_status_options'][$row->status] = $status_name;
 			}
 		}
-		
+
 		$vars['deft_category_options'][''] = lang('none');
-		
+
 		$cats = $vars['cat_group'] ? explode('|', $vars['cat_group']) : array();
 
 		// Needz moar felineness!
@@ -315,9 +314,9 @@ class Admin_content extends CP_Controller {
 			$this->db->where($this->db->dbprefix('category_groups').'.group_id = '.$this->db->dbprefix('categories').'.group_id', NULL, FALSE);
 			$this->db->where_in('categories.group_id', $cats);
 			$this->db->order_by('display_name');
-			
+
 			$query = $this->db->get();
-			
+
 			if ($query->num_rows() > 0)
 			{
 				foreach ($query->result() as $row)
@@ -326,8 +325,8 @@ class Admin_content extends CP_Controller {
 				}
 			}
 		}
-		
-		// Default field for search excerpt		
+
+		// Default field for search excerpt
 		$this->db->select('field_id, field_label');
 		$this->db->where('group_id', $vars['field_group']);
 		$query = $this->db->get('channel_fields');
@@ -363,9 +362,9 @@ class Admin_content extends CP_Controller {
 				'none'	=> lang('convert_to_entities'),
 				'safe'	=> lang('allow_safe_html'),
 				'all'	=> lang('allow_all_html_not_recommended')
-			);		
+			);
 		}
-		
+
 		$vars['languages'] = $this->admin_model->get_xml_encodings();
 
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=channel_management', lang('channels'));
@@ -373,7 +372,7 @@ class Admin_content extends CP_Controller {
 		$this->view->cp_page_title = lang('channel_prefs').': '.$vars['channel_title'];
 		$this->cp->render('admin/channel_edit', $vars);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -384,18 +383,29 @@ class Admin_content extends CP_Controller {
 	 * @access	public
 	 * @return	void
 	 */
-	function _channel_validation_rules()
+	function _channel_validation_rules($editing = FALSE)
 	{
 		$this->load->library('form_validation');
-		
-		$this->form_validation->set_rules('channel_title',		'lang:channel_title',		'required');
-		$this->form_validation->set_rules('channel_name',		'lang:channel_name',		'required|callback__valid_channel_name');
-		$this->form_validation->set_rules('url_title_prefix',	'lang:url_title_prefix',	'strtolower|strip_tags|callback__valid_prefix');
-		$this->form_validation->set_rules('comment_expiration',	'lang:comment_expiration',	'numeric');
-		
+
+		$this->form_validation->set_rules('channel_title', 'lang:channel_title', 'required|strip_tags|trim|valid_xss_check');
+		$this->form_validation->set_rules('channel_name', 'lang:channel_name', 'required|callback__valid_channel_name');
+
+		if ($editing)
+		{
+			$this->form_validation->set_rules('channel_description', 'lang:channel_description', 'strip_tags|trim|valid_xss_check');
+
+			$this->form_validation->set_rules('channel_url', 'lang:channel_url', 'strip_tags|trim|valid_xss_check');
+			$this->form_validation->set_rules('comment_url', 'lang:comment_url', 'strip_tags|trim|valid_xss_check');
+			$this->form_validation->set_rules('search_results_url', 'lang:search_results_url', 'strip_tags|trim|valid_xss_check');
+			$this->form_validation->set_rules('rss_url', 'lang:rss_url', 'strip_tags|trim|valid_xss_check');
+
+			$this->form_validation->set_rules('url_title_prefix', 'lang:url_title_prefix', 'strtolower|strip_tags|trim|callback__valid_prefix');
+			$this->form_validation->set_rules('comment_expiration', 'lang:comment_expiration', 'numeric');
+		}
+
 		$this->form_validation->set_error_delimiters('<p class="notice">', '</p>');
 	}
-	
+
 	function _valid_prefix($str)
 	{
 		if ($str == '')
@@ -405,7 +415,7 @@ class Admin_content extends CP_Controller {
 		$this->form_validation->set_message('_valid_prefix', lang('invalid_url_title_prefix'));
 		return preg_match('/^[\w\-]+$/', $str) ? TRUE : FALSE;
 	}
-	
+
 	function _valid_channel_name($str)
 	{
 		// Check short name characters
@@ -414,11 +424,11 @@ class Admin_content extends CP_Controller {
 			$this->form_validation->set_message('_valid_channel_name', lang('invalid_short_name'));
 			return FALSE;
 		}
-		
+
 		// Check for duplicates
 		$this->db->where('site_id', $this->config->item('site_id'));
 		$this->db->where('channel_name', $str);
-		
+
 		if ($this->form_validation->old_value('channel_id'))
 		{
 			$this->db->where('channel_id != ', $this->form_validation->old_value('channel_id'));
@@ -429,7 +439,7 @@ class Admin_content extends CP_Controller {
 			$this->form_validation->set_message('_valid_channel_name', lang('taken_channel_name'));
 			return FALSE;
 		}
-		
+
 		return TRUE;
 	}
 
@@ -447,8 +457,6 @@ class Admin_content extends CP_Controller {
 	function channel_update()
 	{
 		$this->_restrict_prefs_access();
-
-		$this->lang->loadfile('admin_content');
 
 		unset($_POST['channel_prefs_submit']); // submit button
 
@@ -484,7 +492,7 @@ class Admin_content extends CP_Controller {
 			elseif ($this->input->post('comment_system_enabled') == 'n')
 			{
 				$this->channel_model->update_comments_allowed($_POST['channel_id'], 'n');
-			}	
+			}
 		}
 
 		unset($_POST['apply_comment_enabled_to_existing']);
@@ -533,7 +541,7 @@ class Admin_content extends CP_Controller {
 				$this->db->select('group_id');
 				$this->db->where('site_id', $this->config->item('site_id'));
 				$query = $this->db->get('field_groups');
-				
+
 				if ($query->num_rows() == 1)
 				{
 					$_POST['field_group'] = $query->row('group_id');
@@ -555,7 +563,7 @@ class Admin_content extends CP_Controller {
 			{
 				$this->db->where('channel_id', $dupe_id);
 				$wquery = $this->db->get('channels');
-								
+
 				if ($wquery->num_rows() == 1)
 				{
 					$exceptions = array('channel_id', 'site_id', 'channel_name', 'channel_title', 'total_entries',
@@ -610,7 +618,6 @@ class Admin_content extends CP_Controller {
 								case 'blog_url':
 								case 'comment_url':
 								case 'search_results_url':
-								case 'ping_return_url':
 								case 'rss_url':
 										$_POST[$key] = $val;
 									break;
@@ -626,12 +633,12 @@ class Admin_content extends CP_Controller {
 
 			$_POST['default_entry_title'] = '';
 			$_POST['url_title_prefix'] = '';
-			
-			$this->db->insert('channels', $_POST);		
-						
+
+			$this->db->insert('channels', $_POST);
+
 			$insert_id = $this->db->insert_id();
 			$channel_id = $insert_id;
-			
+
 			// If they made the channel?  Give access to that channel to the member group?
 
 			if ($dupe_id !== FALSE AND is_numeric($dupe_id))
@@ -639,17 +646,17 @@ class Admin_content extends CP_Controller {
 				// Duplicate layouts
 				$this->layout->duplicate_layout($dupe_id, $channel_id);
 			}
-			
+
 			// If member group has ability to create the channel, they should be
 			// able to access it as well
-			if ($this->session->userdata('group_id') != 1) 
+			if ($this->session->userdata('group_id') != 1)
 			{
 				$data = array(
 					'group_id'		=> $this->session->userdata('group_id'),
 					'channel_id'	=> $channel_id
 				);
-				
-				$this->db->insert('channel_member_groups', $data); 
+
+				$this->db->insert('channel_member_groups', $data);
 			}
 
 			$success_msg = lang('channel_created');
@@ -661,13 +668,13 @@ class Admin_content extends CP_Controller {
 			if (isset($_POST['clear_versioning_data']))
 			{
 				$this->db->delete('entry_versioning', array('channel_id' => $_POST['channel_id']));
-				
+
 				unset($_POST['clear_versioning_data']);
 			}
-			
+
 			// Only one possible is revisions- enabled or disabled.
 			// We treat as installed/not and delete the whole tab.
-			
+
 			$this->layout->sync_layout($_POST, $_POST['channel_id']);
 
 			$sql = $this->db->update_string('exp_channels', $_POST, 'channel_id='.$this->db->escape_str($_POST['channel_id']));
@@ -697,7 +704,7 @@ class Admin_content extends CP_Controller {
 	/**
 	 * Channel Update Group Assignments
 	 *
-	 * This function processes changes to the channel's 
+	 * This function processes changes to the channel's
 	 * assigned groups
 	 *
 	 * @access	public
@@ -712,23 +719,21 @@ class Admin_content extends CP_Controller {
 		$data['field_group'] = ($this->input->post('field_group') != FALSE && $this->input->post('field_group') != '') ? $this->input->post('field_group') : NULL;
 		$data['status_group'] = ($this->input->post('status_group') != FALSE && $this->input->post('status_group') != '') ? $this->input->post('status_group') : NULL;
 
-		$this->lang->loadfile('admin_content');
-
 		if (isset($_POST['cat_group']) && is_array($_POST['cat_group']))
 		{
 			$data['cat_group'] = ltrim(implode('|', $_POST['cat_group']), '|');
 		}
-		
+
 		if ( ! isset($data['cat_group']) OR $data['cat_group'] == '')
 		{
 			$data['cat_group'] = '';
 		}
-		
+
 
 		// Find the old custom fields so we can remove them
 		// Have the field assignments changed
 		$this->db->select('cat_group, status_group, field_group');
-		$this->db->where('channel_id', $channel_id); 
+		$this->db->where('channel_id', $channel_id);
 		$query = $this->db->get('channels');
 
 		if ($query->num_rows() == 1)
@@ -738,36 +743,38 @@ class Admin_content extends CP_Controller {
 			$old_field = $query->row('field_group');
 		}
 
-		if ($old_field != $data['field_group'] && ! is_null($old_field))
+		if ($old_field != $data['field_group'])
 		{
 			$update_fields = TRUE;
-			
-			$this->db->select('field_id');
-			$this->db->where('group_id', $old_field); 
-			$query = $this->db->get('channel_fields');
-		
-			if ($query->num_rows() > 0)
-			{
-				foreach($query->result() as $row)
-				{
-					$tabs[] = $row->field_id;
-				}
 
-					
-				$this->load->library('layout');
-				$this->layout->delete_layout_fields($tabs, $channel_id);
-				unset($tabs);
+			if ( ! is_null($old_field))
+			{
+				$this->db->select('field_id');
+				$this->db->where('group_id', $old_field);
+				$query = $this->db->get('channel_fields');
+
+				if ($query->num_rows() > 0)
+				{
+					foreach($query->result() as $row)
+					{
+						$tabs[] = $row->field_id;
+					}
+
+					$this->load->library('layout');
+					$this->layout->delete_layout_fields($tabs, $channel_id);
+					unset($tabs);
+				}
 			}
 		}
-		
+
 		$this->db->where('channel_id', $channel_id);
-		$this->db->update('channels', $data); 
+		$this->db->update('channels', $data);
 
 		// Updated saved layouts if field group changed
 		if ($update_fields == TRUE && ! is_null($data['field_group']))
 		{
 			$this->db->select('field_id');
-			$this->db->where('group_id', $data['field_group']); 
+			$this->db->where('group_id', $data['field_group']);
 			$query = $this->db->get('channel_fields');
 
 			if ($query->num_rows() > 0)
@@ -780,9 +787,9 @@ class Admin_content extends CP_Controller {
 								'htmlbuttons'	=> 'true',
 								'width'			=> '100%'
 								);
-						
+
 				}
-			
+
 				$this->load->library('layout');
 				$this->layout->add_layout_fields($tabs, $channel_id);
 			}
@@ -802,7 +809,7 @@ class Admin_content extends CP_Controller {
 	/**
 	 * Edit Channel
 	 *
-	 * This function displays the form used to edit the various 
+	 * This function displays the form used to edit the various
 	 * preferences and group assignments for a given channel
 	 *
 	 * @access	public
@@ -820,9 +827,8 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model(array(
- 			'channel_model', 'category_model', 'status_model', 'field_model'
+			'channel_model', 'category_model', 'status_model', 'field_model'
 		));
 
 		$query = $this->channel_model->get_channel_info($channel_id);
@@ -833,10 +839,10 @@ class Admin_content extends CP_Controller {
 			{
 				$val = explode('|', $val);
 			}
-			
-			$vars[$key] = $val;  
+
+			$vars[$key] = $val;
 		}
-		
+
 		$vars['form_hidden'] = array(
 			'channel_id'	=> $channel_id,
 			'channel_name'	=> $vars['channel_name'],
@@ -862,7 +868,7 @@ class Admin_content extends CP_Controller {
 		$this->db->select('group_id, group_name');
 		$this->db->where('site_id', $this->config->item('site_id'));
 		$this->db->order_by('group_name');
-		
+
 		$query = $this->db->get('status_groups');
 
 		$vars['status_group_options'][''] = lang('none');
@@ -879,7 +885,7 @@ class Admin_content extends CP_Controller {
 		$this->db->select('group_id, group_name');
 		$this->db->where('site_id', $this->config->item('site_id'));
 		$this->db->order_by('group_name');
-		
+
 		$query = $this->db->get('field_groups');
 
 		$vars['field_group_options'][''] = lang('none');
@@ -917,7 +923,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('channel_model');
 
 		$this->view->cp_page_title = lang('delete_channel');
@@ -962,7 +967,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('channel_model');
 
 		$query = $this->channel_model->get_channel_info($channel_id);
@@ -995,13 +999,188 @@ class Admin_content extends CP_Controller {
 		$authors = array_unique($authors);
 
 		$this->channel_model->delete_channel($channel_id, $entries, $authors);
-		
+
 		// Clear saved layouts
 		$this->load->library('layout');
 		$this->layout->delete_channel_layouts($channel_id);
 
 		$this->session->set_flashdata('message_success', lang('channel_deleted').NBS.$channel_title);
 		$this->functions->redirect(BASE.AMP.'C=admin_content'.AMP.'M=channel_management');
+	}
+
+	// --------------------------------------------------------------------
+
+	function channel_form_settings()
+	{
+		$this->_restrict_prefs_access();
+
+		$this->load->library('table');
+
+		$all_channels = array();
+		$all_settings = array();
+		$all_statuses = array();
+		$all_authors = array();
+
+		$this->load->model('channel_model');
+		$channels = $this->channel_model->get_channels()->result();
+
+		$default_statuses = array(
+			''		 => lang('channel_form_default_status_empty'),
+			'open'	 => lang('open'),
+			'closed' => lang('closed')
+		);
+
+		foreach ($channels as &$channel)
+		{
+			$channel->statuses = $default_statuses;
+			$all_channels[$channel->channel_id] = $channel;
+			$all_statuses[] = $channel->status_group;
+		}
+
+		$status_group_ids = array_filter(array_unique($all_statuses));
+
+		if (count($status_group_ids))
+		{
+			$status_query = $this->db
+				->where_in('group_id', $status_group_ids)
+				->get('statuses')
+				->result();
+
+			// Create status look-up array
+			$statuses = array();
+			foreach ($status_query as $status)
+			{
+				$name = ($status->status == 'open' OR
+						$status->status == 'closed')
+						? lang($status->status) : $status->status;
+
+				$statuses[$status->group_id][$status->status] = $name;
+			}
+
+			// Get the statuses for each channel
+			foreach ($all_channels as $channel)
+			{
+				if ( ! empty($channel->status_group))
+				{
+					// Merge custom statuses with default statuses
+					$all_channels[$channel->channel_id]->statuses = array_merge(
+						$default_statuses,
+						$statuses[$channel->status_group]
+					);
+				}
+			}
+		}
+
+		$this->load->model('member_model');
+		$authors = $this->member_model->get_authors()->result();
+
+		foreach ($authors as $author)
+		{
+			$all_authors[$author->member_id] = $author->username;
+		}
+
+		// No authors? Add member ID 1
+		if (empty($all_authors))
+		{
+			foreach ($this->member_model->get_members(1)->result_array() as $member)
+			{
+				$all_authors[$member['member_id']] = $member['username'];
+			}
+		}
+
+		$channels = array();
+		$default = array(
+			'default_author'	=> 0,
+			'default_status'	=> '',
+			'require_captcha'	=> 'n',
+			'allow_guest_posts'	=> 'n'
+		);
+
+		if (count($all_channels))
+		{
+			$settings = $this->db
+				->where_in('channel_id', array_keys($all_channels))
+				->get('channel_form_settings')
+				->result();
+
+			foreach ($settings as &$row)
+			{
+				$all_settings[$row->channel_id] = $row;
+			}
+		}
+
+		foreach ($all_channels as $id => $channel)
+		{
+			$channels[$id] = $default;
+
+			if (isset($all_settings[$id]))
+			{
+				$channels[$id] = array_merge($channels[$id], (array) $all_settings[$id]);
+			}
+
+			$channels[$id]['title'] = $channel->channel_name;
+			$channels[$id]['channel_id'] = $id;
+			$channels[$id]['statuses'] = $channel->statuses;
+			$channels[$id]['authors'] = $all_authors;
+		}
+
+		$this->view->cp_page_title = lang('channel_form_settings');
+
+		$this->cp->add_js_script('file', 'cp/admin_content/channel_form_settings');
+		$this->cp->render('admin/channel_form_settings', compact('channels'));
+	}
+
+	// --------------------------------------------------------------------
+
+	function update_channel_form_settings()
+	{
+		$this->_restrict_prefs_access();
+
+		$this->load->model('channel_model');
+		$channels = $this->channel_model->get_channels()->result();
+
+		$settings = array();
+		$default = array(
+			'default_author'	=> 0,
+			'default_status'	=> '',
+			'require_captcha'	=> 'n',
+			'allow_guest_posts'	=> 'n'
+		);
+
+		$site_id		   = $this->config->item('site_id');
+		$default_status    = (array) $this->input->post('default_status');
+		$default_author	   = (array) $this->input->post('default_author');
+		$require_captcha   = (array) $this->input->post('require_captcha');
+		$allow_guest_posts = (array) $this->input->post('allow_guest_posts');
+
+		foreach ($channels as $channel)
+		{
+			$id = $channel->channel_id;
+
+			$settings[$id] = $default;
+			$settings[$id]['site_id'] = $site_id;
+			$settings[$id]['channel_id'] = $id;
+
+			if (isset($default_status[$id]))
+			{
+				$settings[$id]['default_status'] = $default_status[$id];
+			}
+
+			if ($allow_guest_posts[$id] == 'y')
+			{
+				$settings[$id]['default_author'] = $default_author[$id];
+				$settings[$id]['require_captcha'] = $require_captcha[$id];
+				$settings[$id]['allow_guest_posts'] = $allow_guest_posts[$id];
+			}
+		}
+
+		// clear all for this site id and re-insert
+		$this->db->delete('channel_form_settings', array('site_id' => $site_id));
+		$this->db->insert_batch('channel_form_settings', $settings);
+
+
+		$this->session->set_flashdata('message_success', lang('channel_form_settings_updated'));
+		$this->functions->redirect(BASE.AMP.'C=admin_content'.AMP.'M=channel_form_settings');
 	}
 
 	// --------------------------------------------------------------------
@@ -1026,11 +1205,10 @@ class Admin_content extends CP_Controller {
 		else
 		{
 			$this->_restrict_prefs_access();
-		}		
+		}
 
 		$this->load->library('table');
 		$this->load->model('category_model');
-		$this->lang->loadfile('admin_content');
 
 		$this->view->cp_page_title = lang('categories');
 
@@ -1041,11 +1219,11 @@ class Admin_content extends CP_Controller {
 
 		// Fetch count of custom fields per group
 		$cfcount = array();
-		
+
 		$this->db->select('COUNT(*) AS count, group_id');
 		$this->db->group_by('group_id');
 		$cfq = $this->db->get('category_fields');
-		
+
 		if ($cfq->num_rows() > 0)
 		{
 			foreach ($cfq->result() as $row)
@@ -1063,18 +1241,18 @@ class Admin_content extends CP_Controller {
 		{
 			$this->db->where('group_id', $row->group_id);
 			$category_count = $this->db->count_all_results('categories');
-			
+
 			$vars['categories'][$cat_count]['group_id'] = $row->group_id;
-			$vars['categories'][$cat_count]['group_name'] = $row->group_name;
+			$vars['categories'][$cat_count]['group_name'] = htmlentities($row->group_name, ENT_QUOTES, 'UTF-8');
 			$vars['categories'][$cat_count]['category_count'] = $category_count;
 			$vars['categories'][$cat_count]['custom_field_count'] = ((isset($cfcount[$row->group_id])) ? $cfcount[$row->group_id] : '0');
 
 			$cat_count++;
 		}
 
-        $this->cp->set_right_nav(array(
-        	'create_new_category_group' => BASE.AMP.'C=admin_content'.AMP.'M=edit_category_group'
-        ));
+		$this->cp->set_right_nav(array(
+			'create_new_category_group' => BASE.AMP.'C=admin_content'.AMP.'M=edit_category_group'
+		));
 
 		$this->cp->render('admin/category_management', $vars);
 	}
@@ -1096,7 +1274,6 @@ class Admin_content extends CP_Controller {
 
 		$this->load->model('admin_model');
 		$this->load->model('category_model');
-		$this->lang->loadfile('admin_content');
 		$this->load->library('table');
 
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=category_management', lang('categories'));
@@ -1112,10 +1289,10 @@ class Admin_content extends CP_Controller {
 		$vars['can_edit_selected'] = array();
 		$vars['can_delete_selected'] = array();
 		$vars['formatting_options'] = array(
-												'none'	=> lang('convert_to_entities'),
-												'safe'	=> lang('allow_safe_html'),
-												'all'	=> lang('allow_all_html')
-											);
+			'none' => lang('convert_to_entities'),
+			'safe' => lang('allow_safe_html'),
+			'all'  => lang('allow_all_html')
+		);
 		$can_edit_selected = array();
 		$can_delete_selected = array();
 		$vars['can_edit_categories'] = '';
@@ -1183,10 +1360,10 @@ class Admin_content extends CP_Controller {
 				$vars['can_delete'][$row['group_id']] = $row['group_title'];
 			}
 		}
-		
+
 		// Get the selected 'excluded' group
 		$vars['exclude_selected'] = (isset($vars['exclude_group'])) ? $vars['exclude_group'] : FALSE;
-		
+
 		$this->cp->render('admin/edit_category_group', $vars);
 	}
 
@@ -1221,21 +1398,11 @@ class Admin_content extends CP_Controller {
 			$this->functions->redirect(BASE.AMP.'C=admin_content'.AMP.'M=category_management');
 		}
 
-		$this->lang->loadfile('admin_content');
-
-		// check for bad characters in group name
-		if ( ! preg_match("#^[a-zA-Z0-9_\-/\s]+$#i", $_POST['group_name']))
-		{
-			show_error(lang('illegal_characters'));
-		}
-
-		$this->load->model('category_model');
-
-		// Is the group name taken?
-		if ($this->category_model->is_duplicate_category_group($this->input->post('group_name'), $this->input->post('group_id')))
-		{
-			show_error(lang('taken_category_group_name'));
-		}
+		// Setup Form Validation Rules
+		ee()->load->library('form_validation');
+		ee()->form_validation->set_rules('group_name', 'lang:group_name', 'required|alpha_dash_space|callback__valid_category_group_name['.ee()->input->post('group_id').']');
+		ee()->form_validation->set_rules('can_edit_categories[]', '', '');
+		ee()->form_validation->set_rules('can_delete_categories[]', '', '');
 
 		// make data array of variables from our POST data
 		$data = array();
@@ -1270,42 +1437,69 @@ class Admin_content extends CP_Controller {
 			$data['can_delete_categories'] = '';
 		}
 
-		// Construct the query based on whether we are updating or inserting
-		if ($edit == FALSE)
+		if (ee()->form_validation->run() !== FALSE)
 		{
-			$this->category_model->insert_category_group($data);
-
-			$cp_message = lang('category_group_created').' '.$data['group_name'];
-			$this->logger->log_action(lang('category_group_created').NBS.NBS.$data['group_name']);
-
-			$this->db->select('channel_id');
-			$this->db->where('site_id', $this->config->item('site_id'));
-			$query = $this->db->get('channels');
-
-			if ($query->num_rows() > 0)
+			// Construct the query based on whether we are updating or inserting
+			if ($edit == FALSE)
 			{
-				$cp_message .= '<br />'.lang('assign_group_to_channel');
+				$this->load->model('category_model');
+				$this->category_model->insert_category_group($data);
 
-				if ($query->num_rows() == 1)
+				$cp_message = lang('category_group_created').' '.$data['group_name'];
+				$this->logger->log_action(lang('category_group_created').NBS.NBS.$data['group_name']);
+
+				$this->db->select('channel_id');
+				$this->db->where('site_id', $this->config->item('site_id'));
+				$query = $this->db->get('channels');
+
+				if ($query->num_rows() > 0)
 				{
-					$link = 'C=admin_content'.AMP.'M=channel_edit_group_assignments'.AMP.'channel_id='.$query->row('channel_id') ;
+					$cp_message .= '<br />'.lang('assign_group_to_channel');
+
+					if ($query->num_rows() == 1)
+					{
+						$link = 'C=admin_content'.AMP.'M=channel_edit_group_assignments'.AMP.'channel_id='.$query->row('channel_id') ;
+					}
+					else
+					{
+						$link = 'C=admin_content'.AMP.'M=channel_management';
+					}
+
+					$cp_message .= '<br /><a href="'.BASE.AMP.$link.'">'. lang('click_to_assign_group').'</a>';
 				}
-				else
-				{
-					$link = 'C=admin_content'.AMP.'M=channel_management';
-				}
-			
-				$cp_message .= '<br /><a href="'.BASE.AMP.$link.'">'. lang('click_to_assign_group').'</a>';
 			}
+			else
+			{
+				$this->category_model->update_category_group($data['group_id'], $data);
+				$cp_message = lang('category_group_updated').NBS.$data['group_name'];
+			}
+
+			$this->session->set_flashdata('message_success', $cp_message);
+			$this->functions->redirect(BASE.AMP.'C=admin_content'.AMP.'M=category_management');
 		}
 		else
 		{
-			$this->category_model->update_category_group($data['group_id'], $data);
-			$cp_message = lang('category_group_updated').NBS.$data['group_name'];
+			$this->edit_category_group();
+		}
+	}
+
+	// --------------------------------------------------------------------
+
+	public function _valid_category_group_name($group_name, $group_id)
+	{
+		ee()->load->model('category_model');
+
+		// Is the group name taken?
+		if (ee()->category_model->is_duplicate_category_group($group_name, $group_id))
+		{
+			ee()->form_validation->set_message(
+				'_valid_category_group_name',
+				lang('taken_category_group_name')
+			);
+			return FALSE;
 		}
 
-		$this->session->set_flashdata('message_success', $cp_message);
-		$this->functions->redirect(BASE.AMP.'C=admin_content'.AMP.'M=category_management');
+		return TRUE;
 	}
 
 	// --------------------------------------------------------------------
@@ -1329,7 +1523,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('category_model');
 
 		$this->view->cp_page_title = lang('delete_group');
@@ -1374,7 +1567,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('category_model');
 
 		$category = $this->category_model->get_category_group_name($group_id);
@@ -1413,7 +1605,7 @@ class Admin_content extends CP_Controller {
 		if (AJAX_REQUEST)
 		{
 			$vars['EE_view_disable'] = TRUE;
-			
+
 			if ( ! $this->cp->allowed_group('can_edit_categories'))
 			{
 				show_error(lang('unauthorized_access'));
@@ -1422,15 +1614,14 @@ class Admin_content extends CP_Controller {
 		else
 		{
 			$this->_restrict_prefs_access();
-		}	
+		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('category_model');
 		$this->load->library('table');
 		$this->load->library('api');
-		
+
 		$this->api->instantiate('channel_categories');
-		
+
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=category_management', lang('categories'));
 
 		$vars['message'] = ''; // override lower down if needed
@@ -1455,7 +1646,7 @@ class Admin_content extends CP_Controller {
 			$this->db->select('can_edit_categories');
 			$this->db->where('group_id', $group_id);
 			$query = $this->db->get('category_groups');
-			
+
 			if ($query->num_rows() == 0)
 			{
 				show_error(lang('unauthorized_access'));
@@ -1474,12 +1665,12 @@ class Admin_content extends CP_Controller {
 		$zurl .= ($this->input->get_post('integrated') !== FALSE) ? AMP.'integrated='.$this->input->get_post('integrated') : '';
 
 		$query = $this->category_model->get_category_groups($group_id, FALSE);
-		
+
 		if ($query->num_rows() == 0)
 		{
 			$this->functions->redirect(BASE.AMP.'C=admin_content&M=category_management');
 		}
-		
+
 		$group_name = $query->row('group_name') ;
 		$sort_order = $query->row('sort_order') ;
 
@@ -1494,10 +1685,18 @@ class Admin_content extends CP_Controller {
 		$this->api_channel_categories->category_tree($group_id, '', $sort_order);
 
 		$vars['categories'] = array();
-		
+
 		if (count($this->api_channel_categories->categories) > 0)
 		{
 			$vars['categories'] = $this->api_channel_categories->categories;
+
+			// Sanitize the category names
+			foreach ($vars['categories'] as $category_id => $category_data)
+			{
+				$vars['categories'][$category_id][1] = htmlentities(
+					$vars['categories'][$category_id][1], ENT_QUOTES, 'UTF-8'
+				);
+			}
 
 			// Category order
 
@@ -1507,7 +1706,7 @@ class Admin_content extends CP_Controller {
 				$vars['sort_order'] = $sort_order;
 			}
 		}
-		
+
 		$vars['can_edit'] = ($this->session->userdata('can_edit_categories') == 'y') ? TRUE : FALSE;
 		$vars['can_delete'] = ($this->session->userdata('can_delete_categories') == 'y') ? TRUE : FALSE;
 		$vars['group_id'] = $group_id;
@@ -1544,7 +1743,6 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->load->model('category_model');
-		$this->lang->loadfile('admin_content');
 		$this->load->library('form_validation');
 
 		$group_id = $this->input->get_post('group_id');
@@ -1576,13 +1774,13 @@ class Admin_content extends CP_Controller {
 				show_error(lang('unauthorized_access'));
 			}
 		}
-		
+
 		$vars['cat_id'] = $this->input->get_post('cat_id');
 
 		$default = array('cat_name', 'cat_url_title', 'cat_description', 'cat_image', 'cat_id', 'parent_id');
 
 		if ($vars['cat_id'] != '')
- 		{
+		{
 			$this->db->select('cat_id, cat_name, cat_url_title, cat_description, cat_image, group_id, parent_id');
 			$query = $this->db->get_where('categories', array('cat_id' => $vars['cat_id']));
 
@@ -1610,7 +1808,7 @@ class Admin_content extends CP_Controller {
 
 			$vars['submit_lang_key'] = 'submit';
 		}
-		
+
 		//  Override the parent id if there is post data
 		if ($this->input->post('parent_id'))
 		{
@@ -1619,28 +1817,28 @@ class Admin_content extends CP_Controller {
 
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=category_management', lang('categories'));
 		$this->view->cp_page_title = ($vars['cat_id'] == '') ? lang('new_category') : lang('edit_category');
-		
+
 		$foreign_characters = $this->_get_foreign_characters();
-		
+
 		// New entry gets URL title js
 		if ($vars['submit_lang_key'] == 'submit')
-		{	
+		{
 			// Pipe in necessary globals
 			$this->javascript->set_global(array(
 				'publish.word_separator'	=> $this->config->item('word_separator') != "dash" ? '_' : '-',
 				'publish.foreignChars'		=> $foreign_characters,
 			));
-			
+
 			// Load in necessary js files
 			$this->cp->add_js_script(array(
 				'plugin'	=> array('ee_url_title')
 			));
-			
+
 			$this->javascript->keyup('#cat_name', '$("#cat_name").ee_url_title($("#cat_url_title"));');
 		}
-		
+
 		$this->load->library('file_field');
-		
+
 		// If there is data in the category image field but the file field library
 		// can't parse it, it's likely legacy data from when a URL was entered in a
 		// text field for the category image. Let's prompt the user to update the
@@ -1651,7 +1849,7 @@ class Admin_content extends CP_Controller {
 		{
 			$vars['cat_image_error'] = lang('update_category_image');
 		}
-		
+
 		// Setup category image
 		$this->file_field->browser();
 		$vars['cat_image'] = $this->file_field->field(
@@ -1670,7 +1868,7 @@ class Admin_content extends CP_Controller {
 		$vars['parent_id_options'] = $this->api_channel_categories->categories;
 
 		// Display custom fields
-		
+
 		$vars['cat_custom_fields'] = array();
 
 		$this->db->where('group_id', $group_id);
@@ -1685,8 +1883,8 @@ class Admin_content extends CP_Controller {
 			$dq_row = $data_query->row_array();
 			$this->load->model('addons_model');
 			$plugins = $this->addons_model->get_plugin_formatting();
-            
-            $vars['custom_format_options']['none'] = 'None';
+
+			$vars['custom_format_options']['none'] = 'None';
 			foreach ($plugins as $k=>$v)
 			{
 				$vars['custom_format_options'][$k] = $v;
@@ -1696,10 +1894,10 @@ class Admin_content extends CP_Controller {
 				$vars['cat_custom_fields'][$row['field_id']]['field_content'] = ( ! isset($dq_row['field_id_'.$row['field_id']])) ? '' : $dq_row['field_id_'.$row['field_id']];
 
 				$vars['cat_custom_fields'][$row['field_id']]['field_fmt'] = ( ! isset($dq_row['field_ft_'.$row['field_id']])) ? $row['field_default_fmt'] : $dq_row['field_ft_'.$row['field_id']];
-				
+
 				$vars['cat_custom_fields'][$row['field_id']]['field_id'] = $row['field_id'];
 				$vars['cat_custom_fields'][$row['field_id']]['field_label'] = $row['field_label'];
-				$vars['cat_custom_fields'][$row['field_id']]['field_required'] = $row['field_required'];					
+				$vars['cat_custom_fields'][$row['field_id']]['field_required'] = $row['field_required'];
 
 				$vars['cat_custom_fields'][$row['field_id']]['field_name'] = $row['field_name'];
 				$vars['cat_custom_fields'][$row['field_id']]['field_input'] = $row['field_label'];
@@ -1707,7 +1905,7 @@ class Admin_content extends CP_Controller {
 				$vars['cat_custom_fields'][$row['field_id']]['field_type'] = $row['field_type'];
 				$vars['cat_custom_fields'][$row['field_id']]['field_text_direction'] = ($row['field_text_direction'] == 'rtl') ? 'rtl' : 'ltr';
 				$vars['cat_custom_fields'][$row['field_id']]['field_show_fmt'] = 'n'; // no by default, over-ridden later when appropriate
-				
+
 				$vars['field_fmt'] = $row['field_default_fmt'];
 
 				//	Textarea field types
@@ -1755,7 +1953,7 @@ class Admin_content extends CP_Controller {
 
 		$this->cp->render('admin/category_edit', $vars);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -1778,8 +1976,8 @@ class Admin_content extends CP_Controller {
 		else
 		{
 			$this->_restrict_prefs_access();
-		}		
-		
+		}
+
 
 		$cat_id = $this->input->get_post('cat_id');
 
@@ -1793,7 +1991,6 @@ class Admin_content extends CP_Controller {
 		$zurl .= ($this->input->get_post('cat_group') !== FALSE) ? AMP.'cat_group='.$this->input->get_post('cat_group') : '';
 		$zurl .= ($this->input->get_post('integrated') !== FALSE) ? AMP.'integrated='.$this->input->get_post('integrated') : '';
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('category_model');
 
 		$this->view->cp_page_title = lang('delete_category');
@@ -1843,7 +2040,7 @@ class Admin_content extends CP_Controller {
 		else
 		{
 			$this->_restrict_prefs_access();
-		}	
+		}
 
 
 		$cat_id = $this->input->get_post('cat_id');
@@ -1853,7 +2050,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('category_model');
 
 		$group_id = $this->category_model->delete_category($cat_id);
@@ -1884,7 +2080,7 @@ class Admin_content extends CP_Controller {
 		else
 		{
 			$this->_restrict_prefs_access();
-		}		
+		}
 
 		$group_id = $this->input->get_post('group_id');
 
@@ -1895,11 +2091,10 @@ class Admin_content extends CP_Controller {
 
 		$edit = ($this->input->post('cat_id') == '') ? FALSE : TRUE;
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('category_model');
 		$this->load->library('api');
 		$this->api->instantiate('channel_categories');
-		
+
 		// Create and validate Category URL Title
 		// Kill all the extraneous characters. (We want the URL title to be pure alpha text)
 
@@ -1916,21 +2111,19 @@ class Admin_content extends CP_Controller {
 			$_POST['cat_url_title'] = url_title($_POST['cat_url_title'], $word_separator);
 		}
 
-		$this->form_validation->set_rules('cat_name',		'lang:category_name',		'required');
-		$this->form_validation->set_rules('cat_url_title',	'lang:cat_url_title',	'callback__cat_url_title');
-		$this->form_validation->set_rules('cat_description', '', '');
-		
+		$this->form_validation->set_rules('cat_name', 'lang:category_name', 'required|strip_tags|valid_xss_check');
+		$this->form_validation->set_rules('cat_url_title', 'lang:cat_url_title', 'callback__cat_url_title');
+		$this->form_validation->set_rules('cat_description', 'lang:cat_description', 'valid_xss_check');
+
 		// Get the Category Image
 		$this->load->library('file_field');
 		$cat_image = $this->file_field->validate(
-			$this->input->post('cat_image'), 
+			$this->input->post('cat_image'),
 			'cat_image'
 		);
-		
-		$_POST['cat_image'] = $this->file_field->format_data(
-			$cat_image['value']
-		);
-		
+
+		$_POST['cat_image'] = $cat_image['value'];
+
 		// Finish data prep for insertion
 		if ($this->config->item('auto_convert_high_ascii') == 'y')
 		{
@@ -1939,8 +2132,6 @@ class Admin_content extends CP_Controller {
 
 			$_POST['cat_name'] =  ascii_to_entities($_POST['cat_name']);
 		}
-
-		$_POST['cat_name'] = str_replace(array('<', '>'), array('&lt;', '&gt;'), $_POST['cat_name']);
 
 		// Pull out custom field data for later insertion
 
@@ -1971,7 +2162,7 @@ class Admin_content extends CP_Controller {
 				$this->form_validation->set_rules('field_ft_'.$row['field_id'],	'', '');
 			}
 		}
-		
+
 		foreach ($fields as $id => $val)
 		{
 			if ( ! isset($required_cat_fields[$id]))
@@ -1981,9 +2172,9 @@ class Admin_content extends CP_Controller {
 			}
 		}
 
-		
+
 		$this->form_validation->set_error_delimiters('<br /><span class="notice">', '<br />');
-		
+
 		if ($this->form_validation->run() === FALSE)
 		{
 			return $this->category_edit();
@@ -1991,19 +2182,19 @@ class Admin_content extends CP_Controller {
 
 		$_POST['site_id'] = $this->config->item('site_id');
 
+		$category_data = array(
+			'group_id'			=> $group_id,
+			'cat_name'			=> $this->input->post('cat_name'),
+			'cat_url_title'		=> $this->input->post('cat_url_title'),
+			'cat_description'	=> $this->input->post('cat_description'),
+			'cat_image'			=> $this->input->post('cat_image'),
+			'parent_id'			=> $this->input->post('parent_id'),
+			'cat_order'			=> 1, // Default to the new category appearing first
+			'site_id'			=> $this->input->post('site_id')
+		);
+
 		if ($edit == FALSE)
 		{
-			$category_data = array(
-							'group_id'			=> $group_id,
-							'cat_name'			=> $this->input->post('cat_name'),
-							'cat_url_title'		=> $this->input->post('cat_url_title'),
-							'cat_description'	=> $this->input->post('cat_description'),
-							'cat_image'			=> $this->input->post('cat_image'),
-							'parent_id'			=> $this->input->post('parent_id'),
-							'cat_order'			=> 1, // Default to the new category appearing first
-							'site_id'			=> $this->input->post('site_id')
-			);
-
 			$this->db->insert('categories', $category_data);
 			$cat_id = $this->db->insert_id();
 
@@ -2033,26 +2224,26 @@ class Admin_content extends CP_Controller {
 			{
 				$children  = array();
 
-        		// Fetch parent info
+				// Fetch parent info
 				$this->db->select('cat_name, cat_id, parent_id');
 				$this->db->where('group_id', $group_id);
 				$this->db->from('categories');
-				$this->db->order_by('parent_id, cat_name'); 
+				$this->db->order_by('parent_id, cat_name');
 
-        		$query = $this->db->get();
-              
-        		if ($query->num_rows() == 0)
-        		{
-            		$update = FALSE;
+				$query = $this->db->get();
+
+				if ($query->num_rows() == 0)
+				{
+					$update = FALSE;
 					return $this->category_editor($group_id, $update);
-        		} 
-				
+				}
+
 				// Assign the query result to a multi-dimensional array
 				foreach($query->result_array() as $row)
 				{
 					$cat_array[$row['cat_id']]	= array($row['parent_id'], $row['cat_name']);
-				}				
-				
+				}
+
 				foreach($cat_array as $key => $values)
 				{
 					if ($values['0'] == $this->input->post('cat_id'))
@@ -2144,6 +2335,16 @@ class Admin_content extends CP_Controller {
 			$this->db->query($this->db->update_string('exp_category_field_data', $fields, array('cat_id' => $cat_id)));
 		}
 
+		// -------------------------------------------
+		// 'category_save' hook.
+		//
+		if (ee()->extensions->active_hook('category_save') === TRUE)
+		{
+			ee()->extensions->call('category_save', $cat_id, $category_data);
+		}
+		//
+		// -------------------------------------------
+
 		$this->session->set_flashdata('message_success', lang('preference_updated'));
 		$this->functions->redirect(BASE.AMP.'C=admin_content'.AMP.'M=category_editor'.AMP."group_id={$group_id}");
 	}
@@ -2151,26 +2352,26 @@ class Admin_content extends CP_Controller {
 	function _get_foreign_characters()
 	{
 		$foreign_characters = FALSE;
-		
+
 	/* -------------------------------------
 		/*  'foreign_character_conversion_array' hook.
 		/*  - Allows you to use your own foreign character conversion array
 		/*  - Added 1.6.0
 		* 	- Note: in 2.0, you can edit the foreign_chars.php config file as well
-		*/  
+		*/
 			if (isset($this->extensions->extensions['foreign_character_conversion_array']))
 			{
 				$foreign_characters = $this->extensions->call('foreign_character_conversion_array');
 			}
 		/*
 		/* -------------------------------------*/
-		
+
 		if ( ! $foreign_characters)
 		{
 			//	Create Foreign Character Conversion JS
 			include(APPPATH.'config/foreign_chars.php');
 		}
-		
+
 		return $foreign_characters;
 	}
 
@@ -2190,26 +2391,26 @@ class Admin_content extends CP_Controller {
 		if (is_numeric($str))
 		{
 			$this->form_validation->set_message('_cat_url_title', lang('cat_url_title_is_numeric'));
-			return FALSE;			
+			return FALSE;
 		}
 
 		// Is the Category URL Title still empty?  Can't have that
 		if (trim($str) == '')
 		{
 			$this->form_validation->set_message('_cat_url_title', lang('unable_to_create_cat_url_title'));
-			return FALSE;	
+			return FALSE;
 		}
 
 		// Cat URL Title must be unique within the group
 		if ($this->category_model->is_duplicate_category_name($str, $this->input->post('cat_id'), $this->input->post('group_id')))
 		{
 			$this->form_validation->set_message('_cat_url_title', lang('duplicate_cat_url_title'));
-			return FALSE;			
+			return FALSE;
 		}
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Set Global Category Order
 	 */
@@ -2231,9 +2432,9 @@ class Admin_content extends CP_Controller {
 		{
 			return FALSE;
 		}
-		
+
 		$order = ($_POST['sort_order'] == 'a') ? 'a' : 'c';
-		
+
 		if ($order == 'a')
 		{
 			if ( ! isset($_POST['override']))
@@ -2287,19 +2488,17 @@ class Admin_content extends CP_Controller {
 		{
 			return FALSE;
 		}
-		
-		$this->lang->loadfile('admin_content');
-		
+
 		$this->view->cp_page_title = lang('global_sort_order');
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=category_editor'.AMP.'group_id='.$group_id, lang('categories'));
 
 		$vars['form_action'] = 'C=admin_content'.AMP.'M=global_category_order'.AMP.'group_id='.$group_id;
-		
-		$vars['form_hidden']['sort_order'] = $this->input->post('sort_order');
-		$vars['form_hidden']['override'] = 1;		
 
-		$this->cp->render('admin/category_order_confirm', $vars);					
-		
+		$vars['form_hidden']['sort_order'] = $this->input->post('sort_order');
+		$vars['form_hidden']['override'] = 1;
+
+		$this->cp->render('admin/category_order_confirm', $vars);
+
 	}
 
 	/** --------------------------------
@@ -2312,9 +2511,9 @@ class Admin_content extends CP_Controller {
 		{
 			return FALSE;
 		}
-		
+
 		$data = $this->process_category_group($group_id);
-		
+
 		if (count($data) == 0)
 		{
 			return FALSE;
@@ -2324,7 +2523,7 @@ class Admin_content extends CP_Controller {
 		{
 			$this->db->query("UPDATE exp_categories SET cat_order = '{$cat_data['1']}' WHERE cat_id = '{$cat_id}'");
 		}
-		
+
 		return TRUE;
 	}
 
@@ -2347,20 +2546,20 @@ class Admin_content extends CP_Controller {
 		{
 			$this->_restrict_prefs_access();
 		}
-		
+
 		$this->db->select('cat_name, cat_id, parent_id');
 		$this->db->where('group_id', $group_id);
 		$this->db->order_by('parent_id, cat_name');
 		$categories = $this->db->get('categories');
-			  
+
 		if ($categories->num_rows() == 0)
 		{
 			return FALSE;
 		}
-		
+
 		$order = 0;
 		$parent = 0;
-		
+
 		foreach($categories->result_array() as $category)
 		{
 			// Once we're on a new parent, reset the ordering
@@ -2369,16 +2568,16 @@ class Admin_content extends CP_Controller {
 				$order = 0;
 				$parent = $category['parent_id'];
 			}
-			
+
 			$order++;
-			
+
 			$this->cat_update[$category['cat_id']] = array(
 				$category['parent_id'],
 				$order,
 				$category['cat_name']
 			);
 		}
-		
+
 		return $this->cat_update;
 	}
 
@@ -2528,15 +2727,14 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->load->library('table');
-		$this->lang->loadfile('admin_content');
 		$this->load->model('category_model');
 
 		$this->view->cp_page_title = lang('custom_category_fields');
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=category_management', lang('categories'));
-		
+
 		// Fetch the name of the category group
 		$query = $this->category_model->get_category_group_name($vars['group_id']);
-		$vars['group_name'] = $query->row('group_name');
+		$vars['group_name'] = htmlentities($query->row('group_name'), ENT_QUOTES, 'UTF-8');
 
 		$this->db->select('field_id, field_name, field_label, field_type, field_order');
 		$this->db->from('category_fields');
@@ -2553,15 +2751,18 @@ class Admin_content extends CP_Controller {
 				$vars['custom_fields'][$row->field_id]['field_id'] = $row->field_id;
 				$vars['custom_fields'][$row->field_id]['field_name'] = $row->field_name;
 				$vars['custom_fields'][$row->field_id]['field_order'] = $row->field_order;
-				$vars['custom_fields'][$row->field_id]['field_label'] = $row->field_label;
+				$vars['custom_fields'][$row->field_id]['field_label'] = htmlentities($row->field_label, ENT_QUOTES, 'UTF-8');
 
 				switch ($row->field_type)
 				{
-					case 'text' :  $field_type = lang('text_input');
+					case 'text':
+						$field_type = lang('text_input');
 						break;
-					case 'textarea' :  $field_type = lang('textarea');
+					case 'textarea':
+						$field_type = lang('textarea');
 						break;
-					case 'select' :  $field_type = lang('select_list');
+					case 'select':
+						$field_type = lang('select_list');
 						break;
 				}
 
@@ -2573,10 +2774,10 @@ class Admin_content extends CP_Controller {
 			headers: {3: {sorter: false}},
 			widgets: ["zebra"]
 		}');
-		
+
 		$this->cp->set_right_nav(array(
-        	'create_new_cat_field' => BASE.AMP.'C=admin_content'.AMP.'M=edit_custom_category_field'.AMP.'group_id='.$vars['group_id']
-        ));
+			'create_new_cat_field' => BASE.AMP.'C=admin_content'.AMP.'M=edit_custom_category_field'.AMP.'group_id='.$vars['group_id']
+		));
 
 		$this->cp->render('admin/category_custom_field_group_manager', $vars);
 	}
@@ -2594,7 +2795,7 @@ class Admin_content extends CP_Controller {
 	function edit_custom_category_field()
 	{
 		$this->_restrict_prefs_access();
-		
+
 		$vars['group_id'] = $this->input->get_post('group_id');
 		$group_id = $vars['group_id'];
 
@@ -2608,7 +2809,6 @@ class Admin_content extends CP_Controller {
 
 		$this->load->model('addons_model');
 		$this->load->helper('snippets_helper');
-		$this->lang->loadfile('admin_content');
 		$this->load->library('table');
 
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=category_management', lang('categories'));
@@ -2623,20 +2823,20 @@ class Admin_content extends CP_Controller {
 
 		// New entry gets URL title js
 		if ($vars['field_id'] == '')
-		{	
+		{
 			$foreign_characters = $this->_get_foreign_characters();
-			
+
 			// Pipe in necessary globals
 			$this->javascript->set_global(array(
-				'publish.word_separator'	=> $this->config->item('word_separator') != "dash" ? '_' : '-',
-				'publish.foreignChars'		=> $foreign_characters,
+				'publish.word_separator' => $this->config->item('word_separator') != "dash" ? '_' : '-',
+				'publish.foreignChars'   => $foreign_characters,
 			));
-			
+
 			// Load in necessary js files
 			$this->cp->add_js_script(array(
 				'plugin'	=> array('ee_url_title')
 			));
-			
+
 			$this->javascript->keyup('#field_label', '$("#field_label").ee_url_title($("#field_name"));');
 		}
 
@@ -2661,7 +2861,7 @@ class Admin_content extends CP_Controller {
 			}
 			else
 			{
-				// if there are no existing category fields yet for this group, 
+				// if there are no existing category fields yet for this group,
 				// this allows us to still validate the group_id
 				$this->db->select('COUNT(*) AS count');
 				$this->db->where('group_id', $group_id);
@@ -2677,9 +2877,9 @@ class Admin_content extends CP_Controller {
 		else
 		{
 			$vars['update_formatting'] = TRUE;
-			
+
 			$this->javascript->output('$(".formatting_notice_info").hide();');
-			
+
 			$this->view->cp_page_title = lang('edit_cat_field');
 
 			$vars['submit_lang_key'] = 'update';
@@ -2710,12 +2910,12 @@ class Admin_content extends CP_Controller {
 		}
 
 		$query = $this->db->query("SELECT f.field_id, f.field_name, f.site_id, f.field_label, f.field_type, f.field_default_fmt, f.field_show_fmt,
-							f.field_list_items, f.field_maxl, f.field_ta_rows, f.field_text_direction, f.field_required, f.field_order,
-							g.group_name
-							FROM exp_category_fields AS f, exp_category_groups AS g
-							WHERE f.group_id = g.group_id
-							AND g.group_id = '{$group_id}'
-							AND f.field_id = '{$field_id}'");
+				f.field_list_items, f.field_maxl, f.field_ta_rows, f.field_text_direction, f.field_required, f.field_order,
+				g.group_name
+			FROM exp_category_fields AS f, exp_category_groups AS g
+			WHERE f.group_id = g.group_id
+			AND g.group_id = '{$group_id}'
+			AND f.field_id = '{$field_id}'");
 
 		$data = array();
 
@@ -2756,9 +2956,9 @@ class Admin_content extends CP_Controller {
 		$vars['field_ta_rows'] = ($vars['field_ta_rows'] == '') ? 6 : $vars['field_ta_rows'];
 
 		$vars['field_type_options'] = array(
-											'text' 		=> lang('text_input'),
-											'textarea' 	=> lang('textarea'),
-											'select' 	=> lang('select_list')
+			'text'     => lang('text_input'),
+			'textarea' => lang('textarea'),
+			'select'   => lang('select_list')
 		);
 
 		// Show field formatting?
@@ -2843,8 +3043,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('unauthorized_access'));
 		}
 
-		$this->lang->loadfile('admin_content');
-
 		unset($_POST['custom_field_edit']); // submit button
 
 		// Check for required fields
@@ -2872,10 +3070,15 @@ class Admin_content extends CP_Controller {
 		}
 
 		// Does field name contain invalid characters?
-
 		if (preg_match('/[^a-z0-9\_\-]/i', $_POST['field_name']))
 		{
 			$error[] = lang('invalid_characters');
+		}
+
+		if ($_POST['field_label'] != ee()->security->xss_clean($_POST['field_label']))
+		{
+			ee()->lang->loadfile('admin');
+			$error[] = sprintf(lang('invalid_xss_check'), cp_url('homepage'));
 		}
 
 		// Field name must be unique for across category groups
@@ -2937,7 +3140,7 @@ class Admin_content extends CP_Controller {
 			unset($_POST['update_formatting']);
 
 			$this->db->query($this->db->update_string('exp_category_fields', $_POST, "field_id='".$field_id."'"));
-			
+
 			$cp_message = lang('cat_field_edited');
 		}
 		else
@@ -2960,7 +3163,7 @@ class Admin_content extends CP_Controller {
 			$this->db->query("ALTER TABLE exp_category_field_data ADD COLUMN field_id_{$insert_id} text NULL");
 			$this->db->query("ALTER TABLE exp_category_field_data ADD COLUMN field_ft_{$insert_id} varchar(40) NULL default 'none'");
 			$this->db->query("UPDATE exp_category_field_data SET field_ft_{$insert_id} = '".$this->db->escape_str($_POST['field_default_fmt'])."'");
-			
+
 			$cp_message = lang('cat_field_created');
 		}
 
@@ -2996,7 +3199,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('category_model');
 
 		$this->view->cp_page_title = lang('delete_field');
@@ -3015,7 +3217,7 @@ class Admin_content extends CP_Controller {
 
 		foreach($items->result() as $item)
 		{
-			$vars['items'][] = $item->field_label;
+			$vars['items'][] = htmlentities($item->field_label, ENT_QUOTES, 'UTF-8');
 		}
 
 		$this->cp->render('admin/preference_delete_confirm', $vars);
@@ -3047,7 +3249,6 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->load->model('category_model');
-		$this->lang->loadfile('admin_content');
 
 		$query = $this->category_model->get_category_label_name($group_id, $field_id);
 
@@ -3058,7 +3259,7 @@ class Admin_content extends CP_Controller {
 
 		$this->category_model->delete_category_field($group_id, $field_id);
 
-		$cp_message = lang('cat_field_deleted').NBS.$query->row('field_label');
+		$cp_message = lang('cat_field_deleted').NBS.htmlentities($query->row('field_label'), ENT_QUOTES, 'UTF-8');
 		$this->logger->log_action($cp_message);
 
 		$this->functions->clear_caching('all', '');
@@ -3083,7 +3284,6 @@ class Admin_content extends CP_Controller {
 
 		$this->load->library('table');
 		$this->load->model('field_model');
-		$this->lang->loadfile('admin_content');
 
 		$this->view->cp_page_title = lang('field_management');
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content', lang('admin_content'));
@@ -3096,7 +3296,7 @@ class Admin_content extends CP_Controller {
 		$vars['message'] = $message;
 		$vars['field_groups'] = $this->field_model->get_field_groups(); // Fetch field groups
 
-        $this->cp->set_right_nav(array('create_new_field_group' => BASE.AMP.'C=admin_content'.AMP.'M=field_group_edit'));
+		$this->cp->set_right_nav(array('create_new_field_group' => BASE.AMP.'C=admin_content'.AMP.'M=field_group_edit'));
 
 		$this->cp->render('admin/field_group_management', $vars);
 	}
@@ -3116,7 +3316,6 @@ class Admin_content extends CP_Controller {
 		$this->_restrict_prefs_access();
 
 		$this->load->model('status_model');
-		$this->lang->loadfile('admin_content');
 		$this->load->model('field_model');
 
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=field_group_management', lang('field_management'));
@@ -3178,7 +3377,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('field_model');
 
 		$this->view->cp_page_title = lang('delete_group');
@@ -3225,28 +3423,27 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->load->model('field_model');
-		$this->lang->loadfile('admin_content');
 
 		// store the name for the delete message
 		$group_name = $this->field_model->get_field_group($group_id);
 
 		// delete routine
 		$deleted = $this->field_model->delete_field_groups($group_id);
-		
+
 		// Drop from custom layouts
 		$query = $this->field_model->get_assigned_channels($group_id);
-			
+
 		if ($query->num_rows() > 0 && isset($deleted['field_ids']) && count($deleted['field_ids']) > 0)
 		{
 			foreach ($query->result() as $row)
 			{
 				$channel_ids[] = $row->channel_id;
 			}
-	
+
 			$this->load->library('layout');
 			$this->layout->delete_layout_fields($deleted['field_ids'], $channel_ids);
 		}
-		
+
 		$this->functions->clear_caching('all', '');
 
 		$cp_message = lang('field_group_deleted').NBS.NBS.$group_name->row('group_name');
@@ -3285,8 +3482,6 @@ class Admin_content extends CP_Controller {
 		{
 			return $this->field_group_edit();
 		}
-
-		$this->lang->loadfile('admin_content');
 
 		if ( ! preg_match("#^[a-zA-Z0-9_\-/\s]+$#i", $group_name))
 		{
@@ -3337,10 +3532,10 @@ class Admin_content extends CP_Controller {
 					'group_name'	=> $group_name,
 					'site_id'		=> $this->config->item('site_id')
 				);
-			
+
 			$this->db->where('group_id', $group_id);
 			$this->db->update('field_groups', $data);
-			
+
 			$cp_message = lang('field_group_updated').NBS.$group_name;
 		}
 
@@ -3377,7 +3572,6 @@ class Admin_content extends CP_Controller {
 		$vars['message'] = $message; //lang('preferences_updated')
 
 		$this->load->library('table');
-		$this->lang->loadfile('admin_content');
 		$this->load->model('field_model');
 
 		// Fetch the name of the category group
@@ -3396,13 +3590,13 @@ class Admin_content extends CP_Controller {
 			$this->load->library('api');
 			$this->api->instantiate('channel_fields');
 			$fts = $this->api_channel_fields->fetch_all_fieldtypes();
-			
+
 			foreach ($custom_fields->result() as $row)
 			{
 				$vars['custom_fields'][$row->field_id]['field_id'] = $row->field_id;
 				$vars['custom_fields'][$row->field_id]['field_name'] = $row->field_name;
 				$vars['custom_fields'][$row->field_id]['field_order'] = $row->field_order;
-				$vars['custom_fields'][$row->field_id]['field_label'] = $row->field_label;
+				$vars['custom_fields'][$row->field_id]['field_label'] = htmlentities($row->field_label, ENT_QUOTES, 'UTF-8');
 				$vars['custom_fields'][$row->field_id]['field_type'] = $fts[$row->field_type]['name'];
 			}
 		}
@@ -3411,7 +3605,7 @@ class Admin_content extends CP_Controller {
 			headers: {4: {sorter: false}},
 			widgets: ["zebra"]
 		}');
-		
+
 		$this->cp->add_js_script('file', 'cp/custom_fields');
 
 		$this->cp->render('admin/field_management', $vars);
@@ -3430,19 +3624,73 @@ class Admin_content extends CP_Controller {
 	function field_edit()
 	{
 		$this->_restrict_prefs_access();
-		
-		$this->load->library('table');
 
-		$this->load->library('api');
+		$this->load->library(array('table', 'api', 'form_validation'));
 		$this->load->helper(array('snippets_helper', 'form'));
-		
+
 		$this->api->instantiate('channel_fields');
-		$this->lang->loadfile('admin_content');
 
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=field_group_management', lang('field_management'));
 
 		$group_id = $this->input->get_post('group_id');
 		$field_id = $this->input->get_post('field_id');
+
+		ee()->form_validation->set_rules(
+			array(
+				array(
+					'field' => 'field_type',
+					'label' => 'lang:field_type',
+					'rules' => 'required'
+				),
+				array(
+					'field' => 'field_label',
+					'label' => 'lang:field_label',
+					'rules' => 'required'
+				),
+				array(
+					'field' => 'field_name',
+					'label' => 'lang:field_name',
+					'rules' => 'trim|required|callback__valid_field_name'
+				),
+				array(
+					'field' => 'field_order',
+					'label' => 'lang:field_order',
+					'rules' => 'trim|numeric'
+				)
+			)
+		);
+
+		// Allow the saved fieldtype to set form validation rules
+		if ($field_type = ee()->input->post('field_type'))
+		{
+			$ft_api = ee()->api_channel_fields;
+
+			$ft_api->fetch_all_fieldtypes();
+			$obj = $ft_api->setup_handler($field_type, TRUE);
+			$ft_api->apply(
+				'_init',
+				array(array('id' => $field_id))
+			);
+
+			if ($ft_api->check_method_exists('validate_settings'))
+			{
+				// Pass the fieldtype object to Form Validation so that it may
+				// call callback methods on it
+				ee()->form_validation->set_fieldtype($obj);
+
+				$ft_api->apply(
+					'validate_settings',
+					array($ft_api->get_posted_field_settings($field_type))
+				);
+			}
+		}
+
+		ee()->form_validation->set_error_delimiters('<p class="notice">', '</p>');
+
+		if (ee()->form_validation->run() !== FALSE)
+		{
+			return $this->field_update();
+		}
 
 		if ($field_id == '')
 		{
@@ -3454,7 +3702,7 @@ class Admin_content extends CP_Controller {
 			$type = 'edit';
 			$this->view->cp_page_title = lang('edit_field');
 		}
-		
+
 		$vars = $this->api_channel_fields->field_edit_vars($group_id, $field_id);
 
 		if ($vars === FALSE)
@@ -3476,17 +3724,17 @@ class Admin_content extends CP_Controller {
 		$this->javascript->output('
 			var ft_divs = $("'.$vars['ft_selector'].'"),
 				ft_dropdown = $("#field_type");
-		
+
 			ft_dropdown.change(function() {
 				ft_divs.hide();
 				$("#ft_"+this.value)
 					.show()
 					.trigger("activate")
 					.find("table").trigger("applyWidgets");
-					
+
 					$("#field_pre_populate_'.$vars['field_pre_populate'].'").trigger("click");
 			});
-			
+
 			ft_dropdown.trigger("change");
 		');
 
@@ -3498,6 +3746,61 @@ class Admin_content extends CP_Controller {
 		$this->cp->render('admin/field_edit', $vars);
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Validates field short name to make sure no disallowed characters or
+	 * words are in there and that the name isn't already taken. Marked as
+	 * public so form validation can access it, but really should be private.
+	 *
+	 * @param	string	Field name
+	 * @return	boolean	Whether or not field name passed validation
+	 */
+	public function _valid_field_name($field_name)
+	{
+		// Does field name contain invalid characters?
+		if (preg_match('/[^a-z0-9\_\-]/i', $field_name))
+		{
+			$this->form_validation->set_message('_valid_field_name', lang('invalid_characters'));
+			return FALSE;
+		}
+
+		// Does the field name match any reserved words?
+		if (in_array($field_name, ee()->cp->invalid_custom_field_names()))
+		{
+			$this->form_validation->set_message('_valid_field_name', lang('reserved_word'));
+			return FALSE;
+		}
+
+		// Truncated field name to test against duplicates
+		$trunc_field_name = substr($field_name, 0, 32);
+		$old_field_name = $this->form_validation->old_value('field_name');
+
+		// Is the field name taken?
+		ee()->db->where(array(
+			'site_id' => ee()->config->item('site_id'),
+			'field_name' => $trunc_field_name,
+		));
+
+		// If editing a field, exclude the current field from the query
+		if ($field_id = ee()->input->post('field_id'))
+		{
+			ee()->db->where('field_id !=', $field_id);
+		}
+
+		// Duplicate exists
+		if (ee()->db->count_all_results('channel_fields') > 0)
+		{
+			$error = ($trunc_field_name != $field_name)
+				? lang('duplicate_truncated_field_name') : lang('duplicate_field_name');
+
+			$this->form_validation->set_message('_valid_field_name', $error);
+
+			return FALSE;
+		}
+
+		return $trunc_field_name;
+	}
 
 	// --------------------------------------------------------------------
 
@@ -3512,13 +3815,12 @@ class Admin_content extends CP_Controller {
 	function field_update()
 	{
 		$this->_restrict_prefs_access();
-		
+
 		if ( ! isset($_POST['group_id']))
 		{
 			show_error(lang('unauthorized_access'));
 		}
-		
-		$this->lang->loadfile('admin_content');
+
 		$this->load->library('api');
 		$this->api->instantiate('channel_fields');
 
@@ -3528,14 +3830,12 @@ class Admin_content extends CP_Controller {
 		$edit = ( ! isset($_POST['field_id']) OR $_POST['field_id'] == '') ? FALSE : TRUE;
 
 		// We need this as a variable as we'll unset the array index
-
 		$group_id = $this->input->post('group_id');
 
 		//perform the field update
 		$this->api_channel_fields->update_field($_POST);
 
 		// Are there errors to display?
-
 		if ($this->api_channel_fields->error_count() > 0)
 		{
 			$str = '';
@@ -3564,7 +3864,7 @@ class Admin_content extends CP_Controller {
 		$this->functions->redirect(BASE.AMP.'C=admin_content'.AMP.'M=field_management'.AMP.'group_id='.$group_id);
 
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -3603,7 +3903,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('field_model');
 
 		$this->view->cp_page_title = lang('delete_field');
@@ -3648,20 +3947,19 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->load->model('field_model');
-		$this->lang->loadfile('admin_content');
 
 		$deleted = $this->field_model->delete_fields($field_id);
-		
+
 		// Drop from custom layouts
 		$query = $this->field_model->get_assigned_channels($deleted['group_id']);
-			
+
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result() as $row)
 			{
 				$channel_ids[] = $row->channel_id;
 			}
-	
+
 			$this->load->library('layout');
 			$this->layout->delete_layout_fields($field_id, $channel_ids);
 		}
@@ -3679,7 +3977,7 @@ class Admin_content extends CP_Controller {
 
 	// --------------------------------------------------------------------
 
- 	/** -----------------------------------------------------------
+	/** -----------------------------------------------------------
 	/**  Edit Formatting Buttons
 	/** -----------------------------------------------------------*/
 	// This function shows the form that lets you edit the
@@ -3694,7 +3992,7 @@ class Admin_content extends CP_Controller {
 		{
 			return FALSE;
 		}
-		
+
 		$this->db->select('group_id');
 		$this->db->from('channel_fields');
 		$this->db->where('field_id', $id);
@@ -3704,12 +4002,11 @@ class Admin_content extends CP_Controller {
 		{
 			return FALSE;
 		}
-		
-		$group_id = $query->row('group_id');		
+
+		$group_id = $query->row('group_id');
 
 		$this->load->library('table');
 		$this->load->model('addons_model');
-		$this->lang->loadfile('admin_content');
 
 		$this->jquery->tablesorter('.mainTable', '{
 			headers: {1: {sorter: false}},
@@ -3723,14 +4020,14 @@ class Admin_content extends CP_Controller {
 
 		$vars['form_hidden']['field_id'] = $id;
 		$vars['form_hidden']['none'] = 'y';
- 		
+
 		$plugins = $this->addons_model->get_plugin_formatting();
 
 		$query = $this->db->query("SELECT field_fmt FROM exp_field_formatting WHERE field_id = '$id' AND field_fmt != 'none' ORDER BY field_fmt");
 
 		// Current available
 		$plugs = array();
-		
+
 		foreach ($query->result_array() as $row)
 		{
 			$plugs[] = $row['field_fmt'];
@@ -3739,24 +4036,24 @@ class Admin_content extends CP_Controller {
 		$options = array();
 
 		foreach ($plugins as $val => $name)
-		{		
+		{
 			$select = (in_array($val, $plugs)) ? 'y' : 'n';
 			$options[$val] = array('name' => $name, 'selected' => $select);
 		}
 
 		$vars['format_options'] = $options;
-		
+
 		$this->cp->render('admin/edit_formatting_options', $vars);
 	}
 
- 	// --------------------------------------------------------------------
- 
- 	/**
- 	 * Update Formatting Buttons
- 	 *
- 	 * @access public
- 	 * @return void
- 	 */
+	// --------------------------------------------------------------------
+
+	/**
+	 * Update Formatting Buttons
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function update_formatting_options()
 	{
 		$this->_restrict_prefs_access();
@@ -3765,23 +4062,25 @@ class Admin_content extends CP_Controller {
 		{
 			return FALSE;
 		}
-		
+
 		if ( ! is_numeric($id))
 		{
 			return FALSE;
 		}
-		
+
 		unset($_POST['field_id']);
-		
-		$this->db->query("DELETE FROM exp_field_formatting WHERE field_id = '$id'");	
-				
+
+		$this->db->query("DELETE FROM exp_field_formatting WHERE field_id = '$id'");
+
 		foreach ($_POST as $key => $val)
 		{
 			if ($val == 'y')
-				 $this->db->query("INSERT INTO exp_field_formatting (field_id, field_fmt) VALUES ('$id', '$key')");	
+				 $this->db->query("INSERT INTO exp_field_formatting (field_id, field_fmt) VALUES ('$id', '$key')");
 		}
-		
-		return $this->field_edit();	
+
+		$group_id = $this->input->get_post('group_id');
+		$field_id = $this->input->get_post('field_id');
+		$this->functions->redirect(BASE.AMP.'C=admin_content'.AMP.'M=field_edit'.AMP.'field_id='.$field_id.AMP.'group_id='.$group_id);
 	}
 
 
@@ -3803,7 +4102,6 @@ class Admin_content extends CP_Controller {
 
 		$this->load->library('table');
 		$this->load->model('status_model');
-		$this->lang->loadfile('admin_content');
 
 		$this->view->cp_page_title = lang('statuses');
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content', lang('admin_content'));
@@ -3817,11 +4115,11 @@ class Admin_content extends CP_Controller {
 
 		// Fetch category groups
 		$vars['status_groups'] = $this->status_model->get_status_groups();
-		
+
 		$this->cp->set_right_nav(array(
 			'create_new_status_group' => BASE.AMP.'C=admin_content'.AMP.'M=status_group_edit'
 		));
-		
+
 		$this->cp->render('admin/status_group_management', $vars);
 	}
 
@@ -3837,8 +4135,6 @@ class Admin_content extends CP_Controller {
 	{
 		$this->_restrict_prefs_access();
 
-		$this->load->model('status_model');
-		$this->lang->loadfile('admin_content');
 		$this->load->model('status_model');
 
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content'.AMP.'M=status_group_management', lang('statuses'));
@@ -3877,7 +4173,7 @@ class Admin_content extends CP_Controller {
 		{
 			$this->view->cp_page_title = lang('create_new_status_group');
 		}
-		
+
 		$this->cp->render('admin/status_group_edit', $vars);
 	}
 
@@ -3902,7 +4198,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('status_model');
 
 		$this->view->cp_page_title = lang('delete_group');
@@ -3948,7 +4243,6 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->load->model('status_model');
-		$this->lang->loadfile('admin_content');
 
 		$query = $this->status_model->get_status_group($group_id);
 
@@ -4003,7 +4297,6 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->load->model('status_model');
-		$this->lang->loadfile('admin_content');
 
 		// Is the group name taken?
 		if ($this->status_model->is_duplicate_status_group_name($group_name, $group_id))
@@ -4074,7 +4367,6 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->load->model('status_model');
-		$this->lang->loadfile('admin_content');
 		$this->load->library('table');
 
 		$group_name = $this->status_model->get_status_group($group_id);
@@ -4091,9 +4383,9 @@ class Admin_content extends CP_Controller {
 
 		// Fetch status groups
 		$vars['statuses'] = $this->status_model->get_statuses($group_id);
-		
-        $this->cp->set_right_nav(array('create_new_status' => BASE.AMP.'C=admin_content'.AMP.'M=status_edit'.AMP.'group_id='.$group_id));
-		
+
+		$this->cp->set_right_nav(array('create_new_status' => BASE.AMP.'C=admin_content'.AMP.'M=status_edit'.AMP.'group_id='.$group_id));
+
 		$this->cp->render('admin/status_management', $vars);
 	}
 
@@ -4117,13 +4409,12 @@ class Admin_content extends CP_Controller {
 		{
 			show_error(lang('not_authorized'));
 		}
-		
+
 		$this->cp->add_js_script(array(
 			'plugin' => array('jscolor')
 		));
 
 		$this->load->library('table');
-		$this->lang->loadfile('admin_content');
 		$this->load->model('status_model');
 
 		$query = $this->status_model->get_status($status_id);
@@ -4239,7 +4530,7 @@ class Admin_content extends CP_Controller {
 						'status'	 	=> $this->input->post('status'),
 						'status_order'	=> (is_numeric($this->input->post('status_order'))) ? $this->input->get_post('status_order') : 0,
 						'highlight'		=> $this->input->post('highlight')
-				  	);
+					);
 
 		if ($edit == FALSE)
 		{
@@ -4254,7 +4545,7 @@ class Admin_content extends CP_Controller {
 			$data['site_id'] = $this->config->item('site_id');
 
 			$this->db->insert('statuses', $data);
-			
+
 			$status_id = $this->db->insert_id();
 			$cp_message = lang('status_created');
 		}
@@ -4338,7 +4629,6 @@ class Admin_content extends CP_Controller {
 			show_error(lang('not_authorized'));
 		}
 
-		$this->lang->loadfile('admin_content');
 		$this->load->model('status_model');
 
 		$this->view->cp_page_title = lang('delete_status');
@@ -4428,179 +4718,6 @@ class Admin_content extends CP_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Default Ping Servers
-	 *
-	 * Creates the Default Ping Servers page
-	 *
-	 * @access	public
-	 * @return	void
-	 */
-	function default_ping_servers($message = '', $id = '0')
-	{
-		$this->_restrict_prefs_access();
-
-		if ($id == 0 && ! $this->cp->allowed_group('can_admin_channels'))
-		{
-			show_error(lang('unauthorized_access'));
-		}
-
-		$this->load->library('table');
-		$this->lang->loadfile('admin_content');
-		$this->load->model('admin_model');
-
-		$vars['message'] = $message;
-
-		$r = '';
-
-		if ($id != 0)
-		{
-			$this->view->cp_page_title = lang('ping_servers');
-			$vars['instructions'] = '';
-		}
-		else
-		{
-			$this->view->cp_page_title = lang('default_ping_servers');
-			$vars['instructions'] = lang('define_ping_servers');
-		}
-
-		$vars['form_hidden']['member_id'] = $id;
-
-		$this->jquery->tablesorter('.mainTable', '{widgets: ["zebra"]}');
-
-		$ping_servers = $this->admin_model->get_ping_servers(0);
-
-		// ping protocols supported (currently only xmlrpc)
-		$vars['protocols'] = array('xmlrpc'=>'xmlrpc');
-
-		$vars['is_default_options'] = array('y'=>lang('yes'), 'n'=>lang('no'));
-
-		$i = 1;
-
-		$vars['ping_servers'] = array();
-
-		if ($ping_servers->num_rows() > 0)
-		{
-			foreach ($ping_servers->result_array() as $row)
-			{
-				$vars['ping_servers'][$i]['server_id'] = $row['id'];
-				$vars['ping_servers'][$i]['server_name'] = $row['server_name'];
-				$vars['ping_servers'][$i]['server_url'] = $row['server_url'];
-				$vars['ping_servers'][$i]['port'] = $row['port'];
-				$vars['ping_servers'][$i]['ping_protocol'] = $row['ping_protocol'];
-				$vars['ping_servers'][$i]['server_order'] = $row['server_order'];
-				$vars['ping_servers'][$i]['is_default'] = $row['is_default'];
-				$i++;
-			}
-		}
-
-		$vars['blank_count'] = $i;
-
-		$this->javascript->output('
-
-			function setup_js_page() {
-				$(".mainTable").tablesorter({widgets: ["zebra"]});
-				
-				$(".del_row, .order_arrows").show();
-				$(".del_instructions").hide();
-
-				$(".tag_order").css("cursor", "move");
-
-				$(".del_row a").click(function(){
-					$(this).parent().parent().remove();
-					update_ping_servers("true");
-					return false;
-				});
-
-				$(".mainTable .tag_order input").hide();
-				
-				$(".mainTable tbody").sortable({
-					axis:"y",
-					containment:"parent",
-					placeholder:"tablesize",
-					update: function(){
-
-						$("input[name^=server_order]").each(function(i) {
-							$(this).val(i+1);
-						});
-
-						update_ping_servers("false");
-						$(".mainTable").trigger("applyWidgets");
-					}
-				});
-
-				$("#ping_server_form").submit(function() {
-					update_ping_servers("true");
-					return false;
-				});
-			}
-
-			function update_ping_servers(refresh) {
-				$.post(
-					EE.BASE+"&C=admin_content&M=save_ping_servers&refresh="+refresh,
-					$("#ping_server_form").serializeArray(),
-					function(res) {
-						if ($(res).find("#ping_server_form").length > 0) {
-							$("#ping_server_form").replaceWith($(res).find("#ping_server_form"));
-							setup_js_page();
-						}
-
-						$.ee_notice("'.lang('preferences_updated').'", {"type" : "success"});
-					},
-				"html");
-			}
-
-			setup_js_page();
-		');
-
-		$this->cp->add_to_head('<style type="text/css">.tablesize{height:45px!important;}</style>');
-
-		$this->cp->render('admin/default_ping_servers', $vars);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 *  Save ping servers
-	 */
-	function save_ping_servers()
-	{
-		$this->_restrict_prefs_access();
-
-		$this->load->model('admin_model');
-
-		$id = $this->input->get_post('member_id');
-
-		$data = array();
-
-		foreach ($_POST as $key => $val)
-		{
-			if (strncmp($key, 'server_name_', 12) == 0 && $val != '')
-			{
-				$n = substr($key, 12);
-
-				$data[] = array(
-								 'member_id'	 => 0,
-								 'server_name'	=> $this->input->post('server_name_'.$n),
-								 'server_url'	=> $this->input->post('server_url_'.$n),
-								 'port'		  => $this->input->post('server_port_'.$n),
-								 'ping_protocol' => $this->input->post('ping_protocol_'.$n),
-								 'is_default'	=> $this->input->post('is_default_'.$n),
-								 'server_order'  => $this->input->post('server_order_'.$n),
-								 'site_id'		 => $this->config->item('site_id')
-								);
-			}
-		}
-
-		$this->admin_model->update_ping_servers(0, $data);
-
-		$message = lang('preferences_updated');
-
-		$this->default_ping_servers($message);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Default HTML Buttons
 	 *
 	 * Creates the Default HTML Buttons page
@@ -4613,7 +4730,6 @@ class Admin_content extends CP_Controller {
 		$this->_restrict_prefs_access();
 
 		$this->load->library('table');
-		$this->lang->loadfile('admin_content');
 		$this->load->model('admin_model');
 
 		$member_id = (int) $this->input->get_post('member_id');
@@ -4624,7 +4740,7 @@ class Admin_content extends CP_Controller {
 		}
 
 		$this->view->cp_page_title = lang('default_html_buttons');
-		
+
 		$this->cp->add_js_script(array('file' => 'cp/account_html_buttons'));
 
 		$vars['form_hidden']['member_id'] = $this->session->userdata('member_id');
@@ -4683,7 +4799,7 @@ class Admin_content extends CP_Controller {
 
 		$vars['html_buttons'] = $this->admin_model->get_html_buttons(0); // recall it in case in insert happened
 		$vars['i'] = 1;
-		
+
 		$this->cp->render('admin/default_html_buttons', $vars);
 	}
 
@@ -4737,7 +4853,7 @@ class Admin_content extends CP_Controller {
 	function global_channel_preferences()
 	{
 		$this->_restrict_prefs_access();
-		
+
 		$this->cp->set_breadcrumb(BASE.AMP.'C=admin_content', lang('admin_content'));
 
 		$this->_config_manager('channel_cfg', __FUNCTION__);
@@ -4762,7 +4878,7 @@ class Admin_content extends CP_Controller {
 			},
 			textExtraction: function(node) {
 				var c = $(node).children();
-				
+
 				if (c.length) {
 					return c.text();
 				}
@@ -4807,151 +4923,7 @@ class Admin_content extends CP_Controller {
 
 		$vars['form_action'] = 'C=admin_content'.AMP.'M=update_config';
 
-		$f_data = $this->admin_model->get_config_fields($type);
-		$subtext = $this->admin_model->get_config_field_subtext();
-
-		/** -----------------------------
-		/**	 Blast through the array
-		/** -----------------------------*/
-
-		// If we're dealing with a database configuration we need to pull the data
-		// out of the DB config file.  To make thigs simple we will set the DB config
-		// items as general config values
-		if ($type == 'db_cfg')
-		{
-			require $this->config->database_path;
-
-			if ( ! isset($active_group))
-			{
-				$active_group = 'expressionengine';
-			}
-
-			if (isset($db[$active_group]))
-			{
-				$db[$active_group]['pconnect'] = ($db[$active_group]['pconnect'] === TRUE) ? 'y' : 'n';
-				$db[$active_group]['cache_on'] = ($db[$active_group]['cache_on'] === TRUE) ? 'y' : 'n';
-				$db[$active_group]['db_debug'] = ($db[$active_group]['db_debug'] === TRUE) ? 'y' : 'n';
-
-				$this->config->set_item('pconnect', $db[$active_group]['pconnect']);
-				$this->config->set_item('cache_on', $db[$active_group]['cache_on']);
-				$this->config->set_item('cachedir', $db[$active_group]['cachedir']);
-				$this->config->set_item('db_debug', $db[$active_group]['db_debug']);
-			}
-		}
-
-		$this->load->helper('date');
-		$timezones = timezones();
-
-		foreach ($f_data as $name => $options)
-		{
-			$value = $this->config->item($name);
-
-			$sub = '';
-			$details = '';
-			$selected = '';
-
-			if (isset($subtext[$name]))
-			{
-				foreach ($subtext[$name] as $txt)
-				{
-					$sub .= lang($txt);
-				}
-			}
-
-			switch ($options[0])
-			{
-				case 's':
-					// Select fields
-					foreach ($options[1] as $k => $v)
-					{
-						$details[$k] = lang($v);
-					}
-					$selected = $value;
-					break;
-				case 'r':
-					// Radio buttons
-					foreach ($options[1] as $k => $v)
-					{
-						// little cheat for some values popped into a build update
-						if ($value === FALSE)
-						{
-							$checked = (isset($options['2']) && $k == $options['2']) ? TRUE : FALSE;
-						}
-						else
-						{
-							$checked = ($k == $value) ? TRUE : FALSE;
-						}
-
-						$details[] = array('name' => $name, 'value' => $k, 'id' => $name.'_'.$k, 'label' => $v, 'checked' => $checked);
-					}
-					break;
-				case 't':
-					// Textareas
-
-					// The "kill_pipes" index instructs us to turn pipes into newlines
-					if (isset($options['1']['kill_pipes']) && $options['1']['kill_pipes'] === TRUE)
-					{
-						$text = str_replace('|', NL, $value);
-					}
-					else
-					{
-						$text = $value;
-					}
-
-					$rows = (isset($options['1']['rows'])) ? $options['1']['rows'] : '20';
-
-					$text = str_replace("\\'", "'", $text);
-
-					$details = array('name' => $name, 'value' => $text, 'rows' => $rows, 'id' => $name);
-					break;
-				case 'f':
-					// Function calls
-					switch ($options['1'])
-					{
-						case 'language_menu'	:
-							$options[0] = 's';
-							$details = $this->admin_model->get_installed_language_packs();
-							$selected = $value;
-							break;
-						case 'fetch_encoding'	:
-							$options[0] = 's';
-							$details = $this->admin_model->get_xml_encodings();
-							$selected = $value;
-							break;
-						case 'site_404'			:
-							$options[0] = 's';
-							$details = array('' => lang('none'));
-							
-							if (is_array($list = $this->admin_model->get_template_list()))
-							{
-								$details = array_merge($details, $list);
-							}
-
-							$selected = $value;
-							break;
-						case 'theme_menu'		:
-							$options[0] = 's';
-							$details = $this->admin_model->get_cp_theme_list();
-							$selected = $value;
-							break;
-						case 'timezone'			:
-							$options[0] = 's';
-							foreach ($timezones as $k => $v)
-							{
-								$details[$k] = lang($k);
-							}
-							$selected = $value;
-							break;
-					}
-					break;
-				case 'i':
-					// Input fields
-					$details = array('name' => $name, 'value' => str_replace("\\'", "'", $value), 'id' => $name);
-					break;
-			}
-
-			$vars['fields'][$name] = array('type' => $options[0], 'value' => $details, 'subtext' => $sub, 'selected' => $selected);
-		}
+		$vars = array_merge(ee()->config->prep_view_vars($type), $vars);
 
 		// if this is an update, show the success message
 		$vars['return_loc'] = BASE.AMP.'C=admin_content'.AMP.'M='.$return_loc;
@@ -4973,7 +4945,7 @@ class Admin_content extends CP_Controller {
 	function update_config()
 	{
 		$this->_restrict_prefs_access();
-		
+
 		$loc = $this->input->get_post('return_location');
 
 		$this->config->update_site_prefs($_POST);

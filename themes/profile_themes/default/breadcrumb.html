@@ -1,9 +1,11 @@
-
-<div><small>{breadcrumb_links}</small></div>
-
+<table border='0' cellpadding='0' cellspacing='0' style="width:99%;">
+<tr>
+<td>
+<div class='breadcrumb'>{breadcrumb_links}</div>
+</td>
 
 {if logged_in}
-<div>
+<td align="right">
 
 {lang:logged_in_as}&nbsp; <span class="defaultBold"><a href="{path:your_profile}">{name}</a></span>
 
@@ -21,5 +23,8 @@
 
 &nbsp;&nbsp;
 
-</div>
+</td>
 {/if}
+
+</tr>
+</table>

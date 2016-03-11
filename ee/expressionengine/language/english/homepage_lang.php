@@ -6,12 +6,6 @@ $lang = array(
 // Home page
 //----------------------------
 
-'install_lock_warning' =>
-'Warning: Your installation folder is still on your server.',
-
-'install_lock_removal' =>
-'For security purposes, please remove the folder called <strong>installer</strong> from your server using your FTP program.',
-
 'checksum_changed_warning' =>
 'One or more core files have been altered:',
 
@@ -47,7 +41,7 @@ Please download <a href="%s" title="Download Here">here</a> and follow the <a hr
 'cp_home' =>
 'My Home Page',
 
-'current_user' => 
+'current_user' =>
 'Current User:',
 
 'system_status' =>
@@ -125,7 +119,7 @@ Please download <a href="%s" title="Download Here">here</a> and follow the <a hr
 'no_templates_available' =>
 'No Template Groups exist.  <a href=\'%s\' title=\'Create a template group\'>Create a Template Group</a>',
 
-'select_channel_to_post_in' => 
+'select_channel_to_post_in' =>
 'Choose a channel to post in',
 
 'recent_members' =>
@@ -167,11 +161,8 @@ Please download <a href="%s" title="Download Here">here</a> and follow the <a hr
 'close' =>
 'Close',
 
-'developer_logs' =>
-'You have %d unviewed items in the <a href="%s">Developer Log</a>.',
-
 'version_mismatch' =>
-'Your ExpressionEngine installation&rsquo;s version (%s) is not consistent with the reported version (%s). <a href="http://ellislab.com/expressionengine/user-guide/installation/update.html">Please update your installation of ExpressionEngine again</a>.',
+'Your ExpressionEngine installation&rsquo;s version (%s) is not consistent with the reported version (%s). <a href="https://docs.expressionengine.com/v2/installation/update.html">Please update your installation of ExpressionEngine again</a>.',
 
 ''=>''
 );

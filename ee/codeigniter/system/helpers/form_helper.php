@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2016, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -58,9 +58,9 @@ if ( ! function_exists('form_open'))
 		$form .= '>';
 
 		// CSRF
-		if ($CI->config->item('csrf_protection') === TRUE)
+		if ( ! bool_config_item('disable_csrf_protection'))
 		{
-			$hidden[$CI->security->get_csrf_token_name()] = $CI->security->get_csrf_hash();
+			$hidden['csrf_token'] = CSRF_TOKEN;
 		}
 
 		if (is_array($hidden) AND count($hidden) > 0)
@@ -627,23 +627,13 @@ if ( ! function_exists('form_prep'))
 			return '';
 		}
 
-		// we've already prepped a field with this name
-		// @todo need to figure out a way to namespace this so
-		// that we know the *exact* field and not just one with
-		// the same name
-		if (isset($prepped_fields[$field_name]))
+		$hash = md5($field_name.$str);
+
+		if ( ! isset($prepped_fields[$hash]))
 		{
-			return $str;
-		}
-
-		$str = htmlspecialchars($str);
-
-		// In case htmlspecialchars misses these.
-		$str = str_replace(array("'", '"'), array("&#39;", "&quot;"), $str);
-
-		if ($field_name != '')
-		{
-			$prepped_fields[$field_name] = $field_name;
+			$str = htmlspecialchars($str, ENT_QUOTES);
+			$hash = md5($field_name.$str);
+			$prepped_fields[$hash] = TRUE;
 		}
 
 		return $str;
@@ -1026,17 +1016,17 @@ if ( ! function_exists('_get_validation_object'))
 
 		// We set this as a variable since we're returning by reference.
 		$return = FALSE;
-		
+
 		if (FALSE !== ($object = $CI->load->is_loaded('form_validation')))
 		{
 			if ( ! isset($CI->$object) OR ! is_object($CI->$object))
 			{
 				return $return;
 			}
-			
+
 			return $CI->$object;
 		}
-		
+
 		return $return;
 	}
 }

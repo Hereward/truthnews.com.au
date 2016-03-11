@@ -6,14 +6,14 @@
 	<?=$this->view->head_title($cp_page_title)?>
 	<?=$this->view->head_link('css/login.css'); ?>
 	<?=$this->view->script_tag('jquery/jquery.js')?>
-	
+
 </head>
 <body>
 
 <div id="branding"><a href="http://ellislab.com/"><img src="<?=PATH_CP_GBL_IMG?>ee_logo_branding.gif" width="250" height="28" alt="<?=lang('powered_by')?> ExpressionEngine" /></a></div>
 
 	<div id="content">
-		
+
 		<?php if ($message != ''):?>
 		<div class="error">
 			<p><?=$message?></p>
@@ -31,15 +31,15 @@
 
 			<dt><?=lang('password', 'password')?>:</dt>
 			<dd>
-			  <?=form_password(array('style' => 'width:90%', 'size' => '32', 'dir' => 'ltr', 'name' => "password", 'id' => "password", 'maxlength' => 40, 'autocomplete' => 'off'))?> 
+			  <?=form_password(array('style' => 'width:90%', 'size' => '32', 'dir' => 'ltr', 'name' => "password", 'id' => "password", 'maxlength' => PASSWORD_MAX_LENGTH, 'autocomplete' => 'off'))?>
 			</dd>
 		</dl>
-		
+
 		<script>
 			document.getElementById('<?=$focus_field?>').focus();
 		</script>
-		
-		<?php if ($this->config->item('admin_session_type') == 'c'):?>
+
+		<?php if ($this->config->item('cp_session_type') == 'c'):?>
 			<p><?=form_checkbox('remember_me', '1', '', 'id="remember_me"')?><span><?=lang('remember_me', 'remember_me')?></span></p>
 		<?php endif;?>
 

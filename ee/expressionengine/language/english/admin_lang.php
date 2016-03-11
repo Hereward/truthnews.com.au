@@ -16,7 +16,7 @@ $lang = array(
 "Enable SQL Query Caching",
 
 // ---------------------------
-//  Member List Config 
+//  Member List Config
 // ---------------------------
 
 "xss_clean_uploads" =>
@@ -169,6 +169,9 @@ $lang = array(
 'enable_extensions' =>
 "Enable Extensions?",
 
+'extensions_disabled_manage' =>
+"Extensions must <a href='%s'>be enabled</a> to manage installed extensions.",
+
 'disable_extension' =>
 "Disable?",
 
@@ -308,11 +311,23 @@ $lang = array(
 "enable_throttling_explanation" =>
 "This feature generates a 404 header and message if a request to your site is made in which the template group does not exist in the URL. It is intended primarily to keep search engine crawlers from repeatedly requesting nonexistent pages.",
 
+"caching_driver" =>
+"Caching Driver",
+
+"caching_driver_failover" =>
+"Cannot connect to %s, using %s driver instead",
+
+"caching_driver_file_fail" =>
+"Cannot use %s driver, check cache path permissions",
+
+"disable_caching" =>
+"Disable Caching",
+
 "max_caches" =>
 "Maximum Number of Cachable URIs",
 
 "max_caches_explanation" =>
-"If you cache your pages or your database, this preference limits the total number of cache instances in order to prevent your cache files from taking up too much disk space.  150 is a good number for a small site.  If you have a large site and disk space is not an issue you can set it higher (over 300).  We have an internal limit of 1000 regardless of your preference.",
+"If you cache your pages or database, this limits the number of cache instances. We recommend 150 for small sites and 300 for large sites. The allowed maximum is 1000.",
 
 "standby_recount" =>
 "Recounting... please stand by...",
@@ -329,7 +344,7 @@ $lang = array(
 "email_module_captchas" =>
 "Enable CAPTCHAs for Tell-a-Friend and Contact emails",
 
-"sql_good_query" => 
+"sql_good_query" =>
 "Your query was successful",
 
 "must_submit_number" =>
@@ -341,7 +356,7 @@ $lang = array(
 "must_submit_channel" =>
 "You must choose at least one channel",
 
-"taken_channel_name" => 
+"taken_channel_name" =>
 "This channel name is already taken.",
 
 "no_members_matched" =>
@@ -450,6 +465,9 @@ $lang = array(
 'pm_cfg' =>
 "Private Messaging Preferences",
 
+'prv_msg_enabled' =>
+'Enable private messaging between members?',
+
 'prv_msg_storage_limit' =>
 "Maximum Number of Private Messages a user can store",
 
@@ -459,10 +477,13 @@ $lang = array(
 'prv_msg_max_chars' =>
 "Maximum Number of characters to allow in Private Messages",
 
+'prv_msg_allow_attachments' =>
+'Allow attachments in private messages?',
+
 "prv_msg_max_attachments" =>
 "Maximum Number of Attachments per Private Message",
 
-'prv_msg_upload_path' => 
+'prv_msg_upload_path' =>
 "Server Path for Attachment Upload Directory",
 
 'prv_msg_attach_maxsize' =>
@@ -825,7 +846,7 @@ $lang = array(
 "auto_convert_high_ascii" =>
 "Automatically Convert High ASCII Text to Entities",
 
-"cp_cfg" => 
+"cp_cfg" =>
 "Control Panel Settings",
 
 "query_cfg" =>
@@ -834,8 +855,17 @@ $lang = array(
 "debug_cfg" =>
 "Debugging Preferences",
 
+"software_registration" =>
+"Software Registration",
+
+"license_contact" =>
+"License Holder Contact Email",
+
 "license_number" =>
 "License Number",
+
+'invalid_license_number' =>
+'The license number provided is not a valid license number.',
 
 "word_separator" =>
 "Word Separator for URL Titles",
@@ -855,16 +885,16 @@ $lang = array(
 "content_admin" =>
 "Content Administration",
 
-"system_preferences" => 
+"system_preferences" =>
 "System Preferences",
 
-"is_system_on" => 
+"is_system_on" =>
 "Is system on?",
 
 "is_system_on_explanation" =>
 "If system is off, only Super Admins will be able to see your site(s) by default",
 
-"system_off_msg" => 
+"system_off_msg" =>
 "System Off Message",
 
 "template_updated" =>
@@ -873,13 +903,13 @@ $lang = array(
 "preference_information" =>
 "Preference Guide",
 
-"preference" => 
+"preference" =>
 "Preference",
 
-"value" => 
+"value" =>
 "Value",
 
-"general_cfg" => 
+"general_cfg" =>
 "General Configuration",
 
 "allow_member_registration" =>
@@ -939,10 +969,10 @@ $lang = array(
 "group_assignment_defaults_to_two" =>
 "If you require account activation, members will be set to this once they are activated",
 
-"user_session_type" =>
-"User Session Type",
+"website_session_type" =>
+"Website Session Type",
 
-"admin_session_type" =>
+"cp_session_type" =>
 "Control Panel Session Type",
 
 "security_cfg" =>
@@ -963,17 +993,11 @@ $lang = array(
 "s_session" =>
 "Session ID only",
 
-"secure_forms" =>
-"Process form data in Secure Mode?",
-
 "deny_duplicate_data" =>
 "Deny Duplicate Data?",
 
 "deny_duplicate_data_explanation" =>
 "This option prevents data submitted by users (comments, etc.) from being received if it is an exact duplicate of data that already exists.",
-
-"secure_forms_explanation" =>
-"Prevents automated spamming and multiple accidental submissions.",
 
 "allow_multi_logins" =>
 "Allow multiple log-ins from a single account?",
@@ -1022,6 +1046,12 @@ $lang = array(
 
 "dictionary_explanation" =>
 "The name of the file containing your word list",
+
+'license_contact_explanation' =>
+'The contact email address for the owner of this software license.',
+
+'license_number_explanation' =>
+'You can find and manage your software licenses on the EllisLab.com <a href="https://store.ellislab.com/manage">Manage Purchases</a> page,',
 
 "image_path" =>
 "Path to Images Directory",
@@ -1089,6 +1119,18 @@ $lang = array(
 "used_in_meta_tags" =>
 "Used in control panel meta tags",
 
+"use_newrelic" =>
+"Enable New Relic RUM JavaScript?",
+
+"use_newrelic_explanation" =>
+'When enabled, New Relic will add <a href="https://newrelic.com/docs/features/real-user-monitoring" rel="external">Real User Monitoring JavaScript</a> to all of your web pages.',
+
+"newrelic_app_name" =>
+"New Relic Application Name",
+
+"newrelic_app_name_explanation" =>
+"Changes the name of the application that appears in the New Relic dashboard for this installation of ExpressionEngine.",
+
 "gzip_output" =>
 "Enable GZIP Output?",
 
@@ -1098,49 +1140,55 @@ $lang = array(
 "send_headers" =>
 "Generate HTTP Page Headers?",
 
-"redirect_method" => 
+"redirect_method" =>
 "Redirection Method",
 
-"location_method" => 
+"location_method" =>
 "Location (faster)",
 
-"refresh_method" => 
+"refresh_method" =>
 "Refresh (Windows servers)",
 
-"localization_cfg" => 
+"localization_cfg" =>
 "Localization Settings",
 
-"time_format" => 
+"date_format" =>
+"Default Date Formatting",
+
+"time_format" =>
 "Default Time Formatting",
 
-"united_states" => 
-"United States",
+"24_hour" =>
+"24-hour",
 
-"european" => 
-"European",
+"12_hour" =>
+"12-hour with AM/PM",
 
-"server_timezone" => 
-"Server Timezone",
+"include_seconds" =>
+"Include Seconds in the Default Time Format",
 
-"cookie_cfg" => 
+"default_site_timezone" =>
+"Site Timezone",
+
+"cookie_cfg" =>
 "Cookie Settings",
 
-"cookie_domain" => 
+"cookie_domain" =>
 "Cookie Domain",
 
-"cookie_domain_explanation" => 
+"cookie_domain_explanation" =>
 "Use .yourdomain.com for  site-wide cookies",
 
-"cookie_prefix" => 
+"cookie_prefix" =>
 "Cookie Prefix",
 
-"cookie_prefix_explain" => 
+"cookie_prefix_explain" =>
 "Use only if you are running multiple installations of this program",
 
-"cookie_path" => 
+"cookie_path" =>
 "Cookie Path",
 
-"cookie_path_explain" => 
+"cookie_path_explain" =>
 "Use only if you require a specific server path for cookies",
 
 "image_resize_protocol" =>
@@ -1182,25 +1230,28 @@ $lang = array(
 "captcha_font" =>
 "Use TrueType Font for CAPTCHA?",
 
-"email_cfg" => 
+"email_cfg" =>
 "Email Configuration",
 
-"mail_protocol" => 
+"mail_protocol" =>
 "Email Protocol",
 
-"smtp_server" => 
+"smtp_server" =>
 "SMTP Server Address",
 
 "smtp_port" =>
 "SMTP Server Port",
 
-"smtp_username" => 
+'empty_stmp_fields' =>
+'The %s field is required for SMTP.',
+
+"smtp_username" =>
 "SMTP Username",
 
-"smtp_password" => 
+"smtp_password" =>
 "SMTP Password",
 
-"only_if_smpte_chosen" => 
+"only_if_smpte_chosen" =>
 "Use this only if you chose SMTP",
 
 "email_batchmode" =>
@@ -1215,19 +1266,19 @@ $lang = array(
 "batch_size_explanation" =>
 "For average servers, 300 is a safe number",
 
-"webmaster_email" => 
+"webmaster_email" =>
 "Return email address for auto-generated emails",
 
-"return_email_explanation" => 
+"return_email_explanation" =>
 "If you leave this blank, many email servers will consider your email spam",
 
-"php_mail" => 
+"php_mail" =>
 "PHP Mail",
 
-"sendmail" => 
+"sendmail" =>
 "Sendmail",
 
-"smtp" => 
+"smtp" =>
 "SMTP",
 
 "plain_text" =>
@@ -1242,7 +1293,7 @@ $lang = array(
 "word_wrap" =>
 "Enable Word-wrapping by Default?",
 
-"cp_theme" => 
+"cp_theme" =>
 "Default Control Panel Theme",
 
 "template_cfg" =>
@@ -1290,28 +1341,25 @@ $lang = array(
 "log_referrers" =>
 "Enable Referrer Tracking?",
 
-"channel_administration" => 
+"channel_administration" =>
 "Channel Administration",
 
-"channels" => 
+"channels" =>
 "Channels",
 
-"field_management" => 
+"field_management" =>
 "Channel Fields",
 
-"file_upload_prefs" => 
+"file_upload_prefs" =>
 "File Upload Preferences",
 
-"categories" => 
+"categories" =>
 "Categories",
 
 'missing_required_fields' =>
 'You Are Missing Required Field(s):',
 
-"default_ping_servers" => 
-"Default Ping Servers",
-
-"statuses" => 
+"statuses" =>
 "Statuses",
 
 "status_created" =>
@@ -1324,10 +1372,10 @@ $lang = array(
 "Status deleted",
 
 
-"taken_status_group_name" => 
+"taken_status_group_name" =>
 "This status group name is already taken.",
 
-"invalid_status_name" => 
+"invalid_status_name" =>
 "Status names can only have alpha-numeric characters, as well as spaces, underscores and hyphens.",
 
 "duplicate_status_name" =>
@@ -1335,22 +1383,22 @@ $lang = array(
 
 
 
-"edit_preferences" => 
+"edit_preferences" =>
 "Edit Preferences",
 
-"preferences_updated" => 
+"preferences_updated" =>
 "Preferences Updated",
 
-"edit_groups" => 
+"edit_groups" =>
 "Edit Group Assignments",
 
-"members_and_groups" => 
+"members_and_groups" =>
 "Members and Groups",
 
-"utilities" => 
+"utilities" =>
 "Utilities",
 
-"view_log_files" => 
+"view_log_files" =>
 "View Control Panel Log",
 
 "clear_caching" =>
@@ -1371,7 +1419,7 @@ $lang = array(
 "cache_deleted" =>
 "Cache files have been deleted",
 
-"php_info" => 
+"php_info" =>
 "PHP Info",
 
 "sql_manager" =>
@@ -1386,7 +1434,7 @@ $lang = array(
 "database_type" =>
 "Database Type",
 
-"sql_version" => 
+"sql_version" =>
 "Database Version",
 
 "database_size" =>
@@ -1398,19 +1446,19 @@ $lang = array(
 "total_queries" =>
 "Total server queries since startup",
 
-"sql_status" => 
+"sql_status" =>
 "Status Info",
 
-"sql_system_vars" => 
+"sql_system_vars" =>
 "System Variables",
 
-"sql_processlist" => 
+"sql_processlist" =>
 "Process List",
 
-"sql_query" => 
+"sql_query" =>
 "Database Query Form",
 
-"query_result" => 
+"query_result" =>
 "Query Result",
 
 "query" =>
@@ -1422,10 +1470,10 @@ $lang = array(
 "total_affected_rows" =>
 "Total Affected Rows: ",
 
-"browse" => 
+"browse" =>
 "Browse",
 
-"tables" => 
+"tables" =>
 "tables",
 
 "table_name" =>
@@ -1473,7 +1521,7 @@ $lang = array(
 "view_in_browser" =>
 "View backup in your browser",
 
-"sql_query_instructions" => 
+"sql_query_instructions" =>
 "Use this form to submit an SQL query",
 
 'sql_query_debug' =>
@@ -1488,10 +1536,10 @@ $lang = array(
 "gzip" =>
 "Gzip",
 
-"advanced_users_only" => 
+"advanced_users_only" =>
 "Advanced Users Only",
 
-"recount_stats" => 
+"recount_stats" =>
 "Recount Statistics",
 
 'recount_prefs' =>
@@ -1542,19 +1590,19 @@ $lang = array(
 "exp_channel_titles" =>
 "Channel Entries",
 
-"search_and_replace" => 
+"search_and_replace" =>
 "Find and Replace",
 
-"sandr_instructions" => 
+"sandr_instructions" =>
 "These forms enable you to search for specific text and replace it with different text",
 
-"search_term" => 
+"search_term" =>
 "Search for this text",
 
-"replace_term" => 
+"replace_term" =>
 "And replace it with this text",
 
-"replace_where" => 
+"replace_where" =>
 "In what database field do you want the replacement to occur?",
 
 "search_replace_disclaimer" =>
@@ -1572,52 +1620,52 @@ $lang = array(
 "templates" =>
 "In ALL Templates",
 
-"rows_replaced" => 
+"rows_replaced" =>
 "Number of database records in which a replacement occurred:",
 
-"view_database" => 
+"view_database" =>
 "Manage Database Tables",
 
-"sql_no_result" => 
+"sql_no_result" =>
 "The query you submitted did not produce any results",
 
-"sql_not_allowed" => 
+"sql_not_allowed" =>
 "Sorry, but that is not one of the allowed query types.",
 
 "site_statistics" =>
 "Site Statistics",
 
-"translation_tool" => 
+"translation_tool" =>
 "Translation Utility",
 
-"translation_dir_unwritable" => 
+"translation_dir_unwritable" =>
 "Warning: Your translation directory is not writable.",
 
-"please_set_permissions" => 
+"please_set_permissions" =>
 "Please set the permissions to 666 or 777 on the following directory:",
 
-"choose_translation_file" => 
+"choose_translation_file" =>
 "Choose a file to translate",
 
-"core_language_files" => 
+"core_language_files" =>
 "Core language files:",
 
-"module_language_files" => 
+"module_language_files" =>
 "Module language files:",
 
-"file_saved" => 
+"file_saved" =>
 "The file has been saved",
 
-"default_html_buttons" => 
+"default_html_buttons" =>
 "Default HTML Buttons",
 
-"add_html_button" => 
+"add_html_button" =>
 "Add HTML button",
 
-"add_predefined_html_button" => 
+"add_predefined_html_button" =>
 "Add Predefined HTML button",
 
-"add_new_html_button" => 
+"add_new_html_button" =>
 "Add new HTML button",
 
 "member_import" =>
@@ -1695,7 +1743,7 @@ $lang = array(
 'sites_tab_behavior' =>
 "Sites Tab Behavior",
 
-"is_site_on" => 
+"is_site_on" =>
 "Is site on?",
 
 "is_site_on_explanation" =>
@@ -1718,6 +1766,12 @@ $lang = array(
 
 'illegal_characters' =>
 'The name you submitted may only contain alpha-numeric characters, underscores, and dashes',
+
+'invalid_xss_check' =>
+'The data you submitted did not pass our security check. If you did not intend to submit this form, please <a href="%s">click here</a> and no settings will be changed.',
+
+'developer_logs' =>
+'You have %d unviewed items in the <a href="%s">Developer Log</a>.',
 
 ''=>''
 );

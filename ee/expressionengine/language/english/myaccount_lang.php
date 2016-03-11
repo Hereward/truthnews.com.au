@@ -18,7 +18,7 @@ $lang = array(
 'Forum Topic',
 
 'password_auth' =>
-'You must submit your current Super Admin password to continue',
+'You must submit your current password to continue',
 
 'existing_password_exp' =>
 'You must submit the current password to update this page',
@@ -121,9 +121,6 @@ $lang = array(
 
 'comment' =>
 'Comment',
-
-'localization_is_site_default' =>
-'Use this member\'s localization settings as the master site default?',
 
 'preferences_updated' =>
 'Preferences Updated',
@@ -248,19 +245,25 @@ $lang = array(
 'localization' =>
 'Localization Settings',
 
-'time_format' => 
+"date_format" =>
+"Date Formatting",
+
+"time_format" =>
+"Time Formatting",
+
+"24_hour" =>
+"24 Hour",
+
+"12_hour" =>
+"12 Hour with AM/PM",
+
+"include_seconds" =>
+"Include Seconds in the Time Format",
+
+'time_format' =>
 'Time Formatting',
 
-'united_states' => 
-'United States',
-
-'european' => 
-'European',
-
-'your_ping_servers' =>
-'Ping Servers',
-
-'your_html_buttons' => 
+'your_html_buttons' =>
 'HTML Formatting Buttons',
 
 'change_password' =>
@@ -432,13 +435,16 @@ $lang = array(
 'The password and password confirmation do not match',
 
 'username_too_short' =>
-'The username you submitted must be at least %x characters long',
+'Your username must be at least %x characters long',
+
+'username_too_long' =>
+'Your username cannot be over 50 characters in length',
 
 'password_too_short' =>
-'The password you submitted must be at least %x characters long',
+'Your password must be at least %x characters long',
 
-'username_password_too_long' =>
-'Usernames and passwords cannot be over 32 characters in length',
+'password_too_long' =>
+'Your password cannot be over '.PASSWORD_MAX_LENGTH.' characters in length',
 
 'username_taken' =>
 'The username you chose is not available',
@@ -472,12 +478,6 @@ $lang = array(
 
 'password_change_warning' =>
 'Note: You have changed your password so you will have to log back in.',
-
-'ping_servers' =>
-'Ping Servers',
-
-'pingservers_updated' =>
-'Ping Servers Updated',
 
 'html_buttons' =>
 'HTML Formatting Buttons',
@@ -524,7 +524,7 @@ $lang = array(
 'bookmarklet_name' =>
 'Bookmarklet Name',
 
-'single_word_no_spaces' => 
+'single_word_no_spaces' =>
 'single word, no spaces',
 
 'channel_name' =>

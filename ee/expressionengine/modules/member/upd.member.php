@@ -5,8 +5,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -48,8 +48,8 @@ class Member_upd {
 		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'activate_member')";
 		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'member_login')";
 		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'member_logout')";
-		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'retrieve_password')";
-		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'reset_password')";
+		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'send_reset_token')";
+		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'process_reset_password')";
 		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'send_member_email')";
 		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'update_un_pw')";
 		$sql[] = "INSERT INTO exp_actions (class, method) VALUES ('Member', 'member_search')";

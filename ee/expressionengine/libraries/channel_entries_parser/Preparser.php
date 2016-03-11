@@ -5,13 +5,13 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
- * @since		Version 2.0
+ * @since		Version 2.6
  * @filesource
  */
- 
+
 // ------------------------------------------------------------------------
 
 /**
@@ -36,6 +36,7 @@ class EE_Channel_preparser {
 
 	protected $_parser;
 	protected $_channel;
+	protected $_site_ids;
 	protected $_entry_ids;
 
 	protected $_components;
@@ -62,7 +63,10 @@ class EE_Channel_preparser {
 	 * @param parser	- A channel parser object which gives us access to the
 	 *					  tagdata, prefix information, and parser components.
 	 *
-	 * @param entry_ids - An array of entry ids. This can be used to retrieve
+	 * @param site_ids  - An array of site IDs that the entries for this
+	 *                    preparser belong to.
+	 *
+	 * @param entry_ids - An array of entry IDs. This can be used to retrieve
 	 *					  additional data ahead of time. A good example of that
 	 *					  would be the relationship parser.
 	 *
@@ -72,19 +76,24 @@ class EE_Channel_preparser {
 	 *				Takes the same values as the channel module's disable
 	 *				parameter, which is one of its uses.
 	 */
-	public function __construct(Channel $channel, EE_Channel_parser $parser, $entry_ids, $config)
+	public function __construct(Channel $channel, EE_Channel_parser $parser, $site_ids, $entry_ids, $config)
 	{
 		// Setup object state
 
 		$this->_parser = $parser;
 		$this->_channel = $channel;
+		$this->_site_ids = $site_ids;
 		$this->_entry_ids = $entry_ids;
-		
+
 		$this->_prefix	= $parser->prefix();
 		$this->_tagdata = $parser->tagdata();
 
 		$this->pairs	= $this->_extract_prefixed(ee()->TMPL->var_pair);
 		$this->singles	= $this->_extract_prefixed(ee()->TMPL->var_single);
+
+		// Get subscriber totals and modified conditionals
+		$this->subscriber_totals	 = $this->_subscriber_totals();
+		$this->modified_conditionals = $this->_find_modified_conditionals();
 
 		// Run through component pre_processing steps, skipping any that
 		// were specified as being disabled.
@@ -106,20 +115,30 @@ class EE_Channel_preparser {
 			}
 
 		}
-
-		// Some more pre-processing work.
-		$this->subscriber_totals	 = $this->_subscriber_totals();
-		$this->modified_conditionals = $this->_find_modified_conditionals();
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Entry ids getter
+	 * Site IDs getter
+	 *
+	 * Returns the site IDs that this pre-parser has entry IDs for.
+	 *
+	 * @return array	site IDs
+	 */
+	public function site_ids()
+	{
+		return $this->_site_ids;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Entry IDs getter
 	 *
 	 * Returns the entry ids that this pre-parser is capable of processing.
 	 *
-	 * @return array	entry ids
+	 * @return array	entry IDs
 	 */
 	public function entry_ids()
 	{
@@ -161,11 +180,26 @@ class EE_Channel_preparser {
 	 *
 	 * Returns the data of the preprocessing step of a given component.
 	 *
-	 * @return mixed	Single tag preprocessing results
+	 * @return mixed	Once tag preprocessing results
 	 */
 	public function once_data($obj)
 	{
 		return $this->_once_data[spl_object_hash($obj)];
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Single tag data setter
+	 *
+	 * Sets the data passed to the replace method of a given component.
+	 *
+	 * @return EE_Channel_parser_component	Component object to set data for
+	 * @return mixed	Data to set for component
+	 */
+	public function set_once_data($obj, $data)
+	{
+		return $this->_once_data[spl_object_hash($obj)] = $data;
 	}
 
 	// --------------------------------------------------------------------
@@ -287,7 +321,7 @@ class EE_Channel_preparser {
 		{
 			return $data;
 		}
-   
+
 		$filtered = array();
 		$tagdata  = $this->_tagdata;
 		$regex_prefix = '/^'.preg_quote($this->_prefix, '/').'.*+( |$)/';
@@ -313,7 +347,7 @@ class EE_Channel_preparser {
 	protected function _subscriber_totals()
 	{
 		$subscribers = array();
-		
+
 		if (strpos($this->_tagdata, LD.'comment_subscriber_total'.RD) !== FALSE
 			&& isset(ee()->session->cache['channel']['entry_ids'])
 			)
@@ -340,6 +374,7 @@ class EE_Channel_preparser {
 	public function _find_modified_conditionals()
 	{
 		$prefix = $this->_prefix;
+		$unfiltered_all_field_names = array();
 		$all_field_names = array();
 
 		if (strpos($this->_tagdata, LD.'if') === FALSE)
@@ -349,10 +384,20 @@ class EE_Channel_preparser {
 
 		foreach($this->_channel->cfields as $site_id => $fields)
 		{
-			$all_field_names = array_unique(array_merge($all_field_names, $fields));
+			$unfiltered_all_field_names = array_unique(array_merge($unfiltered_all_field_names, $fields));
 		}
 
-		$modified_field_options = $prefix.implode('|'.$prefix, array_keys($all_field_names));
+		// Do a rough cut to slim down the number of fields
+		// else the string can be too long for the preg_match_all
+		foreach (array_keys($unfiltered_all_field_names) as $name)
+		{
+			if (strpos($this->_tagdata, $name) !== FALSE)
+			{
+				$all_field_names[] = $name;
+			}
+		}
+
+		$modified_field_options = $prefix.implode('|'.$prefix, $all_field_names);
 		$modified_conditionals = array();
 
 		if (preg_match_all("/".preg_quote(LD)."((if:(else))*if)\s+(($modified_field_options):(\w+))(.*?)".preg_quote(RD)."/s", $this->_tagdata, $matches))
@@ -362,7 +407,7 @@ class EE_Channel_preparser {
 				$modified_conditionals[$field_name][] = $matches[6][$match_key];
 			}
 		}
-		
+
 		return array_map('array_unique', $modified_conditionals);
 	}
 }

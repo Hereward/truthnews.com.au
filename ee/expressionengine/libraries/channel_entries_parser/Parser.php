@@ -5,13 +5,13 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
- * @since		Version 2.0
+ * @since		Version 2.6
  * @filesource
  */
- 
+
 // ------------------------------------------------------------------------
 
 /**
@@ -92,7 +92,7 @@ class EE_Channel_data_parser {
 	 * 'absolute_count', or 'absolute_results'.
 	 *
 	 * @param	string	The data element to retrieve
-	 * @param	string	The value to return if the key does not exist	
+	 * @param	string	The value to return if the key does not exist
 	 * @return	mixed	The requested data element
 	 */
 	public function data($key, $default = NULL)
@@ -159,7 +159,7 @@ class EE_Channel_data_parser {
 	 *
 	 * @param	array	The data row.
  	 * @param	array	Config items
- 	 *		
+ 	 *
  	 *		disable:   array of components to turn off
  	 *		callbacks: array of callbacks to register
  	 *
@@ -184,11 +184,20 @@ class EE_Channel_data_parser {
 
 		$prefix	 = $this->_prefix;
 		$channel = $this->_channel;
-		
+
 		$subscriber_totals = $pre->subscriber_totals;
 
 		$total_results = count($entries);
 		$site_pages = config_item('site_pages');
+
+		foreach (ee()->TMPL->site_ids as $site_id)
+		{
+			if ($site_id != ee()->config->item('site_id'))
+			{
+				$pages = ee()->config->site_pages($site_id);
+				$site_pages[$site_id] = $pages[$site_id];
+			}
+		}
 
 		$result = ''; // final template
 
@@ -205,6 +214,14 @@ class EE_Channel_data_parser {
 
 		$dt = 0;
 
+		ee()->load->library('typography');
+		ee()->typography->initialize(array(
+			'convert_curly'	=> FALSE
+		));
+
+		ee()->load->helper('date');
+		ee()->load->helper('url');
+
 		foreach ($entries as $row)
 		{
 			$tagdata = $orig_tagdata;
@@ -218,6 +235,14 @@ class EE_Channel_data_parser {
 			$row['absolute_count']		= $absolute_offset + $row['count'];
 			$row['absolute_results']	= ($absolute_results === NULL) ? $total_results : $absolute_results;
 			$row['comment_subscriber_total'] = (isset($subscriber_totals[$row['entry_id']])) ? $subscriber_totals[$row['entry_id']] : 0;
+			$row['cp_edit_entry_url']	= cp_url(
+				'content_publish/entry_form',
+				array(
+					'site_id'		=> $row['site_id'],
+					'channel_id'	=> $row['channel_id'],
+					'entry_id'		=> $row['entry_id'],
+				)
+			);
 
 			if ($site_pages !== FALSE && isset($site_pages[$row['site_id']]['uris'][$row['entry_id']]))
 			{
@@ -371,7 +396,7 @@ class EE_Channel_data_parser {
 	 * potentially a single query to gather needed data instead of a query for
 	 * each row.
 	 *
-	 * @param string $entries_data 
+	 * @param string $entries_data
 	 * @return void
 	 */
 	protected function _send_custom_field_data_to_fieldtypes($entries_data)
@@ -381,13 +406,13 @@ class EE_Channel_data_parser {
 		// We'll stick custom field data into this array in the form of:
 		// field_id => array('data1', 'data2', ...);
 		$custom_field_data = array();
-		
+
 		// Loop through channel entry data
 		foreach ($entries_data as $row)
 		{
 			// Get array of custom fields for the row's current site
 			$custom_fields = (isset($channel->cfields[$row['site_id']])) ? $channel->cfields[$row['site_id']] : array();
-			
+
 			foreach ($custom_fields as $field_name => $field_id)
 			{
 				// If the field exists and isn't empty
@@ -401,13 +426,13 @@ class EE_Channel_data_parser {
 				}
 			}
 		}
-		
+
 		if ( ! empty($custom_field_data))
 		{
 			ee()->load->library('api');
 			ee()->api->instantiate('channel_fields');
 			$ft_api = ee()->api_channel_fields;
-			
+
 			// For each custom field, notify its fieldtype class of the data we collected
 			foreach ($custom_field_data as $field_id => $data)
 			{
@@ -440,8 +465,8 @@ class EE_Channel_data_parser {
 		$pre = $this->_preparser;
 
 		$cond = $row;
-		$cond['logged_in']			= (ee()->session->userdata('member_id') == 0) ? 'FALSE' : 'TRUE';
-		$cond['logged_out']			= (ee()->session->userdata('member_id') != 0) ? 'FALSE' : 'TRUE';
+		$cond['logged_in']			= (ee()->session->userdata('member_id') == 0) ? FALSE : TRUE;
+		$cond['logged_out']			= (ee()->session->userdata('member_id') != 0) ? FALSE : TRUE;
 
 		foreach (array('avatar_filename', 'photo_filename', 'sig_img_filename') as $pv)
 		{
@@ -451,14 +476,14 @@ class EE_Channel_data_parser {
 			}
 		}
 
-		$cond['allow_comments']			= $this->_commenting_allowed($row) ? 'TRUE' : 'FALSE';
-		$cond['signature_image']		= ($row['sig_img_filename'] == '' OR ee()->config->item('enable_signatures') == 'n' OR ee()->session->userdata('display_signatures') == 'n') ? 'FALSE' : 'TRUE';
-		$cond['avatar']					= ($row['avatar_filename'] == '' OR ee()->config->item('enable_avatars') == 'n' OR ee()->session->userdata('display_avatars') == 'n') ? 'FALSE' : 'TRUE';
-		$cond['photo']					= ($row['photo_filename'] == '' OR ee()->config->item('enable_photos') == 'n' OR ee()->session->userdata('display_photos') == 'n') ? 'FALSE' : 'TRUE';
-		$cond['forum_topic']			= (empty($row['forum_topic_id'])) ? 'FALSE' : 'TRUE';
-		$cond['not_forum_topic']		= ( ! empty($row['forum_topic_id'])) ? 'FALSE' : 'TRUE';
-		$cond['category_request']		= ($channel->cat_request === FALSE) ? 'FALSE' : 'TRUE';
-		$cond['not_category_request']	= ($channel->cat_request !== FALSE) ? 'FALSE' : 'TRUE';
+		$cond['allow_comments']			= $this->_commenting_allowed($row) ? TRUE : FALSE;
+		$cond['signature_image']		= ($row['sig_img_filename'] == '' OR ee()->config->item('enable_signatures') == 'n' OR ee()->session->userdata('display_signatures') == 'n') ? FALSE : TRUE;
+		$cond['avatar']					= ($row['avatar_filename'] == '' OR ee()->config->item('enable_avatars') == 'n' OR ee()->session->userdata('display_avatars') == 'n') ? FALSE : TRUE;
+		$cond['photo']					= ($row['photo_filename'] == '' OR ee()->config->item('enable_photos') == 'n' OR ee()->session->userdata('display_photos') == 'n') ? FALSE : TRUE;
+		$cond['forum_topic']			= (empty($row['forum_topic_id'])) ? FALSE : TRUE;
+		$cond['not_forum_topic']		= ( ! empty($row['forum_topic_id'])) ? FALSE : TRUE;
+		$cond['category_request']		= ($channel->cat_request === FALSE) ? FALSE : TRUE;
+		$cond['not_category_request']	= ($channel->cat_request !== FALSE) ? FALSE : TRUE;
 		$cond['channel']				= $row['channel_title'];
 		$cond['channel_short_name']		= $row['channel_name'];
 		$cond['author']					= ($row['screen_name'] != '') ? $row['screen_name'] : $row['username'];
@@ -473,6 +498,15 @@ class EE_Channel_data_parser {
 		$cond['signature_image_height']	= $row['sig_img_height'];
 		$cond['relative_date']			= timespan($row['entry_date']);
 
+		//-- we need to prep the default dates
+
+		$default_dates = array('entry_date', 'edit_date', 'recent_comment_date', 'expiration_date', 'comment_expiration_date');
+
+		foreach($default_dates as $value)
+		{
+			$cond[$value] = (empty($row[$value])) ? '' : $row[$value];
+		}
+
 		foreach($channel->mfields as $key => $value)
 		{
 			$cond[$key] = ( ! array_key_exists('m_field_id_'.$value[0], $row)) ? '' : $row['m_field_id_'.$value[0]];
@@ -484,7 +518,7 @@ class EE_Channel_data_parser {
 			foreach($channel->cfields[$row['site_id']] as $key => $value)
 			{
 				$cond[$key] = ( ! isset($row['field_id_'.$value])) ? '' : $row['field_id_'.$value];
-				
+
 				// Is this field used with a modifier anywhere?
 				if (isset($pre->modified_conditionals[$key]) && count($pre->modified_conditionals[$key]))
 				{
@@ -495,16 +529,30 @@ class EE_Channel_data_parser {
 					{
 						foreach($pre->modified_conditionals[$key] as $modifier)
 						{
-							ee()->api_channel_fields->apply('_init', array(array('row' => $row)));
+							ee()->api_channel_fields->apply('_init', array(array(
+								'row' => $row,
+								'content_id' => $row['entry_id']
+							)));
 							$data = ee()->api_channel_fields->apply('pre_process', array($cond[$key]));
 							if (ee()->api_channel_fields->check_method_exists('replace_'.$modifier))
 							{
-								$cond[$key.':'.$modifier] = ee()->api_channel_fields->apply('replace_'.$modifier, array($data, array(), FALSE));
+								$result = ee()->api_channel_fields->apply('replace_'.$modifier, array($data, array(), FALSE));
 							}
 							else
-							{							
-								$cond[$key.':'.$modifier] = FALSE;
+							{
+								$result = FALSE;
 								ee()->TMPL->log_item('Unable to find parse type for custom field conditional: '.$key.':'.$modifier);
+							}
+
+							$cond[$key.':'.$modifier] = $result;
+
+							// If this key also happens to be a Grid field with the modifier
+							// "total_rows", make it the default value for evaluating
+							// conditionals
+							if (isset($channel->gfields[$row['site_id']][$key]) &&
+								$modifier == 'total_rows')
+							{
+								$cond[$key] = $result;
 							}
 						}
 					}

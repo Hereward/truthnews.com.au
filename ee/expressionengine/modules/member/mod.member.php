@@ -5,8 +5,8 @@
  *
  * @package		ExpressionEngine
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2003 - 2013, EllisLab, Inc.
- * @license		http://ellislab.com/expressionengine/user-guide/license.html
+ * @copyright	Copyright (c) 2003 - 2016, EllisLab, Inc.
+ * @license		https://expressionengine.com/license
  * @link		http://ellislab.com
  * @since		Version 2.0
  * @filesource
@@ -44,31 +44,31 @@ class Member {
 	var $theme_class		= 'profile_theme';
 	var $request			= 'public_profile';
 	var $no_menu 			= array(
-						'public_profile', 'memberlist', 'do_member_search', 
-						'member_search', 'register', 'smileys', 'login', 
-						'unpw_update', 'email_console', 'send_email', 
+						'public_profile', 'memberlist', 'do_member_search',
+						'member_search', 'register', 'smileys', 'login',
+						'unpw_update', 'email_console', 'send_email',
 						'aim_console', 'icq_console', 'forgot_password', 'reset_password',
-						'delete', 'member_mini_search', 'do_member_mini_search', 
+						'delete', 'member_mini_search', 'do_member_mini_search',
 					);
 
 	var $no_login 			= array(
-						'public_profile', 'memberlist', 'do_member_search', 
-						'member_search', 'register', 'forgot_password', 'unpw_update', 
+						'public_profile', 'memberlist', 'do_member_search',
+						'member_search', 'register', 'forgot_password', 'unpw_update',
 						'reset_password'
 					);
 
 	var $id_override		= array(
-						'edit_subscriptions', 'memberlist', 'member_search', 
+						'edit_subscriptions', 'memberlist', 'member_search',
 						'browse_avatars', 'messages', 'unpw_update'
 					);
 
 	var $no_breadcrumb 		= array(
-						'email_console', 'send_email', 'aim_console', 
+						'email_console', 'send_email', 'aim_console',
 						'icq_console', 'member_mini_search', 'do_member_mini_search'
 					);
 
 	var $simple_page		= array(
-						'email_console', 'send_email', 'aim_console', 
+						'email_console', 'send_email', 'aim_console',
 						'icq_console', 'smileys', 'member_mini_search', 'do_member_mini_search'
 					);
 
@@ -91,8 +91,6 @@ class Member {
 	var $in_forum			= FALSE;
 	var $is_admin			= FALSE;
 	var $breadcrumb			= TRUE;
-	var $us_datecodes 		= array('long'	=>	'%F %d, %Y &nbsp;%h:%i %A');
-	var $eu_datecodes 		= array('long'	=>	'%d %F, %Y &nbsp;%H:%i');
 	var $crumb_map 			= array(
 								'profile'				=>	'your_control_panel',
 								'delete'				=>	'mbr_delete',
@@ -162,6 +160,7 @@ class Member {
 		ee()->lang->loadfile('member');
 		ee()->functions->template_type = 'webpage';
 		ee()->db->cache_off();
+		$this->trigger = ee()->config->item('profile_trigger');
 	}
 
 	// --------------------------------------------------------------------
@@ -239,35 +238,35 @@ class Member {
  			$this->cur_id	= $this->request;
  			$this->request	= 'public_profile';
  		}
- 
+
 		if ($this->request == '')
 		{
  			$this->request	= 'public_profile';
 		}
- 		 
+
 		// Disable the full page view
  		if (in_array($this->request, $this->simple_page))
  		{
 			$this->show_headings = FALSE;
  		}
- 
+
  		if (in_array($this->request, $this->no_breadcrumb))
  		{
 			$this->breadcrumb = FALSE;
  		}
- 
+
 
  		// Validate ID number
 		// The $this->cur_id variable can only contain a number.
 		// There are a few exceptions like the memberlist page and the
 		// subscriptions page
 
- 		if ( ! in_array($this->request, $this->id_override) && 
+ 		if ( ! in_array($this->request, $this->id_override) &&
  			$this->cur_id != '' && ! is_numeric($this->cur_id))
  		{
  			return FALSE;
  		}
- 
+
  		return TRUE;
 	}
 
@@ -298,8 +297,8 @@ class Member {
 		// -------------------------------------------
 
 		// Is the user logged in?
-		if ($this->request != 'login' && 
-			! in_array($this->request, $this->no_login) && 
+		if ($this->request != 'login' &&
+			! in_array($this->request, $this->no_login) &&
 			ee()->session->userdata('member_id') == 0)
 		{
 			return $this->_final_prep($this->profile_login_form('self'));
@@ -360,7 +359,7 @@ class Member {
 		{
 			$this->_show_404_template();
 		}
-		
+
 		// Call the requested function
 		if ($this->request == 'profile') $this->request = 'profile_main';
 		if ($this->request == 'register') $this->request = 'registration_form';
@@ -422,16 +421,14 @@ class Member {
 	 */
 	public function messages()
 	{
-		if ((ee()->session->userdata('can_send_private_messages') != 'y' && 
-			ee()->session->userdata('group_id') != '1') OR 
-			ee()->session->userdata('accept_messages') != 'y')
-		{
-			return $this->profile_main();
-		}
-
 		if ( ! class_exists('EE_Messages'))
 		{
 			require APPPATH.'libraries/Messages.php';
+		}
+
+		if ( ! EE_Messages::can_send_pm())
+		{
+			return $this->profile_main();
 		}
 
 		$MESS = new EE_Messages;
@@ -448,7 +445,7 @@ class Member {
 		return $MESS->return_data;
 	}
 
-	// --------------------------------------------------------------------	
+	// --------------------------------------------------------------------
 
 	/**
 	 * Member Profile - Menu
@@ -470,23 +467,21 @@ class Member {
 		return $MS->profile_menu();
 	}
 
-	// --------------------------------------------------------------------	
+	// --------------------------------------------------------------------
 
 	/**
 	 * Private Messages - Menu
 	 */
 	public function pm_menu()
 	{
-		if ((ee()->session->userdata('can_send_private_messages') != 'y' && 
-			ee()->session->userdata('group_id') != '1') OR 
-			ee()->session->userdata('accept_messages') != 'y')
-		{
-			return;
-		}
-
 		if ( ! class_exists('EE_Messages'))
 		{
 			require APPPATH.'libraries/Messages.php';
+		}
+
+		if ( ! EE_Messages::can_send_pm())
+		{
+			return;
 		}
 
 		$MESS = new EE_Messages;
@@ -494,7 +489,7 @@ class Member {
 		$MESS->allegiance  = 'user';
 		$MESS->theme_path = $this->theme_path;
 		$MESS->MS =& $this;
-		
+
 		$MESS->create_menu();
 		return $MESS->menu;
 	}
@@ -605,7 +600,7 @@ class Member {
 		{
 			$MS->{$key} = $value;
 		}
-		
+
 		return $MS->update_profile();
 	}
 
@@ -1094,7 +1089,7 @@ class Member {
 	}
 
 	// --------------------------------------------------------------------
-		
+
 	/**
 	 * Subscriptions Edit Form
 	 */
@@ -1133,7 +1128,7 @@ class Member {
 		{
 			$MS->{$key} = $value;
 		}
-		
+
 		return $MS->update_subscriptions();
 	}
 
@@ -1159,7 +1154,7 @@ class Member {
 		return $MS->edit_ignore_list();
 	}
 
-	// --------------------------------------------------------------------	
+	// --------------------------------------------------------------------
 
 	/**
 	 * Update Ignore List
@@ -1349,7 +1344,7 @@ class Member {
 		// trying to delete their account from an off-site form or
 		// after logging out.
 
-		if (ee()->session->userdata('member_id') == 0 OR 
+		if (ee()->session->userdata('member_id') == 0 OR
 			ee()->session->userdata('can_delete_self') !== 'y')
 		{
 			return ee()->output->show_user_error('general', ee()->lang->line('not_authorized'));
@@ -1364,7 +1359,7 @@ class Member {
 		// Is IP and User Agent required for login?  Then, same here.
 		if (ee()->config->item('require_ip_for_login') == 'y')
 		{
-			if (ee()->session->userdata('ip_address') == '' OR 
+			if (ee()->session->userdata('ip_address') == '' OR
 				ee()->session->userdata('user_agent') == '')
 			{
 				return ee()->output->show_user_error('general', ee()->lang->line('unauthorized_request'));
@@ -1375,9 +1370,9 @@ class Member {
 		if (ee()->session->check_password_lockout(ee()->session->userdata('username')) === TRUE)
 		{
 			ee()->lang->loadfile('login');
-			
+
 			return ee()->output->show_user_error(
-				'general', 
+				'general',
 				sprintf(lang('password_lockout_in_effect'), ee()->config->item('password_lockout_interval'))
 			);
 		}
@@ -1397,11 +1392,11 @@ class Member {
 		// No turning back, get to deletin'!
 		ee()->load->model('member_model');
 		ee()->member_model->delete_member(ee()->session->userdata('member_id'));
-		
+
 		// Email notification recipients
 		if (ee()->session->userdata('mbr_delete_notify_emails') != '')
 		{
-			
+
 			$notify_address = ee()->session->userdata('mbr_delete_notify_emails');
 
 			$swap = array(
@@ -1447,11 +1442,11 @@ class Member {
 		ee()->db->where('session_id', ee()->session->userdata('session_id'))
 					 ->delete('sessions');
 
-		ee()->functions->set_cookie(ee()->session->c_session);
-		ee()->functions->set_cookie(ee()->session->c_expire);
-		ee()->functions->set_cookie(ee()->session->c_anon);
-		ee()->functions->set_cookie('read_topics');
-		ee()->functions->set_cookie('tracker');
+		ee()->input->delete_cookie(ee()->session->c_session);
+		ee()->input->delete_cookie(ee()->session->c_expire);
+		ee()->input->delete_cookie(ee()->session->c_anon);
+		ee()->input->delete_cookie('read_topics');
+		ee()->input->delete_cookie('tracker');
 
 		// Build Success Message
 		$url	= ee()->config->item('site_url');
@@ -1486,7 +1481,7 @@ class Member {
 	 */
 	public function login_form()
 	{
-		if (ee()->config->item('user_session_type') != 'c')
+		if (ee()->config->item('website_session_type') != 'c')
 		{
 			ee()->TMPL->tagdata = preg_replace("/{if\s+auto_login}.*?{".'\/'."if}/s", '', ee()->TMPL->tagdata);
 		}
@@ -1512,7 +1507,7 @@ class Member {
 			$data['name'] = ee()->TMPL->fetch_param('form_name');
 		}
 
-		if (ee()->TMPL->fetch_param('id') !== FALSE && 
+		if (ee()->TMPL->fetch_param('id') !== FALSE &&
 			preg_match("#^[a-zA-Z0-9_\-]+$#i", ee()->TMPL->fetch_param('id')))
 		{
 			$data['id'] = ee()->TMPL->fetch_param('id');
@@ -1522,9 +1517,10 @@ class Member {
 		{
 			$data['id'] = ee()->TMPL->form_id;
 		}
-		
+
 		$data['class'] = ee()->TMPL->form_class;
 
+		$data['action'] = ee()->TMPL->fetch_param('action');
 
 		$res  = ee()->functions->form_declaration($data);
 
@@ -1767,7 +1763,7 @@ class Member {
 		function add_smiley(smiley)
 		{
 			var el = opener.document.getElementById('submit_post').body;
-			
+
 			if ('selectionStart' in el) {
 				newStart = el.selectionStart + smiley.length;
 
@@ -1783,7 +1779,7 @@ class Member {
 			else {
 				el.value += " " + smiley + " ";
 			}
-			
+
 			el.focus();
 			window.close();
 		}
@@ -1927,7 +1923,7 @@ class Member {
 		if ($this->theme_path == '')
 		{
 			$theme = (ee()->config->item('member_theme') == '') ? 'default' : ee()->config->item('member_theme');
-			$this->theme_path = PATH_MBR_THEMES."{$theme}/";			
+			$this->theme_path = PATH_MBR_THEMES."{$theme}/";
 		}
 
 		if ( ! file_exists($this->theme_path.$which.'.html'))
@@ -1939,9 +1935,10 @@ class Member {
 							'link'		=> array(ee()->config->item('site_url'), stripslashes(ee()->config->item('site_name')))
 						 );
 
-			return ee()->output->show_message($data, 0);			
+			set_status_header(404);
+			return ee()->output->show_message($data, 0);
 		}
-		
+
 		return $this->_prep_element(trim(file_get_contents($this->theme_path.$which.'.html')));
 	}
 
@@ -2186,13 +2183,13 @@ class Member {
 	/**
 	 * Prep Element Data
 	 *
-	 * Right now we only use this to parse the logged-in/logged-out vars 
+	 * Right now we only use this to parse the logged-in/logged-out vars
 	 */
 	function _prep_element($str)
 	{
 		if ($str == '')
 		{
-			return '';			
+			return '';
 		}
 
 		if (ee()->session->userdata('member_id') == 0)
@@ -2217,7 +2214,7 @@ class Member {
 		}
 
 		// Parse the self deletion conditional
-		if (ee()->session->userdata('can_delete_self') == 'y' && 
+		if (ee()->session->userdata('can_delete_self') == 'y' &&
 			ee()->session->userdata('group_id') != 1)
 		{
 			$str = $this->_allow_if('can_delete', $str);
@@ -2234,7 +2231,7 @@ class Member {
 
 	/**
 	 * Finalize a few things
-	 */ 
+	 */
 	function _final_prep($str)
 	{
 		// Which mode are we in?
@@ -2300,7 +2297,7 @@ class Member {
 		{
 			$this->css_file_path = ee()->config->slash_item('theme_folder_url', 1).'profile_themes/'.ee()->config->item('member_theme').'profile.css';
 		}
-		
+
 		// Parse {switch="foo|bar"} variables
 		if (preg_match_all("/".LD."(switch\s*=.+?)".RD."/i", $str, $matches, PREG_SET_ORDER))
 		{
@@ -2317,74 +2314,81 @@ class Member {
 					{
 						$str = substr_replace($str, $sopt[($i++ + count($sopt) - 1) % count($sopt)], $pos, strlen(LD.$match[1].RD));
 					}
-				}				
+				}
 			}
 		}
 
-		// Finalize the output		
+		// Finalize the output
 		$str = ee()->functions->prep_conditionals($str, array('current_request' => $this->request));
-		
-		$str = $this->_var_swap($str,
-								array(
-										'lang'						=> ee()->config->item('xml_lang'),
-										'charset'					=> ee()->config->item('output_charset'),
-										'path:image_url'			=> ($this->image_url == '') ? $theme_images : $this->image_url,
-										'path:your_control_panel'	=> $this->_member_path('profile'),
-										'path:your_profile'			=> $this->_member_path(ee()->session->userdata('member_id')),
-										'path:edit_preferences'		=> $this->_member_path('edit_preferences'),
-										'path:register'				=> $this->_member_path('register'.$simple),
-										'path:private_messages'		=> $this->_member_path('messages'),
-										'path:memberlist'			=> $this->_member_path('memberlist'),
-										'path:signature'			=> $this->_member_path('edit_signature'),
-										'path:avatar'				=> $this->_member_path('edit_avatar'),
-										'path:photo'				=> $this->_member_path('edit_photo'),
-										'path:smileys'				=> $this->_member_path('smileys'),
-										'path:forgot'				=> $this->_member_path('forgot_password'.$simple),
-										'path:login'				=> $this->_member_path('login'.$simple),
-										'path:delete'				=> $this->_member_path('delete'),
-										'page_title'				=> $this->page_title,
-										'site_name'					=> stripslashes(ee()->config->item('site_name')),
-										'path:theme_css'			=> $this->css_file_path,
-										'current_request'			=> $this->request
-									)
-								 );
+
+		$str = $this->_var_swap(
+			$str,
+			array(
+				'lang'                    => ee()->config->item('xml_lang'),
+				'charset'                 => ee()->config->item('output_charset'),
+				'path:image_url'          => ($this->image_url == '') ? $theme_images : $this->image_url,
+				'path:your_control_panel' => $this->_member_path('profile'),
+				'path:your_profile'       => $this->_member_path(ee()->session->userdata('member_id')),
+				'path:edit_preferences'   => $this->_member_path('edit_preferences'),
+				'path:register'           => $this->_member_path('register'.$simple),
+				'path:private_messages'   => $this->_member_path('messages'),
+				'path:memberlist'         => $this->_member_path('memberlist'),
+				'path:signature'          => $this->_member_path('edit_signature'),
+				'path:avatar'             => $this->_member_path('edit_avatar'),
+				'path:photo'              => $this->_member_path('edit_photo'),
+				'path:smileys'            => $this->_member_path('smileys'),
+				'path:forgot'             => $this->_member_path('forgot_password'.$simple),
+				'path:login'              => $this->_member_path('login'.$simple),
+				'path:delete'             => $this->_member_path('delete'),
+				'page_title'              => $this->page_title,
+				'site_name'               => stripslashes(ee()->config->item('site_name')),
+				'path:theme_css'          => $this->css_file_path,
+				'current_request'         => $this->request,
+				'password_max_length'     => PASSWORD_MAX_LENGTH
+			)
+		);
 
 		// parse regular global vars
 		ee()->load->library('template', NULL, 'TMPL');
-		
+
 		// load up any Snippets
 		ee()->db->select('snippet_name, snippet_contents');
 		ee()->db->where('(site_id = '.ee()->db->escape_str(ee()->config->item('site_id')).' OR site_id = 0)');
 		$fresh = ee()->db->get('snippets');
-		
+
 		if ($fresh->num_rows() > 0)
 		{
 			$snippets = array();
-			
+
 			foreach ($fresh->result() as $var)
 			{
 				$snippets[$var->snippet_name] = $var->snippet_contents;
 			}
-			
+
 			ee()->config->_global_vars = array_merge(ee()->config->_global_vars, $snippets);
-			
+
 			unset($snippets);
 			unset($fresh);
 		}
-		
+
 		if ( ! $this->in_forum)
 		{
 			ee()->TMPL->parse($str);
 			$str = ee()->TMPL->parse_globals(ee()->TMPL->final_template);
 		}
-		
+
 		//  Add security hashes to forms
 		if ( ! class_exists('Template'))
 		{
 			$str = ee()->functions->insert_action_ids(ee()->functions->add_form_security_hash($str));
 		}
-		
-		$str = preg_replace("/".LD."if\s+.*?".RD.".*?".LD.'\/if'.RD."/s", "", $str);
+
+		if ( ! is_object(ee()->TMPL))
+		{
+			// cleanup unparsed conditionals and annotations
+			$str = preg_replace("/".LD."if\s+.*?".RD.".*?".LD.'\/if'.RD."/s", "", $str);
+			$str = preg_replace("/\{!--.*?--\}/s", '', $str);
+		}
 
 		return $str;
 	}
@@ -2470,13 +2474,18 @@ class Member {
 	/**
 	 * Swap single variables with final value
 	 */
-	function _var_swap_single($search, $replace, $source)
+	function _var_swap_single($search, $replace, $source, $encode_ee_tags = TRUE)
 	{
+		if ($encode_ee_tags)
+		{
+			$replace = ee()->functions->encode_ee_tags($replace, TRUE);
+		}
+
 		return str_replace(LD.$search.RD, $replace, $source);
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Show 404 Template
 	 *
@@ -2489,24 +2498,7 @@ class Member {
 	{
 		// 404 it
 		ee()->load->library('template', NULL, 'TMPL');
-		
-		$template = explode('/', ee()->config->item('site_404'));
-
-		if (isset($template[1]))
-		{
-			ee()->TMPL->template_type = "404";
-			ee()->TMPL->fetch_and_parse($template[0], $template[1]);
-			$out = ee()->TMPL->parse_globals(ee()->TMPL->final_template);
-		}
-		else
-		{
-			$out = ee()->TMPL->_404();
-		}
-		
-		ee()->output->out_type = '404';
-		ee()->output->set_output($out);
-		ee()->output->_display();
-		exit;
+		ee()->TMPL->show_404();
 	}
 
 	// --------------------------------------------------------------------
@@ -2540,21 +2532,21 @@ class Member {
 		}
 
 		$default_fields = $query->row_array();
-		
+
 		// Is there an avatar?
 		if (ee()->config->item('enable_avatars') == 'y' AND $query->row('avatar_filename') != '')
 		{
 			$avatar_path	= ee()->config->item('avatar_url').$query->row('avatar_filename');
 			$avatar_width	= $query->row('avatar_width');
 			$avatar_height	= $query->row('avatar_height');
-			$avatar			= 'TRUE';
+			$avatar			= TRUE;
 		}
 		else
 		{
 			$avatar_path	= '';
 			$avatar_width	= '';
 			$avatar_height	= '';
-			$avatar			= 'FALSE';
+			$avatar			= FALSE;
 		}
 
 		// Is there a member photo?
@@ -2563,14 +2555,14 @@ class Member {
 			$photo_path		= ee()->config->item('photo_url').$query->row('photo_filename');
 			$photo_width	= $query->row('photo_width');
 			$photo_height	= $query->row('photo_height');
-			$photo			= 'TRUE';
+			$photo			= TRUE;
 		}
 		else
 		{
 			$photo_path	= '';
 			$photo_width	= '';
 			$photo_height	= '';
-			$photo			= 'FALSE';
+			$photo			= FALSE;
 		}
 
 		// Is there a signature image?
@@ -2579,14 +2571,14 @@ class Member {
 			$sig_img_path	= ee()->config->item('sig_img_url').$query->row('sig_img_filename');
 			$sig_img_width	= $query->row('sig_img_width');
 			$sig_img_height	= $query->row('sig_img_height');
-			$sig_img_image	= 'TRUE';
+			$sig_img_image	= TRUE;
 		}
 		else
 		{
 			$sig_img_path	= '';
 			$sig_img_width	= '';
 			$sig_img_height	= '';
-			$sig_img		= 'FALSE';
+			$sig_img		= FALSE;
 		}
 
 		// Parse variables
@@ -2654,7 +2646,7 @@ class Member {
 		{
 			$cond['avatar']	= $avatar;
 			$cond['photo'] = $photo;
-			
+
 			foreach($fields as $key =>  $value)
 			{
 				$cond[$key] = ee()->typography->parse_type($row['m_field_id_'.$value['0']],
@@ -2694,7 +2686,7 @@ class Member {
 				{
 					ee()->TMPL->tagdata = $this->_var_swap_single($key, ($default_fields['last_activity'] > 0) ? ee()->localize->format_date($val, $default_fields['last_activity']) : '', ee()->TMPL->tagdata);
 				}
-				
+
 				//  "join_date"
 				if (strncmp($key, 'join_date', 9) == 0)
 				{
@@ -2738,7 +2730,7 @@ class Member {
 				//  {email}
 				if ($key == "email")
 				{
-					ee()->TMPL->tagdata = $this->_var_swap_single($val, ee()->typography->encode_email($default_fields['email']), ee()->TMPL->tagdata);
+					ee()->TMPL->tagdata = $this->_var_swap_single($val, ee()->typography->encode_email($default_fields['email']), ee()->TMPL->tagdata, FALSE);
 				}
 
 				//  {birthday}
@@ -2792,7 +2784,7 @@ class Member {
 					$locale = FALSE;
 
 					if (ee()->session->userdata('member_id') != $this->cur_id)
-					{  
+					{
 						// Default is UTC?
 						$locale = ($default_fields['timezone'] == '') ? 'UTC' : $default_fields['timezone'];
 					}
@@ -2913,7 +2905,7 @@ class Member {
 
 				if (isset($row[$val]))
 				{
-					$temp = ee()->TMPL->swap_var_single($pre.$val, $row[$val], $temp);
+					$temp = ee()->TMPL->swap_var_single($pre.$val, ee()->functions->encode_ee_tags($row[$val]), $temp);
 				}
 			}
 
