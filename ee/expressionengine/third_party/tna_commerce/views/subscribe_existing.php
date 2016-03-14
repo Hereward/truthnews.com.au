@@ -22,6 +22,7 @@
 
     <div class="form-group">
         <input class="btn btn-default" type="submit" value="Proceed to Checkout &raquo;">
+        <input type="hidden" name="XID" value="<?= $xid_hash ?>">
     </div>
 </form>
 
