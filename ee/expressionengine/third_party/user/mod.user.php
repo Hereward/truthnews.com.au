@@ -5,10 +5,10 @@
  *
  * @package		Solspace:User
  * @author		Solspace, Inc.
- * @copyright	Copyright (c) 2008-2013, Solspace, Inc.
+ * @copyright	Copyright (c) 2008-2015, Solspace, Inc.
  * @link		http://solspace.com/docs/user
  * @license		http://www.solspace.com/license_agreement
- * @version		3.4.5
+ * @version		3.5.3
  * @filesource	user/mod.user.php
  */
 
@@ -179,6 +179,7 @@ class User extends Module_builder_user
 
 	private 	$uploads			= array();
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -217,7 +218,7 @@ class User extends Module_builder_user
 			$query = ee()->db->query(
 				"SELECT m.screen_name, m.email, m.username, m.member_id
 				 FROM 	exp_members AS m,
-				 		exp_user_welcome_email_list AS el
+						exp_user_welcome_email_list AS el
 				 WHERE 	m.member_id = el.member_id
 				 AND 	el.email_sent = 'n'
 				 AND 	el.group_id != m.group_id
@@ -1063,7 +1064,8 @@ class User extends Module_builder_user
 		{
 			if (strpos(ee()->TMPL->tagdata, LD.$val) === FALSE) continue;
 
-			if (preg_match_all("/".LD.$val."\s+format=([\"'])([^\\1]*?)\\1".RD."/s", ee()->TMPL->tagdata, $matches))
+			//added escaped quotes for EE 2.9 variable conditionals
+			if (preg_match_all("/".LD.$val."\s+format=(\\\'|\\\"|\"|\')([^\\1]*?)\\1".RD."/s", ee()->TMPL->tagdata, $matches))
 			{
 				$date_variables_exist = TRUE;
 
@@ -1600,14 +1602,7 @@ class User extends Module_builder_user
 		//  Invoke Pagination for EE 2.4 and Above
 		// --------------------------------------------
 
-		if ($this->ee_version >= '2.4.0')
-		{
-			ee()->load->library('pagination');
-			$channel->pagination = new Pagination_object('Channel');
-
-			// Used by pagination to determine whether we're coming from the cache
-			$channel->pagination->dynamic_sql = FALSE;
-		}
+		$channel = $this->add_pag_to_channel($channel);
 
 		/**	----------------------------------------
 		/**	Pass params
@@ -1649,24 +1644,7 @@ class User extends Module_builder_user
 		//  Pagination Tags Parsed Out
 		// --------------------------------------------
 
-		if ($this->ee_version >= '2.4.0')
-		{
-			$channel->pagination->get_template();
-		}
-		else
-		{
-			$channel->fetch_pagination_data();
-		}
-
-		if ($this->ee_version >= '2.4.0')
-		{
-			$channel->pagination->cfields = $channel->cfields;
-			$channel->pagination->build();
-		}
-		else
-		{
-			$channel->create_pagination();
-		}
+		$channel = $this->fetch_pagination_data($channel);
 
 		/**	----------------------------------------
 		/**	Grab entry data
@@ -1702,14 +1680,7 @@ class User extends Module_builder_user
 
 		$channel->parse_channel_entries();
 
-		if ($this->ee_version >= '2.4.0')
-		{
-			$channel->return_data = $channel->pagination->render($channel->return_data);
-		}
-		else
-		{
-			$channel->add_pagination_data();
-		}
+		$channel = $this->add_pagination_data($channel);
 
 		/**	----------------------------------------
 		/**	Count tag
@@ -2925,7 +2896,7 @@ class User extends Module_builder_user
 		if (ee()->extensions->active_hook('user_edit_validate') === TRUE)
 		{
 			$errors = ee()->extensions->universal_call(
-				'user_edit_insert_data',
+				'user_edit_validate',
 				$member_id,
 				$this->insert_data,
 				$this
@@ -3298,7 +3269,8 @@ class User extends Module_builder_user
 		//	changed.
 		//	----------------------------------------
 
-		if ($query->row('screen_name') != $_POST['screen_name'])
+		if ($query->row('screen_name') != $_POST['screen_name'] &&
+			ee()->db->table_exists('exp_comments'))
 		{
 			ee()->db->update(
 				'exp_comments',
@@ -5974,13 +5946,18 @@ class User extends Module_builder_user
 			}
 		}
 
-		/**	----------------------------------------
-		/**	Secure Mode Forms?
-		/**	----------------------------------------*/
+		//	----------------------------------------
+		//	Secure Mode Forms?
+		//	----------------------------------------
 
-		if (ee()->config->item('secure_forms') == 'y')
+		//EE 2.8 takes all of this out of our hands
+		if (version_compare($this->ee_version, '2.8.0', '<') && $this->csrf_enabled())
 		{
-			$good = ee()->security->check_xid(ee()->input->get_post('XID'));
+			$csrf_key = 'secure_forms';
+
+			$good = ee()->input->get_post($this->sc->csrf_name);
+
+			$good = ee()->security->check_xid($good);
 
 			//EE 2.7 does this 'for us'
 			if (version_compare($this->ee_version, '2.7', '<') && ! $good)
@@ -6005,12 +5982,12 @@ class User extends Module_builder_user
 
 			if ( $remote === FALSE && version_compare($this->ee_version, '2.7', '<'))
 			{
-				ee()->security->delete_xid(ee()->input->get_post('XID'));
+				ee()->security->delete_xid(ee()->input->get_post($this->sc->csrf_name));
 			}
-			//EE 2.7 auto deletes XID. The jerk.
-			else if (version_compare($this->ee_version, '2.7', '>='))
+			//EE 2.7 auto deletes csrf_token. The jerk.
+			else
 			{
-				ee()->security->restore_xid();
+				$this->restore_xid();
 			}
 		}
 
@@ -6078,11 +6055,27 @@ class User extends Module_builder_user
 			$this->insert_data['timezone'] = 'UTC';
 		}
 
+		// -------------------------------------
+		//	fix ints
+		//	NOTE: Do not remove this unless a new
+		//	solution has been found.
+		//	Needed to fix errors with MySQL strict.
+		// -------------------------------------
+
+		foreach ($this->int_fields as $int_field)
+		{
+			if (isset($this->insert_data[$int_field]) &&
+				empty($this->insert_data[$int_field]))
+			{
+				$this->insert_data[$int_field] = 0;
+			}
+		}
+
 		/**	----------------------------------------
 		/**	Insert basic member data
 		/**	----------------------------------------*/
 
-		ee()->db->query(ee()->db->insert_string('exp_members', $this->insert_data));
+		ee()->db->insert('exp_members', $this->insert_data);
 
 		$member_id = ee()->db->insert_id();
 
@@ -6095,7 +6088,7 @@ class User extends Module_builder_user
 
 		$cust_fields['member_id'] = $member_id;
 
-		ee()->db->query(ee()->db->insert_string('exp_member_data', $cust_fields));
+		ee()->db->insert('exp_member_data', $cust_fields);
 
 		/**	----------------------------------------
 		/**	Member Group Override on Activation
@@ -6388,7 +6381,10 @@ class User extends Module_builder_user
 			if (ee()->extensions->end_script === TRUE) return;
 		}
 
-
+		//false is put here so we can eventually add a preference for this
+		//but still allow people who want it now to remove the false and
+		//get the functionality. This is sort of tricky, though so no
+		//"official" support on it just yet.
 		if (FALSE AND ee()->extensions->active_hook('member_member_register') === TRUE)
 		{
 			$this->EE->extensions->call('member_member_register', $this->insert_data, $member_id);
@@ -6477,7 +6473,7 @@ class User extends Module_builder_user
 			$member 	= ee()->db->get_where('members', array('member_id' => $member_id));
 
 			$session 	= new Auth_result($member->row());
-			if ($this->ee_version >= '2.4.0') { $session->remember_me(60*60*24*182); }
+			$session->remember_me(60*60*24*182);
 			$session->start_session();
 
 			// Update system stats
@@ -6646,7 +6642,7 @@ class User extends Module_builder_user
 		ee()->db->delete('online_users');
 
 		ee()->session->destroy();
-		ee()->functions->set_cookie('read_topics');
+		$this->set_cookie('read_topics');
 
 		/* -------------------------------------------
 		/* 'user_logout' hook.
@@ -7617,14 +7613,14 @@ class User extends Module_builder_user
 
 		if (version_compare($this->ee_version, '2.6.0', '<'))
 		{
-			ee()->functions->set_cookie(ee()->session->c_expire , time()+$expire, $expire);
-			ee()->functions->set_cookie(ee()->session->c_uniqueid , $query->row('unique_id'), $expire);
+			$this->set_cookie(ee()->session->c_expire , time()+$expire, $expire);
+			$this->set_cookie(ee()->session->c_uniqueid , $query->row('unique_id'), $expire);
 		}
 
 		$member 	= ee()->db->get_where('members', array('member_id' => $query->row('member_id')));
 
 		$session 	= new Auth_result($member->row());
-		if ($this->ee_version >= '2.4.0') { $session->remember_me(60*60*24*182); }
+		$session->remember_me(60*60*24*182);
 		$session->start_session();
 
 		// Update system stats
@@ -7642,11 +7638,11 @@ class User extends Module_builder_user
 
 		if ( $anon == 'y')
 		{
-			ee()->functions->set_cookie(ee()->session->c_anon , 1,  $expire);
+			$this->set_cookie(ee()->session->c_anon , 1,  $expire);
 		}
 		else
 		{
-			ee()->functions->set_cookie(ee()->session->c_anon);
+			$this->set_cookie(ee()->session->c_anon);
 		}
 
 		/** ----------------------------------------
@@ -9062,6 +9058,23 @@ class User extends Module_builder_user
 
 		$this->params['secure_action']	= ee()->TMPL->fetch_param('secure_action', 'no');
 
+		//password reset template for EE 2.6+
+		if (version_compare($this->ee_version, '2.6', '>=') &&
+			ee()->TMPL->fetch_param('password_reset_template'))
+		{
+			$this->params['secure_reset_link']				=
+				ee()->TMPL->fetch_param('secure_reset_link', 'no');
+
+			$this->params['password_reset_template']		=
+				ee()->TMPL->fetch_param('password_reset_template');
+
+			$this->params['password_reset_email_template']	=
+				ee()->TMPL->fetch_param('password_reset_email_template', '');
+
+			$this->params['password_reset_email_subject']	=
+				ee()->TMPL->fetch_param('password_reset_email_subject', '');
+		}
+
 		return $this->_form();
 	}
 	// END forgot_password
@@ -9144,6 +9157,41 @@ class User extends Module_builder_user
 	// --------------------------------------------------------------------
 
 	/**
+	 * Reset Password Form
+	 *
+	 * @access	public
+	 * @return	string	tagdata wrapped in form setup
+	 */
+
+	public function reset_password()
+	{
+		return $this->lib('reset_password')->reset_password_form();
+	}
+	//END reset_password
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Process Reset Password
+	 *
+	 * Uses intercepting objects to capture how EE would do it but using
+	 * our own output and redirecting.
+	 *
+	 * @access	public
+	 * @return	void	redirects
+	 */
+
+	public function process_reset_password()
+	{
+		return $this->lib('reset_password')->process_reset_password();
+	}
+	//END
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 *	Forgot Password Processing
 	 *
 	 *	Let's come together everybody and just use EE!
@@ -9157,6 +9205,27 @@ class User extends Module_builder_user
 		//EE 2.6+
 		if (version_compare($this->ee_version, '2.6.0', '>='))
 		{
+
+			//	----------------------------------------
+			//	Check if email is present in DB
+			//	----------------------------------------
+
+			$emailQuery = ee()->db->select('member_id')
+							->where('email', ee()->db->escape_str(ee()->input->post('email')))
+							->get('members');
+
+			if ($emailQuery->num_rows() == 0)
+			{
+				return $this->_output_error('submission', array(lang('invalid_email_address')));
+			}
+
+			$this->_param();
+
+			if ($this->lib('reset_password')->check_params($this->params))
+			{
+				return $this->lib('reset_password')->send_reset_token($this->params);
+			}
+
 			if ( ! class_exists('Member'))
 			{
 				require PATH_MOD.'member/mod.member.php';
@@ -10249,6 +10318,7 @@ class User extends Module_builder_user
 	}
 	/* END */
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -10398,188 +10468,8 @@ class User extends Module_builder_user
 		//  EE 2.4 Added a Member Model for Deleting That Works Rather Well
 		// --------------------------------------------
 
-		if ($this->ee_version >= '2.4.0')
-		{
-			ee()->load->model('member_model');
-			ee()->member_model->delete_member($id);
-		}
-		else
-		{
-			/** -------------------------------------
-			/**  No turning back, get to deletin'!
-			/** -------------------------------------*/
-
-			ee()->db->query("DELETE FROM exp_members WHERE member_id = '{$id}'");
-			ee()->db->query("DELETE FROM exp_member_data WHERE member_id = '{$id}'");
-			ee()->db->query("DELETE FROM exp_member_homepage WHERE member_id = '{$id}'");
-
-			$message_query = ee()->db->query(
-				"SELECT DISTINCT 	recipient_id
-				 FROM 				exp_message_copies
-				 WHERE 				sender_id = '{$id}'
-				 AND 				message_read = 'n'"
-			);
-
-			ee()->db->query("DELETE FROM exp_message_copies WHERE sender_id = '{$id}'");
-			ee()->db->query("DELETE FROM exp_message_data WHERE sender_id = '{$id}'");
-			ee()->db->query("DELETE FROM exp_message_folders WHERE member_id = '{$id}'");
-			ee()->db->query("DELETE FROM exp_message_listed WHERE member_id = '{$id}'");
-
-			if ($message_query->num_rows() > 0)
-			{
-				foreach($message_query->result_array() as $row)
-				{
-					$count_query = ee()->db->query(
-						"SELECT COUNT(*) AS count
-						 FROM 	exp_message_copies
-						 WHERE 	recipient_id = '".$row['recipient_id']."' AND message_read = 'n'"
-					);
-
-					ee()->db->query(
-						ee()->db->update_string(
-							'exp_members',
-							array(
-								'private_messages' 	=> $count_query->row('count')
-							),
-							array(
-								'member_id'			=> $row['recipient_id']
-							)
-						)
-					);
-				}
-			}
-
-			/** -------------------------------------
-			/**  Delete Forum Posts
-			/** -------------------------------------*/
-
-			if (ee()->config->item('forum_is_installed') == "y")
-			{
-				ee()->db->query("DELETE FROM exp_forum_subscriptions  WHERE member_id = '{$id}'");
-				ee()->db->query("DELETE FROM exp_forum_pollvotes  WHERE member_id = '{$id}'");
-
-				ee()->db->query("DELETE FROM exp_forum_topics WHERE author_id = '{$id}'");
-
-				// Snag the affected topic id's before deleting the member for the update afterwards
-				$query = ee()->db->query("SELECT topic_id FROM exp_forum_posts WHERE author_id = '{$id}'");
-
-				if ($query->num_rows() > 0)
-				{
-					$topic_ids = array();
-
-					foreach ($query->result_array() as $row)
-					{
-						$topic_ids[] = $row['topic_id'];
-					}
-
-					$topic_ids = array_unique($topic_ids);
-				}
-
-				ee()->db->query("DELETE FROM exp_forum_posts  WHERE author_id = '{$id}'");
-				ee()->db->query("DELETE FROM exp_forum_polls  WHERE author_id = '{$id}'");
-
-				// Update the forum stats
-				$query = ee()->db->query("SELECT forum_id FROM exp_forums WHERE forum_is_cat = 'n'");
-
-				if ( ! class_exists('Forum'))
-				{
-					require PATH_MOD.'forum/mod.forum'.EXT;
-					require PATH_MOD.'forum/mod.forum_core'.EXT;
-				}
-
-				$FRM = new Forum_Core;
-
-				foreach ($query->result_array() as $row)
-				{
-					$FRM->_update_post_stats($row['forum_id']);
-				}
-
-				if (isset($topic_ids))
-				{
-					foreach ($topic_ids as $topic_id)
-					{
-						$FRM->_update_topic_stats($topic_id);
-					}
-				}
-			}
-
-			/** -------------------------------------
-			/**  Va-poo-rize Weblog Entries and Comments
-			/** -------------------------------------*/
-
-			$entry_ids			= array();
-			$channel_ids		= array();
-			$recount_ids		= array();
-
-			// Find Entry IDs and Channel IDs, then DELETE! DELETE, WHA HA HA HA!!
-
-			$query = ee()->db->query("SELECT entry_id, channel_id FROM exp_channel_titles WHERE author_id = '{$id}'");
-
-			if ($query->num_rows() > 0)
-			{
-				foreach ($query->result_array() as $row)
-				{
-					$entry_ids[]	= $row['entry_id'];
-					$channel_ids[]	= $row['channel_id'];
-				}
-
-
-				ee()->db->query("DELETE FROM exp_channel_titles WHERE author_id = '{$id}'");
-				ee()->db->query("DELETE FROM exp_channel_data WHERE entry_id IN ('".implode("','", $entry_ids)."')");
-
-
-				ee()->db->query("DELETE FROM exp_comments WHERE entry_id IN ('".implode("','", $entry_ids)."')");
-				ee()->db->query("DELETE FROM exp_trackbacks WHERE entry_id IN ('".implode("','", $entry_ids)."')");
-			}
-
-			// Find the affected entries AND channel ids for author's comments
-
-			$query = ee()->db->query("SELECT DISTINCT(entry_id), channel_id FROM exp_comments WHERE author_id = '{$id}'");
-
-
-			if ($query->num_rows() > 0)
-			{
-				foreach ($query->result_array() as $row)
-				{
-					$recount_ids[] = $row['entry_id'];
-					$channel_ids[] = $row['channel_id'];
-				}
-
-				$recount_ids = array_diff($recount_ids, $entry_ids);
-			}
-
-			// Delete comments by member
-			ee()->db->query("DELETE FROM exp_comments WHERE author_id = '{$id}'");
-
-			ee()->stats->update_member_stats();
-
-			// Update stats on channel entries that were NOT deleted AND had comments by author
-
-			if (count($recount_ids) > 0)
-			{
-				foreach (array_unique($recount_ids) as $entry_id)
-				{
-					$query = ee()->db->query("SELECT MAX(comment_date) AS max_date FROM exp_comments WHERE status = 'o' AND entry_id = '".ee()->db->escape_str($entry_id)."'");
-
-					$comment_date = ($query->num_rows() == 0 OR !is_numeric($query->row('max_date'))) ? 0 : $query->row('max_date');
-
-					$query = ee()->db->query("SELECT COUNT(*) AS count FROM exp_comments WHERE entry_id = '{$entry_id}' AND status = 'o'");
-
-					ee()->db->query("UPDATE exp_channel_titles SET comment_total = '".ee()->db->escape_str($query->row('count'))."',
-																		recent_comment_date = '$comment_date' WHERE entry_id = '{$entry_id}'");
-
-				}
-			}
-
-			foreach (array_unique($channel_ids) as $channel_id)
-			{
-
-				ee()->stats->update_channel_stats($channel_id);
-
-				ee()->stats->update_comment_stats($channel_id);
-			}
-		}
-		// END conditional for EE versions below EE 2.4.0
+		ee()->load->model('member_model');
+		ee()->member_model->delete_member($id);
 
 
 		/** -------------------------------------
@@ -10646,10 +10536,10 @@ class User extends Module_builder_user
 
 		if ($admin === FALSE)
 		{
-			ee()->functions->set_cookie(ee()->session->c_session);
-			ee()->functions->set_cookie(ee()->session->c_anon);
-			ee()->functions->set_cookie('read_topics');
-			ee()->functions->set_cookie('tracker');
+			$this->set_cookie(ee()->session->c_session);
+			$this->set_cookie(ee()->session->c_anon);
+			$this->set_cookie('read_topics');
+			$this->set_cookie('tracker');
 		}
 
 		if (ee()->extensions->active_hook('user_delete_account_end') === TRUE)
@@ -10703,10 +10593,12 @@ class User extends Module_builder_user
 
 		if ($this->is_ajax_request())
 		{
-			$this->send_ajax_response(array('success' => TRUE,
-											'heading' => lang('user_successful_submission'),
-											'message' => lang('mbr_account_deleted'),
-											'content' => lang('mbr_account_deleted')));
+			$this->send_ajax_response(array(
+				'success' => TRUE,
+				'heading' => lang('user_successful_submission'),
+				'message' => lang('mbr_account_deleted'),
+				'content' => lang('mbr_account_deleted'))
+			);
 		}
 
 		/** -------------------------------------
@@ -10715,16 +10607,18 @@ class User extends Module_builder_user
 
 		$name	= stripslashes(ee()->config->item('site_name'));
 
-		$data = array(	'title' 	=> lang('mbr_delete'),
-						'heading'	=> lang('thank_you'),
-						'content'	=> lang('mbr_account_deleted'),
-						'redirect'	=> $return,
-					 );
+		$data = array(
+			'title' 	=> lang('mbr_delete'),
+			'heading'	=> lang('thank_you'),
+			'content'	=> lang('mbr_account_deleted'),
+			'redirect'	=> $return,
+		);
 
 		ee()->output->show_message($data);
 	}
+	//END delete_account
 
-	/* END reg */
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -13264,60 +13158,63 @@ class User extends Module_builder_user
 
 		return FALSE;
 	}
-
-	/* END params */
+	// END params
 
 
 	// --------------------------------------------------------------------
 
 	/**
-	 *	Insert Parameters for a Form
+	 * Insert Parameters for a Form
 	 *
-	 *	@access		private
-	 *	@param		array
-	 *	@return		bool
+	 * @access	private
+	 * @param	array   $params				array of params to hash
+	 * @return	string						hash key for param insert
 	 */
-
-	private function _insert_params( $params = array() )
+	private function _insert_params($params = array())
 	{
-		/**	----------------------------------------
-		/**	Empty?
-		/**	----------------------------------------*/
+		//	----------------------------------------
+		//	Empty?
+		//	----------------------------------------
 
 		if ( count( $params ) > 0 )
 		{
 			$this->params	= $params;
 		}
-		elseif ( ! isset( $this->params ) OR count( $this->params ) == 0 )
+		elseif ( ! isset($this->params) OR count($this->params) == 0)
 		{
 			return FALSE;
 		}
 
-		/**	----------------------------------------
-		/**	Delete excess when older than 2 hours
-		/**	----------------------------------------*/
+		//	----------------------------------------
+		//	Delete excess when older than 2 hours
+		//	----------------------------------------
 
-		ee()->db->query( "DELETE FROM exp_user_params WHERE entry_date < ". (ee()->localize->now-7200) );
+		ee()->db->where("entry_date < ", (ee()->localize->now - 7200))
+				->delete('user_params');
 
-		/**	----------------------------------------
-		/**	Insert
-		/**	----------------------------------------*/
+		//	----------------------------------------
+		//	Insert
+		//	----------------------------------------
 
 		$hash = ee()->functions->random('alpha', 25);
 
-		ee()->db->query( ee()->db->insert_string( 'exp_user_params',
-															array(	'hash' => $hash,
-																	'entry_date' => ee()->localize->now,
-																	'data' => serialize( $this->params ) ) ) );
+		ee()->db->insert(
+			'exp_user_params',
+			array(
+				'hash'			=> $hash,
+				'entry_date'	=> ee()->localize->now,
+				'data'			=> serialize($this->params)
+			)
+		);
 
-		/**	----------------------------------------
-		/**	Return
-		/**	----------------------------------------*/
+		//	----------------------------------------
+		//	Return
+		//	----------------------------------------
 
 		return $hash;
 	}
+	// END insert params
 
-	/* END insert params */
 
 	// --------------------------------------------------------------------
 
@@ -13417,8 +13314,8 @@ class User extends Module_builder_user
 
 			if ( ee()->input->post('user_orderby') !== FALSE )
 			{
-				ee()->functions->set_cookie( 'user_orderby', strtolower( implode( ",", $orderby ) ), 0 );
-				ee()->functions->set_cookie( 'user_sort', strtolower( implode( ",", $sort ) ), 0 );
+				$this->set_cookie( 'user_orderby', strtolower( implode( ",", $orderby ) ), 0 );
+				$this->set_cookie( 'user_sort', strtolower( implode( ",", $sort ) ), 0 );
 			}
 
 			/** ----------------------------------------
@@ -13572,7 +13469,7 @@ class User extends Module_builder_user
 			if ( ee()->input->post('user_limit') !== FALSE AND ee()->input->post('user_limit') != '' )
 			{
 				$this->limit	= ee()->input->post('user_limit');
-				ee()->functions->set_cookie( 'limit', ee()->input->post('user_limit'), 0 );
+				$this->set_cookie( 'limit', ee()->input->post('user_limit'), 0 );
 			}
 			elseif ( ee()->input->cookie('user_limit') !== FALSE AND ee()->input->cookie('user_limit') != '' )
 			{
@@ -13588,6 +13485,7 @@ class User extends Module_builder_user
 	}
 
 	/* END order sort */
+
 
 	// --------------------------------------------------------------------
 
@@ -13651,6 +13549,7 @@ class User extends Module_builder_user
 	}
 	// END prep pagination
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -13687,7 +13586,7 @@ class User extends Module_builder_user
 	private function _output_error($type, $errors)
 	{
 		// -------------------------------------
-		//	auto restore XID? (ee 2.7 only)
+		//	auto restore csrf_token? (ee 2.7 only)
 		// -------------------------------------
 
 		if (version_compare($this->ee_version, '2.7', '>='))
@@ -13714,7 +13613,7 @@ class User extends Module_builder_user
 
 			if ($restore)
 			{
-				ee()->security->restore_xid();
+				$this->restore_xid();
 			}
 		}
 
@@ -14043,7 +13942,7 @@ class User extends Module_builder_user
 					foreach ($timezone_params as $tp_name => $tp_value)
 					{
 						//ID has a special case because of the JS
-						if ($tp_name = 'id')
+						if ($tp_name == 'id')
 						{
 							$menu = str_replace('timezone_select', $tp_value, $menu);
 						}
@@ -14053,8 +13952,8 @@ class User extends Module_builder_user
 
 					//add it in
 					$menu = str_replace(
-						'<select name="server_timezone"',
-						'<select name="server_timezone" ' . $timezone_add,
+						'<select name="timezone"',
+						'<select name="timezone" ' . $timezone_add,
 						$menu
 					);
 
@@ -14074,5 +13973,26 @@ class User extends Module_builder_user
 		return $tagdata;
 	}
 	//END parse_timezone_menu_tag
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * EE 2.7+ restore xid with version check
+	 *
+	 * @access	public
+	 * @return	void
+	 */
+
+	public function restore_xid()
+	{
+		//deprecated in 2.8. Weeee!
+		if (version_compare($this->ee_version, '2.7', '>=') &&
+			version_compare($this->ee_version, '2.8', '<'))
+		{
+			ee()->security->restore_xid();
+		}
+	}
+	//END restore_xid
 }
 // END CLASS User

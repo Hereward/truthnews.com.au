@@ -1,6 +1,7 @@
 <? $this->view('errors'); ?>
 
 <form id="donate_form" name="donate_form" action="<?= $https_site_url ?>donate/payment" method="post">
+    <input type="hidden" name="XID" value="<?= $xid_hash ?>">
 
     <div class="form-group">
         <label for="email">Please Enter Your Email Address</label>

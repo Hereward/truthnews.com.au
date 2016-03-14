@@ -5,7 +5,7 @@
 
 
 <form action="<?=$caller->output($base_uri.'&method=process_reassign_ownership')?>" method="post" id="reassign_ownership_confirm_form">
-	<input type="hidden" name="XID" value="<?=$XID_SECURE_HASH?>" />
+    <input type="hidden" name="<?=$csrf_hidden_name?>" value="<?=$CSRF_TOKEN?>" />
 	<input type="hidden" name="member_id" value="<?=$hidden['member_id']?>"/>
 
 	<?php foreach($hidden['entry_ids'] as $entry_id) : ?>

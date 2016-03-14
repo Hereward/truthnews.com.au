@@ -5,7 +5,7 @@
  *
  * @package		Solspace:User
  * @author		Solspace, Inc.
- * @copyright	Copyright (c) 2008-2013, Solspace, Inc.
+ * @copyright	Copyright (c) 2008-2015, Solspace, Inc.
  * @link		http://solspace.com/docs/user
  * @license		http://www.solspace.com/license_agreement
  * @filesource	user/models/user_model.php

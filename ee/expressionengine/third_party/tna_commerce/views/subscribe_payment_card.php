@@ -54,6 +54,8 @@
     
     <input type="hidden" id="total_cost" name="total_cost" value="<?= $total_cost ?>" />
     <input type="hidden" id="include_extras" name="include_extras" value="<?= $include_extras?>" />
+    <input type="hidden" name="XID" value="<?= $xid_hash ?>">
+
     
 
 

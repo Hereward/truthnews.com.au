@@ -1,7 +1,7 @@
 <?php $this->view('header.html');?>
 
 <form  action="<?=$caller->output($base_uri.'&method=update_preferences')?>" method="post">
-	<input type="hidden" name="XID" value="<?=$XID_SECURE_HASH?>" />
+	<input type="hidden" name="<?=$csrf_hidden_name?>" value="<?=$CSRF_TOKEN?>" />
 
 	<table class="mainTable padTable" border="0" cellspacing="0" cellpadding="0">
 		<caption><?=$lang_general_preferences?></caption>

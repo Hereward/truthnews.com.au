@@ -16,9 +16,9 @@ jQuery(function($)
 	// jQuery cached lookups
 	//----------------------------------------------------------------------------------
 
-	var $primaryAuthorBox 	= $('#hold_field_user__solspace_user_primary_author').hide(),
-	 	$userAuthorsField	= $('#user__solspace_user_browse_authors').hide(),
-		$primaryAuthorField = $('#user__solspace_user_primary_author');
+	var $primaryAuthorBox 	= $('#hold_field_user__solspace_user_primary_author').hide();
+	var $userAuthorsField	= $('[name="user__solspace_user_browse_authors"]').hide();
+	var $primaryAuthorField = $('[name="user__solspace_user_primary_author"]');
 
 	//----------------------------------------------------------------------------------
 	// views  - I really dont like having these here - gf
@@ -115,13 +115,13 @@ jQuery(function($)
 
 
 			//array needs a bit of checking
-			var tempArray	= $userAuthorsField.val().split(',');
+			var tempArray	= $userAuthorsField.val() ? $userAuthorsField.val().split(',') : [];
 			var cleanArray	= [];
 
 			//bail if not clean
 			if ( tempArray.length == 1 &&
 				 ( $.trim(tempArray[0]) === '' || isNaN(parseInt(tempArray[0], 10)) )
-			   )
+			)
 			{
 				return;
 			}
@@ -263,7 +263,7 @@ jQuery(function($)
 					data		: {
 						author		: $.trim($search.val()),
 						existing	: userAuthors.join('||'),
-						XID			: EE.XID
+						XID			: EE.<?=$this->sc->csrf_js_name?>
 					},
 					success 	: function(data)
 					{

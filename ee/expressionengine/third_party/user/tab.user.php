@@ -5,10 +5,10 @@
  *
  * @package		Solspace:User
  * @author		Solspace, Inc.
- * @copyright	Copyright (c) 2008-2013, Solspace, Inc.
+ * @copyright	Copyright (c) 2008-2015, Solspace, Inc.
  * @link		http://solspace.com/docs/user
  * @license		http://www.solspace.com/license_agreement
- * @version		3.4.5
+ * @version		3.5.3
  * @filesource	user/tab.user.php
  */
 
@@ -240,43 +240,31 @@ class User_tab extends Module_builder_user
 			PREG_SPLIT_NO_EMPTY
 		);
 
+		$users = array_filter($users, array($this, 'is_positive_intlike'));
+
 		if (empty($users)) return;
 
-		foreach($users AS $user)
-		{
-			$user = ee()->db->escape_str( $user );
-		}
-
-		$users_implode = implode(',', $users);
-
-		//get all by screen name if they exist
-		$query = ee()->db->query(
-			"SELECT member_id, screen_name
-			 FROM	exp_members
-			 WHERE	member_id
-			 IN     ($users_implode)"
-		);
+		$query = ee()->db
+					->select('member_id, screen_name')
+					->where_in('member_id', $users)
+					->get('members');
 
 		//insert each author
 		//principal will be matched by screen name
 		foreach($query->result_array() AS $row)
 		{
-			ee()->db->query(
-				ee()->db->insert_string(
-					'exp_user_authors',
-					array(
-						'author_id'		=> $row['member_id'],
-						'entry_id'		=> $params['entry_id'],
-						'principal'	 	=> (
-							trim($params['mod_data']['solspace_user_primary_author']) == $row['member_id']
-						) ? 'y' : 'n',
-						'entry_date'	=> ee()->localize->now
-					)
+			ee()->db->insert(
+				'exp_user_authors',
+				array(
+					'author_id'		=> $row['member_id'],
+					'entry_id'		=> $params['entry_id'],
+					'principal'	 	=> (
+						trim($params['mod_data']['solspace_user_primary_author']) == $row['member_id']
+					) ? 'y' : 'n',
+					'entry_date'	=> ee()->localize->now
 				)
 			);
 		}
-
-		return;
 	}
 	/* END publish_data_db() */
 

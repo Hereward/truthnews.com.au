@@ -5,10 +5,10 @@
  *
  * @package		Solspace:User
  * @author		Solspace, Inc.
- * @copyright	Copyright (c) 2008-2013, Solspace, Inc.
+ * @copyright	Copyright (c) 2008-2015, Solspace, Inc.
  * @link		http://solspace.com/docs/user
  * @license		http://www.solspace.com/license_agreement
- * @version		3.4.5
+ * @version		3.5.3
  * @filesource	user/upd.user.php
  */
 
@@ -16,7 +16,7 @@ require_once 'addon_builder/module_builder.php';
 
 class User_upd extends Module_builder_user
 {
-	public 	$module_actions		= array();
+	public 	$module_actions		= array('process_reset_password');
 	public 	$hooks				= array();
 	private $old_layout_data	= array(
 		array(
@@ -69,7 +69,8 @@ class User_upd extends Module_builder_user
 			'delete_account',
 			'activate_member',
 			'retrieve_username',
-			'create_key'
+			'create_key',
+			'process_reset_password'
 		);
 
 		// --------------------------------------------
@@ -157,7 +158,7 @@ class User_upd extends Module_builder_user
 		//  Add Profile Views Field to exp_members
 		// --------------------------------------------
 
-		if ( ! $this->column_exists('provile_views', 'exp_members'))
+		if ( ! $this->column_exists('profile_views', 'exp_members'))
 		{
 			ee()->db->query(
 				"ALTER TABLE exp_members

@@ -5,10 +5,10 @@
  *
  * @package		Solspace:User
  * @author		Solspace, Inc.
- * @copyright	Copyright (c) 2008-2013, Solspace, Inc.
+ * @copyright	Copyright (c) 2008-2015, Solspace, Inc.
  * @link		http://solspace.com/docs/user
  * @license		http://www.solspace.com/license_agreement
- * @version		3.4.5
+ * @version		3.5.3
  * @filesource	user/language/english/lang.user.php
  */
 
@@ -488,6 +488,9 @@ $lang = array(
 
 'cp_jquery_requred' =>
 "The 'jQuery for the Control Panel' extension must be <a href='%extensions_url%'>enabled</a> to use this module.",
+
+'could_not_send_reset_email' =>
+"Could Not Send Reset Email: Unknown Error.",
 
 /** --------------------------------------------
 /**  Update Routine

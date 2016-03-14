@@ -22,6 +22,7 @@ abstract class Base_Controller {
     protected $member_groups;
     protected $postage_costs;
     protected $gift = 0;
+    protected $xid_hash;
   
 
     protected function __construct() {
@@ -70,11 +71,12 @@ abstract class Base_Controller {
         $this->member_group_id = $this->member_groups['members'];
         
         $this->postage_costs = $this->EE->subscribers_model->get_postage_costs();
-        
+
         $this->EE->load->vars($this->postage_costs);
-        
-        
-        
+
+        $this->xid_hash = $this->EE->functions->add_form_security_hash('{XID_HASH}');
+        $this->EE->load->vars(array('xid_hash'  => $this->xid_hash));
+
         //$msg = "Is Subscriber? ".$this->is_subscriber();
         //die($msg);
         

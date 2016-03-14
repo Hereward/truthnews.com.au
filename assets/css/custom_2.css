@@ -217,7 +217,7 @@ h3.recent_shows {
     color: #FFFFFF;
     font-size: 16px;
     font-weight: bold;
-    margin-top: 0;
+    margin: 20px 0px 20px 0px;
     /* max-width: 728px; */
     padding: 7px;
     text-align: center;
@@ -1193,9 +1193,6 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
         font-size:13px;
     }
 
-    h3.recent_shows {
-        margin-bottom:20px;
-    }
 
     .right_col {
         border-left: 1px solid #EAE8E8;
@@ -1377,10 +1374,6 @@ div.profile_section {
 
 
 @media (min-width:1600px) {
-
-    h3.recent_shows {
-        margin-bottom:20px;
-    }
 
     .right_col {
         border-left: 1px solid #EAE8E8;

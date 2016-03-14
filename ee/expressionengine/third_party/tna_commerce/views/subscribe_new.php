@@ -10,6 +10,7 @@
     {!-- action="<?= $https_site_url ?>subscribe/payment" --}
     <form  action="<?= $https_site_url ?>subscribe/payment" ng-app="validationExample" ng-controller="subscribeController" novalidate id="subscribe_form" name="subscribe_form"  ng-submit="subscribeForm($event)" method="post">
         <input type="hidden" name="create_member" value="1" />
+        <input type="hidden" name="XID" value="<?= $xid_hash ?>">
 
         <!-- This credit card fieldset is not required for free or external checkout (e.g., PayPal Express Checkout) payment methods. -->
 

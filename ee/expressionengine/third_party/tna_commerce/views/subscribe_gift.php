@@ -4,6 +4,8 @@
     <input type="hidden" name="create_member" value="1" />
     <input type="hidden" name="gift" value="1" />
     <input type="hidden" name="include_extras" value="1" />
+    <input type="hidden" name="XID" value="<?= $xid_hash ?>">
+
     {!-- <input type="hidden" name="include_extras" id ="include_extras" value="1"> --}
     
     <input type="hidden" name="subscription_type" id="subscription_type" value="yearly">

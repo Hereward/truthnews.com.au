@@ -35,6 +35,10 @@ class subscribe_controller extends Base_Controller {
      
         dev_log::write("subscribe_controller:create");
 
+        //$parameter = $this->EE->TMPL->parse_globals($parameter);
+
+        //die($this->xid_hash);
+
         $errors = array();
         $this->set_defaults();
         
