@@ -322,7 +322,7 @@ class subscription_payment_gift_controller extends Base_Controller {
         $data['username'] = $this->EE->input->post('r_email');
         $data['screen_name'] = $screen_name;
         //$data['password']    = do_hash($this->EE->input->post('password'));
-        $data['password'] = do_hash($password);
+        $data['password'] = md5($password); // do_hash($password);
         $data['email'] = $this->EE->input->post('r_email');
         $data['ip_address'] = $this->EE->input->ip_address();
         $data['unique_id'] = random_string('encrypt');
