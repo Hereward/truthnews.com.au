@@ -1,5 +1,5 @@
 {!-- category="{embed:category}" --}
-{exp:channel:entries cache="no" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}"
+{exp:channel:entries cache="yes" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}"
 orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry}"}
 {if no_results} {redirect="404"} {/if}
 {if count == 2 || count == 4}
