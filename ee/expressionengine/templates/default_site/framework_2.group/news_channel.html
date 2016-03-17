@@ -1,5 +1,5 @@
 {!-- category="{embed:category}" --}
-{exp:channel:entries cache="yes" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}"
+{exp:channel:entries cache="no" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}"
 orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry}"}
 {if no_results} {redirect="404"} {/if}
 {if count == 2 || count == 4}
@@ -19,27 +19,30 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
 
 
     <div class="row">
-        <div class="col-lg-1">
+
+        <div class="col-xs-2 col-lg-1">
             <div class="listen_toggle">
                 <a alt="Listen" role="button" data-toggle="collapse" href="#audio_player_{entry_id}" aria-expanded="false" aria-controls="audio_player_{entry_id}">
                     <strong><span class="icon icon-volume-medium"></span></strong>
                 </a>
             </div>
         </div>
-        <div class="col-lg-5">
+
+
+        <div class="col-xs-10 col-lg-5">
             <p class="timestamp">
                 <strong>
                     {entry_date format="%d %F %Y"}
                 </strong>
                 {if original_date}(Original: {original_date format="%Y-%m-%d"}){/if}
-                |
+                <span class="hidden-xs">|</span> <span class="visible-xs-inline"><br></span>
                 {if original_source}<a target="_blank" href="{original_source}">Source</a> | {/if}
 
                 {!--
-                <a href="{channel_url}/{url_title}">Permalink</a> | <a href="{channel_url}/{url_title}#comment_body">comments: {comment_total}</a>
+                <a href="{channel_url}/{url_title}">Permalink</a> <span class="hidden-xs">|</span> <span class="visible-xs-inline"><br></span><a href="{channel_url}/{url_title}#comment_body">comments: {comment_total}</a>
                 --}
 
-                <a href="{channel_url}/{url_title}">Permalink</a> | <a href="{channel_url}/{url_title}/#disqus_thread" data-disqus-identifier="{url_title}">0 Comments</a>
+                <a href="{channel_url}/{url_title}">Permalink</a> <span class="hidden-xs">|</span> <span class="visible-xs-inline"><br></span><a href="{channel_url}/{url_title}/#disqus_thread" data-disqus-identifier="{url_title}">0 Comments</a>
 
                 {if original_author}<br/>By <span style="font-style:italic; font-weight:bold;">{original_author}</span>{/if}
             </p>
@@ -51,7 +54,7 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
 
 
         </div>
-        <div class="col-lg-6">
+        <div class="col-xs-12 col-lg-6">
             <div>
                 <div class="fb-like" data-href="{channel_url}/{url_title}" data-width="280" data-show-faces="true" data-send="true"></div>
                 {!-- <fb:like href="{channel_url}/{url_title}" send="true" width="450" show_faces="true" font=""></fb:like> --}
