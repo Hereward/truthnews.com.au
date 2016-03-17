@@ -13,11 +13,20 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
        <h2 class="channel_title">{title}</h2>
     {/if}
 
- <div>{embed=framework_2/mejs_player entry_id="{entry_id}"}</div>
+
+
+ <div class="collapse" id="audio_player_{entry_id}">{embed=framework_2/mejs_player entry_id="{entry_id}"}</div>
 
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-1">
+            <div class="listen_toggle">
+                <a alt="Listen" role="button" data-toggle="collapse" href="#audio_player_{entry_id}" aria-expanded="false" aria-controls="audio_player_{entry_id}">
+                    <strong><span class="icon icon-volume-medium"></span></strong>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-5">
             <p class="timestamp">
                 <strong>
                     {entry_date format="%d %F %Y"}

@@ -1,3 +1,25 @@
+
+.mejs-controls div.mejs-time-rail {
+    width: 98px;
+}
+
+
+.listen_toggle a:link {
+    color: black;
+    text-decoration:none;
+}
+
+.listen_toggle a:hover {
+    text-decoration:none;
+    color:red;
+}
+
+.listen_toggle {
+    margin: 2px 0px 0px 0px;
+    font-size:30px;
+    text-align:right;
+}
+
 .right_col {
     margin-top:20px;
 }
