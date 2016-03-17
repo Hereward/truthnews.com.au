@@ -34,23 +34,20 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
                 <strong>
                     {entry_date format="%d %F %Y"}
                 </strong>
-                {if original_date}(Original: {original_date format="%Y-%m-%d"}){/if}
-                <span class="hidden-xs">|</span> <span class="visible-xs-inline"><br></span>
-                {if original_source}<a target="_blank" href="{original_source}">Source</a> | {/if}
+                <span class="hidden-xs">
+                    {if original_date}(Original: {original_date format="%Y-%m-%d"}){/if}
+                    |
+                    {if original_source}<a target="_blank" href="{original_source}">Source</a> | {/if}
 
-                {!--
-                <a href="{channel_url}/{url_title}">Permalink</a> <span class="hidden-xs">|</span> <span class="visible-xs-inline"><br></span><a href="{channel_url}/{url_title}#comment_body">comments: {comment_total}</a>
-                --}
+                    <a href="{channel_url}/{url_title}">Permalink</a> |
+                    <a href="{channel_url}/{url_title}/#disqus_thread" data-disqus-identifier="{url_title}">0 Comments</a>
+                </span>
+                <span class="visible-xs-inline"><br><a href="{channel_url}/{url_title}/#disqus_thread" data-disqus-identifier="{url_title}">0 Comments</a></span>
 
-                <a href="{channel_url}/{url_title}">Permalink</a> <span class="hidden-xs">|</span> <span class="visible-xs-inline"><br></span><a href="{channel_url}/{url_title}/#disqus_thread" data-disqus-identifier="{url_title}">0 Comments</a>
 
                 {if original_author}<br/>By <span style="font-style:italic; font-weight:bold;">{original_author}</span>{/if}
             </p>
-{!--
-            <div class="add_this hidden-xs">
-                {embed=framework_2/add_this add_this_url="{channel_url}/{url_title}"}
-            </div>
---}
+
 
 
         </div>
