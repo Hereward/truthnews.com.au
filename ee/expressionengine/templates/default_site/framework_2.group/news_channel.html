@@ -22,8 +22,8 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
 
         <div class="col-xs-2 col-lg-1">
             <div class="listen_toggle">
-                <a alt="Listen" role="button" data-toggle="collapse" href="#audio_player_{entry_id}" aria-expanded="false" aria-controls="audio_player_{entry_id}">
-                    <strong><span class="icon icon-volume-medium"></span></strong>
+                <a {if podcast == 'yes'} alt="Listen" title="This is a podcast - click to listen" {if:else} alt="News" title="This is a news article - it has no audio"{/if} role="button" data-toggle="collapse" href="#audio_player_{entry_id}" aria-expanded="false" aria-controls="audio_player_{entry_id}">
+                    <strong><span class="icon {if podcast == 'yes'}icon-volume-medium{if:else}icon-newspaper{/if}"></span></strong>
                 </a>
             </div>
         </div>
