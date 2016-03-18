@@ -59,15 +59,15 @@
 {form:form_declaration:modify_messages}
 
 
-{if paginate}
+{paginate}
 <table border='0'  cellspacing='5' cellpadding='0' class='tablePad' >
 <tr>
 <td  class='default' >
-{include:pagination_link}
+{pagination_links}
 </td>
 </tr>
 </table>
-{/if}
+{/paginate}
 
 <div class="tablePad">
 
@@ -106,16 +106,16 @@
 
 </div>
 
-{if paginate}
+{paginate}
 <table border='0'  cellspacing='5' cellpadding='0' class='tablePad' >
 <tr>
 <td  class='default' >
-<div>{include:pagination_link}</div>
+<div>{pagination_links}</div>
 </td>
 </tr>
 </table>
 
-{/if}
+{/paginate}
 {include:folder_pulldown:move}
 
 {include:folder_pulldown:copy}
