@@ -60,6 +60,7 @@ var $return_data = "";
 	} elseif (isset($words) && $words != "") {
 		// Strip the HTML
 		$stripped_content = strip_tags($tag_content, $allow);
+        $stripped_content = strip_tags($stripped_content, '<br>');
 		$new_content = (str_word_count($stripped_content) <= $words ? $stripped_content : $this->_truncate_words($stripped_content, $words, $append));
 	} else {
         // Strip the HTML
