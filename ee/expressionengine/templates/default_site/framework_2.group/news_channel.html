@@ -80,7 +80,7 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
             {if embed:limit == 1}
                 {body_rich}
             {if:else}
-                {exp:eehive_hacksaw words="200" allow="<b><a><p><img><li><ul>"}
+                {exp:eehive_hacksaw words="200" allow="<b><a><p><img><li><ul><blockquote>"}
                     {body_rich}
                 {/exp:eehive_hacksaw}... <p style="text-align:right;"><a href="{channel_url}/{url_title}">Read More &rarr;</a></p>
             {/if}
