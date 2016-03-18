@@ -18,7 +18,7 @@ $file_browser_options = array(
 );
 
 // is Assets installed?
-if (array_key_exists('assets', $this->addons->get_installed()))
+if (Wygwam_helper::is_assets_installed())
 {
 	$file_browser_options['assets'] = 'Assets';
 }

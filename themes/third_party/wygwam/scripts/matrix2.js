@@ -8,10 +8,12 @@ Wygwam.matrixColConfigs = {};
  * Display
  */
 var onDisplay = function(cell){
-	
+
 	var $textarea = $('textarea', cell.dom.$td),
 		config = Wygwam.matrixColConfigs[cell.col.id],
 		id = cell.field.id+'_'+cell.row.id+'_'+cell.col.id+'_'+Math.floor(Math.random()*100000000);
+
+	id = id.replace(/\[/, '_').replace(/\]/, '');
 
 	$textarea.attr('id', id);
 
@@ -29,9 +31,22 @@ Matrix.bind('wygwam', 'beforeSort', function(cell){
 
 	// has CKEditor been initialized?
 	if (! $iframe.hasClass('wygwam')) {
+
+		// Make a clone of the editor DOM
+		cell.dom.$ckeClone = cell.dom.$td.children('.cke').clone();
+
 		// save the latest HTML value to the textarea
-		var html = $iframe[0].contentDocument.body.innerHTML;
-		$textarea.val(html);
+		var id = $textarea.attr('id'),
+			editor = CKEDITOR.instances[id];
+
+		editor.updateElement();
+
+		// destroy the CKEDITOR.editor instance
+		editor.destroy();
+
+		// make it look like nothing happened
+		$textarea.hide();
+		cell.dom.$ckeClone.appendTo(cell.dom.$td);
 	}
 });
 
@@ -39,8 +54,11 @@ Matrix.bind('wygwam', 'beforeSort', function(cell){
  * After Sort
  */
 Matrix.bind('wygwam', 'afterSort', function(cell) {
-	$textarea = $('textarea', cell.dom.$td);
-	cell.dom.$td.empty().append($textarea);
+	if (typeof cell.dom.$ckeClone != 'undefined')
+	{
+		cell.dom.$ckeClone.remove();
+	}
+	$('iframe:first', cell.dom.$td).remove();
 	onDisplay(cell);
 });
 

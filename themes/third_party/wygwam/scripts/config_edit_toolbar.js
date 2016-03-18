@@ -1,5 +1,19 @@
 (function($) {
 
+
+// Set the icon backgrounds
+$('#settings .cke_button_icon').each(function() {
+	var $icon = $(this),
+		icon = $icon.attr('data-icon'),
+		iconStyle = CKEDITOR.skin.getIconStyle(icon);
+
+	if (iconStyle)
+	{
+		$icon.attr('style', iconStyle);
+	}
+});
+
+
 /**
  * Position element relative to anothor
  */

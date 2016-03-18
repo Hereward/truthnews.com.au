@@ -29,16 +29,15 @@ $this->table->add_row(
 // -------------------------------------------
 
 $tb_helper_vars = array(
-	'tb_groups'          => $helper->tb_groups(),
-	'tb_selects'         => $helper->tb_selects(),
-	'tb_class_overrides' => $helper->tb_class_overrides(),
-	'tb_label_overrides' => $helper->tb_label_overrides()
+	'tb_groups'          => Wygwam_helper::tb_groups(),
+	'tb_combos'          => Wygwam_helper::tb_combos(),
+	'tb_label_overrides' => Wygwam_helper::tb_label_overrides()
 );
 
 $selections_vars = array(
 	'vars'            => $tb_helper_vars,
 	'id'              => 'selections',
-	'groups'          => $helper->custom_toolbar($config['settings']['toolbar'], TRUE),
+	'groups'          => Wygwam_helper::create_toolbar($config['settings']['toolbar'], TRUE),
 	'selected_groups' => array(),
 	'selections_pane' => TRUE
 );
@@ -46,7 +45,7 @@ $selections_vars = array(
 $options_vars = array(
 	'vars'            => $tb_helper_vars,
 	'id'              => 'options',
-	'groups'          => $helper->tb_groups(),
+	'groups'          => Wygwam_helper::tb_groups(),
 	'selected_groups' => $config['settings']['toolbar'],
 	'selections_pane' => FALSE
 );
@@ -76,14 +75,16 @@ $this->table->add_row(
 );
 
 // -------------------------------------------
-//  CSS
+//  CSS File
 // -------------------------------------------
 
 $this->table->add_row(
-	lang('wygwam_css', 'css') . '<br />' . lang('wygwam_css_desc'),
+	lang('wygwam_css_file', 'css') . '<br />' . lang('wygwam_css_desc'),
 	array(
 		'style' => 'padding-right: 13px',
-		'data' => form_input(array('id'=>'css', 'name'=>'settings[contentsCss]', 'value'=>implode($config['settings']['contentsCss'])))
+		'data' =>  '<p>'.form_input(array('id'=>'css', 'name'=>'settings[contentsCss]', 'value'=>implode($config['settings']['contentsCss']))).'</p>' .
+		           '<label>'.form_checkbox('settings[parse_css]', 'y', ($config['settings']['parse_css'] == 'y')).NBS.lang('wygwam_parse_css').'</label>' . NBS .
+		           ' '.lang('wygwam_parse_css_alt')
 	)
 );
 
@@ -94,6 +95,15 @@ $this->table->add_row(
 $this->table->add_row(
 	lang('wygwam_upload_dir', 'upload_dir'),
 	$upload_dir
+);
+
+// -------------------------------------------
+//  Allowed Content
+// -------------------------------------------
+
+$this->table->add_row(
+	lang('wygwam_restrict_html', 'restrict_html') . '<br />' . lang('wygwam_restrict_html_desc'),
+	form_dropdown('settings[restrict_html]', array('n' => lang('no'), 'y' => lang('yes')), $config['settings']['restrict_html'], 'id="restrict_html"')
 );
 
 ?>

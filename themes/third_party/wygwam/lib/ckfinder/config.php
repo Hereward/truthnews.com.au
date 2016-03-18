@@ -253,7 +253,7 @@ if ($wygconfig['allowed_types'] == 'all')
 			'url' => $baseUrl,
 			'directory' => $baseDir,
 			'maxSize' => $wygconfig['max_size'],
-			'allowedExtensions' => '7z,aiff,asf,avi,bmp,csv,doc,docx,fla,flv,gif,gz,gzip,jpeg,jpg,mid,mov,mp3,mp4,mpc,mpeg,mpg,ods,odt,pdf,png,ppt,pptx,pxd,qt,ram,rar,rm,rmi,rmvb,rtf,sdc,sitd,swf,sxc,sxw,tar,tgz,tif,tiff,txt,vsd,wav,wma,wmv,xls,xlsx,zip',
+			'allowedExtensions' => '7z,aiff,asf,avi,bmp,csv,doc,docx,fla,flv,gif,gz,gzip,htm,html,jpeg,jpg,mid,mov,mp3,mp4,mpc,mpeg,mpg,ods,odt,pdf,png,ppt,pptx,pxd,qt,ram,rar,rm,rmi,rmvb,rtf,sdc,sitd,swf,sxc,sxw,tar,tgz,tif,tiff,txt,vsd,wav,wma,wmv,xls,xlsx,zip',
 			'deniedExtensions' => '');
 
 	$config['ResourceType'][] = Array(
@@ -286,6 +286,13 @@ checked, not only the last part. In this way, uploading foo.php.rar would be
 denied, because "php" is on the denied extensions list.
 */
 $config['CheckDoubleExtension'] = true;
+
+/*
+Increases the security on an IIS web server.
+If enabled, CKFinder will disallow creating folders and uploading files whose names contain characters
+that are not safe under an IIS web server.
+*/
+$config['DisallowUnsafeCharacters'] = true;
 
 /*
 If you have iconv enabled (visit http://php.net/iconv for more information),
@@ -321,8 +328,9 @@ $config['HtmlExtensions'] = array('html', 'htm', 'xml', 'js');
 Folders to not display in CKFinder, no matter their location.
 No paths are accepted, only the folder name.
 The * and ? wildcards are accepted.
+".*" disallows the creation of folders starting with a dot character.
 */
-$config['HideFolders'] = Array(".svn", "CVS");
+$config['HideFolders'] = Array(".*", "CVS");
 
 /*
 Files to not display in CKFinder, no matter their location.
@@ -353,9 +361,23 @@ will be automatically converted to ASCII letters.
 */
 $config['ForceAscii'] = false;
 
+/*
+Send files using X-Sendfile module
+Mod X-Sendfile (or similar) is avalible on Apache2, Nginx, Cherokee, Lighttpd
+
+Enabling X-Sendfile option can potentially cause security issue.
+ - server path to the file may be send to the browser with X-Sendfile header
+ - if server is not configured properly files will be send with 0 length
+
+For more complex configuration options visit our Developer's Guide
+  http://docs.cksource.com/CKFinder_2.x/Developers_Guide/PHP
+*/
+$config['XSendfile'] = false;
+
 
 include_once "plugins/imageresize/plugin.php";
 include_once "plugins/fileeditor/plugin.php";
+include_once "plugins/zip/plugin.php";
 
 $config['plugin_imageresize']['smallThumb'] = '90x90';
 $config['plugin_imageresize']['mediumThumb'] = '120x120';

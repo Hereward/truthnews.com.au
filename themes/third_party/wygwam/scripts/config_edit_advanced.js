@@ -162,15 +162,20 @@ var languages = {
 };
 
 var settings = {
+	// allowedContent
+	// autoGrow_bottomSpace
 	autoGrow_maxHeight: { desc: 'The maximum height to which the editor can reach using AutoGrow. Zero means unlimited.', type: 'number', val: '0' },
-	autoGrow_minHeight: { desc: 'The minimum height to which the editor can reach using AutoGrow', type: 'number', val: 200 },
+	//autoGrow_minHeight: { desc: 'The minimum height to which the editor can reach using AutoGrow', type: 'number', val: 200 },
+	autoGrow_onStartup: { desc: 'Whether to have the auto grow happen on editor creation.', type: 'bool' },
 	autoParagraph: { desc: 'Whether automatically create wrapping blocks around inline contents inside document body, this helps to ensure the integrality of the block enter mode.', type: 'bool', val: 'y' },
 	// autoUpdateElement, baseFloatZIndex
 	baseHref: { desc: 'The base href URL used to resolve relative and absolute URLs in the editor content.' },
 	// blockedKeystrokes
 	bodyClass: { desc: 'Sets the ‘class’ attribute to be used on body if it doesn’t have one.' },
 	bodyId: { desc: 'Sets the ‘id’ attribute to be used on body if it doesn’t have one.' },
-	// browserContextMenuOnCtrl, colorButton_backStyle
+	// browserContextMenuOnCtrl
+	clipboard_defaultContentType: { desc: 'The default content type is used when pasted data cannot be clearly recognized as HTML or text.', val: 'html' },
+	// colorButton_backStyle
 	colorButton_colors: { desc: 'Defines the colors to be displayed in the color selectors. It’s a string containing the hexadecimal notation for HTML colors, without the “#” prefix.', type: 'textarea', val: '000,800000,8B4513,2F4F4F,008080,000080,4B0082,696969,B22222,A52A2A,DAA520,006400,40E0D0,0000CD,800080,808080,F00,FF8C00,FFD700,008000,0FF,00F,EE82EE,A9A9A9,FFA07A,FFA500,FFFF00,00FF00,AFEEEE,ADD8E6,DDA0DD,D3D3D3,FFF0F5,FAEBD7,FFFFE0,F0FFF0,F0FFFF,F0F8FF,E6E6FA,FFF' },
 	colorButton_enableMore: { desc: 'Whether to enable the “More Colors...” button in the color selectors.', type: 'bool' },
 	// colorButton_foreStyle
@@ -178,12 +183,14 @@ var settings = {
 	contentsLangDirection: { desc: 'The writting direction of the language used to write the editor contents.', type: 'select', options: { ltr: 'Left-to-right', rtl: 'Right-to-left' }},
 	customConfig: { desc: 'The URL path for the custom configuration file to be loaded. If not overloaded with inline configurations, it defaults to the “config.js” file present in the root of the CKEditor installation directory.' },
 	defaultLanguage: { desc: 'The language to be used if the “language” setting isn’t set and it’s not possible to localize the editor to the user language.', type: 'select', options: languages, val: 'en' },
-	// devtools_styles, dialog_backgroundCoverColor, dialog_backgroundCoverOpacity
+	// devtools_styles, dialog_backgroundCoverColor, dialog_backgroundCoverOpacity, dialog_buttonsOrder
 	dialog_buttonsOrder: { desc: 'The guideline to follow when generating the dialog buttons.', type: 'select', options: { OS: 'Operating System Default', ltr: 'Left-to-right', rtl: 'Right-to-left' }},
 	// dialog_magnetDistance,
+	dialog_noConfirmCancel: { desc: 'Toggles whether users should be asked to confirm that they want to close dialogs with unsaved changes. Setting it to “Yes” will disable the confirmation.', type: 'bool', val: 'n' },
 	disableNativeSpellChecker: { desc: 'Disables the built-in spell checker while typing natively available in the browser (currently Firefox and Safari only).', type: 'bool', val: 'y' },
 	// disableNativeTableHandles
 	disableObjectResizing: { desc: 'Disables the ability of resize objects (image and tables) in the editing area.', type: 'bool' },
+	// disableReadonlyStyling
 	disableReadonlyStyling: { desc: 'Disables inline styling on read-only elements.', type: 'bool' },
 	docType: { desc: 'Sets the doctype to be used when loading the editor content as HTML.', val: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' },
 	editingBlock: { desc: 'Whether to render or not the editing block area in the editor interface.', type: 'bool', val: 'y' },
@@ -194,8 +201,11 @@ var settings = {
 	entities_greek: { desc: 'Whether to convert some symbols, mathematical symbols, and Greek letters to HTML entities. This may be more relevant for users typing text written in Greek. The list of entities can be found at the <a href="http://www.w3.org/TR/html4/sgml/entities.html#h-24.3.1" target="_blank">W3C HTML 4.01 Specification, section 24.3.1</a>.', type: 'bool', val: 'y' },
 	entities_latin: { desc: 'Whether to convert some Latin characters (Latin alphabet No. 1, ISO 8859-1) to HTML entities. The list of entities can be found at the <a href="http://www.w3.org/TR/html4/sgml/entities.html#h-24.2.1" target="_blank">W3C HTML 4.01 Specification, section 24.2.1</a>.', type: 'bool', val: 'y' },
 	entities_processNumerical: { desc: 'Whether to convert all remaining characters, not comprised in the ASCII character table, to their relative numeric representation of HTML entity. For example, the phrase “This is Chinese: 汉语.” is outputted as “This is Chinese: &amp;#27721;&amp;#35821;.”', type: 'bool', val: 'y' },
+	extraAllowedContent: { desc: 'Whitelist of additional tags, attributes, styles, and classes that should be allowed in the field HTML if the “Restrict allowed HTML?” setting is set to “Yes”. Use the <a href="http://docs.ckeditor.com/#!/guide/dev_allowed_content_rules-section-2" target="_blank">string format</a> syntax.' },
 	extraPlugins: { desc: 'Comma-separated list of additional plugins to be loaded.' },
 	//filebrowserWindowFeatures: { desc: 'The “features” to use in the file browser popup window.', val: 'location=no,menubar=no,toolbar=no,dependent=yes,minimizable=no,modal=no,alwaysRaised=yes,resizable=yes,scrollbars=yes' },
+	// filebrowserWindowHeight, filebrowserWindowWidth
+	fillEmptyBlocks: { desc: 'Whether a non-breaking space should be inserted into empty block elements in the HTML output.', type: 'bool', val: 'y' },
 	// find_highlight
 	font_defaultLabel: { desc: 'The text to be displayed in the Font combo if none of the available values matches the current cursor position or text selection.' },
 	font_names: { desc: 'The list of fonts names to be displayed in the Font combo in the toolbar. Entries are separated by semi-colons (;), while it’s possible to have more than one font for each entry, in the HTML way (separated by comma). A display name may be optionally defined by prefixing the entries with the name and the slash character. For example, “Arial/Arial, Helvetica, sans-serif” will be displayed as “Arial” in the list, but will be outputted as “Arial, Helvetica, sans-serif”.', type: 'textarea' },
@@ -235,6 +245,12 @@ var settings = {
 	resize_maxWidth: { desc: 'The maximum editor width, in pixels, when resizing it with the resize handle.', type: 'number', val: 3000 },
 	resize_minHeight: { desc: 'The minimum editor height, in pixels, when resizing it with the resize handle.', type: 'number', val: 250 },
 	resize_minWidth: { desc: 'The minimum editor width, in pixels, when resizing it with the resize handle.', type: 'number', val: 750 },
+	scayt_autoStartup: { desc: 'Whether SCAYT (“Spell Check As You Type”) should be enabled automatically.', type: 'bool', val: 'n' },
+	scayt_contextCommands: { desc: 'Customizes the display of SCAYT context menu commands.', val: 'all' },
+	scayt_contextMenuItemsOrder: { desc: 'Defines the order SCAYT context menu items by groups.', val: 'suggest|moresuggest|control' },
+	scayt_maxSuggestions: { desc: 'Defines the number of SCAYT suggestions to show in the main context menu.', type: 'number', val: 5 },
+	scayt_moreSuggestions: { desc: 'Enables/disables the "More Suggestions" sub-menu in the context menu', type: 'select', options: { on:'on', off:'off' }, val: 'on' },
+	scayt_sLang: { desc: 'Sets the default spell checking language for SCAYT.', type: 'select', options: { en_US:'en_US', en_GB:'en_GB', pt_BR:'pt_BR', da_DK:'da_DK', nl_NL:'nl_NL', en_CA:'en_CA', fi_FI:'fi_FI', fr_FR:'fr_FR', fr_CA:'fr_CA', de_DE:'de_DE', el_GR:'el_GR', it_IT:'it_IT', nb_NO:'nb_NO', pt_PT:'pt_PT', es_ES:'es_ES', sv_SE:'sv_SE' }, val: 'en_US' },
 	// * shiftEnterMode
 	skin: { desc: 'The skin to load. It may be the name of the skin folder inside the editor installation path, or the name and the path separated by a comma.', val: 'wygwam' },
 	// * smiley_columns, smiley_descriptions, smiley_images, smiley_path
@@ -250,6 +266,7 @@ var settings = {
 	templates_files: { desc: 'The list of templates definition files to load. Put each file on a single line.', type: 'textarea', val: 'plugins/templates/templates/default.js' },
 	templates_replaceContent: { desc: 'Whether the “Replace actual contents” checkbox is checked by default in the Templates dialog.', type: 'bool', val: 'y' },
 	// theme
+	title: { desc: 'Customizes the <a href="http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-title" target="_blank">human-readable title</a> of this editor.' },
 	// * toolbar, toolbar_Basic, toolbar_Full
 	// toolbarCanCollapse: { desc: 'Whether the toolbar can be collapsed by the user. If disabled, the collapser button will not be displayed.', type: 'bool' },
 	toolbarGroupCycling: { desc: 'When enabled, makes the arrow keys navigation cycle within the current toolbar group. Otherwise the arrows will move trought all items available in the toolbar. The TAB key will still be used to quickly jump among the toolbar groups.', type: 'bool', val: 'y' },
@@ -306,7 +323,7 @@ wygwam_addSettingRow = function(initialType, initialVal){
 				type = settingAttr.type || 'text';
 
 			// description
-			$desc.html(settingAttr.desc+' <a href="http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html#.'+setting+'" target="_blank">More...</a>').show();
+			$desc.html(settingAttr.desc+' <a href="http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-'+setting+'" target="_blank">More...</a>').show();
 
 			// input
 			switch (type) {

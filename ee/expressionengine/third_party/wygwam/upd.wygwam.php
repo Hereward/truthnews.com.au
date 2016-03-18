@@ -23,8 +23,6 @@ class Wygwam_upd {
 	function __construct()
 	{
 		$this->EE =& get_instance();
-
-		$this->helper = new Wygwam_Helper();
 	}
 
 	// --------------------------------------------------------------------
@@ -86,22 +84,16 @@ class Wygwam_upd {
 					$toolbar['stylesSet'] = $toolbar['stylesCombo_stylesSet'];
 					unset($toolbar['stylesCombo_stylesSet']);
 				}
-
-				// remove MediaEmbed
-				if (($key = array_search('MediaEmbed', $toolbar)) !== FALSE)
-				{
-					array_splice($toolbar, $key, 1, 'EmbedMedia');
-				}
 			}
 		}
 		else
 		{
-			$toolbars = $this->helper->default_toolbars();
+			$toolbars = Wygwam_helper::default_toolbars();
 		}
 
 		foreach ($toolbars as $name => &$toolbar) // WTF PHP
 		{
-			$config_settings = array_merge($this->helper->default_config_settings(), array('toolbar' => $toolbar));
+			$config_settings = array_merge(Wygwam_helper::default_config_settings(), array('toolbar' => $toolbar));
 
 			$this->EE->db->insert('wygwam_configs', array(
 				'config_name' => $name,
@@ -146,7 +138,7 @@ class Wygwam_upd {
 			)
 			{
 				$new_config_settings = array_merge(
-					$this->helper->default_config_settings(),
+					Wygwam_helper::default_config_settings(),
 					array('toolbar' => $toolbars[$field_settings['toolbar']])
 				);
 

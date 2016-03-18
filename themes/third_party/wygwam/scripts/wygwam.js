@@ -9,9 +9,38 @@ window.Wygwam;
  */
 Wygwam = function(id, config, defer) {
 
+    // Allow initializing by a jQuery object that matched something
+    if (typeof id == "object" && typeof id.is == "function" && id.is('textarea'))
+    {
+        this.$element = id;
+    }
+    else
+    {
+        this.$element = $('#' + id);
+    }
+
+    // No luck
+    if (this.$element.length == 0)
+    {
+        return;
+    }
+
 	this.id = id;
-	this.config = (Wygwam.configs[config] || Wygwam.configs['default']);
-	this.defer = defer;
+
+    if (typeof config == "undefined")
+    {
+        config = this.$element.data('config');
+    }
+    this.config = (Wygwam.configs[config] || Wygwam.configs['default']);
+
+    if (typeof defer == "undefined")
+    {
+        this.defer = this.$element.data('defer') == "y";
+    }
+    else
+    {
+        this.defer = defer;
+    }
 
 	if (this.defer) {
 		this.showIframe();
@@ -30,7 +59,7 @@ Wygwam.prototype = {
 		var width = (this.config.width ? this.config.width.toString() : '100%'),
 			height = (this.config.height ? this.config.height.toString() : '200'),
 			css = (this.config.contentsCss ? this.config.contentsCss : Wygwam.themeUrl+'lib/ckeditor/contents.css'),
-			$textarea = $('#'+this.id).hide();
+			$textarea = this.$element.hide();
 
 		if (width.match(/\d$/)) width += 'px';
 		if (height.match(/\d$/)) height += 'px';
@@ -63,13 +92,19 @@ Wygwam.prototype = {
 			this.$iframe.remove();
 		}
 
-		CKEDITOR.replace(this.id, this.config);
+		// Load in any custom config values
+		if (CKEDITOR.editorConfig)
+		{
+			CKEDITOR.editorConfig(this.config);
+		}
+
+		CKEDITOR.replace(this.$element[0], this.config);
 	}
 }
 
 
 Wygwam.configs = {};
-
+Wygwam.assetIds = [];
 
 /**
  * Load Assets Sheet
@@ -80,7 +115,21 @@ Wygwam.loadAssetsSheet = function(params, filedir, kind) {
 		kinds: (kind == 'any' ? kind : [kind]),
 
 		onSelect: function(files) {
-			CKEDITOR.tools.callFunction(params.CKEditorFuncNum, files[0].url);
+			var cacheBustUrl = files[0].url + '?cachebuster:' + parseInt(Math.random() * 100, 10);
+			CKEDITOR.tools.callFunction(params.CKEditorFuncNum, cacheBustUrl);
+
+			if (files[0].id) {
+				if ($.inArray(files[0].id, Wygwam.assetIds) == -1) {
+					for (var instanceName in CKEDITOR.instances) break;
+					var ckeditorContainerElem = CKEDITOR.instances[instanceName].container.$;
+					var $form = $(ckeditorContainerElem).closest('form');
+
+					$('<input type="hidden" name="wygwam_asset_ids[]"/>').val(files[0].id).appendTo($form);
+					$('<input type="hidden" name="wygwam_asset_urls[]"/>').val(files[0].url).appendTo($form);
+
+					Wygwam.assetIds.push(files[0].id);
+				}
+			}
 		}
 	});
 

@@ -1,16 +1,11 @@
-﻿/*
- * --------------------------------------------------------------------
- *  EDITOR CONFIGURATION
- * --------------------------------------------------------------------
- *
- * Create default configuration settings, to be used by all Wygwam fields.
- * See http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html
- *
+﻿/**
+ * Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
-CKEDITOR.editorConfig = function( config )
-{
+
+CKEDITOR.editorConfig = function( config ) {
+	// Define changes to default configuration here. For example:
 	// config.language = 'fr';
-	// config.uiColor = '#AADC6E';
 };
 
 /*
@@ -38,3 +33,4 @@ CKEDITOR.editorConfig = function( config )
 //	for (var i = 0; i < blockTags.length; i++)
 //		ev.editor.dataProcessor.writer.setRules( blockTags[i], blockTagRules);
 //});
+

@@ -20,25 +20,11 @@ class Wygwam_ft extends EE_Fieldtype {
 
 	var $has_array_data = TRUE;
 
-	/**
-	 * Fieldtype Constructor
-	 */
-	function __construct()
-	{
-		parent::__construct();
-
-		$this->helper = new Wygwam_Helper();
-
-		// -------------------------------------------
-		//  Prepare Cache
-		// -------------------------------------------
-
-		if (! isset($this->EE->session->cache['wygwam']))
-		{
-			$this->EE->session->cache['wygwam'] = array();
-		}
-		$this->cache =& $this->EE->session->cache['wygwam'];
-	}
+	private static $convert_previous_data_types = array(
+		''        => '--',
+		'auto'    => 'Auto &lt;br /&gt; or XHTML',
+		'textile' => 'Textile'
+	);
 
 	// --------------------------------------------------------------------
 
@@ -131,7 +117,7 @@ class Wygwam_ft extends EE_Fieldtype {
 
 		$r[] = array(
 			lang('wygwam_editor_config', 'wygwam_config'),
-			$config_setting . NBS.NBS . ' <a href="'.BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=wygwam'.AMP.'method=configs">'.lang('wygwam_edit_configs').'</a>'
+			$config_setting . NBS.NBS . ' <a href="'.BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=wygwam'.AMP.'method=index" target="_blank">'.lang('wygwam_edit_configs').'</a>'
 		);
 
 		// -------------------------------------------
@@ -154,7 +140,7 @@ class Wygwam_ft extends EE_Fieldtype {
 	 */
 	function display_settings($settings)
 	{
-		$settings = array_merge($this->helper->default_settings(), $settings);
+		$settings = array_merge(Wygwam_helper::default_settings(), $settings);
 
 		$rows = $this->_field_settings($settings);
 
@@ -166,15 +152,11 @@ class Wygwam_ft extends EE_Fieldtype {
 		if ($settings['field_id'] && $settings['field_type'] != 'wygwam')
 		{
 			array_unshift($rows, array(
-				lang('wygwam_convert', 'wygwam_convert').'<br />'.$this->EE->lang->line('wygwam_convert_desc'),
+				lang('wygwam_convert_entries', 'wygwam_convert_entries').'<br />'.lang('wygwam_convert_entries_desc'),
 				form_dropdown('wygwam[convert]',
-					array(
-						''        => '--',
-						'auto'    => 'Auto &lt;br /&gt; or XHTML',
-						'textile' => 'Textile'
-					),
+					self::$convert_previous_data_types,
 					(in_array($settings['field_fmt'], array('br', 'xhtml')) ? 'auto' : ''),
-					'id="wygwam_convert"'
+					'id="wygwam_convert_entries"'
 				)
 			));
 		}
@@ -187,15 +169,68 @@ class Wygwam_ft extends EE_Fieldtype {
 	}
 
 	/**
+	 * Display Grid cell settings
+	 */
+	function grid_display_settings($settings)
+	{
+		$settings = array_merge(Wygwam_helper::default_settings(), $settings);
+
+		$rows = $this->_field_settings($settings, TRUE);
+
+		// -------------------------------------------
+		//  Column Conversion
+		// -------------------------------------------
+
+		// is this a new Wygwam cell?
+		if (! isset($settings['config']))
+		{
+			array_unshift($rows, array(
+				lang('wygwam_convert_rows', 'wygwam_convert_rows'),
+				form_dropdown('wygwam[convert]',
+					self::$convert_previous_data_types,
+					'',
+					'id="wygwam_convert_rows"'
+				)
+			));
+		}
+
+		// Just throw the HTML together.
+		foreach ($rows as &$row)
+		{
+			$row = EE_Fieldtype::grid_settings_row($row[0], $row[1]);
+		}
+		return $rows;
+	}
+
+	/**
 	 * Display Cell Settings
 	 */
 	function display_cell_settings($settings)
 	{
 		global $DSP;
 
-		$settings = array_merge($this->helper->default_settings(), $settings);
+		$settings = array_merge(Wygwam_helper::default_settings(), $settings);
 
-		return $this->_field_settings($settings, TRUE);
+		$rows = $this->_field_settings($settings, TRUE);
+
+		// -------------------------------------------
+		//  Column Conversion
+		// -------------------------------------------
+
+		// is this a new Wygwam cell?
+		if (! isset($settings['config']))
+		{
+			array_unshift($rows, array(
+				lang('wygwam_convert_rows', 'wygwam_convert_rows'),
+				form_dropdown('wygwam[convert]',
+					self::$convert_previous_data_types,
+					'',
+					'id="wygwam_convert_rows"'
+				)
+			));
+		}
+
+		return $rows;
 	}
 
 	/**
@@ -203,9 +238,32 @@ class Wygwam_ft extends EE_Fieldtype {
 	 */
 	function display_var_settings($settings)
 	{
-		$this->helper->insert_js('(function($){
+		Wygwam_helper::insert_js('(function($){
 		                            $("#wygwam").wrap($("<div />").attr("id", "ft_wygwam"));
 		                          })(jQuery);');
+
+		return $this->_field_settings($settings);
+	}
+
+	/**
+	 * Display element settings.
+	 *
+	 * @param $settings
+	 * @return array
+	 */
+	function display_element_settings($settings)
+	{
+		if (!is_array($settings))
+		{
+			$settings = array();
+		}
+
+		if (!empty($settings['wygwam']))
+		{
+			$settings = $settings['wygwam'];
+		}
+
+		$settings = array_merge(Wygwam_helper::default_settings(), $settings);
 
 		return $this->_field_settings($settings);
 	}
@@ -228,10 +286,10 @@ class Wygwam_ft extends EE_Fieldtype {
 		//  Field Conversion
 		// -------------------------------------------
 
-		if (isset($settings['convert']))
+		if (!empty($settings['convert']))
 		{
 			$field_id = $this->EE->input->post('field_id');
-			if ($field_id && $settings['convert'])
+			if ($field_id)
 			{
 				$this->EE->db->select('entry_id, field_id_'.$field_id.' data, field_ft_'.$field_id.' format');
 				$query = $this->EE->db->get_where('channel_data', 'field_id_'.$field_id.' != ""');
@@ -256,7 +314,7 @@ class Wygwam_ft extends EE_Fieldtype {
 					foreach ($query->result_array() as $row)
 					{
 						$data = $row['data'];
-						$this->_replace_file_tags($data);
+						Wygwam_helper::replace_file_tags($data);
 
 						$convert = FALSE;
 
@@ -277,7 +335,7 @@ class Wygwam_ft extends EE_Fieldtype {
 						// Save the new field data
 						if ($convert)
 						{
-							$this->_replace_file_urls($data);
+							Wygwam_helper::replace_file_urls($data);
 
 							$this->EE->db->query($this->EE->db->update_string('exp_channel_data',
 								array(
@@ -298,11 +356,137 @@ class Wygwam_ft extends EE_Fieldtype {
 	}
 
 	/**
+	 * Save Grid cell settings
+	 */
+	function grid_save_settings($settings)
+	{
+		$settings = $settings['wygwam'];
+
+		// -------------------------------------------
+		//  Field Conversion
+		// -------------------------------------------
+
+		if (!empty($settings['convert']))
+		{
+			if (!empty($this->settings['col_id']))
+			{
+				$col_name = 'col_id_'.$this->settings['col_id'];
+				$table_name = 'channel_grid_field_'.$this->settings['grid_field_id'];
+				$this->EE->db->select('row_id, '.$col_name.' data');
+				$query = $this->EE->db->get_where($table_name, $col_name.' != ""');
+
+				if ($query->num_rows())
+				{
+					// prepare Typography
+					$this->EE->load->library('typography');
+					$this->EE->typography->initialize();
+
+					// prepare Textile
+					if ($settings['convert'] == 'textile')
+					{
+						if (! class_exists('Textile'))
+						{
+							require_once PATH_THIRD.'wygwam/lib/textile/textile.php';
+						}
+
+						$textile = new Textile();
+					}
+
+					foreach ($query->result_array() as $row)
+					{
+						$data = $row['data'];
+						Wygwam_helper::replace_file_tags($data);
+
+						// Auto <br /> and XHTML
+						switch ($settings['convert'])
+						{
+							case 'auto': $data = $this->EE->typography->auto_typography($data); break;
+							case 'textile': $data = $textile->TextileThis($data);
+						}
+
+						// Save the new field data
+						Wygwam_helper::replace_file_urls($data);
+
+						$this->EE->db->query($this->EE->db->update_string($table_name,
+							array(
+								$col_name => $data
+							),
+							'row_id = '.$row['row_id']
+						));
+					}
+				}
+			}
+
+			unset($settings['convert']);
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * Save Cell Settings
 	 */
 	function save_cell_settings($settings)
 	{
-		return $settings['wygwam'];
+		$settings = $settings['wygwam'];
+
+		// -------------------------------------------
+		//  Field Conversion
+		// -------------------------------------------
+
+		if (!empty($settings['convert']))
+		{
+			if (!empty($this->col_id))
+			{
+				$this->EE->db->select('row_id, col_id_'.$this->col_id.' data');
+				$query = $this->EE->db->get_where('matrix_data', 'col_id_'.$this->col_id.' != ""');
+
+				if ($query->num_rows())
+				{
+					// prepare Typography
+					$this->EE->load->library('typography');
+					$this->EE->typography->initialize();
+
+					// prepare Textile
+					if ($settings['convert'] == 'textile')
+					{
+						if (! class_exists('Textile'))
+						{
+							require_once PATH_THIRD.'wygwam/lib/textile/textile.php';
+						}
+
+						$textile = new Textile();
+					}
+
+					foreach ($query->result_array() as $row)
+					{
+						$data = $row['data'];
+						Wygwam_helper::replace_file_tags($data);
+
+						// Auto <br /> and XHTML
+						switch ($settings['convert'])
+						{
+							case 'auto': $data = $this->EE->typography->auto_typography($data); break;
+							case 'textile': $data = $textile->TextileThis($data);
+						}
+
+						// Save the new field data
+						Wygwam_helper::replace_file_urls($data);
+
+						$this->EE->db->query($this->EE->db->update_string('exp_matrix_data',
+							array(
+								'col_id_'.$this->col_id => $data
+							),
+							'row_id = '.$row['row_id']
+						));
+					}
+				}
+			}
+
+			unset($settings['convert']);
+		}
+
+		return $settings;
 	}
 
 	/**
@@ -313,383 +497,57 @@ class Wygwam_ft extends EE_Fieldtype {
 		return $this->EE->input->post('wygwam');
 	}
 
-	// --------------------------------------------------------------------
-
 	/**
-	 * Compare File URLs
+	 * Save element settings.
+	 *
+	 * @param $data
+	 * @return mixed
 	 */
-	private function _cmp_file_urls($a, $b)
+	function save_element_settings($data)
 	{
-		return -(strcmp(strlen($a), strlen($b)));
-	}
-
-	/**
-	 * Fetch File Tags
-	 */
-	private function _fetch_file_tags($sort = FALSE)
-	{
-		if (! isset($this->cache['file_tags']))
-		{
-			$tags = array();
-			$urls = array();
-
-			if ($file_paths = $this->EE->functions->fetch_file_paths())
-			{
-				if ($sort)
-				{
-					uasort($file_paths, array(&$this, '_cmp_file_urls'));
-				}
-
-				foreach ($file_paths as $id => $url)
-				{
-					// ignore "/" URLs
-					if ($url == '/') continue;
-
-					$tags[] = LD.'filedir_'.$id.RD;
-					$urls[] = $url;
-				}
-			}
-
-			$this->cache['file_tags'] = array($tags, $urls);
-		}
-
-		return $this->cache['file_tags'];
-	}
-
-	/**
-	 * Replace File Tags
-	 */
-	private function _replace_file_tags(&$data)
-	{
-		$tags = $this->_fetch_file_tags();
-		$data = str_replace($tags[0], $tags[1], $data);
-	}
-
-	/**
-	 * Replace File Paths
-	 */
-	private function _replace_file_urls(&$data)
-	{
-		$tags = $this->_fetch_file_tags();
-		$data = str_replace($tags[1], $tags[0], $data);
+		return $data['wygwam'];
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Compare Page URLs
-	 */
-	private function _cmp_page_urls($a, $b)
-	{
-		return -(strcmp(strlen($a[4]), strlen($b[4])));
-	}
-
-	/**
-	 * Fetch Page Tags
-	 */
-	private function _fetch_page_tags($sort = FALSE)
-	{
-		$tags = array();
-		$urls = array();
-
-		$page_data = $this->helper->get_all_page_data(FALSE);
-
-		if ($sort)
-		{
-			usort($page_data, array(&$this, '_cmp_page_urls'));
-		}
-
-		foreach ($page_data as $page)
-		{
-			$tags[] = LD.'page_'.$page[0].RD;
-			$urls[] = $page[4];
-		}
-
-		return array($tags, $urls);
-	}
-
-	/**
-	 * Replace Page Tags
-	 */
-	private function _replace_page_tags(&$data)
-	{
-		if (strpos($data, LD.'page_') !== FALSE)
-		{
-			$tags = $this->_fetch_page_tags();
-			$data = str_replace($tags[0], $tags[1], $data);
-		}
-	}
-
-	/**
-	 * Replace Page URLs
-	 */
-	private function _replace_page_urls(&$data)
-	{
-		$tags = $this->_fetch_page_tags(TRUE);
-		$data = str_replace($tags[1], $tags[0], $data);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Config JSON
-	 */
-	private function _config_json()
-	{
-		// starting point
-		$config = $this->helper->base_config();
-
-		// -------------------------------------------
-		//  Editor Config
-		// -------------------------------------------
-
-		if ($this->EE->db->table_exists('wygwam_configs')
-			&& isset($this->settings['config']) && is_numeric($this->settings['config'])
-			&& ($query = $this->EE->db->select('settings')->get_where('wygwam_configs', array('config_id' => $this->settings['config'])))
-			&& $query->num_rows()
-		)
-		{
-			// merge custom settings into config
-			$custom_settings = unserialize(base64_decode($query->row('settings')));
-			$config = array_merge($config, $custom_settings);
-		}
-		else
-		{
-			$this->settings['config'] = 'default';
-		}
-
-		// skip if already included
-		if (in_array($this->settings['config'], $this->cache['included_configs']))
-		{
-			return;
-		}
-
-		// language
-		if (! isset($config['language']) || ! $config['language'])
-		{
-			$lang_map = $this->helper->lang_map();
-			$language = $this->EE->session->userdata('language');
-			$config['language'] = isset($lang_map[$language]) ? $lang_map[$language] : 'en';
-		}
-
-		// toolbar
-		if (is_array($config['toolbar']))
-		{
-			$config['toolbar'] = $this->helper->custom_toolbar($config['toolbar']);
-		}
-
-		// css
-		if (! $config['contentsCss'])
-		{
-			unset($config['contentsCss']);
-		}
-
-		// extraPlugins
-		$config['extraPlugins'] = (isset($config['extraPlugins']) && $config['extraPlugins'] ? $config['extraPlugins'].',' : '') . 'wygwam,embedmedia,readmore';
-
-		// -------------------------------------------
-		//  File Browser Config
-		// -------------------------------------------
-
-		$user_group = $this->EE->session->userdata('group_id');
-		$upload_dir = isset($config['upload_dir']) ? $config['upload_dir'] : NULL;
-		$upload_prefs = $this->helper->get_upload_preferences($user_group, $upload_dir);
-
-		// before doing anything, make sure that the user has access to any upload directories
-		// (taking into account the upload directory setting)
-		if ($upload_prefs)
-		{
-			$file_browser = isset($this->settings['file_browser']) ? $this->settings['file_browser'] : 'ee';
-
-			switch ($file_browser)
-			{
-				case 'ckfinder':
-
-					// CKFinder can only pull files from a single upload directory, so make sure it's set
-					if (! $upload_dir) break;
-
-					if (! isset($_SESSION)) @session_start();
-					if (! isset($_SESSION['wygwam_'.$config['upload_dir']])) $_SESSION['wygwam_'.$config['upload_dir']] = array();
-					$sess =& $_SESSION['wygwam_'.$config['upload_dir']];
-
-					// add the FCPATH if this is a relative path
-					if (! preg_match('/^(\/|\\\|[a-zA-Z]+:)/', $upload_prefs['server_path']))
-					{
-						$upload_prefs['server_path'] = FCPATH . $upload_prefs['server_path'];
-					}
-
-					$sess['p'] = $upload_prefs['server_path'];
-					$sess['u'] = $upload_prefs['url'];
-					$sess['t'] = $upload_prefs['allowed_types'];
-					$sess['s'] = $upload_prefs['max_size'];
-					$sess['w'] = $upload_prefs['max_width'];
-					$sess['h'] = $upload_prefs['max_height'];
-
-					$config['filebrowserImageBrowseUrl'] = $this->helper->theme_url().'lib/ckfinder/ckfinder.html?Type=Images&id='.$config['upload_dir'];
-					$config['filebrowserImageUploadUrl'] = $this->helper->theme_url().'lib/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&id='.$config['upload_dir'];
-
-					if ($upload_prefs['allowed_types'] == 'all')
-					{
-						$config['filebrowserBrowseUrl'] = $this->helper->theme_url().'lib/ckfinder/ckfinder.html?id='.$config['upload_dir'];
-						$config['filebrowserUploadUrl'] = $this->helper->theme_url().'lib/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&id='.$config['upload_dir'];
-						$config['filebrowserFlashBrowseUrl'] = $this->helper->theme_url().'lib/ckfinder/ckfinder.html?Type=Flash&id='.$config['upload_dir'];
-						$config['filebrowserFlashUploadUrl'] = $this->helper->theme_url().'lib/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash&id='.$config['upload_dir'];
-					}
-
-					break;
-
-				case 'assets':
-
-					// make sure Assets is actually installed
-					// (otherwise, just use the EE File Manager)
-					if (array_key_exists('assets', $this->EE->addons->get_installed()))
-					{
-						// include sheet resources
-						if (! class_exists('Assets_helper'))
-						{
-							require PATH_THIRD.'assets/helper.php';
-						}
-
-						$assets_helper = new Assets_helper;
-						$assets_helper->include_sheet_resources();
-
-						// if no upload directory was set, just default to "all"
-						if (! $upload_dir) $upload_dir = '"all"';
-
-						$config['filebrowserBrowseFunc']      = 'function(params) { Wygwam.loadAssetsSheet(params, '.$upload_dir.', "any"); }';
-						$config['filebrowserImageBrowseFunc'] = 'function(params) { Wygwam.loadAssetsSheet(params, '.$upload_dir.', "image"); }';
-						$config['filebrowserFlashBrowseFunc'] = 'function(params) { Wygwam.loadAssetsSheet(params, '.$upload_dir.', "flash"); }';
-
-						break;
-					}
-
-				default:
-
-					// if no upload directory was set, just default to "all"
-					if (! $upload_dir) $upload_dir = '"all"';
-
-					$config['filebrowserBrowseFunc']      = 'function(params) { Wygwam.loadEEFileBrowser(params, '.$upload_dir.', "any"); }';
-					$config['filebrowserImageBrowseFunc'] = 'function(params) { Wygwam.loadEEFileBrowser(params, '.$upload_dir.', "image"); }';
-
-			}
-		}
-
-		// add any site page data to wygwam config
-		if ($pages = $this->helper->get_all_page_data())
-		{
-			$this->EE->lang->loadfile('wygwam');
-			$site_page_string = lang('wygwam_site_page');
-
-			foreach ($pages as $page)
-			{
-				$config['link_types'][$site_page_string][] = array(
-			            'label' => $page[2],
-			            'url'   => $page[4]
-				);
-			}
-		}
-
-		// -------------------------------------------
-		//  'wygwam_config' hook
-		//   - Override any of the config settings
-		// 
-			if ($this->EE->extensions->active_hook('wygwam_config'))
-			{
-				$config = $this->EE->extensions->call('wygwam_config', $config, $this->settings);
-			}
-		// 
-		// -------------------------------------------
-
-		unset($config['upload_dir']);
-
-		// -------------------------------------------
-		//  JSONify Config and Return
-		// -------------------------------------------
-
-		$config_literals = $this->helper->config_literals();
-		$config_booleans = $this->helper->config_booleans();
-
-		$js = '';
-
-		foreach ($config as $setting => $value)
-		{
-			if (! in_array($setting, $config_literals))
-			{
-				if (in_array($setting, $config_booleans))
-				{
-					$value = ($value == 'y' ? TRUE : FALSE);
-				}
-
-				$value = $this->EE->javascript->generate_json($value, TRUE);
-
-				// Firefox gets an "Unterminated string literal" error if this line gets too long,
-				// so let's put each new value on its own line
-				if ($setting == 'link_types')
-				{
-					$value = str_replace('","', "\",\n\t\t\t\"", $value);
-				}
-			}
-
-			$js .= ($js ? ','.NL : '')
-			     . "\t\t".'"'.$setting.'": '.$value;
-		}
-
-		$this->helper->insert_js(NL."\t".'Wygwam.configs["'.$this->settings['config'].'"] = {'.NL.$js.NL."\t".'};'.NL);
-		$this->cache['included_configs'][] = $this->settings['config'];
-	}
-
-	/**
-	 * Field Includes
-	 */
-	private function _field_includes()
-	{
-		if (! isset($this->cache['included_configs']))
-		{
-			$this->helper->include_theme_js('lib/ckeditor/ckeditor.js');
-			$this->helper->include_theme_js('scripts/wygwam.js');
-			$this->helper->include_theme_css('styles/wygwam.css');
-
-			$js = 'Wygwam.themeUrl = "'.$this->helper->theme_url().'";'
-			    . 'Wygwam.ee2plus = '.(version_compare(APP_VER, '2.2', '>=') ? 'true' : 'false').';';
-
-			$filedirs = $this->helper->get_upload_preferences(1);
-
-			if ($filedirs)
-			{
-				foreach ($filedirs as $filedir)
-				{
-					$filedir_urls[$filedir['id']] = $filedir['url'];
-				}
-
-				$js .= 'Wygwam.filedirUrls = '.$this->EE->javascript->generate_json($filedir_urls, TRUE).';';
-			}
-
-			$this->helper->insert_js($js);
-
-			$this->cache['included_configs'] = array();
-		}
-	}
 
 	/**
 	 * Display Field
 	 */
 	function display_field($data)
 	{
-		$this->_field_includes();
-		$this->_config_json();
+		Wygwam_helper::include_field_resources();
+		Wygwam_helper::insert_config_js($this->settings);
 
 		$id = str_replace(array('[', ']'), array('_', ''), $this->field_name);
 		$defer = (isset($this->settings['defer']) && $this->settings['defer'] == 'y') ? 'true' : 'false';
 
-		$this->helper->insert_js('new Wygwam("'.$id.'", "'.$this->settings['config'].'", '.$defer.');');
+		// Don't initialize this for Content Element templates
+		if ($id != '__element_name_____index___data')
+		{
+			Wygwam_helper::insert_js('new Wygwam("'.$id.'", "'.$this->settings['config'].'", '.$defer.');');
+		}
+
+		// pass the data through form_prep() if this is SafeCracker
+		if (REQ == 'PAGE')
+		{
+			$data = form_prep($data, $this->field_name);
+		}
 
 		// convert file tags to URLs
-		$this->_replace_file_tags($data);
+		Wygwam_helper::replace_file_tags($data);
+
+		// convert asset tags to URLs
+		$asset_info = Wygwam_helper::replace_asset_tags($data);
 
 		// convert site page tags to URLs
-		$this->_replace_page_tags($data);
+		Wygwam_helper::replace_page_tags($data);
 
-		return '<div class="wygwam"><textarea id="'.$id.'" name="'.$this->field_name.'" rows="10">'.$data.'</textarea></div>';
+		if ($this->EE->extensions->active_hook('wygwam_before_display'))
+		{
+			$data = $this->EE->extensions->call('wygwam_before_display', $this, $data);
+		}
+
+		return '<div class="wygwam"><textarea id="'.$id.'" name="'.$this->field_name.'" rows="10" data-config="'.$this->settings['config'].'" data-defer="'.($this->settings['defer'] == 'y' ? 'y' : 'n').'">'.$data.'</textarea></div>'.$this->_generate_asset_inputs_string($asset_info);
 	}
 
 	/**
@@ -697,31 +555,93 @@ class Wygwam_ft extends EE_Fieldtype {
 	 */
 	function display_cell($data)
 	{
-		$this->_field_includes();
-		$this->_config_json();
+		Wygwam_helper::include_field_resources();
+		Wygwam_helper::insert_config_js($this->settings);
 
-		if (! isset($this->cache['displayed_cols']))
+		// get the cache
+		if (! isset($this->EE->session->cache['wygwam']))
 		{
-			$this->helper->include_theme_js('scripts/matrix2.js');
-			$this->cache['displayed_cols'] = array();
+			$this->EE->session->cache['wygwam'] = array();
+		}
+		$cache =& $this->EE->session->cache['wygwam'];
+
+		if (! isset($cache['displayed_cols']))
+		{
+			Wygwam_helper::include_theme_js('scripts/matrix2.js');
+			$cache['displayed_cols'] = array();
 		}
 
-		if (! isset($this->cache['displayed_cols'][$this->col_id]))
+		if (! isset($cache['displayed_cols'][$this->col_id]))
 		{
 			$defer = (isset($this->settings['defer']) && $this->settings['defer'] == 'y') ? 'true' : 'false';
 
-			$this->helper->insert_js('Wygwam.matrixColConfigs.col_id_'.$this->col_id.' = ["'.$this->settings['config'].'", '.$defer.'];');
+			Wygwam_helper::insert_js('Wygwam.matrixColConfigs.col_id_'.$this->col_id.' = ["'.$this->settings['config'].'", '.$defer.'];');
 
-			$this->cache['displayed_cols'][$this->col_id] = TRUE;
+			$cache['displayed_cols'][$this->col_id] = TRUE;
 		}
 
 		// convert file tags to URLs
-		$this->_replace_file_tags($data);
+		Wygwam_helper::replace_file_tags($data);
+
+		// convert asset tags to URLs
+		$asset_info = Wygwam_helper::replace_asset_tags($data);
 
 		// convert site page tags to URLs
-		$this->_replace_page_tags($data);
+		Wygwam_helper::replace_page_tags($data);
 
-		return '<textarea name="'.$this->cell_name.'" rows="10">'.$data.'</textarea>';
+		if ($this->EE->extensions->active_hook('wygwam_before_display'))
+		{
+			$data = $this->EE->extensions->call('wygwam_before_display', $this, $data);
+		}
+
+		return '<textarea name="'.$this->cell_name.'" rows="10">'.$data.'</textarea>'.$this->_generate_asset_inputs_string($asset_info);;
+	}
+
+	/**
+	 * Display Grid Cell
+	 */
+	function grid_display_field($data)
+	{
+		Wygwam_helper::include_field_resources();
+		Wygwam_helper::insert_config_js($this->settings);
+
+		// get the cache
+		if (! isset($this->EE->session->cache['wygwam']))
+		{
+			$this->EE->session->cache['wygwam'] = array();
+		}
+		$cache =& $this->EE->session->cache['wygwam'];
+
+		if (! isset($cache['displayed_grid_cols']))
+		{
+			Wygwam_helper::include_theme_js('scripts/grid.js');
+			$cache['displayed_grid_cols'] = array();
+		}
+
+		if (! isset($cache['displayed_grid_cols'][$this->settings['col_id']]))
+		{
+			$defer = (isset($this->settings['defer']) && $this->settings['defer'] == 'y') ? 'true' : 'false';
+
+			Wygwam_helper::insert_js('Wygwam.gridColConfigs.col_id_'.$this->settings['col_id'].' = ["'.$this->settings['config'].'", '.$defer.'];');
+
+			$cache['displayed_grid_cols'][$this->settings['col_id']] = TRUE;
+		}
+
+		// convert file tags to URLs
+		Wygwam_helper::replace_file_tags($data);
+
+		// convert asset tags to URLs
+		$asset_info = Wygwam_helper::replace_asset_tags($data);
+
+		// convert site page tags to URLs
+		Wygwam_helper::replace_page_tags($data);
+
+		if ($this->EE->extensions->active_hook('wygwam_before_display'))
+		{
+			$data = $this->EE->extensions->call('wygwam_before_display', $this, $data);
+		}
+
+		return '<textarea name="'.$this->field_name.'" rows="10">'.$data.'</textarea>'.$this->_generate_asset_inputs_string($asset_info);;
 	}
 
 	/**
@@ -731,16 +651,40 @@ class Wygwam_ft extends EE_Fieldtype {
 	{
 		// Low Variables doesn't mix in the fieldtype's global settings,
 		// so we'll do it manually here
-		$this->settings = array_merge($this->settings, $this->helper->get_global_settings());
+		$this->settings = array_merge($this->settings, Wygwam_helper::get_global_settings());
 
-		// for now, it's way too complicated to get EE's file browser
-		// loaded on non-Publish pages, so we'll fallback to CKFinder
-		if ($this->settings['file_browser'] == 'ee')
+		if (version_compare(APP_VER, '2.5.0', '<'))
 		{
-			$this->settings['file_browser'] = 'ckfinder';
+			// it's way too complicated to get EE's file browser
+			// loaded on non-Publish pages, so we'll fallback to CKFinder
+			$global_settings = Wygwam_helper::get_global_settings();
+			if (! isset($global_settings['file_browser']) || $global_settings['file_browser'] == 'ee')
+			{
+				$global_settings['file_browser'] = 'ckfinder';
+				Wygwam_helper::set_global_settings($global_settings);
+			}
 		}
 
 		return $this->display_field($data);
+	}
+
+	/**
+	 * Display the element.
+	 *
+	 * @param $data
+	 * @return mixed
+	 */
+	function display_element($data)
+	{
+		if (!empty($this->settings['wygwam']))
+		{
+			$this->settings = array_merge($this->settings, $this->settings['wygwam']);
+			unset($this->settings['wygwam']);
+		}
+
+		Wygwam_helper::include_theme_js('scripts/content_elements.js');
+		return $this->display_field($data, FALSE);
+
 	}
 
 	// --------------------------------------------------------------------
@@ -780,11 +724,12 @@ class Wygwam_ft extends EE_Fieldtype {
 	 */
 	function save($data)
 	{
-		// Clear out if just whitespace
-		if (! $data || preg_match('/^\s*(<\w+>\s*(&nbsp;)*\s*<\/\w+>|<br \/>)?\s*$/s', $data))
-		{
-			return '';
-		}
+		// Trim out any whitespace/empty tags
+		$data = preg_replace('/^(\s|<(\w+)>(&nbsp;|\s)*<\/\2>|<br \/>)*/', '', $data);
+		$data = preg_replace('/(\s|<(\w+)>(&nbsp;|\s)*<\/\2>|<br \/>)*$/', '', $data);
+
+		// Remove any ?cachebuster:X query strings
+		$data = preg_replace('/\?cachebuster:\d+/', '', $data);
 
 		// Entitize curly braces within codeblocks
 		$data = preg_replace_callback('/<code>(.*?)<\/code>/s',
@@ -802,15 +747,22 @@ class Wygwam_ft extends EE_Fieldtype {
 		//    http://dev.ckeditor.com/ticket/6645
 		$data = str_replace('&quot;', '"', $data);
 
-		// Convert file URLs to tags
-		$this->_replace_file_urls($data);
-
-		// Convert page URLs to tags
-		$this->_replace_page_urls($data);
+		// Convert URLs to tags if we have to.
+		$prevent_conversion = $this->EE->config->item('wygwam_prevent_url_conversion');
+		if (!$prevent_conversion || $prevent_conversion == "n" || $prevent_conversion == "no")
+		{
+			$data = $this->_convert_urls_to_tags($data);
+		}
 
 		// Preserve Read More comments
 		//  - For whatever reason, SafeCracker is converting HTML comment brackets into entities
 		$data = str_replace('&lt;!--read_more--&gt;', '<!--read_more-->', $data);
+
+		if ($this->EE->extensions->active_hook('wygwam_before_save'))
+		{
+			$data = $this->EE->extensions->call('wygwam_before_save', $this, $data);
+		}
+
 
 		return $data;
 	}
@@ -831,6 +783,17 @@ class Wygwam_ft extends EE_Fieldtype {
 		return $this->save($data);
 	}
 
+	/**
+	 * Process the URLs to tags.
+	 *
+	 * @param $data
+	 * @return mixed
+	 */
+	function save_element($data)
+	{
+		return $this->save($data);
+	}
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -838,7 +801,16 @@ class Wygwam_ft extends EE_Fieldtype {
 	 */
 	function pre_process($data)
 	{
-		$this->_replace_page_tags($data);
+		Wygwam_helper::$entry_site_id = (isset($this->row['entry_site_id']) ? $this->row['entry_site_id'] : null);
+
+		// convert file tags to URLs
+		Wygwam_helper::replace_file_tags($data);
+
+		// convert asset tags to URLs
+		Wygwam_helper::replace_asset_tags($data);
+
+		// convert site page tags to URLs
+		Wygwam_helper::replace_page_tags($data);
 
 		$this->EE->load->library('typography');
 
@@ -872,11 +844,31 @@ class Wygwam_ft extends EE_Fieldtype {
 		// return images only?
 		if (isset($params['images_only']) && $params['images_only'] == 'yes')
 		{
-			return $this->_parse_images($data, $params, $tagdata);
+			$data = $this->_parse_images($data, $params, $tagdata);
 		}
 
-		// strip out the {read_more} tag
-		$data = str_replace('<!--read_more-->', '', $data);
+		// Text only?
+		else if (isset($params['text_only']) && $params['text_only'] == 'yes')
+		{
+			// Strip out the HTML tags
+			$data = preg_replace('/<[^<]+?>/', '', $data);
+		}
+		else
+		{
+			// Remove images?
+			if (isset($params['remove_images']) && $params['remove_images'] == 'yes')
+			{
+				$data = preg_replace('/<img(.*)>/Ums', '', $data);
+			}
+
+			// strip out the {read_more} tag
+			$data = str_replace('<!--read_more-->', '', $data);
+		}
+
+		if ($this->EE->extensions->active_hook('wygwam_before_replace'))
+		{
+			$data = $this->EE->extensions->call('wygwam_before_replace', $this, $data);
+		}
 
 		return $data;
 	}
@@ -894,20 +886,20 @@ class Wygwam_ft extends EE_Fieldtype {
 	/**
 	 * Replace Excerpt Tag
 	 */
-	function replace_excerpt($data)
+	function replace_excerpt($data, $params)
 	{
 		if (($read_more_tag_pos = strpos($data, '<!--read_more-->')) !== FALSE)
 		{
 			$data = substr($data, 0, $read_more_tag_pos);
 		}
 
-		return $data;
+		return $this->replace_tag($data, $params);
 	}
 
 	/**
 	 * Replace Extended Tag
 	 */
-	function replace_extended($data)
+	function replace_extended($data, $params)
 	{
 		if (($read_more_tag_pos = strpos($data, '<!--read_more-->')) !== FALSE)
 		{
@@ -918,10 +910,79 @@ class Wygwam_ft extends EE_Fieldtype {
 			$data = '';
 		}
 
-		return $data;
+		return $this->replace_tag($data, $params);
 	}
 
 	// --------------------------------------------------------------------
+
+	/**
+	 * Display Variable Tag
+	 */
+	function display_var_tag($data)
+	{
+		return $this->replace_tag($this->pre_process($data));
+	}
+
+	/**
+	 * Render the element.
+	 *
+	 * @param $data
+	 * @param array $params
+	 * @param $tagdata
+	 * @return bool
+	 */
+	function replace_element_tag($data, $params = array(), $tagdata)
+	{
+		return $this->EE->functions->var_swap($tagdata, array(
+			'value' => $this->replace_tag($this->pre_process($data)),
+			'element_name' => $this->element_name
+		));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Convert URLs to Wygwam Tags.
+	 *
+	 * @param $html
+	 * @return mixed
+	 */
+	private function _convert_urls_to_tags($html)
+	{
+		$asset_ids = $this->EE->input->post('wygwam_asset_ids');
+		$asset_urls = $this->EE->input->post('wygwam_asset_urls');
+
+		// If they select any files using Assets.
+		if (!empty($asset_ids) && !empty($asset_urls) && count($asset_ids) == count($asset_urls))
+		{
+			// Convert Asset URLs to tags
+			Wygwam_helper::replace_asset_urls($html, $asset_ids, $asset_urls);
+		}
+
+		// Convert file URLs to tags
+		Wygwam_helper::replace_file_urls($html);
+
+		// Convert page URLs to tags
+		Wygwam_helper::replace_page_urls($html);
+
+		return $html;
+	}
+
+	/**
+	 * @param $asset_info
+	 * @return string
+	 */
+	private function _generate_asset_inputs_string($asset_info)
+	{
+		$inputs = '';
+		for ($counter = 0; $counter < count($asset_info['ids']); $counter++)
+		{
+			$inputs .= '<input type="hidden" name="wygwam_asset_ids[]" value="'.$asset_info['ids'][$counter].'" />';
+			$inputs .= '<input type="hidden" name="wygwam_asset_urls[]" value="'.$asset_info['urls'][$counter].'" />';
+		}
+
+		return $inputs;
+	}
 
 	/**
 	 * Parse Images
@@ -1036,14 +1097,15 @@ class Wygwam_ft extends EE_Fieldtype {
 		return $r;
 	}
 
-	// --------------------------------------------------------------------
-
 	/**
-	 * Display Variable Tag
+	 * Grid compatibility.
+	 *
+	 * @param $name
+	 * @return bool
 	 */
-	function display_var_tag($data)
+	public function accepts_content_type($name)
 	{
-		return $this->replace_tag($this->pre_process($data));
+		return ($name == 'channel' || $name == 'grid');
 	}
 }
 
