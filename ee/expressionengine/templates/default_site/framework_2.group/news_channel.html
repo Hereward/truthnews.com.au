@@ -80,10 +80,19 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
             {if embed:limit == 1}
                 {body_rich}
             {if:else}
+{!--
                 {exp:eehive_hacksaw words="200" allow="<br><a><p><img><li><ul><blockquote><em><strong><i><b>"}
                     {body_rich}
                 {/exp:eehive_hacksaw}... <p style="text-align:right;"><a href="{channel_url}/{url_title}">Read More &rarr;</a></p>
+--}
+
+
+                {exp:eehive_hacksaw html_cut="1" html_max_length="800"}
+                    {body_rich}
+                {/exp:eehive_hacksaw} <p style="text-align:right;"><a href="{channel_url}/{url_title}">Read More &rarr;</a></p>
+
             {/if}
+
 
         {/if}
 
