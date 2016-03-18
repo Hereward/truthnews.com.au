@@ -72,12 +72,19 @@ orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry
         {if (body_short && (segment_2 != 'story')) || ("{always_use_short_body}" == "yes")}
             {body_short}
             {if "{always_use_short_body}" == "yes"}
-                 <p style="text-align:right;"><a href="{original_source}">Article Continues &raquo;</a></p>
+                 <p style="text-align:right;"><a href="{original_source}">Article Continues &rarr;</a></p>
             {if:else}
-                 <p style="text-align:right;"><a href="{channel_url}/{url_title}">Article Continues &raquo;</a></p>
+                 <p style="text-align:right;"><a href="{channel_url}/{url_title}">Article Continues &rarr;</a></p>
             {/if}
         {if:else}
-            {body_rich}
+            {if embed:limit == 1}
+                {body_rich}
+            {if:else}
+                {exp:eehive_hacksaw words="200" allow="<b><a><p><img><li><ul>"}
+                    {body_rich}
+                {/exp:eehive_hacksaw}... <p style="text-align:right;"><a href="{channel_url}/{url_title}">Read More &rarr;</a></p>
+            {/if}
+
         {/if}
 
         {if embed:show_comments}
