@@ -60,7 +60,7 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/includes/dev_log.php");
  * Enable it only if you have a good reason to.
  * 
  */
-	$debug = 1;
+	$debug = 0;
 
 /*
  * --------------------------------------------------------------------
