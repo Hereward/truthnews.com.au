@@ -2,7 +2,7 @@
 {exp:channel:entries cache="yes" refresh="5" site="default_site" url_title="{embed:url_title}" channel="{embed:channel}" search:"{embed:search}" limit="{embed:limit}"
 orderby="date" sort="desc" paginate="bottom" require_entry="{embed:require_entry}"}
 {if no_results} {redirect="404"} {/if}
-{if count == 2 || count == 4}
+{if count == 2 || count == 4 || count == 6 || embed:limit == 1}
   {embed="ad_zones/leaderboard_internal"}
 {/if}
 <div class="article_container">
