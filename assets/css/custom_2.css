@@ -338,6 +338,10 @@ div#home_carousel_wide .item img, div#home_carousel_wide .item .icon {
     margin-top:25px;
 }
 
+div#home_carousel_wide .item img {
+    max-height:175px;
+}
+
 div#home_carousel_wide .item .carousel_icon {
     font-size:20px;
     text-align: center;
