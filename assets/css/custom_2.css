@@ -297,6 +297,74 @@ div.latest {
 
 }
 
+a.carousel_icon, a.carousel_icon:link, a.carousel_icon:visited  {
+    color:white;
+}
+
+a.carousel_icon:hover {
+    font-weight:normal;
+    text-decoration:none;
+    color:#337ab7;
+}
+
+div#home_carousel_wide {
+    margin:20px 0px;
+}
+
+div#home_carousel_wide h3 {
+    text-align:left;
+    font-size:22px;
+    font-weight:bold;
+}
+
+div#home_carousel_wide p {
+    text-align:left;
+}
+
+div#home_carousel_wide .item {
+    /* height:230px; */
+    min-height:250px;
+    background-color:#2e2e2e;
+    overflow: visible;
+    padding:0px 100px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+
+}
+
+div#home_carousel_wide .item img, div#home_carousel_wide .item .icon {
+    display:block;
+    margin-top:25px;
+}
+
+div#home_carousel_wide .item .carousel_icon {
+    font-size:20px;
+    text-align: center;
+}
+
+div#home_carousel_wide .carousel-caption {
+    position:static;
+    /*
+    max-height: 200px;
+    overflow: hidden;
+    */
+}
+
+div#home_carousel_wide .carousel-control.left, div#home_carousel_wide .carousel-control.right {
+    background:none;
+    background-color:transparent;
+
+}
+
+div#home_carousel_wide .carousel-control {
+    width:7%;
+    opacity:0.3;
+}
+
+
+
+
 div.index_carousel {
     background-color: #030000; /* #222222;  #1E1C1D; */
     /*

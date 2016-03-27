@@ -255,6 +255,12 @@ class Tna_utils {
 		return "boo";
 	}
 
+    function strip_lines() {
+        $string = $this->EE->TMPL->fetch_param('string');
+        $string = trim(preg_replace('/\s\s+/', ' ', $string));
+        return $string;
+    }
+
 }
 
 /* End of file pi.plugin_name.php */

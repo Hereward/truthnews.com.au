@@ -1,0 +1,80 @@
+<div id="home_carousel_wide" data-interval="15000" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+
+    {!--
+    <ol class="carousel-indicators">
+        <li data-target="#home_carousel_wide" data-slide-to="0" class="active"></li>
+        <li data-target="#home_carousel_wide" data-slide-to="1"></li>
+        <li data-target="#home_carousel_wide" data-slide-to="2"></li>
+    </ol>
+    --}
+
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+
+        {exp:channel:entries offset="1" dynamic="no" site="default_site" channel="tna|tna_news" limit="12" orderby="date" sort="desc" }
+
+            <div class="item {if count == 1}active{/if}">
+
+
+                <div class="carousel-caption">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            {if image_hero}
+                                <img src="{image_hero}" alt="Image">
+                            {if:else}
+                            <img style="margin-top:22px;" src="{site_url}storage/images/framework/carousel_default_{exp:low_random:item items='1|2'}.png" alt="Image">
+                                {!-- <span class="icon {if podcast == 'yes'}icon-volume-medium{if:else}icon-newspaper{/if}"> --}
+                            {/if}
+                        </div>
+
+                        <div class="col-lg-8">
+                            <h3><a style="color:white;" href="{channel_url}/{url_title}">{title}</a></h3>
+                            <p>{exp:eehive_hacksaw words="30" append = "..."}{description}{/exp:eehive_hacksaw}</p>
+                               {!--  {exp:char_limit total="175"}{description}{/exp:char_limit} --}
+
+                            <p style="text-align:right;"><a class="carousel_icon" href="{channel_url}/{url_title}">{if podcast == 'yes'}<span class="glyphicon glyphicon-headphones" aria-hidden="true"></span> Listen &rarr;{if:else}Read More &rarr;{/if}</a></p>
+                        </div>
+                    </div>
+
+
+
+
+
+                    {!-- <p>{exp:tna_utils:strip_lines string="{description}"}</p> --}
+                </div>
+            </div>
+
+        {/exp:channel:entries}
+
+
+        {!--
+        <div class="item active">
+            <img src="..." alt="...">
+            <div class="carousel-caption">
+                <h3>Blah blah</h3>
+                <p>This is some text yahooooooooo!</p>
+            </div>
+        </div>
+        <div class="item">
+            <img src="..." alt="...">
+            <div class="carousel-caption">
+                <h3>Wieners are delicious</h3>
+                <p>More mumbo jumbo for the jolly clowns!</p>
+            </div>
+        </div>
+        --}
+
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#home_carousel_wide" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#home_carousel_wide" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
