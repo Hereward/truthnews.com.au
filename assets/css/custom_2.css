@@ -1,3 +1,7 @@
+div.subscribe_banner_small_phone {
+    text-align:center;
+    margin:0px 0px 15px 0px;
+}
 
 .mejs-controls div.mejs-time-rail {
     width: 98px;
@@ -1163,10 +1167,6 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
         margin:0px 0px 0px 15px;
     }
 
-    div.subscribe_banner_small_phone {
-        text-align:center;
-        margin:0px 0px 15px 0px;
-    }
 
     div.top_banner {
         margin:10px 0px 0px -15px;
@@ -1464,6 +1464,11 @@ div.profile_section {
         margin:20px 0px 20px 0px;
     }
     */
+    .latest_show.header {
+        margin:30px 0px 0px 100px;
+        display:block !important;
+
+    }
 }
 
 
@@ -1480,11 +1485,6 @@ div.profile_section {
         font-size: 38px;
     }
 
-    .latest_show {
-        margin:30px 0px 0px 100px;
-        display:block !important;
-
-    }
 
 }
 
@@ -1514,7 +1514,7 @@ div.profile_section {
         padding-right: 50px;
     }
 
-    .latest_show {
+    .latest_show.header {
         margin:30px 0px 0px 100px;
 
     }
