@@ -317,7 +317,7 @@ div#home_carousel_wide {
 
 div#home_carousel_wide h3 {
     text-align:left;
-    font-size:22px;
+    font-size:18px;
     font-weight:bold;
 }
 
@@ -347,7 +347,7 @@ div#home_carousel_wide .item img {
 }
 
 div#home_carousel_wide .item .carousel_icon {
-    font-size:20px;
+    font-size:16px;
     text-align: center;
 }
 
@@ -1468,6 +1468,19 @@ div.profile_section {
         margin:30px 0px 0px 100px;
         display:block !important;
 
+    }
+
+
+    div#home_carousel_wide .item {
+        min-height:242px;
+    }
+
+    div#home_carousel_wide h3 {
+        font-size:22px;
+    }
+
+    div#home_carousel_wide .item .carousel_icon {
+        font-size:18px;
     }
 }
 
