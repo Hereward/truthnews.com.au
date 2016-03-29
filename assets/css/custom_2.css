@@ -350,7 +350,7 @@ div#home_carousel_wide .item {
 div#home_carousel_wide .item img {
     display:block;
     margin:10px auto;
-    max-height:165px;
+    max-height:150px;
 }
 
 div#home_carousel_wide .item img.default_carousel_image {
