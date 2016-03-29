@@ -347,18 +347,16 @@ div#home_carousel_wide .item {
 
 }
 
-div#home_carousel_wide .item img, div#home_carousel_wide .item .icon {
+div#home_carousel_wide .item img {
     display:block;
-    margin-top:10px;
+    margin:10px auto;
+    max-height:165px;
 }
 
 div#home_carousel_wide .item img.default_carousel_image {
     margin-top:8px;
 }
 
-div#home_carousel_wide .item img {
-    max-height:165px;
-}
 
 div#home_carousel_wide .item .carousel_icon {
     font-size:16px;
