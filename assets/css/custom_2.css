@@ -2,6 +2,7 @@
     text-align: center;
 }
 
+
 .modal-footer div.lb_subscribe_button {
     margin-bottom:10px;
 }
@@ -327,6 +328,7 @@ div#home_carousel_wide h3 {
     text-align:left;
     font-size:18px;
     font-weight:bold;
+    margin-top:5px;
 }
 
 div#home_carousel_wide p {
@@ -335,7 +337,7 @@ div#home_carousel_wide p {
 
 div#home_carousel_wide .item {
     /* height:230px; */
-    min-height:242px;
+    min-height:205px;
     background-color:#2e2e2e;
     overflow: visible;
     padding:0px 100px;
@@ -347,7 +349,11 @@ div#home_carousel_wide .item {
 
 div#home_carousel_wide .item img, div#home_carousel_wide .item .icon {
     display:block;
-    margin-top:25px;
+    margin-top:10px;
+}
+
+div#home_carousel_wide .item img.default_carousel_image {
+    margin-top:8px;
 }
 
 div#home_carousel_wide .item img {
@@ -1121,7 +1127,8 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
 */
 
 #subscribe_lightbox a, #subscribe_lightbox a:link, #subscribe_lightbox a:hover {
-    font-weight:bold;
+    font-weight:normal;
+    min-width:158px;
 }
 
 
@@ -1256,6 +1263,11 @@ a.disqus_thread_link, a.disqus_thread_link:link, a.disqus_thread_link:visited {
 @media (min-width:768px)  {
     .modal-footer div.lb_subscribe_button {
         margin-bottom:0px;
+    }
+
+
+    .carousel-caption {
+        padding-bottom: 10px;
     }
 
 }
@@ -1482,7 +1494,7 @@ div.profile_section {
 
 
     div#home_carousel_wide .item {
-        min-height:242px;
+        /* min-height:227px; */
     }
 
     div#home_carousel_wide h3 {

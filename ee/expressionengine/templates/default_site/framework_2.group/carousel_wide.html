@@ -24,7 +24,7 @@
                             {if image_hero}
                                 <img src="{image_hero}" alt="Image">
                             {if:else}
-                            <img style="margin-top:22px;" src="{site_url}storage/images/framework/carousel_default_{exp:low_random:item items='1|2'}.png" alt="Image">
+                            <img class="default_carousel_image" src="{site_url}storage/images/framework/carousel_default_{exp:low_random:item items='1|2'}.png" alt="Image">
                                 {!-- <span class="icon {if podcast == 'yes'}icon-volume-medium{if:else}icon-newspaper{/if}"> --}
                             {/if}
                         </div>
