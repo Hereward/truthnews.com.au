@@ -18,7 +18,7 @@
 
     <div class="col-lg-<?=$span_width?>">
 
-        <audio class="mejs-player" style="width:280px; margin-top:15px;" id="<?=$media_id?>" data-mejsoptions='{"audioWidth:": 280}' controls="controls" preload="none">
+        <audio class="mejs__player" style="width:280px; margin-top:15px;" id="<?=$media_id?>" data-mejsoptions='{"startVolume": "0.5", "audioVolume": "vertical"}' controls="controls" preload="none">
             <source src="<?=$media_url?>" type="audio/mpeg" />
         </audio>
 
@@ -38,4 +38,8 @@
 
 
 </div>
+
+
+
+{!-- <audio class="mejs__player" style="width:280px; margin-top:15px;" id="<?=$media_id?>" data-mejsoptions='{"audioWidth:": 280}' controls="controls" preload="none"> </audio>--}
 

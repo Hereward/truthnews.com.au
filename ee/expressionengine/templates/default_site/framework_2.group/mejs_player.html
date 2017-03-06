@@ -4,7 +4,7 @@
     {if:elseif "{media_url}"}
         <div class="col-lg-12">
 
-            <audio class="mejs-player" style="width:280px; margin-top:15px;" id="raw_player_{embed:entry_id}" data-mejsoptions='{"audioWidth:": 280}' controls="controls" preload="none">
+            <audio class="mejs__player" style="width:280px; margin-top:15px;" id="raw_player_{embed:entry_id}" data-mejsoptions='{"startVolume": "0.5", "audioVolume": "vertical"}' controls="controls" preload="none">
                 <source src="{media_url}" type="audio/mpeg" />
             </audio>
 
