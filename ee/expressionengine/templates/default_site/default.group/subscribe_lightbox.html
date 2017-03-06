@@ -32,15 +32,21 @@
     
     <script>
         $(document).ready(function() {
+            /*
                if ($.cookie("subscribeLightboxDone") != 'true') {
                     // The key_value cookie was not found so set it now 
                     $.cookie("subscribeLightboxDone", "true", {path: '/'});  
                     //$('#subscribe_lightbox').modal();
                 }
+            */
 
 
             $(".listen_toggle a").on('click', function(){
-                $('#subscribe_lightbox').modal();
+                if ($.cookie("subscribeLightboxDone") != 'true') {
+                    // The key_value cookie was not found so set it now
+                    $.cookie("subscribeLightboxDone", "true", {path: '/'});
+                    $('#subscribe_lightbox').modal();
+                }
             });
 
         });
