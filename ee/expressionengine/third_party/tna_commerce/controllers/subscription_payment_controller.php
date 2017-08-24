@@ -114,6 +114,7 @@ class subscription_payment_controller extends Base_Controller {
     }
 
     public function create() {
+        redirect($this->https_site_url);
         dev_log::write("payment_controller:create");
         $existing_subscriber = '';
         $errors = array();
@@ -215,6 +216,7 @@ class subscription_payment_controller extends Base_Controller {
      */
 
     public function store() {
+        redirect($this->https_site_url);
         //$generic_error = 'The transaction failed. Please check your credit card details and try again.';
         $eway_auth_code = '';
         $eway_init = $this->EE->eway_model->init();
