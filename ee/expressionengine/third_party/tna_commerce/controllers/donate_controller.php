@@ -38,6 +38,7 @@ class donate_controller extends Base_Controller {
     
 
     public function create() {
+        redirect($this->https_site_url);
         dev_log::write("donate_controller:create");
         $email = $this->EE->input->post('email');
          if (!$email) {
@@ -94,6 +95,7 @@ class donate_controller extends Base_Controller {
     }
     
     public function store() {
+        redirect($this->https_site_url);
        //$generic_error = 'The transaction failed. Please check your credit card details and try again.';
         dev_log::write("donate_controller:store");
         $eway_auth_code = '';
