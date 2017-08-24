@@ -111,6 +111,7 @@ class subscription_payment_gift_controller extends Base_Controller {
     
      public function create() {
          redirect($this->https_site_url);
+         die();
         dev_log::write("payment_gift_controller:create");
         $existing_subscriber = '';
         $errors = array();
@@ -191,6 +192,7 @@ class subscription_payment_gift_controller extends Base_Controller {
 
     public function store() {
         redirect($this->https_site_url);
+        die();
         dev_log::write("subscription_payment_gift_controller:store");
         //$generic_error = 'The transaction failed. Please check your credit card details and try again.';
         $eway_auth_code = '';

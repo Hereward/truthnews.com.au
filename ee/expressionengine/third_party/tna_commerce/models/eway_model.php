@@ -116,6 +116,7 @@ class Eway_model extends Base_model {
     }
 
     public function process_direct_payment($subscription_details) {
+        die();
         $this->eway_error = '';
 /*
         $txtFirstName = $_POST['txtFirstName'];
@@ -257,6 +258,7 @@ class Eway_model extends Base_model {
     
     
      public function process_donation() {
+         die();
         $this->eway_error = '';
 
         $final_amount = $this->EE->input->post('aud_price');
